@@ -304,10 +304,11 @@ const body = {
   amount: 1000,
 };
 
-export const getMenuitemCart = async () => {
+export const getMenuitemCart = async (id: any) => {
+  console.log(id, '===userId===');
   try {
     const MenuItemCart = await api.get(
-      `/orders/cart/menuitem?page=1&branchId=82059935-89dc-4daf-aff3-adcf997d6859`,
+      `/orders/cart/menuitem?page=1&branchId=82059935-89dc-4daf-aff3-adcf997d6859&userId=${id}`,
     );
     console.log(MenuItemCart, 'MenuPlanDataMenuPlanDataMenuPlanData....');
     const menuCart = MenuItemCart?.data?.data;
@@ -319,10 +320,10 @@ export const getMenuitemCart = async () => {
   }
 };
 
-export const getMenuPlanCart = async () => {
+export const getMenuPlanCart = async (id: any) => {
   try {
     const MenuItemCart = await api.get(
-      `/orders/cart/menuplan?page=1&branchId=82059935-89dc-4daf-aff3-adcf997d6859`,
+      `/orders/cart/menuplan?page=1&branchId=82059935-89dc-4daf-aff3-adcf997d6859&userId=${id}`,
     );
     console.log(MenuItemCart, 'MenuPlanDataMenuPlanDataMenuPlanData....');
     const menuCart = MenuItemCart?.data?.data;
@@ -362,10 +363,10 @@ export const getDeliveryAddress = async (branch: any) => {
 //   }
 // };
 
-export const createOrder = async (body: any) => {
+export const createMenuItemOrder = async (body: any) => {
   console.log(body, 'bodyyy');
-  try {
-    const cart = await api.post(`/orders`, {
+  console.log(
+    {
       isMenuPlan: body.isMenuPlan,
       branchId: body.branchId,
       subTotal: body.subTotal,
@@ -373,12 +374,70 @@ export const createOrder = async (body: any) => {
       paymentMethod: body.paymentMethod,
       paymentType: body.paymentType,
       deliveryCharge: body.deliveryCharge,
-      deliveryAddressId: body.deliveryAddressId,
-      deliveryAddId: body.deliveryAddId,
+      orderName: body.orderName,
+      // orderChannel: 'POS',
+      paymentStatus: 'Not Paid',
+      cartIds: body.cartIds,
+      orderForFriend: body.orderForFriend,
+      friendName: body.friendName,
+      friendPhoneNumber: body.friendPhoneNumber,
+      deliveryOption: body.deliveryOption,
       deliveryTime: body.deliveryTime,
+      deliveryAddress: body.deliveryAddress,
+      deliveryAddId: body.deliveryAddId,
+      orderChannel: body.orderChannel,
+    },
+    '====consolleddditem=====',
+  );
+  try {
+    const cart = await api.post(`/orders/menuItem`, {
+      isMenuPlan: body.isMenuPlan,
+      branchId: body.branchId,
+      subTotal: body.subTotal,
+      total: body.total,
+      paymentMethod: body.paymentMethod,
+      paymentType: body.paymentType,
+      deliveryCharge: body.deliveryCharge,
+      // orderName: body.orderName,
+      // orderChannel: 'POS',
+      paymentStatus: 'Not Paid',
+      cartIds: body.cartIds,
+      orderForFriend: body.orderForFriend,
+      friendName: body.friendName,
+      friendPhoneNumber: body.friendPhoneNumber,
+      deliveryOption: body.deliveryOption,
+      deliveryTime: body.deliveryTime,
+      deliveryAddress: body.deliveryAddress,
+      deliveryAddId: body.deliveryAddId,
+      orderChannel: body.orderChannel,
     });
     const addedCart = cart?.data?.data;
-    console.log(addedCart, 'addedcaart');
+    console.log(cart.data, 'addedcaart');
+    return addedCart;
+  } catch (err) {
+    console.log(err, 'cartError');
+  }
+};
+
+export const createMenuPlanOrder = async (body: any) => {
+  console.log(body, 'bodyyy');
+  try {
+    const cart = await api.post(`/orders/menuPlan`, {
+      isMenuPlan: body.isMenuPlan,
+      branchId: body.branchId,
+      subTotal: body.subTotal,
+      total: body.total,
+      paymentMethod: body.paymentMethod,
+      paymentType: body.paymentType,
+      deliveryCharge: body.deliveryCharge,
+      orderName: body.orderName,
+      // orderChannel: 'POS',
+      paymentStatus: 'Not Paid',
+      basketIds: body.cartIds,
+      orderChannel: body.orderChannel,
+    });
+    const addedCart = cart?.data?.data;
+    console.log(cart?.data, 'addedcaart');
     return addedCart;
   } catch (err) {
     console.log(err, 'cartError');
@@ -421,5 +480,35 @@ export const createmenuplanorderDetail = async (body: any, orderId: any) => {
     console.log(addedCart, 'order completed');
   } catch (err) {
     console.log(err, 'orderError');
+  }
+};
+
+export const getMenuPlanOrders = async (id: any) => {
+  try {
+    const MenuItemCart = await api.get(
+      `orders/menuplan/detail?page=${1}&userId=${id}`,
+    );
+    console.log(MenuItemCart, 'MenuPlanDataMenuPlanDataMenuPlanData....');
+    const menuCart = MenuItemCart?.data?.data;
+    console.log(menuCart, 'menuPlan');
+    return menuCart;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
+export const getMenuItemOrders = async (id: any) => {
+  try {
+    const MenuItemCart = await api.get(
+      `/orders/menuitem/detail?page=${1}&userId=${id}`,
+    );
+    console.log(MenuItemCart, 'MenuPlanDataMenuPlanDataMenuPlanData....');
+    const menuCart = MenuItemCart?.data?.data;
+    console.log(menuCart, 'menuPlan');
+    return menuCart;
+  } catch (error) {
+    console.log(error);
+    return error;
   }
 };

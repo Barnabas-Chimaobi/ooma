@@ -44,6 +44,7 @@ export default function region() {
           underlayColor="rgba(255, 255, 255, 0.3)"
           onPress={() => {
             AsyncStorage.setItem('regionName', item?.item?.city),
+              AsyncStorage.setItem('regionId', item?.item?.id),
               getBranch(item?.item?.id);
           }}>
           <View>

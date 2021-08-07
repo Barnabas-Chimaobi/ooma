@@ -6,6 +6,10 @@ import {SafeAreaView, StyleSheet, ActivityIndicator, View} from 'react-native';
 import {Basket} from '../../../components/Basket/index';
 import {useNavigation} from '@react-navigation/native';
 import {getMenuPlanCart} from '../../../FetchData';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useDispatch, useSelector} from 'react-redux';
+import {basketStates} from '../../../reducers/basket';
+import {AppDispatch, RootState} from '../../../store';
 
 const App = () => {
   const [refreshing, setRefreshing] = useState(true);
@@ -15,20 +19,27 @@ const App = () => {
   const tabRef = useRef(null);
 
   const navigation = useNavigation();
+  const dispatch: AppDispatch = useDispatch();
+  const basketItem = useSelector(
+    (state: RootState) => state.basketState.payload,
+  );
 
   useEffect(() => {
     const getMenuplanKart = async () => {
-      const menuplanscart = await getMenuPlanCart();
+      const userId = await AsyncStorage.getItem('userId');
+      console.log(userId, 'useriddd');
+
+      const menuplanscart = await getMenuPlanCart(userId);
       setPlanCart(menuplanscart?.items);
-      // console.log(
-      //   menuplanscart?.items.map((item: any) => item.MenuPlan),
-      //   '=======planscarttttttt=========',
-      // );
+      dispatch(basketStates(menuplanscart?.items));
+      console.log(menuplanscart, '=======planscarttttttt=========');
       const all = menuplanscart?.items.map((item: any) => item.MenuPlan);
       let all1 = all.map((item: any) => item.MenuPlanDetails);
       // console.log(all1, '=====all1======');
     };
-
+    const unsubscribe = navigation.addListener('focus', () => {
+      getMenuplanKart();
+    });
     getMenuplanKart();
     console.log('consoleddddddddd');
     getData();
@@ -53,7 +64,7 @@ const App = () => {
         {refreshing ? <ActivityIndicator /> : null}
         <View style={styles.nav}>
           <Basket
-            counts={planCart?.length}
+            counts={basketItem?.length}
             onBasketPress={(itemCount) =>
               navigation.navigate('Cart', {
                 cartItems: planCart,

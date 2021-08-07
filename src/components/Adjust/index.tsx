@@ -19,6 +19,7 @@ interface IProps {
   processAddons?: any;
   removeAddon?: any;
   itemAddon?: any;
+  edit: any;
 }
 
 const Adjust = ({
@@ -35,15 +36,14 @@ const Adjust = ({
   removeAddon,
   processAddons,
   itemAddon,
+  edit,
 }: IProps) => {
   const [state, setState] = useState(isAddon ? 0 : 1);
   const [prices, setPrice] = useState(price);
   // const {value} = state;
-  // useEffect(() => {
-  //   itemAddon?.map((item) => {
-  //     setState(item.quantity);
-  //   });
-  // });
+  useEffect(() => {
+    console.log(edit, '===edit====');
+  });
 
   const getQuantity = (item: any, str: any) => {
     console.log(state, 'state');

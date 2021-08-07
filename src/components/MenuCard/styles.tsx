@@ -9,6 +9,15 @@ export default StyleSheet.create({
     flex: 1,
     height: 250,
     // width: 300,
+    width: Dimensions.get('window').width / 1.15,
+
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  imageBackground2: {
+    flex: 1,
+    height: 250,
+    // width: 300,
     width: Dimensions.get('window').width / 1.07,
 
     borderRadius: 10,
@@ -49,6 +58,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 13,
+    justifyContent: 'space-between',
   },
   ratingImage: {
     width: 15,
@@ -73,7 +83,8 @@ export default StyleSheet.create({
   },
   imageBackgroundRow: {
     width: 130,
-    height: 150,
+    height: 110,
+    marginTop: 15,
   },
   flexRow: {
     marginTop: 14,

@@ -42,7 +42,7 @@ const RenderItems = ({item}: any) => {
   );
 };
 
-const Current = () => {
+const Current = ({item}) => {
   const data = [
     {
       orderId: 'ZS214298',

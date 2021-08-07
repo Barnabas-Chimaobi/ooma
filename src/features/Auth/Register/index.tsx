@@ -71,11 +71,11 @@ const Register = () => {
         username: number,
         password,
       });
-      const {token} = loginUser?.data?.data;
+      const {token, id} = loginUser?.data?.data;
       console.log(token, 'token');
       if (token != false) {
         navigation.navigate('Region', {newToken: token});
-        // await AsyncStorage.setItem('token', token);
+        await AsyncStorage.setItem('userId', id);
         setLoading(false);
         // dispatch(signIn());
       }

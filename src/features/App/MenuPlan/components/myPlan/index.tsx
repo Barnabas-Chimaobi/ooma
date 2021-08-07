@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -14,6 +14,15 @@ import {ProgressBar} from '../../../../../components/ProgressBar/index';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {BottomSheet} from '../../../../../components/BottomSheetModal';
 import {BottomSheetList} from './bottomSheetList';
+import {getMenuPlanOrders} from '../../../../../FetchData';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  Button,
+  ButtonType,
+  PriceTag,
+  EmptyList,
+} from '../../../../../components';
+import {useNavigation} from '@react-navigation/native';
 
 const {width: windowWidth} = Dimensions.get('window');
 
@@ -26,6 +35,7 @@ interface ListItemProps {
     pecentage: Number;
     time: string;
     status: string;
+    time1: any;
   }[];
 }
 interface ListProps {
@@ -34,6 +44,7 @@ interface ListProps {
   pecentage: Number;
   time: string;
   status: string;
+  time1: any;
 }
 
 interface Props {
@@ -41,7 +52,9 @@ interface Props {
 }
 
 export const MyPlans = ({findPlan}: Props) => {
+  const navigation = useNavigation();
   const [isOpen, setOpen] = useState<boolean>(false);
+  const [planOrders, setOrders] = useState([]);
   const openDrawer = useCallback(() => {
     setOpen(true);
   }, []);
@@ -51,31 +64,76 @@ export const MyPlans = ({findPlan}: Props) => {
   }, []);
 
   const flatListOptimizationProps = {
-    initialNumToRender: 0,
-    maxToRenderPerBatch: 1,
-    removeClippedSubviews: true,
-    scrollEventThrottle: 16,
-    windowSize: 2,
+    // initialNumToRender: 0,
+    // maxToRenderPerBatch: 1,
+    // removeClippedSubviews: true,
+    // scrollEventThrottle: 16,
+    // windowSize: 2,
     keyExtractor: () => shortid.generate(),
-    getItemLayout: useCallback(
-      (_, index) => ({
-        index,
-        length: windowWidth * 0.9,
-        offset: index * windowWidth * 0.9,
-      }),
-      [],
-    ),
+    // getItemLayout: useCallback(
+    //   (_, index) => ({
+    //     index,
+    //     length: windowWidth * 0.9,
+    //     offset: index * windowWidth * 0.9,
+    //   }),
+    //   [],
+    // ),
   };
 
-  const Item = ({imageUrl, itemName, pecentage, time, status}: ListProps) => {
+  const getOrders = async () => {
+    const userId = await AsyncStorage.getItem('userId');
+    console.log(userId, 'useriddd');
+    // const gottenId = JSON.parse(userId);
+
+    try {
+      // console.log(newsum, 'cartttttt');
+      const order = await getMenuPlanOrders(userId);
+      setOrders(order?.items);
+      //  await dispatch(cartStates(menuICart?.items));
+      console.log(order, 'cart ===value');
+      console.log(
+        order?.items?.map((item: any) => item),
+        'cart ===valuesssss',
+      );
+
+      // setRefreshing(false);
+    } catch (error) {
+      console.log(error, '====errorrsss====');
+      // setRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
+    getOrders();
+  }, []);
+
+  const Item = ({
+    imageUrl,
+    itemName,
+    pecentage,
+    time,
+    status,
+    time1,
+  }: ListProps) => {
     return (
       <TouchableWithoutFeedback
         onPress={openDrawer}
         style={styles.innerListItemStyle}>
-        <Image source={imageUrl} />
+        <Image
+          style={{height: 100, width: 100, borderRadius: 10}}
+          source={{uri: imageUrl}}
+        />
         <View style={styles.itemTextArea}>
           <Text style={styles.itemNameStyle}>{itemName}</Text>
-          <Text style={styles.timeStyle}>{time}</Text>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={styles.timeStyle}>
+              {new Date(time).toDateString()} -
+            </Text>
+            <Text> </Text>
+            <Text style={styles.timeStyle}>
+              {new Date(time1).toDateString()}
+            </Text>
+          </View>
           <View>
             <Text style={styles.statusStyle}>{status}</Text>
             <ProgressBar progressValue={pecentage} />
@@ -98,20 +156,29 @@ export const MyPlans = ({findPlan}: Props) => {
     return (
       <View style={styles.main}>
         <FlatList
-          data={list}
+          data={planOrders}
           style={styles.innerListStyle}
           renderItem={({item}) => {
             return (
               <Item
-                imageUrl={item.imageUrl}
-                itemName={item.itemName}
+                imageUrl={item?.orderInfo?.MenuPlan?.imageurl}
+                itemName={item?.orderInfo?.orderName}
                 pecentage={item.pecentage}
-                time={item.time}
-                status={item.status}
+                time={item?.orderInfo?.MenuPlan?.startDate}
+                status={item?.orderInfo?.status}
+                time1={item?.orderInfo?.MenuPlan?.endDate}
               />
             );
           }}
           {...flatListOptimizationProps}
+          ListEmptyComponent={
+            <EmptyList
+              image={require('../../../../../assets/Images/emptyCart.png')}
+              title="FIND MEAL"
+              message="Oops! You don't have any ongoing plan"
+              onPress={() => navigation.goBack()}
+            />
+          }
           ListHeaderComponent={<Header icon={icon} location={location} />}
         />
       </View>
@@ -122,22 +189,22 @@ export const MyPlans = ({findPlan}: Props) => {
 
   return (
     <>
-      {myPlanData.length !== 0 ? (
+      {planOrders?.length !== 0 ? (
         <>
-          <FlatList
+          {/* <FlatList
             data={myPlanData || []}
             style={styles.listStyle}
             renderItem={({item}) => {
-              return (
-                <ListItem
-                  icon={item.icon}
-                  location={item.location}
-                  list={item.list}
-                />
-              );
+              return ( */}
+          <ListItem
+          // icon={item.icon}
+          // location={item.location}
+          // list={item.list}
+          />
+          {/* );
             }}
             {...flatListOptimizationProps}
-          />
+          /> */}
           <BottomSheet
             isOpen={isOpen}
             openedPercentage={0.7}

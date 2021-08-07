@@ -64,7 +64,7 @@ const SelectedCategory: FC<selectedProps> = ({route}) => {
       dispatch(useMenuItemByCategory(newData.data.items));
       setLoader(false);
     };
-
+    setLoader(false);
     getItemByCategoryId();
   }, [categoryId]);
 
@@ -142,6 +142,7 @@ export const CardItem = ({item, onPress, gridView}: any) => {
   return (
     <Pressable onPress={onPress}>
       <Card
+        diff={'plan'}
         categories={item.MenuItemCategories}
         img={Image_Http_URL}
         labelText={item.caption}

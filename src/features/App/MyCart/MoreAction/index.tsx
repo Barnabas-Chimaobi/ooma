@@ -5,6 +5,12 @@ import {useNavigation} from '@react-navigation/native';
 import {styles} from './styles';
 import api from '../../../../api';
 import {ShowMessage, type} from '../../../../components';
+import {getMenuPlanCart, getMenuitemCart} from '../../../../FetchData';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useDispatch, useSelector} from 'react-redux';
+import {basketStates} from '../../../../reducers/basket';
+import {cartStates} from '../../../../reducers/cart';
+import {AppDispatch, RootState} from '../../../../store';
 
 interface IProps {
   title: string;
@@ -16,6 +22,8 @@ interface IProps {
   id?: any;
   cart?: any;
   editItems: any;
+  params: any;
+  addons;
 }
 
 const MoreAction: FC<IProps> = ({
@@ -28,23 +36,54 @@ const MoreAction: FC<IProps> = ({
   id,
   cart,
   editItems,
+  params,
+  addons,
 }) => {
   const [isCounter, setIsCounter] = useState(false);
   const [countValue, setCountValue] = useState(0);
   const navigation = useNavigation();
+  const dispatch: AppDispatch = useDispatch();
 
   console.log(id, cart, editItems, 'idforeditttttt');
 
+  const getBasket = async () => {
+    // const getMenuplanKart = async () => {
+    const userId = await AsyncStorage.getItem('userId');
+    console.log(userId, 'useriddd');
+
+    const menuplanscart = await getMenuPlanCart(userId);
+    dispatch(basketStates(menuplanscart?.items));
+    console.log(menuplanscart, '=======planscarttttttt=========');
+    const all = menuplanscart?.items.map((item: any) => item.MenuPlan);
+    let all1 = all.map((item: any) => item.MenuPlanDetails);
+    // console.log(all1, '=====all1======');
+    // };
+  };
+
+  const getCart = async () => {
+    const userId = await AsyncStorage.getItem('userId');
+    console.log(userId, 'useriddd');
+    // const gottenId = JSON.parse(userId);
+
+    try {
+      const menuICart = await getMenuitemCart(userId);
+      dispatch(cartStates(menuICart?.items));
+      console.log(menuICart, 'cart ===value');
+    } catch (error) {}
+  };
+
   const deleteCart = async () => {
+    console.log(cart, '===deltessss===');
     try {
       const carts = await api.delete(`/orders/cart`, {
         cartId: cart,
       });
       const addedCart = carts?.data?.data;
+      getCart();
       // if (cart?.config?.response == 'Cart updated successfully') {
       ShowMessage(type.DONE, 'Item deleted successfully'); // dispatch(cartStates(addedCart));
       // setCartItem(addedCart);
-      navigation.goBack('Mycart');
+      // navigation.goBack('Mycart');
       console.log(carts, 'editedcartttt');
       // } else {
       //   ShowMessage(type.ERROR, 'Item could not be updated'); // dispatch(cartStates(addedCart));
@@ -54,11 +93,36 @@ const MoreAction: FC<IProps> = ({
     }
   };
 
+  const deleteBasket = async () => {
+    console.log(cart, '===deltessss===');
+    try {
+      const carts = await api.delete(`/orders/basket`, {
+        basketId: cart,
+      });
+      const addedCart = carts?.data?.data;
+      getBasket();
+      // if (cart?.config?.response == 'Cart updated successfully') {
+      ShowMessage(type.DONE, 'Item deleted successfully'); // dispatch(cartStates(addedCart));
+      // setCartItem(addedCart);
+      navigation.navigate('Cart');
+      console.log(carts, 'deletedbasket');
+      // } else {
+      //   ShowMessage(type.ERROR, 'Item could not be updated'); // dispatch(cartStates(addedCart));
+      // }
+    } catch (err) {
+      console.log(err.response.data, 'cartError');
+    }
+  };
+
   const handleActions = () => {
     if (count) {
       setIsCounter(true);
     } else if (del) {
-      deleteCart();
+      if (params == 'deleteBasket') {
+        deleteBasket();
+      } else {
+        deleteCart();
+      }
       // Run delete function here
       // Alert.alert('No function to call');
     } else {
@@ -67,6 +131,7 @@ const MoreAction: FC<IProps> = ({
         cartId: cart,
         eachItem: editItems,
         editParams: 'editParams',
+        addon: addons,
       });
     }
   };

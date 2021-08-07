@@ -32,6 +32,7 @@ interface IProps {
   page: number;
   onpress1?: () => void;
   oldPrice?: any;
+  diff: any;
 }
 
 const Card: FC<IProps> = ({
@@ -52,12 +53,15 @@ const Card: FC<IProps> = ({
   onPress,
   onpress1,
   oldPrice,
+  diff,
 }) => {
   return (
     <View style={[S.main, cardStyle, gridView && S.mainRow]}>
       {!gridView ? (
         <TouchableOpacity onPress={onPress}>
-          <ImageBackground source={img} style={S.imageBackground}>
+          <ImageBackground
+            source={img}
+            style={diff == 'plan' ? S.imageBackground2 : S.imageBackground}>
             <View style={S.flex}>
               <Label
                 labelText={labelText}
@@ -73,16 +77,17 @@ const Card: FC<IProps> = ({
           </ImageBackground>
           <View style={S.textBar}>
             <Text style={S.title}>{title}</Text>
-            <PriceTag price={price} oldPrice={oldPrice} />
+            {/* <PriceTag price={price} oldPrice={oldPrice} /> */}
             <View style={S.rating}>
-              <Rating1 />
-              <RatingCount ratingCount={ratingCount} />
+              {/* <Rating1 /> */}
+              {/* <RatingCount ratingCount={ratingCount} /> */}
               <DishTypes
                 categories={categories}
                 dish1={dish1}
                 dish2={dish2}
                 dish3={dish3}
               />
+              <PriceTag price={price} oldPrice={oldPrice} />
             </View>
             <Text style={S.dishType}>{dishType?.toUpperCase()}</Text>
           </View>

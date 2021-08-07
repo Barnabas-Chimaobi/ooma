@@ -97,7 +97,7 @@ const Explore = () => {
         }}
         rightIcon={<Icon name="search" color={colors.blackGrey} size={18} />}
         style={styles.exploreInput}
-        inputStyle={{ padding: 1 }}
+        inputStyle={{padding: 1}}
       /> */}
       <View
         style={{

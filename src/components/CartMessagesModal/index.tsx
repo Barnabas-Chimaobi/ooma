@@ -13,6 +13,9 @@ interface Props {
   otherCardViewStyle?: any;
   otherModalViewStyle?: any;
   btnClose?: any;
+  total: any;
+  cartParams: any;
+  onpress?: any;
 }
 
 const MessageModal: FC<Props> = (props: Props) => {
@@ -50,7 +53,15 @@ const MessageModal: FC<Props> = (props: Props) => {
       </Modal>
       <Pressable
         style={[styles.button, styles.buttonOpen, props.btnStyles]}
-        onPress={() => setModalVisible(true)}>
+        // onPress={() => {
+        //   navigation.navigate('Checkout', {
+        //     params: props.cartParams,
+        //     subTotal: props.total,
+        //     planOrder: 'planOrder',
+        //   });
+        //   // setModalVisible(true);
+        // }}
+        onPress={props.onpress}>
         <Text style={styles.textStyle}>{props.openButtonTitle}</Text>
       </Pressable>
     </View>

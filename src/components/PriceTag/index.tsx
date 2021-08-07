@@ -11,14 +11,14 @@ interface IProps {
 
 const PriceTag: FC<IProps> = ({price, clear, oldPrice, style}) => (
   <View style={{flexDirection: 'row', alignItems: 'center'}}>
-    {oldPrice && (
+    {/* {oldPrice && (
       <Text
         style={{
           marginRight: 20,
           color: 'black',
           textDecorationLine: 'line-through',
         }}>{`\u20A6${oldPrice}`}</Text>
-    )}
+    )} */}
     {price && (
       <Text
         style={

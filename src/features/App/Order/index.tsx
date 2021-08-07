@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {
@@ -13,17 +13,24 @@ import CurrentOrder from './Current';
 import OrderHistory from './History';
 import UpcomingOrder from './Upcoming';
 import OrderDetails from './OrderDetails';
+import {useNavigation, useRoute} from '@react-navigation/native';
+// import {getMenuitemCart} from '../../../FetchData';
 
 const Tab = createMaterialTopTabNavigator();
 
 const Stack = createStackNavigator();
 
 const OrderTab = () => {
-  const Current = () => <CurrentOrder />;
+  const route = useRoute();
+  const {itemOrder} = route.params;
+  useEffect(() => {
+    console.log(itemOrder, 'itemorderssss======');
+  });
+  const Current = () => <CurrentOrder item={itemOrder} />;
 
-  const Upcoming = () => <UpcomingOrder />;
+  const Upcoming = () => <UpcomingOrder item={itemOrder} />;
 
-  const History = () => <OrderHistory />;
+  const History = () => <OrderHistory item={itemOrder} />;
 
   return (
     <>

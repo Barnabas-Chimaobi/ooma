@@ -99,7 +99,7 @@ const MenuTab = () => {
 
       // menuPlan('82059935-89dc-4daf-aff3-adcf997d6859');
     };
-
+    console.log(params.planId, '=====planid=====');
     getBranchId();
   }, []);
 

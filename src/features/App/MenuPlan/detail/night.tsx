@@ -21,6 +21,7 @@ type Props = {
   oldPrice?: Number;
   planId: any;
   planTime: any;
+  plandate: any;
 };
 
 function percentageCalc(oldPrice: any, newPrice: any) {
@@ -38,6 +39,7 @@ const DetailCard: React.FC<Props> = (props: Props) => {
           menuPlan: 'menuPlan',
           planId: props.planId,
           planTime: props.planTime,
+          plandate: props.plandate,
           // rating: item?.item?.name,
         })
       }>
@@ -80,7 +82,7 @@ const Night = (night: any, planIds: any) => {
           style={{height: 80, width: 80, marginTop: -120}}
           image={require('../../../../assets/Images/emptyCart.png')}
           title="FIND PLAN"
-          message="Oops! No plan for this date"
+          message="Please wait while we load the plan for this date!"
           onPress={() => navigation.goBack()}
         />
       ) : (
@@ -100,6 +102,7 @@ const Night = (night: any, planIds: any) => {
               amount={item?.MenuItem?.amount}
               oldPrice={item.oldPrice}
               planTime={item?.deliveryTime}
+              plandate={item?.plandate}
             />
           )}
           refreshControl={

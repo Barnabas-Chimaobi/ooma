@@ -17,7 +17,7 @@ const AllMenu: FC<AllMenuPlanProps> = ({allMenuPlans}) => {
     //Call the Service to get the latest data, thats the api call method
   };
 
-  // console.log(allMenuPlans, 'allMenuPlans');
+  console.log(allMenuPlans, '====allMenuPlans===');
 
   return (
     <View style={{marginBottom: 250}}>

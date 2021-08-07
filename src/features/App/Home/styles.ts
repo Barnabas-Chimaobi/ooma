@@ -16,8 +16,8 @@ export default StyleSheet.create({
   logoBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginHorizontal: 10,
-    marginTop: 20,
+    marginHorizontal: 5,
+    marginTop: 10,
     alignItems: 'center',
   },
   notificationBar: {
@@ -35,7 +35,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginHorizontal: 15,
-    marginTop: 15,
+    marginTop: 5,
     backgroundColor: '#fff',
     borderRadius: 5,
     height: 120,

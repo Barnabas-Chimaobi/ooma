@@ -7,6 +7,7 @@ import {
   Image,
   Platform,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import {styles} from './styles';
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
@@ -27,7 +28,10 @@ import {
   getMenuPlanCart,
 } from '../../../../FetchData';
 import {DateFormatter} from '../../../../Utils';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useDispatch, useSelector} from 'react-redux';
+import {basketStates} from '../../../../reducers/basket';
+import {AppDispatch, RootState} from '../../../../store';
 interface IProps {
   route?: {};
 }
@@ -35,6 +39,10 @@ interface IProps {
 const initialLayout = {width: Dimensions.get('window').width};
 
 const MenuDetails: FC<IProps> = ({route}) => {
+  const basketItem = useSelector(
+    (state: RootState) => state.basketState.payload,
+  );
+
   const {planId} = route?.params;
 
   const MorningRoute = () => (
@@ -72,15 +80,31 @@ const MenuDetails: FC<IProps> = ({route}) => {
 
   const getMorningAfternoonNight = async (item: any, newdate: any) => {
     setPlanType(item);
-
+    const news = new Date().toISOString();
+    console.log(news.substring(0, 10), '====new dateeee=====');
     const morningorAfterOrEve = await getMenuPlanDetailBydateAndtypePlanId(
-      newdate == undefined ? '2021-06-01' : newdate,
+      newdate == undefined ? news.substring(0, 10) : newdate,
       '1',
-      'e2594184-ba9a-4c22-8a7a-106d8ae7bff1',
+      planId,
       item,
     );
     setMorning(morningorAfterOrEve);
     console.log(date, 'morningsssss');
+  };
+
+  const getMenuplanKart = async () => {
+    const userId = await AsyncStorage.getItem('userId');
+    console.log(userId, 'useriddd');
+
+    const menuplanscart = await getMenuPlanCart(userId);
+    setPlanCart(menuplanscart?.items);
+    // console.log(
+    //   menuplanscart?.items.map((item: any) => item.MenuPlan),
+    //   '=======planscarttttttt=========',
+    // );
+    const all = menuplanscart?.items.map((item: any) => item.MenuPlan);
+    let all1 = all.map((item: any) => item.MenuPlanDetails);
+    console.log(menuplanscart, '=====all1======');
   };
 
   useEffect(() => {
@@ -90,20 +114,22 @@ const MenuDetails: FC<IProps> = ({route}) => {
       console.log(menuPlansDetail, 'menuplandetailsconsoled');
     };
 
-    const getMenuplanKart = async () => {
-      const menuplanscart = await getMenuPlanCart();
-      setPlanCart(menuplanscart?.items);
-      // console.log(
-      //   menuplanscart?.items.map((item: any) => item.MenuPlan),
-      //   '=======planscarttttttt=========',
-      // );
-      const all = menuplanscart?.items.map((item: any) => item.MenuPlan);
-      let all1 = all.map((item: any) => item.MenuPlanDetails);
-      console.log(all1, '=====all1======');
-    };
+    // const getMenuplanKart = async () => {
+    //   const menuplanscart = await getMenuPlanCart();
+    //   setPlanCart(menuplanscart?.items);
+    //   // console.log(
+    //   //   menuplanscart?.items.map((item: any) => item.MenuPlan),
+    //   //   '=======planscarttttttt=========',
+    //   // );
+    //   const all = menuplanscart?.items.map((item: any) => item.MenuPlan);
+    //   let all1 = all.map((item: any) => item.MenuPlanDetails);
+    //   console.log(all1, '=====all1======');
+    // };
 
     console.log(date, planId, planType, 'consoleedddddsss');
-
+    const unsubscribe = navigation.addListener('focus', () => {
+      getMenuplanKart();
+    });
     getMenuPlanDetails();
     getMenuplanKart();
     getMorningAfternoonNight('Morning');
@@ -115,6 +141,7 @@ const MenuDetails: FC<IProps> = ({route}) => {
     const newDate = JSON.stringify(selectedDate).substring(1, 11);
 
     console.log(planType, '======plantype=====');
+    console.log(selectedDate, '======plandatesssss======');
     const currentDate = newDate || date;
     setDate1(selectedDate || date1);
     setDate(currentDate);
@@ -207,7 +234,7 @@ const MenuDetails: FC<IProps> = ({route}) => {
       </View>
       <View style={styles.list}>
         <Basket
-          counts={planCart?.length}
+          counts={basketItem?.length}
           onBasketPress={() =>
             navigation.navigate('Cart', {
               menu: routes,
@@ -217,44 +244,52 @@ const MenuDetails: FC<IProps> = ({route}) => {
           }
         />
         <View style={styles.line} />
-        <TouchableOpacity
-          style={styles.calendar}
-          onPress={() => showDatepicker()}>
-          <Image source={require('../assets/calendar3.png')} />
-          <Text>
-            {DateFormatter.date2(date) || new Date().toLocaleDateString()}
-          </Text>
+        <View style={{flex: 1}}>
+          <ScrollView>
+            <View style={{flex: 1}}>
+              <TouchableOpacity
+                style={styles.calendar}
+                onPress={() => showDatepicker()}>
+                <Image source={require('../assets/calendar3.png')} />
+                <Text>
+                  {DateFormatter.date2(date) || new Date().toLocaleDateString()}
+                </Text>
 
-          {/* <Text>{moment(date).format('D-MM-YYYY')}</Text> */}
-        </TouchableOpacity>
+                {/* <Text>{moment(date).format('D-MM-YYYY')}</Text> */}
+              </TouchableOpacity>
 
-        {show && (
-          // <DateTimePicker
-          //   // testID="dateTimePicker"
-          //   value={date || new Date()}
-          //   mode="date"
-          //   // is24Hour={true}
-          //   display="default"
-          //   onChange={(e: any) => onChange(e)}
-          // />
+              {show && (
+                // <DateTimePicker
+                //   // testID="dateTimePicker"
+                //   value={date || new Date()}
+                //   mode="date"
+                //   // is24Hour={true}
+                //   display="default"
+                //   onChange={(e: any) => onChange(e)}
+                // />
 
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={date1 || new Date()}
-            mode={'date'}
-            is24Hour={true}
-            display="default"
-            onChange={onChanges}
-          />
-        )}
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={date1 || new Date()}
+                  mode={'date'}
+                  is24Hour={true}
+                  display="default"
+                  onChange={onChanges}
+                />
+              )}
 
-        <Text style={styles.date}>
-          {DateFormatter.date2(date) || new Date().toLocaleDateString()}
-        </Text>
-        {/* <Text style={styles.date}>
+              <Text style={styles.date}>
+                {DateFormatter.date2(date) || new Date().toLocaleDateString()}
+              </Text>
+              {/* <Text style={styles.date}>
           {moment(date).format('ddd, Do MMM, YYYY')}
         </Text> */}
-        <TabViewContent />
+              <View style={{marginBottom: -30}}>
+                <TabViewContent />
+              </View>
+            </View>
+          </ScrollView>
+        </View>
       </View>
     </>
   );

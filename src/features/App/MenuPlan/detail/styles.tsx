@@ -94,6 +94,7 @@ export const styles = StyleSheet.create({
     bottom: 55,
     padding: 10,
     zIndex: 32,
+    flex: 1,
   },
 
   calendar: {

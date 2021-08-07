@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState, useEffect} from 'react';
 import {StyleSheet, Text, View, Image, Dimensions} from 'react-native';
 import {FlatList, TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import shortid from 'shortid';
@@ -6,6 +6,15 @@ import {menuHistoryData} from './menuHistoryData';
 import {ProgressBar} from '../../../../../components/ProgressBar/index';
 import {PopupMenu} from '../../../../../components/PopupMenu/index';
 import {Alert} from 'react-native';
+import {getMenuPlanOrders} from '../../../../../FetchData';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  Button,
+  ButtonType,
+  PriceTag,
+  EmptyList,
+} from '../../../../../components';
+import {useNavigation} from '@react-navigation/native';
 
 const {width: windowWidth} = Dimensions.get('window');
 
@@ -15,25 +24,57 @@ interface ListProps {
   pecentage: Number;
   time: string;
   status: string;
+  list: any;
+  time1: any;
 }
 
 export const MenuHistory = () => {
+  const navigation = useNavigation();
+  const [planOrders, setOrders] = useState([]);
+
   const flatListOptimizationProps = {
-    initialNumToRender: 0,
-    maxToRenderPerBatch: 1,
-    removeClippedSubviews: true,
-    scrollEventThrottle: 16,
-    windowSize: 2,
+    // initialNumToRender: 0,
+    // maxToRenderPerBatch: 1,
+    // removeClippedSubviews: true,
+    // scrollEventThrottle: 16,
+    // windowSize: 2,
     keyExtractor: () => shortid.generate(),
-    getItemLayout: useCallback(
-      (_, index) => ({
-        index,
-        length: windowWidth * 0.9,
-        offset: index * windowWidth * 0.9,
-      }),
-      [],
-    ),
+    // getItemLayout: useCallback(
+    //   (_, index) => ({
+    //     index,
+    //     length: windowWidth * 0.9,
+    //     offset: index * windowWidth * 0.9,
+    //   }),
+    //   [],
+    // ),
   };
+
+  const getOrders = async () => {
+    const userId = await AsyncStorage.getItem('userId');
+    console.log(userId, 'useriddd');
+    // const gottenId = JSON.parse(userId);
+
+    try {
+      // console.log(newsum, 'cartttttt');
+      const order = await getMenuPlanOrders(userId);
+      setOrders(order?.items);
+      //  await dispatch(cartStates(menuICart?.items));
+      console.log(order, 'cart ===value');
+      console.log(
+        order?.items?.map((item: any) => item),
+        'cart ===valuesssss',
+      );
+
+      // setRefreshing(false);
+    } catch (error) {
+      console.log(error, '====errorrsss====');
+      // setRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
+    getOrders();
+  }, []);
 
   const onPopupEvent = (eventName: string, index: Number) => {
     if (eventName !== 'itemSelected') return;
@@ -41,14 +82,37 @@ export const MenuHistory = () => {
     else Alert.alert('Deleted');
   };
 
-  const Item = ({imageUrl, itemName, pecentage, time, status}: ListProps) => {
+  const Item = ({
+    imageUrl,
+    itemName,
+    pecentage,
+    time,
+    status,
+    list,
+    time1,
+  }: ListProps) => {
+    // console.log(
+    //   list?.map((item: any) => item),
+    //   '===listitemmsss===',
+    // );
     return (
       <View style={styles.innerListItemStyle}>
         <View style={styles.overlayStyle} />
-        <Image source={imageUrl} />
+        <Image
+          style={{height: 100, width: 100, borderRadius: 10}}
+          source={{uri: imageUrl}}
+        />
         <View style={styles.itemTextArea}>
           <Text style={styles.itemNameStyle}>{itemName}</Text>
-          <Text style={styles.timeStyle}>{time}</Text>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={styles.timeStyle}>
+              {new Date(time).toDateString()} -
+            </Text>
+            <Text> </Text>
+            <Text style={styles.timeStyle}>
+              {new Date(time1).toDateString()}
+            </Text>
+          </View>
           <View>
             <Text style={styles.statusStyle}>{status}</Text>
             <ProgressBar progressValue={pecentage} />
@@ -67,20 +131,30 @@ export const MenuHistory = () => {
   return (
     <View>
       <FlatList
-        data={menuHistoryData}
+        data={planOrders}
         style={styles.listStyle}
         renderItem={({item}) => {
           return (
             <Item
-              imageUrl={item.imageUrl}
-              itemName={item.itemName}
+              imageUrl={item?.orderInfo?.MenuPlan?.imageurl}
+              itemName={item?.orderInfo?.orderName}
               pecentage={item.pecentage}
-              time={item.time}
-              status={item.status}
+              time={item?.orderInfo?.MenuPlan?.startDate}
+              status={item?.orderInfo?.status}
+              time1={item?.orderInfo?.MenuPlan?.endDate}
+              // list={item?.menuplanorders?.MenuplanOrderDetails}
             />
           );
         }}
         {...flatListOptimizationProps}
+        ListEmptyComponent={
+          <EmptyList
+            image={require('../../../../../assets/Images/emptyCart.png')}
+            title="FIND MEAL"
+            message="Oops! You don't have any ongoing plan"
+            onPress={() => navigation.goBack()}
+          />
+        }
       />
     </View>
   );

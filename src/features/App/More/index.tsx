@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
 import {Overlay} from 'react-native-elements';
 import {SimpleHeader, CheckBox1} from '../../../components';
@@ -13,7 +13,7 @@ import {useDispatch} from 'react-redux';
 import {AppDispatch} from '../../../store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ScrollView} from 'react-native-gesture-handler';
-
+import {getMenuItemOrders} from '../../../FetchData';
 interface itemProp {
   name: string;
   icon: any | undefined;
@@ -94,13 +94,37 @@ const More: React.FC<Props> = ({navigation}) => {
   const [visible, setVisible] = useState(false);
   const [dish, setDish] = useState(false);
   const [menuPlan, setMenuPlan] = useState(false);
+  const [order, setOrders] = useState('');
+
   const toggleOverlay = () => {
     setVisible(!visible);
   };
+
+  const getOrders = async () => {
+    const userId = await AsyncStorage.getItem('userId');
+    console.log(userId, 'useriddd');
+    // const gottenId = JSON.parse(userId);
+
+    try {
+      // console.log(newsum, 'cartttttt');
+      const orders = await getMenuItemOrders(userId);
+      setOrders(orders?.items);
+      //  await dispatch(cartStates(menuICart?.items));
+      console.log(orders, 'cart ===value');
+      // setRefreshing(false);
+    } catch (error) {
+      console.log(error, '====errorrsss====');
+      // setRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
+    getOrders();
+  }, []);
   const handleNavigate = async (name: string) => {
     switch (name) {
       case 'My Order':
-        navigation.navigate('Order', {screen: 'Order'});
+        navigation.navigate('Order', {screen: 'Order', itemOrder: order});
         break;
 
       case 'Order for a friend':
@@ -129,8 +153,9 @@ const More: React.FC<Props> = ({navigation}) => {
 
       case 'Logout':
         await AsyncStorage.removeItem('token');
-        dispatch(reset());
-        dispatch(signOut());
+        navigation.navigate('Splash');
+        // dispatch(reset());
+        // dispatch(signOut());
         break;
 
       default:

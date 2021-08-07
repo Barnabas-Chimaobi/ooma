@@ -18,6 +18,7 @@ interface IProps {
   overlay?: boolean;
   props?: any;
   props1?: any;
+  props2?: any;
 }
 
 const RadioSelect = ({
@@ -33,6 +34,7 @@ const RadioSelect = ({
   overlay,
   props,
   props1,
+  props2,
 }: IProps) => {
   const [switchs, setSwitchs] = useState(false);
   const [checkedValue, setCheckedValue] = useState('');
@@ -53,6 +55,10 @@ const RadioSelect = ({
   const setLoad = (title: any) => {
     props1(title);
   };
+
+  const setChannel = (title: any) => {
+    props2(title);
+  };
   const toggleSwitch = () => setSwitchs((previousState) => !previousState);
 
   const handleRadioCheck = (type: any, value: any, title: any) => {
@@ -65,6 +71,12 @@ const RadioSelect = ({
     } else if (type === 'Payment Method') {
       // setCombine(value);
       setCheckedValue(value);
+      // dispatch(useCombination(value));
+      console.log(type, value);
+      return;
+    } else if (type === 'Order Channel') {
+      setCheckedValue(value);
+      // props2(title);
       // dispatch(useCombination(value));
       console.log(type, value);
       return;

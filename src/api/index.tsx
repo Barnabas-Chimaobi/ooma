@@ -23,25 +23,27 @@ class Api {
       // console.log(res, 'res');
       return {errorStatus: false, ...res};
     } catch (err) {
-      // console.log(err.response.data.message, 'post');
+      console.log(err.response.data, 'post');
       ShowMessage(type.ERROR, err.response.data.message);
       throw err;
       // return err;
     }
   };
 
-  delete = async (URL: any, data?: any) => {
+  delete = async (URL: any, datas?: any) => {
     try {
       let token: any = await AsyncStorage.getItem('token');
       console.log(token, 'tokennnn');
       token = token || '';
-      const res = await request.delete(URL, data, {
+      const res = await request.delete(URL, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        data: datas,
       });
       return {errorStatus: false, ...res};
     } catch (err) {
+      console.log(err.response.data, 'delete');
       return err;
     }
   };

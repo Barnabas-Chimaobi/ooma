@@ -7,7 +7,7 @@ import {square} from '../../../../../assets/index';
 type Props = {
   id: string;
   image: any;
-  cardStyle:any
+  cardStyle: any;
   title: String;
   rating?: Number;
   star?: any;

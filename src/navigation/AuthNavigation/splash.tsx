@@ -13,7 +13,6 @@ const Splash = () => {
 
   const bootstrapAsync = async () => {
     // let userToken: any;
-
     try {
       let userToken: any = await AsyncStorage.getItem('token');
       console.log(userToken, 'asyncbranchhhsssss');
@@ -31,7 +30,10 @@ const Splash = () => {
   };
 
   useEffect(() => {
-    bootstrapAsync();
+    const unsubscribe = navigation.addListener('focus', () => {
+      // this.componentDidMount();
+      bootstrapAsync();
+    });
   }, []);
 
   return (

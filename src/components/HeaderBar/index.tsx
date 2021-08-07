@@ -8,6 +8,7 @@ import {
   Alert,
 } from 'react-native';
 import S from './styles';
+import s from './styles1';
 import {Divider} from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {DateFormatter} from '../../Utils';
@@ -21,6 +22,7 @@ interface IProps {
   otherTitle?: any;
   onPressImg?: () => void;
   modes?: any;
+  checkout: any;
 }
 
 const HeaderBar = ({
@@ -32,6 +34,7 @@ const HeaderBar = ({
   otherTitle,
   onPressImg,
   modes,
+  checkout,
 }: IProps) => {
   const [date, setDate] = useState();
 
@@ -55,59 +58,113 @@ const HeaderBar = ({
   console.log(otherTitle, 'title');
   return (
     <>
-      <View style={S.location}>
-        <Text
-          style={{
-            fontSize: 12,
-            bottom: 10,
-            alignSelf: 'flex-start',
-            opacity: 0.5,
-          }}>
-          Deliver to
-        </Text>
-        <View style={S.locationDetails}>
-          <Text style={{fontSize: 13}}>{title}</Text>
-
-          {onPressImg ? (
+      {checkout === 'checkout' ? (
+        <View>
+          <View style={s.location}>
+            <View style={s.locationDetails}>
+              {onPressImg ? (
+                <TouchableOpacity
+                  onPress={() => {
+                    showDatepicker(), onPressImg();
+                  }}>
+                  <Image source={image1} style={s.locationImage} />
+                </TouchableOpacity>
+              ) : (
+                <Image source={image1} style={s.locationImage} />
+              )}
+              <Text style={{fontSize: 13}}>{title}</Text>
+            </View>
             <TouchableOpacity
               onPress={() => {
-                onPressImg();
-              }}>
-              <Image
-                resizeMode="contain"
-                source={image1}
-                style={S.locationImage}
-              />
+                (otherTitle == 'Set Time' || title == 'Set Time') &&
+                  showDatepicker();
+              }}
+              style={[s.timerBar, rejig && {width: '50%', padding: 0}]}>
+              {rejig ? (
+                <>
+                  <Text style={s.rejig}>{rejigTitle}</Text>
+                </>
+              ) : (
+                <Image
+                  source={image2}
+                  style={{height: 18, width: 18, marginLeft: -25}}
+                />
+              )}
+              <Text
+                style={
+                  (rejig && {padding: 6}) ||
+                  (date && {paddingHorizontal: 5, width: 90, fontSize: 10})
+                }>
+                {DateFormatter.date2(date) || new Date().toLocaleDateString()}
+              </Text>
             </TouchableOpacity>
-          ) : (
-            <Image
-              resizeMode="contain"
-              source={image1}
-              style={S.locationImage}
+          </View>
+          {show && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={date || new Date()}
+              mode={'date'}
+              is24Hour={true}
+              display="default"
+              onChange={onChange}
             />
           )}
         </View>
-
-        <TouchableOpacity>
-          <View
-            style={{
-              flexDirection: 'row',
-              top: 25,
-              marginLeft: -50,
-              borderColor: '#F6F6F6',
-              borderWidth: 1,
-              padding: 5,
-              borderRadius: 50,
-              marginBottom: 15,
-              alignSelf: 'flex-start',
-            }}>
-            <Image source={image2} style={{height: 18, width: 18}} />
-            <Text style={{paddingHorizontal: 5, fontSize: 14}}>
-              Schedule Order
+      ) : (
+        <View>
+          <View style={S.location}>
+            <Text
+              style={{
+                fontSize: 12,
+                bottom: 10,
+                alignSelf: 'flex-start',
+                opacity: 0.5,
+              }}>
+              Deliver to
             </Text>
-          </View>
-        </TouchableOpacity>
-        {/* <TouchableOpacity
+            <View style={S.locationDetails}>
+              <Text style={{fontSize: 13}}>{title}</Text>
+
+              {onPressImg ? (
+                <TouchableOpacity
+                  onPress={() => {
+                    onPressImg();
+                  }}>
+                  <Image
+                    resizeMode="contain"
+                    source={image1}
+                    style={S.locationImage}
+                  />
+                </TouchableOpacity>
+              ) : (
+                <Image
+                  resizeMode="contain"
+                  source={image1}
+                  style={S.locationImage}
+                />
+              )}
+            </View>
+
+            <TouchableOpacity onPress={() => showDatepicker()}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  top: 25,
+                  marginLeft: -50,
+                  borderColor: '#F6F6F6',
+                  borderWidth: 1,
+                  padding: 5,
+                  borderRadius: 50,
+                  marginBottom: 15,
+                  alignSelf: 'flex-start',
+                }}>
+                <Image source={image2} style={{height: 18, width: 18}} />
+                <Text style={{paddingHorizontal: 5, fontSize: 14}}>
+                  Schedule Order
+                </Text>
+              </View>
+            </TouchableOpacity>
+            {/* <TouchableOpacity
           onPress={() => {
             (otherTitle == 'Set Time' || title == 'Set Time') &&
               showDatepicker();
@@ -131,16 +188,18 @@ const HeaderBar = ({
             {DateFormatter.date2(date) || new Date().toLocaleDateString()}
           </Text>
         </TouchableOpacity> */}
-      </View>
-      {show && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={date || new Date()}
-          mode={'date'}
-          is24Hour={true}
-          display="default"
-          onChange={onChange}
-        />
+          </View>
+          {show && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={date || new Date()}
+              mode={'date'}
+              is24Hour={true}
+              display="default"
+              onChange={onChange}
+            />
+          )}
+        </View>
       )}
     </>
   );

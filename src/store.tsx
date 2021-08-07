@@ -16,7 +16,10 @@ import {
   historyMenuItemslice,
   menuItemByCategorySlice,
   cartSlice,
-  menuItemCategorySlice,menuPlanCategorySlice
+  menuItemCategorySlice,
+  menuPlanCategorySlice,
+  basketSlice,
+  basketStates,
 } from './reducers';
 import thunkMiddleware from 'redux-thunk';
 
@@ -38,8 +41,9 @@ export const store = configureStore({
     historyMenuItems: historyMenuItemslice,
     menuItemsByCategory: menuItemByCategorySlice,
     addedCart: cartSlice,
-    itemCategory:menuItemCategorySlice,
-    menuPlanCategories:menuPlanCategorySlice
+    itemCategory: menuItemCategorySlice,
+    menuPlanCategories: menuPlanCategorySlice,
+    basketState: basketSlice,
   },
   middleware: [
     ...getDefaultMiddleware({immutableCheck: false}),

@@ -310,7 +310,7 @@ const Home = () => {
                 <Text
                   style={{
                     backgroundColor: colors.start,
-                    marginTop: '-5%',
+                    marginTop: '-8%',
                     color: colors.white,
                     width: 126,
                     padding: 8,

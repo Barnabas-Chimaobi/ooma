@@ -16,6 +16,7 @@ interface IProps {
   itemId: string;
   cartId: string;
   item: any;
+  addons: any;
 }
 
 const Card: FC<IProps> = ({
@@ -29,6 +30,7 @@ const Card: FC<IProps> = ({
   itemId,
   cartId,
   item,
+  addons,
 }) => {
   const [state, setState] = useState({toggle: false});
   const [qunt, setQunt] = useState(quantity);
@@ -103,9 +105,11 @@ const Card: FC<IProps> = ({
               iconName="pen"
               id={itemId}
               cart={cartId}
+              addons={addons}
             />
             {/* <MoreAction title="Add Quantity" iconName="signal" count /> */}
             <MoreAction
+              cart={cartId}
               editItems={item}
               title="Delete"
               iconName="trash"

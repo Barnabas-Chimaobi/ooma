@@ -144,7 +144,7 @@ const MyCarousel: FC<CarouselProps> = ({menuItem, page = 1, keyProp}) => {
       data={menuItem}
       renderItem={_renderItem}
       sliderWidth={380}
-      itemWidth={350}
+      itemWidth={315}
       activeSlideAlignment="start"
     />
   );

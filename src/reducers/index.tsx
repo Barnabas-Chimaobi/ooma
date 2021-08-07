@@ -25,12 +25,13 @@ import drinkMenuItemSlice, {getDrinkMenuItems} from './DrinkMenu';
 import breakFastMenuItemSlice, {getBreakFastMenuItems} from './BreakFastMenu';
 import historyMenuItemslice, {getMenuItemsHistory} from './HistoryMenu';
 import menuItemCategorySlice, {useMenuItemCategory} from './ItemCategory';
-import menuPlanCategorySlice, {useMenuPlanCategory} from './MenuPlanCategory'
+import menuPlanCategorySlice, {useMenuPlanCategory} from './MenuPlanCategory';
 
 import menuItemByCategorySlice, {
   useMenuItemByCategory,
 } from './MenuItemByCategory';
 import cartSlice, {cartStates} from './cart';
+import basketSlice, {basketStates} from './basket';
 
 export {
   authSlice,
@@ -76,5 +77,7 @@ export {
   menuItemCategorySlice,
   useMenuItemCategory,
   menuPlanCategorySlice,
-  useMenuPlanCategory
+  useMenuPlanCategory,
+  basketSlice,
+  basketStates,
 };

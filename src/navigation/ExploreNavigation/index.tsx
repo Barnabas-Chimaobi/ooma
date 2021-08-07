@@ -10,6 +10,7 @@ import {
   Detail,
   SearchMenuitemandPlan,
   Cart1,
+  Home,
 } from '../../features/App';
 import {createStackNavigator} from '@react-navigation/stack';
 const {Navigator, Screen} = createStackNavigator();

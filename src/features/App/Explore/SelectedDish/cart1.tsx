@@ -67,6 +67,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     planTime,
     eachItem,
     editParams,
+    addon,
   } = route.params;
 
   const navigation = useNavigation();
@@ -104,6 +105,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   const [paymentMethod, setPaymentMethod] = useState('');
   const [cartid, setCartId] = useState('');
   const [showTime, setShowTime] = useState(false);
+  const [newItem, setNewItem] = useState([]);
 
   const visibility = () => {
     setVisible((previousState) => !previousState);
@@ -161,8 +163,10 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     }
   };
 
+  let eachItems = JSON.parse(eachItem?.addons);
   useEffect(() => {
-    // console.log(route.params.eachItem, '====eachitemmm ====');
+    // console.log(JSON.parse(addon), '====eachitemmm ====');
+    console.log(eachItem, '====eachitemmm ====');
     const handleData = async () => {
       const regionName = await AsyncStorage.getItem('regionName');
       const branchName = await AsyncStorage.getItem('branchName');
@@ -434,7 +438,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
         <View style={S.sdHold}>
           <View style={S.sdContainer}>
             <Text>{menuItem?.itemName}</Text>
-            <PriceTag price={prices} />
+            <PriceTag price={eachItem?.amount} />
           </View>
           <View style={S.sdRating}>
             <Rating rating={count} />
@@ -482,36 +486,37 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           />
           <Collapsible collapsed={!visible} style={{width: '100%'}}>
             <>
-              {eachItem?.addons
-                ? JSON.parse(eachItem?.addons).map((addon: any) => {
-                    // console.log(addon, 'addonsss');
-                    return (
-                      <TouchableWithoutFeedback
-                        onPress={() => {
-                          console.log('==do nothing==');
-                        }}>
-                        <View key={addon?.id}>
-                          <Adjust
-                            isAddon
-                            itemAddon={addon}
-                            processAddons={processAddons}
-                            removeAddon={removeAddon}
-                            props={(item: any) => submitProp(item)}
-                            mainStyle={{paddingVertical: 10}}
-                            title={
-                              addon?.isExtra == true
-                                ? `Extra ${addon?.name} `
-                                : addon?.name
-                            }
-                            price={(addon?.totalPrice).toFixed(2)}
-                            titleStyle={ss.adjustTitleStyle}
-                          />
-                          {/* <AddOns /> */}
-                        </View>
-                      </TouchableWithoutFeedback>
-                    );
-                  })
-                : null}
+              {console.log(
+                JSON.parse(addon).map((item) => item),
+                '===consolleedddd====',
+              )}
+              {JSON.parse(addon).map((addons: any) => {
+                return (
+                  <TouchableWithoutFeedback
+                    onPress={() => {
+                      console.log('==do nothing==');
+                    }}>
+                    <View key={addons?.id}>
+                      <Adjust
+                        quantity={addons?.quantity}
+                        isAddon
+                        itemAddon={addons}
+                        processAddons={processAddons}
+                        removeAddon={removeAddon}
+                        props={(item: any) => submitProp(item)}
+                        mainStyle={{paddingVertical: 10}}
+                        title={
+                          addons?.isExtra == true
+                            ? `Extra ${addons?.name} `
+                            : addons?.name
+                        }
+                        price={(addons?.totalPrice).toFixed(2)}
+                        titleStyle={ss.adjustTitleStyle}
+                      />
+                    </View>
+                  </TouchableWithoutFeedback>
+                );
+              })}
             </>
           </Collapsible>
         </View>
@@ -565,6 +570,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
 
         <Divider />
         <Adjust
+          edit={eachItem?.quantity}
           props1={(item: any) => getQuantity(item)}
           mainStyle={{paddingVertical: 20}}
           title="Adjust Quantity"

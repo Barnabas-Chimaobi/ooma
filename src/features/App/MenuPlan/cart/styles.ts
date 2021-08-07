@@ -60,13 +60,13 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 16,
     color: '#303030',
-    width: 160,
+    width: 130,
   },
   textViewStyles: {
     flexDirection: 'column',
     justifyContent: 'space-evenly',
     marginLeft: -30,
-
+    
     height: '100%',
   },
   countStyles: {
@@ -78,6 +78,7 @@ export const styles = StyleSheet.create({
   timeStyle: {
     color: 'green',
     fontSize: 12,
+    marginTop: 40
   },
   deliveryStyle: {
     color: 'green',
@@ -90,7 +91,7 @@ export const styles = StyleSheet.create({
     color: '#303030',
   },
   listFooter: {
-    marginTop: 'auto',
+    marginTop: '5%',
     padding: 5,
     backgroundColor: 'white',
   },

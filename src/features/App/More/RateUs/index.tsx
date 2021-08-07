@@ -116,7 +116,7 @@ const RateUs: React.FC<Props> = ({}) => {
             onChangeText={() => {}}
           />
           <Button
-            onPress={() => navigation.navigate('BottomNavigator')}
+            onPress={() => navigation.navigate('HomeNav')}
             title="Send"
             type={ButtonType.clear}
             titleStyle={{color: '#fff'}}

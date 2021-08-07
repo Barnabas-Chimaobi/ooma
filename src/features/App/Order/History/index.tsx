@@ -8,37 +8,37 @@ import {emptyCart} from '../../../../assets';
 import {colors} from '../../../../colors';
 
 const RenderItems = ({item}: any) => {
-  console.log(item.status, 'item');
+  console.log(item?.menuitemorders?.MenuItemOrderDetails, 'item');
   return (
     <OrderCard
-      dateTitle="24/9/2021"
+      dateTitle={item?.menuitemorders?.deliveryTime}
       titlePosition="right"
       children={
         <>
           <Total
             randomTitle="ORDER ID"
-            randomValue={item.orderId}
+            randomValue={item?.id}
             mainStyle={S.totalStyle}
           />
           <Total
             randomTitle="ITEM"
-            randomValue={item.time}
+            randomValue={item?.id}
             mainStyle={S.totalStyle}
           />
           <Total
-            total={Number(item.price)}
+            total={Number(item?.menuitemorders?.total)}
             totalTitle="PRICE"
             mainStyle={S.totalStyle}
           />
           <Total
             randomTitle="STATUS"
-            randomValue={item.status}
+            randomValue={item?.paymentStatus}
             mainStyle={S.totalStyle}
             randomStyle={{
               color:
-                item.status == 'Cancelled'
+                item?.paymentStatus == 'Cancelled'
                   ? colors.red
-                  : item.status == 'Delivered'
+                  : item?.paymentStatus == 'NOT-PAID'
                   ? colors.primary
                   : colors.black,
             }}
@@ -49,7 +49,8 @@ const RenderItems = ({item}: any) => {
   );
 };
 
-const Current = () => {
+const Current = ({item}) => {
+  console.log(item, 'consoleditemmm======');
   const data: any = [
     {
       orderId: 'ZS214298',
@@ -62,9 +63,9 @@ const Current = () => {
   return (
     <View style={S.main}>
       <FlatList
-        ListHeaderComponent={<>{data.length > 0 && <SortBy />}</>}
+        ListHeaderComponent={<>{item.length > 0 && <SortBy />}</>}
         renderItem={({item}) => <RenderItems item={item} />}
-        data={data}
+        data={item}
         keyExtractor={() => shortid.generate()}
         ListEmptyComponent={
           <EmptyList

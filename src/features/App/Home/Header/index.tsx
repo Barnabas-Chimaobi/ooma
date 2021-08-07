@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  TouchableHighlight,
+} from 'react-native';
 import {Avatar} from 'react-native-elements';
 import {useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
@@ -71,14 +78,20 @@ export default function Header() {
   //   }
   // };
 
-  const handleGetBranches = async (regionId: number) => {
-    const allBranches = await getBranches(regionId);
+  const handleGetBranches = async () => {
+    const regionIds = await AsyncStorage.getItem('regionId');
+    const allBranches = await getBranches(regionIds);
+    console.log(allBranches, '====alllbranchesss=====');
+
     if (allBranches) {
+      console.log(allBranches, '====alllbranchesss=====');
       setModalData2(allBranches);
+      setModalData(allBranches);
     }
   };
 
   useEffect(() => {
+    handleGetBranches();
     const checkBranch = async () => {
       if (await AsyncStorage.getItem('branchId')) {
         const branchId = await AsyncStorage.getItem('branchId');
@@ -285,14 +298,19 @@ export default function Header() {
   return (
     <View style={S.header}>
       <View style={S.logoBar}>
-        <Logo logoStyle={{width: 50, height: 50}} />
+        <Logo logoStyle={{width: 40, height: 40}} />
         <View style={S.notificationBar}>
-          <Image source={oomaNotify} style={{height: 22, width: 22}} />
+          <Image source={oomaNotify} style={{height: 20, width: 20}} />
           <Image source={active} style={S.activenotifications} />
           <TouchableOpacity
             style={{marginLeft: 10}}
             onPress={() => navigation.navigate('Profile')}>
-            <Avatar size="small" rounded source={profilePics} />
+            <Avatar
+              size="small"
+              rounded
+              source={profilePics}
+              iconStyle={{width: 30, height: 30}}
+            />
           </TouchableOpacity>
         </View>
       </View>
@@ -304,12 +322,14 @@ export default function Header() {
           image2={clock}
           otherTitle="Set Time"
         />
-        <TouchableOpacity>
-          <Image
-            source={filter}
-            style={{height: 20, width: 20, marginTop: -15, marginRight: 15}}
-          />
-        </TouchableOpacity>
+        <TouchableHighlight
+          underlayColor=""
+          onPress={() => navigation.navigate('Filter')}>
+          <View
+            style={{width: 60, height: 60, marginRight: -20, marginTop: 10}}>
+            <Image source={filter} style={{height: 20, width: 20}} />
+          </View>
+        </TouchableHighlight>
         <Modal
           isVisible={showModal}
           child={<Drop closeModal={() => setShowModal(!showModal)} />}

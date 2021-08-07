@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 
 export default StyleSheet.create({
   container: {
@@ -11,16 +11,17 @@ export default StyleSheet.create({
     marginBottom: 10,
   },
   menuImage: {
-    height: 300,
-    width: '100%',
+    height: 270,
+    // width: '100%',
     borderRadius: 8,
-    overflow: 'hidden'
+    overflow: 'hidden',
+        width: Dimensions.get('window').width/1.15,
   },
   title: {
     // width: 129,
     height: 18,
     marginLeft: 7,
-    marginTop: 7,
+    marginTop: 3,
     fontFamily: 'Montserrat',
     fontStyle: 'normal',
     fontWeight: 'bold',
@@ -42,7 +43,7 @@ export default StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 7,
+    // marginTop: 7,
   },
 
   ratingStar: {
@@ -53,6 +54,7 @@ export default StyleSheet.create({
   description: {
     textAlign: 'left',
     padding: 4,
-    marginBottom: 10,
+    marginBottom: 13,
+    marginTop: -7
   },
 });

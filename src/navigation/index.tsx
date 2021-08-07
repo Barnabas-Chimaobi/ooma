@@ -56,6 +56,7 @@ import {colors} from '../colors';
 import BottomNavigator from './BottomTabNavigator';
 import MyCartNavigation from './MyCartNavigation';
 import MenuNavigation from './MenuNavigation';
+import HomeNav from './HomeNavigation';
 import ExploreNavigation, {ExploreStackParamList} from './ExploreNavigation';
 import {NetworkManager, Loader} from '../components';
 
@@ -231,6 +232,7 @@ export default function App() {
               component={AddNewAddressForm}
             />
             <MainStack.Screen name="Home" component={Home} />
+            <MainStack.Screen name="HomeNav" component={HomeNav} />
             {/* <MainStack.Screen name="Explore" component={ExploreNavigation} /> */}
             <MainStack.Screen name="Details" component={DetailsScreen} />
             <MainStack.Screen

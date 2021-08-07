@@ -29,7 +29,7 @@ export const ListItems: FC<IProps> = ({list, styles, hour, date}) => {
       <TouchableWithoutFeedback
         onPress={() => setOpen(!open)}
         style={styles.accordionToggle}>
-        <Text style={styles.accordionText}>{newdate}</Text>
+        {/* <Text style={styles.accordionText}>{newdate}</Text> */}
         <Icon
           name={!open ? 'angle-down' : 'angle-right'}
           size={20}
@@ -39,7 +39,7 @@ export const ListItems: FC<IProps> = ({list, styles, hour, date}) => {
 
       {open && (
         <View style={styles.listView}>
-          <Text style={styles.hour}>{hour}</Text>
+          {/* <Text style={styles.hour}>{hour}</Text> */}
           <FlatList
             data={list}
             style={styles.listStyle}

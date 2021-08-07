@@ -25,15 +25,17 @@ import RadioSelect from './RadioSelect';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import ModalMessage from '../../../components/CartMessagesModal';
 import {
-  createOrder,
+  createMenuItemOrder,
   getDeliveryAddress,
   createMenuItemOrderDetail,
+  createMenuPlanOrder,
 } from '../../../FetchData';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {parse, types} from '@babel/core';
 import ToggleSwitch from 'toggle-switch-react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import index from '../Settings/Profile/second';
 
 const Checkout = () => {
   const navigation = useNavigation();
@@ -47,7 +49,7 @@ const Checkout = () => {
   const [deliveryCharges, setDeliveryCharges] = useState(1);
   const [paymentMethod, setPaymentMethod] = useState('');
   const [date, setDate] = useState(new Date());
-  const [addressId, setAddressId] = useState(0);
+  const [addressId, setAddressId] = useState(null);
   const [show, setShow] = useState(false);
   const [show1, setShow1] = useState(false);
   const [switchs, setSwitchs] = useState(false);
@@ -57,6 +59,9 @@ const Checkout = () => {
   const [rName, setRname] = useState('');
   const [checks, setChecks] = useState(false);
   const [checks1, setChecks1] = useState(false);
+  const [cartId, setCartId] = useState('');
+  const [orderChannel, setOrderChannel] = useState('');
+  const [orderName, setOrderName] = useState('');
 
   const getAddress = async () => {
     const adress = await AsyncStorage.getItem('branchId');
@@ -78,6 +83,15 @@ const Checkout = () => {
   let a = 50;
   let b = 60;
   useEffect(() => {
+    console.log(params, a + b, 'paramssss');
+    console.log(params?.paramsBuynow?.amount, a + b, 'paramssss');
+
+    // let one = params?.params?.map((item: any) => {
+    //   console.log(item.cartId, '===mapppppeddd====');
+    // });
+    // let ones = one.map((item: any, index: any) => item);
+
+    // console.log(cartId, '===cartidddss===');
     const handleData = async () => {
       const regionName = await AsyncStorage.getItem('regionName');
       const branchName = await AsyncStorage.getItem('branchName');
@@ -87,44 +101,75 @@ const Checkout = () => {
       console.log(regionName, branchName, 'regionbranch');
     };
 
-    console.log(params, a + b, 'paramssss');
+    optionsForDelivery('Pick-Up'), toggleCheckOptions('Pick-Up');
     handleData();
     getAddress();
   }, []);
 
   const body = {
-    isMenuPlan: false,
+    isMenuPlan: !params?.planOrder
+      ? false
+      : params?.paramsBuynow === 'buynow'
+      ? false
+      : true,
     branchId: '82059935-89dc-4daf-aff3-adcf997d6859',
-    subTotal: params?.subTotal,
-    total: parseInt(deliveryCharges) + parseInt(params?.subTotal),
+    subTotal: params?.subTotal || params?.params?.amount,
+    total:
+      params?.paramsBuynow === 'buynow'
+        ? parseInt(deliveryCharges) + parseInt(params?.params?.amount)
+        : parseInt(deliveryCharges) + parseInt(params?.subTotal),
     paymentMethod: paymentMethod,
     paymentType: 'FullPayment',
     deliveryCharge: deliveryCharges,
     deliveryAddId: addressId,
-    cartIds: params?.params?.map((item: any) => item?.cartId),
+    cartIds:
+      params?.paramsBuynow === 'buynow'
+        ? (params?.params?.id).toString()
+        : !params?.planOrder
+        ? params?.params?.map((item: any) => item.cartId).toString()
+        : params?.params?.map((item: any) => item.id).toString(),
     deliveryTime: date?.toLocaleDateString(),
     deliveryAddress: myAddress,
     deliveryOption: deliveryOption,
     orderForFriend: switchs,
     friendName: friendName,
     friendPhoneNumber: friendPhone,
+    orderChannel: 'MOBILE',
+    orderName: params?.planOrder ? params?.planOrderName : orderName,
   };
 
   const orderNow = async () => {
     console.log(body, 'idddddddd');
-    if (myAddress == '' && deliveryOption == '') {
+    if (myAddress === '' && deliveryOption === 'Delivery') {
       ShowMessage(
         type.INFO,
-        'please select either a pick-up location or enter your delivery address or location',
+        'please select a pick-up location and enter your delivery address',
       ); // dispatch(cartStates(addedCart));
     } else {
-      const cart = await createOrder(body);
-      const orderNow = await createMenuItemOrderDetail(body, cart?.id);
+      const cart = await createMenuItemOrder(body);
+      // const orderNow = await createMenuItemOrderDetail(body, cart?.id);
       ShowMessage(type.DONE, 'Order Placed successfully'); // dispatch(cartStates(addedCart));
-      console.log(cart, 'cart');
-      console.log(orderNow, 'cart');
+      // console.log(cart, 'cart');
+      // console.log(orderNow, 'cart');
       navigation.navigate('RateUs');
     }
+  };
+
+  const PlanOrder = async () => {
+    console.log(body, 'idddddddd');
+    // if (myAddress == '' && deliveryOption == '') {
+    //   ShowMessage(
+    //     type.INFO,
+    //     'please select either a pick-up location or enter your delivery address or location',
+    //   ); // dispatch(cartStates(addedCart));
+    // } else {
+    const cart = await createMenuPlanOrder(body);
+    // const orderNow = await createMenuItemOrderDetail(body, cart?.id);
+    ShowMessage(type.DONE, 'Order Placed successfully'); // dispatch(cartStates(addedCart));
+    console.log(cart, 'cart');
+    console.log(orderNow, 'cart');
+    navigation.navigate('RateUs');
+    // }
   };
 
   const radio1 = (item: any) => [console.log(item, 'eacvaueee')];
@@ -132,6 +177,11 @@ const Checkout = () => {
   const radio2 = (item: any) => {
     setPaymentMethod(item);
     console.log(item, 'eachvalue');
+  };
+
+  const radio3 = (item: any) => {
+    setOrderChannel(item);
+    console.log(item, 'eachvalue3333');
   };
 
   //    const setOpen = (open) =>  {
@@ -151,11 +201,13 @@ const Checkout = () => {
   //     }));
   //   }
 
-  const optionsForDelivery = () => {
+  const optionsForDelivery = (item) => {
     setShow((prevstate) => !prevstate);
-    setDeliveryOptions(`${bName}, ${rName}`);
+    // setDeliveryOptions(`${bName}, ${rName}`);
+    setDeliveryOptions(item);
   };
-  const optionsForDelivery1 = () => {
+  const optionsForDelivery1 = (item) => {
+    setDeliveryOptions(item);
     setShow1((prevstate) => !prevstate);
   };
 
@@ -173,94 +225,117 @@ const Checkout = () => {
     setChecks1((prevstate) => !prevstate);
   };
 
+  const toggleCheckOptions = (item: any) => {
+    if (item === 'Pick-Up') {
+      setChecks(true);
+    } else {
+      setChecks(false);
+    }
+
+    if (item === 'Delivery') {
+      setChecks1(true);
+    } else {
+      setChecks1(false);
+    }
+  };
   return (
     <ScrollView style={S.main}>
-      <View style={S.header}>
-        <HeaderBar
-          image1={require('../../../assets/Images/clock.png')}
-          title="Set Time"
-          image2={require('../../../assets/Images/clock.png')}
-          rejig
-          // rejigTitle="4:30 pm"
-          // otherTitle = date
-          modes={(item: any) => text(item)}
-          onPressImg={() => {}}
-        />
-      </View>
-      {/* <DeliveryOptions title="Delivery Options" /> */}
-      <View style={{backgroundColor: '#FFFFFF'}}>
-        <Text
-          style={{
-            fontFamily: 'Poppins',
-            fontSize: 16,
-            fontWeight: 'bold',
-            marginLeft: 15,
-            marginTop: 15,
-          }}>
-          {'Delivery Options'}
-        </Text>
-
-        <View style={{flexDirection: 'row'}}>
-          <Button
-            title="Pick-up"
-            type={ButtonType.clear}
-            imageIcon={require('../../../assets/Images/shipping.png')}
-            containerStyle={s.buttonContainer}
-            titleStyle={s.buttonTitle}
-            onPress={() => {
-              optionsForDelivery(), showCheck();
-            }}
+      {!params?.planOrder && (
+        <View style={S.header}>
+          <HeaderBar
+            checkout="checkout"
+            image1={require('../../../assets/Images/clock.png')}
+            title="Set Time"
+            image2={require('../../../assets/Images/clock.png')}
+            rejig
+            // rejigTitle="4:30 pm"
+            // otherTitle = date
+            modes={(item: any) => text(item)}
+            onPressImg={() => {}}
           />
-          {checks == true ? (
-            <Image
-              style={{height: 15, width: 15, marginTop: 10, marginLeft: 10}}
-              source={check}
-            />
-          ) : null}
         </View>
+      )}
 
-        {show == true ? (
-          <TouchableOpacity
-            onPress={() => setDeliveryOptions(`${bName}, ${rName}`)}
-            style={{marginVertical: 10}}>
-            <View>
-              <Text
-                style={{
-                  borderWidth: 0.5,
-                  padding: 5,
-                  width: '70%',
-                  alignSelf: 'flex-start',
-                  marginLeft: 20,
-                  borderRadius: 5,
-                }}>{`${bName}, ${rName}`}</Text>
-            </View>
-          </TouchableOpacity>
-        ) : null}
+      {/* <DeliveryOptions title="Delivery Options" /> */}
+      {/* {!params?.planOrder && ( */}
+      {!params?.planOrder && (
+        <View style={{backgroundColor: '#FFFFFF'}}>
+          <Text
+            style={{
+              fontFamily: 'Poppins',
+              fontSize: 16,
+              fontWeight: 'bold',
+              marginLeft: 15,
+              marginTop: 15,
+            }}>
+            {'Delivery Options'}
+          </Text>
 
-        <View style={{flexDirection: 'row'}}>
-          <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={() => {
-              optionsForDelivery1(), showCheck1();
-            }}
-            style={{marginLeft: 10, marginBottom: 10}}>
-            <View style={{flexDirection: 'row', marginTop: 10}}>
+          <View style={{flexDirection: 'row'}}>
+            <Button
+              title="Pick-up"
+              type={ButtonType.clear}
+              imageIcon={require('../../../assets/Images/shipping.png')}
+              containerStyle={s.buttonContainer}
+              titleStyle={s.buttonTitle}
+              onPress={() => {
+                optionsForDelivery('Pick-Up'), toggleCheckOptions('Pick-Up');
+              }}
+            />
+            {checks == true ? (
               <Image
-                style={{marginLeft: 10}}
-                source={require('../../../assets/Images/truck.png')}
+                style={{height: 15, width: 15, marginTop: 10, marginLeft: 10}}
+                source={check}
               />
-              <Text style={{marginLeft: 15}}>Delivery</Text>
-            </View>
-          </TouchableOpacity>
-          {checks1 == true ? (
-            <Image
-              style={{height: 15, width: 15, marginTop: 10, marginLeft: 10}}
-              source={check}
-            />
-          ) : null}
-        </View>
-      </View>
+            ) : null}
+          </View>
 
+          {show == true ? (
+            <TouchableOpacity
+              onPress={() => {
+                optionsForDelivery('Pick-Up'), toggleCheckOptions('Pick-Up');
+              }}
+              style={{marginVertical: 10}}>
+              <View>
+                <Text
+                  style={{
+                    borderWidth: 0.5,
+                    padding: 5,
+                    width: '70%',
+                    alignSelf: 'flex-start',
+                    marginLeft: 20,
+                    borderRadius: 5,
+                  }}>{`${bName}, ${rName}`}</Text>
+              </View>
+            </TouchableOpacity>
+          ) : null}
+
+          <View style={{flexDirection: 'row'}}>
+            <TouchableOpacity
+              activeOpacity={0.5}
+              onPress={() => {
+                optionsForDelivery1('Delivery'), toggleCheckOptions('Delivery');
+              }}
+              style={{marginLeft: 10, marginBottom: 10}}>
+              <View style={{flexDirection: 'row', marginTop: 10}}>
+                <Image
+                  style={{marginLeft: 10}}
+                  source={require('../../../assets/Images/truck.png')}
+                />
+                <Text style={{marginLeft: 15}}>Delivery</Text>
+              </View>
+            </TouchableOpacity>
+            {checks1 == true ? (
+              <Image
+                style={{height: 15, width: 15, marginTop: 10, marginLeft: 10}}
+                source={check}
+              />
+            ) : null}
+          </View>
+        </View>
+      )}
+
+      {/* )} */}
       <View style={{marginTop: 10}}>
         {show1 == true ? (
           <View
@@ -314,7 +389,7 @@ const Checkout = () => {
                 onChangeItem={(value) => {
                   setDeliveryCharges(value.amount);
                   setAddressId(value.id);
-                  setMyAddress(value?.label);
+                  // setMyAddress(value?.label);
                   console.log(value, 'amountt');
                 }}
               />
@@ -322,16 +397,18 @@ const Checkout = () => {
           </View>
         ) : null}
       </View>
-      <View style={{backgroundColor: '#FFFFFF'}}>
-        <RadioSelect
-          title="I Will Pay"
-          title1="Now"
-          title2="On Delivery"
-          defaultTitle="title1"
-          type="I Will Pay"
-          props={(item: any) => radio1(item)}
-        />
-      </View>
+      {/* {!params?.planOrder && (
+        <View style={{backgroundColor: '#FFFFFF'}}>
+          <RadioSelect
+            title="I Will Pay"
+            title1="Now"
+            title2="On Delivery"
+            defaultTitle="title1"
+            type="I Will Pay"
+            props={(item: any) => radio1(item)}
+          />
+        </View>
+      )} */}
       <View style={{backgroundColor: '#FFFFFF', marginTop: 10}}>
         <RadioSelect
           title="Payment Method"
@@ -342,79 +419,122 @@ const Checkout = () => {
         />
       </View>
 
-      <View
-        style={{backgroundColor: '#FFFFFF', marginTop: 10, marginBottom: 10}}>
-        <TouchableHighlight>
-          <View
-            style={{
-              flexDirection: 'row',
-              marginVertical: 10,
-              justifyContent: 'space-between',
-              marginRight: 15,
-            }}>
-            <Text style={{marginLeft: 15, fontWeight: 'bold', fontSize: 17}}>
-              Order For a friend
-            </Text>
-            <ToggleSwitch
-              isOn={switchs}
-              onColor="#fff"
-              offColor="rgba(196, 196, 196, 0.15);"
-              trackOnStyle={{
-                borderRadius: 50,
-                backgroundColor: 'rgba(196, 196, 196, 0.15)',
-              }}
-              trackOffStyle={{borderRadius: 50}}
-              thumbOnStyle={{borderRadius: 50, backgroundColor: 'green'}}
-              thumbOffStyle={{
-                borderRadius: 50,
-                backgroundColor: 'grey',
-              }}
-              labelStyle={{color: 'black', fontWeight: '900'}}
-              size="small"
-              onToggle={(isOn: any) => {
-                toggleFriend(), console.log('changed to : ', isOn);
-              }}
-            />
-          </View>
-        </TouchableHighlight>
-        {switchs == true ? (
-          <View style={{backgroundColor: 'white', marginBottom: 20}}>
-            <TextInput
-              style={{
-                backgroundColor: 'rgba(196, 196, 196, 0.15);',
-                width: '90%',
-                alignSelf: 'center',
-                marginTop: 20,
-                borderRadius: 15,
-                padding: 5,
-              }}
-              value={friendName}
-              placeholder="Friend's Name"
-              onChangeText={(text) => setFriendName(text)}
-            />
+      {/* <View style={{backgroundColor: '#FFFFFF', marginTop: 10}}>
+        <RadioSelect
+          title="Order Channel"
+          title1="POS"
+          title2="MOBILE"
+          type="Order Channel"
+          props={(item: any) => radio3(item)}
+        />
+      </View> */}
 
-            <TextInput
+      {/* {!params?.planOrder && (
+        <View
+          style={{
+            // flexDirection: 'row',
+            marginVertical: 10,
+            // justifyContent: 'space-between',
+            // marginRight: 15,
+            backgroundColor: '#FFFFFF',
+            marginTop: 10,
+          }}>
+          <Text style={{marginLeft: 15, fontWeight: 'bold', fontSize: 17}}>
+            Order Name
+          </Text>
+          <TextInput
+            style={{
+              backgroundColor: 'rgba(196, 196, 196, 0.15);',
+              width: '90%',
+              alignSelf: 'center',
+              marginTop: 20,
+              borderRadius: 15,
+              padding: 5,
+              marginBottom: 10,
+            }}
+            value={orderName}
+            placeholder="Give your order a name"
+            onChangeText={(text) => setOrderName(text)}
+          />
+        </View>
+      )} */}
+
+      {!params?.planOrder ? (
+        <View
+          style={{backgroundColor: '#FFFFFF', marginTop: 10, marginBottom: 10}}>
+          <TouchableHighlight>
+            <View
               style={{
-                backgroundColor: 'rgba(196, 196, 196, 0.15);',
-                width: '90%',
-                alignSelf: 'center',
-                marginTop: 20,
-                borderRadius: 15,
-                padding: 5,
-              }}
-              value={friendPhone}
-              placeholder="Friend's Phone No"
-              onChangeText={(text) => setFriendPhone(text)}
-            />
-          </View>
-        ) : null}
-      </View>
+                flexDirection: 'row',
+                marginVertical: 10,
+                justifyContent: 'space-between',
+                marginRight: 15,
+              }}>
+              <Text style={{marginLeft: 15, fontWeight: 'bold', fontSize: 17}}>
+                Order For a friend
+              </Text>
+              <ToggleSwitch
+                isOn={switchs}
+                onColor="#fff"
+                offColor="rgba(196, 196, 196, 0.15);"
+                trackOnStyle={{
+                  borderRadius: 50,
+                  backgroundColor: 'rgba(196, 196, 196, 0.15)',
+                }}
+                trackOffStyle={{borderRadius: 50}}
+                thumbOnStyle={{borderRadius: 50, backgroundColor: 'green'}}
+                thumbOffStyle={{
+                  borderRadius: 50,
+                  backgroundColor: 'grey',
+                }}
+                labelStyle={{color: 'black', fontWeight: '900'}}
+                size="small"
+                onToggle={(isOn: any) => {
+                  toggleFriend(), console.log('changed to : ', isOn);
+                }}
+              />
+            </View>
+          </TouchableHighlight>
+          {switchs == true ? (
+            <View style={{backgroundColor: 'white', marginBottom: 20}}>
+              <TextInput
+                style={{
+                  backgroundColor: 'rgba(196, 196, 196, 0.15);',
+                  width: '90%',
+                  alignSelf: 'center',
+                  marginTop: 20,
+                  borderRadius: 15,
+                  padding: 5,
+                }}
+                value={friendName}
+                placeholder="Friend's Name"
+                onChangeText={(text) => setFriendName(text)}
+              />
+
+              <TextInput
+                style={{
+                  backgroundColor: 'rgba(196, 196, 196, 0.15);',
+                  width: '90%',
+                  alignSelf: 'center',
+                  marginTop: 20,
+                  borderRadius: 15,
+                  padding: 5,
+                }}
+                value={friendPhone}
+                placeholder="Friend's Phone No"
+                onChangeText={(text) => setFriendPhone(text)}
+              />
+            </View>
+          ) : null}
+        </View>
+      ) : null}
+
       <Total
-        subTotal={params?.subTotal || params?.amount}
+        subTotal={params?.subTotal || params?.amount || params?.params?.amount}
         deliveryCharges={deliveryCharges}
         total={
           parseInt(deliveryCharges) +
-          parseInt(params?.subTotal || params?.amount)
+          parseInt(params?.subTotal || params?.amount || params?.params?.amount)
         }
         mainStyle={S.totalStyle}
       />
@@ -424,16 +544,29 @@ const Checkout = () => {
         openButtonTitle="ORDER NOW"
         closeButtonTitle="Fund Wallet"
       /> */}
-      <View style={S.footerStyle}>
-        <Button
-          onPress={() => {
-            orderNow();
-          }}
-          title="ORDER NOW"
-          type={ButtonType.solid}
-          containerStyle={S.buttonStyle}
-        />
-      </View>
+      {params?.planOrder ? (
+        <View style={S.footerStyle}>
+          <Button
+            onPress={() => {
+              PlanOrder();
+            }}
+            title="SUBSCRIBE NOW"
+            type={ButtonType.solid}
+            containerStyle={S.buttonStyle}
+          />
+        </View>
+      ) : (
+        <View style={S.footerStyle}>
+          <Button
+            onPress={() => {
+              orderNow();
+            }}
+            title="ORDER NOW"
+            type={ButtonType.solid}
+            containerStyle={S.buttonStyle}
+          />
+        </View>
+      )}
     </ScrollView>
   );
 };

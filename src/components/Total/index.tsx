@@ -26,6 +26,18 @@ const Total = ({
   randomStyle,
   randomTitleStyle,
 }: IProps) => {
+  // console.log(
+  //   subTotal,
+  //   deliveryCharges,
+  //   total,
+  //   mainStyle,
+  //   randomTitle,
+  //   randomValue,
+  //   totalTitle,
+  //   randomStyle,
+  //   randomTitleStyle,
+  //   '=======listssss=====',
+  // );
   return (
     <View style={[S.main, mainStyle]}>
       {randomTitle && (
@@ -40,15 +52,15 @@ const Total = ({
           <Text style={S.textStyle}>{`\u20A6${currencyFormat(subTotal)}`}</Text>
         </View>
       )}
-      {deliveryCharges != 1 ? (
+      {/* {deliveryCharges != 1 ? (
         <View style={S.bodyStyle}>
           <Text style={S.textStyle}>Delivery Charges</Text>
           <Text style={S.textStyle}>{`\u20A6${currencyFormat(
             deliveryCharges,
           )}`}</Text>
-          {/* <Text style={S.textStyle}># {deliveryCharges}</Text> */}
+          <Text style={S.textStyle}># {deliveryCharges}</Text>
         </View>
-      ) : null}
+      ) : null} */}
       {total && (
         <View style={S.bodyStyle}>
           <Text style={totalTitle ? {} : S.textStyle1}>

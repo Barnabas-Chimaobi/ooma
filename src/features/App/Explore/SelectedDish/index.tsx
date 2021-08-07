@@ -34,6 +34,7 @@ import {
   getDeliveryAddress,
   createOrder,
   createmenuplanorderDetail,
+  createMenuPlanOrder,
 } from '../../../../FetchData';
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState, AppDispatch} from '../../../../store';
@@ -67,6 +68,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     planTime,
     eachItem,
     editParams,
+    plandate,
   } = route.params;
 
   const navigation = useNavigation();
@@ -84,7 +86,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   const [Preferences, setPreference] = useState([]);
   const [itemQty, setItemqty] = useState(1);
   const [total, setTotal] = useState(menuItem?.amount);
-  const [addsTotal, setAddsTotal] = useState('');
+  const [addsTotal, setAddsTotal] = useState(0);
   const [switchs, setSwitchs] = useState(false);
   const [friendName, setFriendName] = useState('');
   const [friendPhone, setFriendPhone] = useState('');
@@ -98,12 +100,13 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   const [deliveryOption, setDeliveryOptions] = useState('');
   const [time, setTime] = useState('');
   const [items, setItems] = useState([]);
-  const [addressId, setAddressId] = useState(0);
+  const [addressId, setAddressId] = useState(null);
   const [myAddress, setMyAddress] = useState('');
   const [deliveryCharges, setDeliveryCharges] = useState(1);
   const [paymentMethod, setPaymentMethod] = useState('');
   const [cartid, setCartId] = useState('');
   const [showTime, setShowTime] = useState(false);
+  const [prefAmount, setPrefAmount] = useState(0);
 
   const visibility = () => {
     setVisible((previousState) => !previousState);
@@ -117,12 +120,13 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     // setShowEndDate(true);
   };
 
-  const optionsForDelivery = () => {
+  const optionsForDelivery = (item: any) => {
     setShow((prevstate) => !prevstate);
-    setDeliveryOptions(`${bName}, ${rName}`);
+    setDeliveryOptions(item);
   };
-  const optionsForDelivery1 = () => {
+  const optionsForDelivery1 = (item: any) => {
     setShow1((prevstate) => !prevstate);
+    setDeliveryOptions(item);
   };
 
   const text = (item: any) => {
@@ -162,7 +166,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   };
 
   useEffect(() => {
-    // console.log(route.params.eachItem, '====eachitemmm ====');
+    console.log(route.params, '====eachitemmm ====');
     const handleData = async () => {
       const regionName = await AsyncStorage.getItem('regionName');
       const branchName = await AsyncStorage.getItem('branchName');
@@ -176,14 +180,17 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     getAddress();
     console.log(id, cartId, planId, planTime, 'paramssssmmm');
     getItemDetail();
+    optionsForDelivery('Pick-Up'), toggleCheckOptions('Pick-Up');
   }, []);
 
   const body = {
     branchId: menuItem?.branchId,
     menuitemid: menuItem?.id,
     quantity: itemQty,
-    amount: parseInt(total) * parseInt(itemQty) + parseInt(addsTotal),
-    addons: adds,
+    amount:
+      (parseInt(total) + parseInt(prefAmount) + parseInt(addsTotal)) *
+      parseInt(itemQty),
+    addons: JSON.stringify(adds),
     Preferences: JSON.stringify(Preferences),
     specialInstruction: value,
     menuplanid: planId,
@@ -192,10 +199,10 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   const body1 = {
     isMenuPlan: true,
     branchId: '82059935-89dc-4daf-aff3-adcf997d6859',
-    subTotal: parseInt(total) * parseInt(itemQty) + parseInt(addsTotal),
-    total: parseInt(total) * parseInt(itemQty) + parseInt(addsTotal),
-    paymentMethod: paymentMethod,
-    paymentType: 'FullPayment',
+    // subTotal: parseInt(total) * parseInt(itemQty) + parseInt(addsTotal),
+    // total: parseInt(total) * parseInt(itemQty) + parseInt(addsTotal),
+    // paymentMethod: paymentMethod,
+    // paymentType: 'FullPayment',
     deliveryCharge: deliveryCharges,
     deliveryAddId: addressId,
     // cartIds: params?.params?.map((item: any) => item?.cartId),
@@ -207,7 +214,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     friendPhoneNumber: friendPhone,
     cartIds: cartid,
   };
-  const createCart = async () => {
+  const createCart = async (item: any) => {
     console.log(addsTotal, 'bodyyyquntyyss');
     console.log(body, 'bodyyy');
     try {
@@ -221,41 +228,99 @@ const CardItem: FC<IProps> = ({route, menu}) => {
         specialInstruction: body.specialInstruction,
         menuplanid: planId,
       });
-      const addedCart = cart?.data?.data;
-      if (menuPlan == 'menuPlan') {
-        ShowMessage(type.DONE, 'Item added to basket successfully');
-        setOpenModal(true);
-      } else {
+      const addedCart = await cart?.data?.data;
+      if (item == 'Buy now' && addedCart?.amount !== undefined) {
+        navigation.navigate('Checkout', {
+          branchId: menuItem?.branchId,
+          params: addedCart,
+          paramsBuynow: 'buynow',
+          // amount: menuItem?.amount,
+        });
+      } else if (addedCart?.amount !== undefined) {
         ShowMessage(type.DONE, 'Item added to cart successfully'); // dispatch(cartStates(addedCart));
-      }
-      setCartItem(addedCart);
-      setCartId(addedCart?.id);
-      if (menuPlan != 'menuPlan') {
+        setCartItem(addedCart);
+        setCartId(addedCart?.id);
+        // if (menuPlan != 'menuPlan') {
         navigation.goBack();
+        // }
+        console.log(addedCart, 'addedcaart');
+      } else {
+        ShowMessage(
+          type.ERROR,
+          'Sorry we could not process your order at this time',
+        );
       }
-      console.log(addedCart?.id, 'addedcaart');
     } catch (err) {
       console.log(err, 'cartError');
     }
   };
 
-  const orderNow = async () => {
-    setOpenModal(false);
-    console.log(body, 'idddddddd');
-    if (myAddress == '' && deliveryOption == '') {
-      ShowMessage(
-        type.INFO,
-        'please select either a pick-up location or enter your delivery address or location',
-      ); // dispatch(cartStates(addedCart));
-    } else {
-      const cart = await createOrder(body1);
-      const orderNow = await createmenuplanorderDetail(body1, cart?.id);
-      ShowMessage(type.DONE, 'Order Placed successfully'); // dispatch(cartStates(addedCart));
-      console.log(cart, 'cart');
-      console.log(orderNow, 'cartorderdetail');
-      navigation.goBack();
+  const createBasket = async () => {
+    console.log(addsTotal, 'bodyyyquntyyss');
+    console.log(body, 'bodyyy');
+
+    try {
+      if ((myAddress == '' && deliveryOption == 'Delivery') || time == '') {
+        ShowMessage(
+          type.INFO,
+          'please check if you have selected a delivery location, time and enter your delivery address',
+        ); // dispatch(cartStates(addedCart));
+      } else {
+        const cart = await api.post(`orders/basket/`, {
+          branchId: body.branchId,
+          menuitemid: body.menuitemid,
+          quantity: body.quantity,
+          amount: body.amount,
+          addons: JSON.stringify(body.addons),
+          Preferences: body.Preferences,
+          specialInstruction: body.specialInstruction,
+          menuplanid: planId,
+          deliveryCharge: deliveryCharges,
+          deliveryAddId: addressId,
+          deliveryTime: time,
+          deliveryAddress: myAddress,
+          deliveryOption: deliveryOption,
+          orderForFriend: switchs,
+          friendName: friendName,
+          friendPhoneNumber: friendPhone,
+          deliveryDate: plandate,
+        });
+        const addedCart = cart?.data?.data;
+        if (menuPlan == 'menuPlan') {
+          ShowMessage(type.DONE, 'Item added to basket successfully');
+        } else {
+          ShowMessage(type.DONE, 'Item added to cart successfully'); // dispatch(cartStates(addedCart));
+        }
+        setCartItem(addedCart);
+        setCartId(addedCart?.id);
+        // if (menuPlan != 'menuPlan') {
+        navigation.goBack();
+        // }
+        console.log(addedCart?.id, 'addedcaart');
+      }
+      setOpenModal(false);
+    } catch (err) {
+      console.log(err, 'cartError');
     }
   };
+
+  // const orderNow = async () => {
+  //   setOpenModal(false);
+  //   console.log(body, 'idddddddd');
+  //   if (myAddress == '' && deliveryOption == '') {
+  //     ShowMessage(
+  //       type.INFO,
+  //       'please select either a pick-up location or enter your delivery address or location',
+  //     ); // dispatch(cartStates(addedCart));
+  //   } else {
+  //     const cart = await createOrder(body1);
+  //     const orderNow = await createmenuplanorderDetail(body1, cart?.id);
+  //     ShowMessage(type.DONE, 'Order Placed successfully'); // dispatch(cartStates(addedCart));
+  //     console.log(cart, 'cart');
+  //     console.log(orderNow, 'cartorderdetail');
+  //     navigation.goBack();
+  //   }
+  // };
 
   const editCart = async () => {
     try {
@@ -283,7 +348,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
 
   const getItemDetail = async () => {
     const item = await getMenuItemsById(id);
-    console.log(item.amount, 'itemssssss');
+    console.log(item.Preference, 'itemssssss');
     console.log(menuItem?.menuItemPreferences, '======preferencessss=======');
     setTotal(item?.amount);
     setPrice(item?.amount);
@@ -410,6 +475,8 @@ const CardItem: FC<IProps> = ({route, menu}) => {
       quantity: 1,
       totalPrice: addon?.price,
       initialPrice: addon?.price,
+      isExtra: addon?.isExtra == true ? true : false,
+      originalQuantity: 1,
     };
   };
 
@@ -424,6 +491,20 @@ const CardItem: FC<IProps> = ({route, menu}) => {
 
   const deliveryTime = () => {
     setShowTime(true);
+  };
+
+  const toggleCheckOptions = (item: any) => {
+    if (item === 'Pick-Up') {
+      setChecks(true);
+    } else {
+      setChecks(false);
+    }
+
+    if (item === 'Delivery') {
+      setChecks1(true);
+    } else {
+      setChecks1(false);
+    }
   };
 
   return (
@@ -539,9 +620,9 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                       preference?.Preference?.name,
                       '====preefereeeenn====',
                     );
-                    JSON.stringify(
-                      Preferences.push(preference?.Preference?.name),
-                    );
+                    // JSON.stringify(
+                    //   Preferences.push(preference?.Preference?.name),
+                    // );
                   }}>
                   <View
                     style={{
@@ -549,12 +630,28 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                       justifyContent: 'space-between',
                     }}>
                     <CheckBox
+                      id={preference?.Preference?.id}
                       value={preference?.Preference?.unitPrice}
                       key={preference?.Preference?.id}
                       title={preference?.Preference?.name}
-                      props={(name: any, unitPrice: any) => {
-                        Preferences.push({name, unitPrice});
-                        // console.log(name, value, '====itemmmmsss====');
+                      props1={(name: any, unitPrice: any, id: any) => {
+                        Preferences.push({name, unitPrice, id});
+                        const sum = Preferences?.map((v) => v?.unitPrice);
+                        if (unitPrice !== null) {
+                          let names = sum.reduce(
+                            (sum: any, current: any) => +sum + +current,
+                            // console.log(sum, current, 'consolessssssssssloggg'),
+                          );
+                          setPrefAmount(names);
+                          console.log(names, '====nameeeesss====');
+                        }
+
+                        if (unitPrice !== null) {
+                          setPrice(+unitPrice + +prices);
+                          setPrice1(+unitPrice + +prices);
+                        }
+
+                        console.log(name, unitPrice, id, '====itemmmmsss====');
                       }}
                     />
                     <Text style={{paddingTop: 20}}>
@@ -613,6 +710,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
             <View
               style={{
                 flex: 1,
+                marginBottom: 30,
               }}>
               <ScrollView>
                 <View
@@ -632,12 +730,8 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                       Cancel
                     </Text>
                   </TouchableHighlight>
-                  <TouchableHighlight
-                    underlayColor="rgba(0, 0, 0, 0.2)"
-                    onPress={() => deliveryTime()}>
-                    <Text style={{fontSize: 16}}>Select Time</Text>
-                  </TouchableHighlight>
-                  <TouchableHighlight onPress={() => orderNow()}>
+
+                  <TouchableHighlight onPress={() => createBasket()}>
                     <Text style={{fontSize: 16, color: '#05944F'}}>Done</Text>
                   </TouchableHighlight>
                 </View>
@@ -671,7 +765,8 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                       containerStyle={s.buttonContainer}
                       titleStyle={s.buttonTitle}
                       onPress={() => {
-                        optionsForDelivery(), showCheck();
+                        optionsForDelivery('Pick-Up'),
+                          toggleCheckOptions('Pick-Up');
                       }}
                     />
                     {checks == true ? (
@@ -689,7 +784,10 @@ const CardItem: FC<IProps> = ({route, menu}) => {
 
                   {show == true ? (
                     <TouchableOpacity
-                      onPress={() => setDeliveryOptions(`${bName}, ${rName}`)}
+                      onPress={() => {
+                        setDeliveryOptions('Pick-Up'),
+                          toggleCheckOptions('Pick-Up');
+                      }}
                       style={{marginVertical: 10}}>
                       <View>
                         <Text
@@ -709,7 +807,10 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                     <TouchableOpacity
                       activeOpacity={0.5}
                       onPress={() => {
-                        optionsForDelivery1(), showCheck1();
+                        optionsForDelivery1('Delivery'),
+                          toggleCheckOptions('Delivery');
+                        // showCheck1(),
+                        // setChecks(false);
                       }}
                       style={{marginLeft: 10, marginBottom: 10}}>
                       <View style={{flexDirection: 'row', marginTop: 10}}>
@@ -731,6 +832,21 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                         source={check}
                       />
                     ) : null}
+                  </View>
+
+                  <View
+                    style={{
+                      backgroundColor: 'rgba(246, 246, 246, 0.75)',
+                      padding: 5,
+                      top: 8,
+                    }}>
+                    <TouchableHighlight
+                      underlayColor="rgba(0, 0, 0, 0.2)"
+                      onPress={() => deliveryTime()}>
+                      <Text style={{fontSize: 16, marginLeft: 10}}>
+                        Select Time
+                      </Text>
+                    </TouchableHighlight>
                   </View>
                 </View>
 
@@ -787,7 +903,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                           onChangeItem={(value) => {
                             setDeliveryCharges(value.amount);
                             setAddressId(value.id);
-                            setMyAddress(value?.label);
+                            // setMyAddress(value?.label);
                             console.log(value, 'amountt');
                           }}
                         />
@@ -797,7 +913,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                 </View>
 
                 {showTime == true ? (
-                  <View>
+                  <View style={{marginTop: -20}}>
                     <Button
                       titleStyle={s.buttonTitle}
                       type={ButtonType.clear}
@@ -917,7 +1033,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
               iconSize={18}
               titleStyle={{color: 'white', marginHorizontal: 20}}
               onPress={() => {
-                createCart();
+                setOpenModal(true);
               }}
             />
           </View>
@@ -933,7 +1049,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
               iconSize={18}
               titleStyle={{color: 'white', marginHorizontal: 20}}
               onPress={() => {
-                createCart();
+                createCart('Add to cart');
               }}
             />
             <Button
@@ -943,10 +1059,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
               buttonStyle={{backgroundColor: '#EEE'}}
               titleStyle={{color: 'black', fontWeight: 'bold'}}
               onPress={() => {
-                navigation.navigate('Checkout', {
-                  branchId: menuItem?.branchId,
-                  amount: menuItem?.amount,
-                });
+                createCart('Buy now');
               }}
             />
           </View>

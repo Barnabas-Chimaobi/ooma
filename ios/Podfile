@@ -15,10 +15,18 @@ target 'Oma' do
   pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
 
 
+<<<<<<< HEAD
   pod 'react-native-netinfo', :path => '../node_modules/@react-native-community/netinfo'
 
   pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
 
+=======
+
+  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
+
+  pod 'react-native-netinfo', :path => '../node_modules/@react-native-community/netinfo'
+
+>>>>>>> a7c61c2336caf17538b03fb4ef3e8f7946d70494
   target 'OmaTests' do
     inherit! :complete
     # Pods for testing
