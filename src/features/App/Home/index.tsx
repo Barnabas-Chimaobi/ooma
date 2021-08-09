@@ -8,6 +8,7 @@ import {
   TouchableHighlight,
   FlatList,
   ImageBackground,
+  TouchableOpacity,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import S from './styles';
@@ -39,6 +40,10 @@ import {useNavigation} from '@react-navigation/native';
 import {color} from 'react-native-reanimated';
 import {background, ellipse, newCheck, star} from '../../../assets/index';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+import s from '../../../components/MenuCard/styles';
+import {hearts} from '../../../assets';
+import Label from '../../../components/MenuCard/Label';
+import {PriceTag, RatingCount, Rating1, DishTypes} from '../../../components';
 
 const Home = () => {
   const navigation = useNavigation();
@@ -479,11 +484,92 @@ const Home = () => {
         {menuItem.length == 0 ? (
           <Skeleton />
         ) : (
-          <Categories
-            title="More for you"
-            menuItem={menuItem}
-            bool={menuItem.length == 0 ? true : false}
-          />
+          // <Categories
+          //   text="also"
+          //   title="You may also like"
+          //   menuItem={menuItem}
+          //   bool={menuItem.length == 0 ? true : false}
+          //   />
+
+          <View>
+            <Text
+              style={{
+                fontSize: 21,
+                fontWeight: 'bold',
+                backgroundColor: colors.white,
+                padding: '3%',
+              }}>
+              You may also like
+            </Text>
+            {menuItem?.map((item) => {
+              return (
+                <View
+                  style={{
+                    width: '100%',
+                    alignSelf: 'center',
+                    backgroundColor: colors.white,
+                    borderBottomWidth: 3,
+                    borderBottomColor: colors.grey,
+                    paddingLeft: '3%',
+                    paddingRight: '3%',
+                    paddingTop: '3%',
+                    paddingBottom: '3%',
+                  }}>
+                  {/* <Text>You may also like</Text> */}
+                  <TouchableOpacity
+                    onPress={() => {
+                      const imgs = {uri: item?.imageUrl};
+                      navigation.navigate('Dish', {
+                        id: item?.id,
+                        rating: item?.rating / item?.ratingCount,
+                        img: imgs,
+                      });
+                    }}>
+                    <ImageBackground
+                      source={{uri: item?.imageUrl}}
+                      style={s.imageBackground3}>
+                      <View style={s.flex}>
+                        {/* <Label
+                        labelText={item?.caption}
+                        labelStyle={{
+                          top: !item?.caption ? window.height * 1000 : 0,
+                          bottom: !item?.caption ? -window.height * 1000 : 0,
+                        }}
+                      /> */}
+                        <TouchableOpacity>
+                          <Image source={hearts} style={s.likeImage} />
+                        </TouchableOpacity>
+                      </View>
+                    </ImageBackground>
+                    <View style={s.textBar}>
+                      <Text style={s.title}>{item?.itemName}</Text>
+                      {/* <PriceTag price={price} oldPrice={oldPrice} /> */}
+                      <View style={s.rating}>
+                        {/* <Rating1 /> */}
+                        {/* <RatingCount ratingCount={ratingCount} /> */}
+                        <DishTypes
+                          categories={item?.MenuItemCategories}
+                          // dish1={dish1}
+                          // dish2={dish2}
+                          // dish3={dish3}
+                        />
+                        <PriceTag
+                          price={
+                            item?.discount
+                              ? (item?.amount - item?.discount).toFixed(2)
+                              : item?.amount
+                          }
+                        />
+                      </View>
+                      <Text style={s.dishType}>
+                        {item?.menuItemType?.toUpperCase()}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              );
+            })}
+          </View>
         )}
 
         {/* {historyMenuItems.length == 0 ? (

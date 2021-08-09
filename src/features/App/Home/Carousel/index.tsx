@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   ImageBackground,
+  Dimensions,
 } from 'react-native';
 import {Card} from '../../../../components';
 import Card1 from '../../MenuPlan/components/menuCards/card';

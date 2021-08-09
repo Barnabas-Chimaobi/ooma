@@ -7,12 +7,25 @@ export default StyleSheet.create({
   },
   imageBackground: {
     flex: 1,
-    height: 250,
-    // width: 300,
-    width: Dimensions.get('window').width / 1.15,
+    height: 300,
+    width: '100%',
+    // width: Dimensions.get('window').width / 1,
 
     borderRadius: 10,
     overflow: 'hidden',
+  },
+
+  imageBackground3: {
+    flex: 1,
+    height: 300,
+    width: '100%',
+    // width: Dimensions.get('window').width / 1,
+    marginLeft: 2,
+    borderRadius: 10,
+    overflow: 'hidden',
+    alignSelf: 'center',
+    borderTopRightRadius: 10,
+    borderBottomRightRadius: 10,
   },
   imageBackground2: {
     flex: 1,

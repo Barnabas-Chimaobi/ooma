@@ -11,11 +11,11 @@ export default StyleSheet.create({
     marginBottom: 10,
   },
   menuImage: {
-    height: 270,
-    // width: '100%',
+    height: 300,
+    width: '100%',
     borderRadius: 8,
     overflow: 'hidden',
-        width: Dimensions.get('window').width/1.15,
+        // width: Dimensions.get('window').width/1.15,
   },
   title: {
     // width: 129,
