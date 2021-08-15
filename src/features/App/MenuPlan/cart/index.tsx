@@ -108,7 +108,7 @@ export const Cart = () => {
         ),
       );
       setDateTime(all1);
-      groupBasketItem(basketItem);
+    
     }
 
     // console.log(all1, '=====all1======');
