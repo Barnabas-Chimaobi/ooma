@@ -92,14 +92,14 @@ const MenuTab = () => {
 
   useEffect(() => {
     // mapScenes();
-    console.log(params?.items, 'itemmmssss');
+    // console.log(params?.items, 'itemmmssss');
     const getBranchId = async () => {
       const id: any = await AsyncStorage.getItem('branchId');
       setBranchId(id);
 
       // menuPlan('82059935-89dc-4daf-aff3-adcf997d6859');
     };
-    console.log(params.planId, '=====planid=====');
+    // console.log(params.planId, '=====planid=====');
     getBranchId();
   }, []);
 
@@ -224,7 +224,7 @@ const MenuTab = () => {
             style={{marginTop: 20}}
             source={require('../../assets/no-data.png')}
           />
-          <Text style={styles.btnText}>No menu plan available.</Text>
+          <Text style={styles.btnText}>No meal plan available.</Text>
 
           <View style={styles.btn}>
             <Text style={{color: 'white', fontWeight: 'bold', fontSize: 14}}>

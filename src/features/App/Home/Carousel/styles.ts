@@ -8,7 +8,7 @@ export default StyleSheet.create({
     borderWidth: 2,
     borderColor: 'rgba(255, 255,255, 1.0)',
     backgroundColor: 'white',
-    marginBottom: 10,
+    // marginBottom: 10,
   },
   menuImage: {
     height: 300,
@@ -28,7 +28,6 @@ export default StyleSheet.create({
     fontSize: 17,
     lineHeight: 21,
     letterSpacing: 0.04,
-
     color: '#303030',
   },
   titleContainer: {
@@ -52,9 +51,11 @@ export default StyleSheet.create({
     marginTop: 6,
   },
   description: {
-    textAlign: 'left',
+    // textAlign: 'left',
     padding: 4,
-    marginBottom: 13,
-    marginTop: -7
+    // marginBottom: 13,
+    marginTop: -7,
+    fontSize: 12,
+    marginLeft: 5
   },
 });

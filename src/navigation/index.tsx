@@ -12,7 +12,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {RootState, AppDispatch} from '../store';
 import {signIn, signOut} from '../reducers';
 import Slash from '../navigation/AuthNavigation/splash';
-import {Register, Region, Branch} from '../features/Auth';
+import {Register, Region, Branch, Login} from '../features/Auth';
 import {
   DetailsScreen,
   SplashScreen,
@@ -172,13 +172,13 @@ export default function App() {
               cardStyle: {backgroundColor: 'white'},
             }}>
             <MainStack.Screen name="Splash" component={Splash} />
-
             <MainStack.Screen
               name="BottomNavigator"
               component={BottomNavigator}
             />
             <MainStack.Screen name="Region" component={Region} />
             <MainStack.Screen name="Branch" component={Branch} />
+            <MainStack.Screen name="Login" component={Login} />
             <MainStack.Screen
               name="SearchMenuitemandPlan"
               component={SearchMenuitemandPlan}
@@ -195,9 +195,7 @@ export default function App() {
               name="SelectedCategory"
               component={SelectedCategory}
             />
-
             <MainStack.Screen name="Filter" component={Filter} />
-
             <MainStack.Screen name="CartIntro" component={CartIntro} />
             <MainStack.Screen name="MyCart" component={MyCart} />
             <MainStack.Screen name="Checkout" component={Checkout} />

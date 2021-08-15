@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {StyleSheet, FlatList, Text, View, Dimensions} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const {width: windowWidth} = Dimensions.get('window');
 
 import Slide from './components/menuIntro';
@@ -25,7 +26,13 @@ const MenuPlanIntro: React.FC<Props> = ({title, externalRoute}) => {
     }
   }, []);
 
+  const disableIntro = async () => {
+    let intro = 'disable';
+    const newAsync = await AsyncStorage.setItem('intro', intro);
+  };
+
   useEffect(() => {
+    disableIntro();
     console.log('indexxxxxxxxssssss');
   }, []);
 
@@ -47,7 +54,7 @@ const MenuPlanIntro: React.FC<Props> = ({title, externalRoute}) => {
   };
   return (
     <View style={styles.main}>
-      <Text style={styles.headerText}>{title || 'Menu Plan'}</Text>
+      <Text style={styles.headerText}>{title || 'Meal Plan'}</Text>
       <FlatList
         data={data}
         style={styles.listStyle}

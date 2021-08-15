@@ -289,7 +289,9 @@ export const Cart = () => {
                     date={item?.MenuPlan?.MenuplanDetail?.plandate}
                     // planDetails={Object.values(item)}
                     styles={styles}
-                    imageUrl={item?.MenuPlan?.imageurl}
+                    imageUrl={
+                      item?.MenuPlan?.MenuplanDetail?.MenuItem?.imageUrl
+                    }
                     itemName={item?.MenuPlan?.name}
                     price={item?.amount}
                     delivery={item?.deliveryAddress}

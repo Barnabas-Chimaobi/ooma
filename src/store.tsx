@@ -46,7 +46,8 @@ export const store = configureStore({
     basketState: basketSlice,
   },
   middleware: [
-    ...getDefaultMiddleware({immutableCheck: false}),
+    ...getDefaultMiddleware({serializableCheck: false, immutableCheck: false}),
+    // ...getDefaultMiddleware({immutableCheck: false}),
     thunkMiddleware,
   ],
 });

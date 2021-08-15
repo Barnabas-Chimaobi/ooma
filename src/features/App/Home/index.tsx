@@ -41,13 +41,16 @@ import {color} from 'react-native-reanimated';
 import {background, ellipse, newCheck, star} from '../../../assets/index';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import s from '../../../components/MenuCard/styles';
-import {hearts} from '../../../assets';
+import {hearts, scroll} from '../../../assets';
 import Label from '../../../components/MenuCard/Label';
 import {PriceTag, RatingCount, Rating1, DishTypes} from '../../../components';
 
 const Home = () => {
   const navigation = useNavigation();
   const [switchs, setSwitchs] = useState(false);
+  const {menuPlanCategories} = useSelector(
+    (state: RootState) => state.menuPlanCategories,
+  );
   const menuItem = useSelector((state: RootState) => state.menuItem.payload);
   const menuItemSpecialOffer = useSelector((state: RootState) =>
     shuffleArray(state.menuItemsSpecialOffer.payload),
@@ -71,10 +74,7 @@ const Home = () => {
     (state: RootState) => state.glutenMenuItem.payload,
   );
 
-  const {menuPlanCategories} = useSelector(
-    (state: RootState) => state.menuPlanCategories,
-  );
-
+  useEffect(() => {}, []);
   //  const {categories} = useSelector(
   //    (state: RootState) => state.itemCategory,
   //  );
@@ -303,6 +303,20 @@ const Home = () => {
                 borderRadius: 10,
                 // alignSelf: 'center',
               }}>
+              <View>
+                <Text
+                  style={{
+                    fontWeight: 'bold',
+                    fontSize: 17,
+                    marginLeft: 10,
+                    marginBottom: 20,
+                    marginTop: 10,
+                    zIndex: 20,
+                  }}>
+                  Customize your meal plan
+                </Text>
+              </View>
+
               <Categories
                 text="text"
                 bool={menuPlansMenuItem?.length == 0 ? true : false}
@@ -311,7 +325,8 @@ const Home = () => {
                 // subtitle="Various Menu plans for pre-order on display."
                 keys="plan"
               />
-              <TouchableHighlight>
+
+              {/* <TouchableHighlight>
                 <Text
                   style={{
                     backgroundColor: colors.start,
@@ -326,14 +341,16 @@ const Home = () => {
                   }}>
                   Subscribe now
                 </Text>
-              </TouchableHighlight>
+              </TouchableHighlight> */}
             </View>
           )}
         </View>
 
         <View style={{backgroundColor: colors.mainbg, marginLeft: 10}}>
           <View>
-            <Text style={{marginBottom: 8, fontWeight: 'bold'}}>Explore</Text>
+            <Text style={{marginBottom: 8, fontWeight: 'bold'}}>
+              Discover More
+            </Text>
           </View>
 
           <FlatList
@@ -418,7 +435,7 @@ const Home = () => {
                     onPress={() => {
                       navigation.navigate('Menu'), setSwitchs(false);
                     }}>
-                    Menu Plan
+                    Meal Plan
                   </Text>
                 </View>
               </TouchableHighlight>
@@ -609,6 +626,22 @@ const Home = () => {
           onPress={() => {}}
         />
       </ScrollView>
+
+      <View>
+        <Image
+          style={{
+            height: 90,
+            width: 70,
+            alignSelf: 'flex-end',
+            position: 'absolute',
+            bottom: 10,
+            // right: 60,
+            zIndex: 30,
+            borderRadius: 70,
+          }}
+          source={scroll}
+        />
+      </View>
       {/* <BottomNav /> */}
     </View>
   );

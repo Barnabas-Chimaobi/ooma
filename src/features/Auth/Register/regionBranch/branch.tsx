@@ -34,7 +34,9 @@ export default function Branch() {
   const params = route.params;
 
   const handleGetBranch = async () => {
-    const allRegion = await getBranches(params?.id);
+    const regionId = await AsyncStorage.getItem('regionId');
+    console.log(regionId, '=====regioniddd=====');
+    const allRegion = await getBranches(params?.id || regionId);
     if (allRegion) {
       setBranch(allRegion);
     }
@@ -103,14 +105,17 @@ export default function Branch() {
           height: 50,
           paddingTop: 25,
         }}>
-        <TouchableHighlight
-          activeOpacity={1}
-          underlayColor="rgba(255, 255, 255, 0.3)"
-          onPress={() => navigation.navigate('Region')}>
-          <View style={{marginLeft: 10}}>
-            <Image source={arrow} style={{height: 10, width: 20}} />
-          </View>
-        </TouchableHighlight>
+        {params?.branch !== 'changeBranch' ? (
+          <TouchableHighlight
+            activeOpacity={1}
+            underlayColor="rgba(255, 255, 255, 0.3)"
+            onPress={() => navigation.navigate('Region')}>
+            <View style={{marginLeft: 10}}>
+              <Image source={arrow} style={{height: 10, width: 20}} />
+            </View>
+          </TouchableHighlight>
+        ) : null}
+
         <Text style={{marginLeft: '30%', fontWeight: 'bold'}}>
           Select Branch
         </Text>

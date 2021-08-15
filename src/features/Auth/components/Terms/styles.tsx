@@ -4,6 +4,7 @@ export default StyleSheet.create({
   mainStyle: {
     paddingVertical: 25,
     fontSize: 10,
+    textAlign: 'center',
   },
   terms: {
     fontFamily: 'poppins',

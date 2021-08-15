@@ -46,7 +46,7 @@ const Checkout = () => {
   const [open, setOpen] = useState(true);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([]);
-  const [deliveryCharges, setDeliveryCharges] = useState(1);
+  const [deliveryCharges, setDeliveryCharges] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState('');
   const [date, setDate] = useState(new Date());
   const [addressId, setAddressId] = useState(null);
@@ -234,6 +234,7 @@ const Checkout = () => {
 
     if (item === 'Delivery') {
       setChecks1(true);
+      setShow(false);
     } else {
       setChecks1(false);
     }

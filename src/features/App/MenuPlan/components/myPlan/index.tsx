@@ -221,7 +221,7 @@ export const MyPlans = ({findPlan}: Props) => {
             source={require('../../assets/no-data.png')}
           />
           <Text style={styles.btnText}>
-            You do not have any ongoing menu plan.
+            You do not have any ongoing meal plan.
           </Text>
           <TouchableWithoutFeedback onPress={() => findPlan(0)}>
             <View style={styles.btn}>

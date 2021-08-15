@@ -64,7 +64,7 @@ const AllMenuPlanByCategory: FC<selectedProps> = ({route}) => {
           fontWeight: 'bold',
           fontSize: 20,
         }}>
-        Menu Plans For {categoryName}{' '}
+        Meal Plans For {categoryName}{' '}
       </Text>
 
       {refreshing ? <ActivityIndicator /> : null}

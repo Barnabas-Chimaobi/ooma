@@ -6,9 +6,9 @@ const request = axios.create({
   timeout: 60000,
   timeoutErrorMessage:
     'Either your internet connect is not strong or you have no internet connectiom',
-  baseURL: 'https://api.ooma.kitchen/api/v1',
+  baseURL: 'https://api.staging.ooma.kitchen/',
+  // baseURL: 'https://api.ooma.kitchen/api/v1',
 });
-
 class Api {
   post = async (URL: any, data?: any) => {
     try {
@@ -23,7 +23,7 @@ class Api {
       // console.log(res, 'res');
       return {errorStatus: false, ...res};
     } catch (err) {
-      console.log(err.response.data, 'post');
+      console.log(err.response.data.message, 'post');
       ShowMessage(type.ERROR, err.response.data.message);
       throw err;
       // return err;
@@ -49,7 +49,16 @@ class Api {
   };
 
   get = async (URL: any) => {
+    // console.log(
+    //   await (await request.get()).config,
+    //   '===consolleeddddurlll====',
+    // );
+    // console.log(await request.get(), '===consolleeddddurlll====');
     try {
+      console.log(
+        await (await request.get()).config,
+        '===consolleeddddurlll====',
+      );
       let token: any = await AsyncStorage.getItem('token');
       token = token || '';
       const res = await request.get(URL, {
@@ -59,10 +68,12 @@ class Api {
       });
       return {errorStatus: false, ...res};
     } catch (err) {
+      console.log(err.response.data, 'get');
       console.log(err.message, 'get');
       return err;
     }
   };
+
   put = async (URL: any, data?: any) => {
     try {
       let token: any = await AsyncStorage.getItem('token');

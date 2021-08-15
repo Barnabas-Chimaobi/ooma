@@ -1,6 +1,5 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 // import {View, Text} from 'react-native';
-const {Navigator, Screen} = createStackNavigator();
 import {createStackNavigator} from '@react-navigation/stack';
 import {
   Dish,
@@ -10,16 +9,35 @@ import {
   Menu,
   MenuHistory,
 } from '../../features/App';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+const {Navigator, Screen} = createStackNavigator();
 
-const index = () => (
-  <Navigator headerMode="none" initialRouteName="Intro">
-    <Screen name="Intro" component={MenuPlanIntro} />
-    <Screen name="Menu" component={Menu} />
-    <Screen name="Detail" component={Detail} />
-    <Screen name="Cart" component={Cart} />
-    <Screen name="Dish" component={Dish} />
-    <Screen name="MenuHistory" component={MenuHistory} />
-  </Navigator>
-);
+export default function index() {
+  const [intro, setIntro] = useState('');
 
-export default index;
+  const getIntro = async () => {
+    let newIntro = await AsyncStorage.getItem('intro');
+    setIntro(newIntro);
+  };
+
+  useEffect(() => {
+    getIntro();
+  }, []);
+
+  return (
+    <Navigator
+      headerMode="none"
+      initialRouteName={intro === 'disable' ? Menu : 'Intro'}>
+      {intro === 'disable' ? null : (
+        <Screen name="Intro" component={MenuPlanIntro} />
+      )}
+      <Screen name="Menu" component={Menu} />
+      <Screen name="Detail" component={Detail} />
+      <Screen name="Cart" component={Cart} />
+      <Screen name="Dish" component={Dish} />
+      <Screen name="MenuHistory" component={MenuHistory} />
+    </Navigator>
+  );
+}
+
+// export default index;

@@ -34,6 +34,7 @@ const star = require('./Images/5stars.png');
 const newCart = require('./Images/newCart.png');
 const newPlan = require('./Images/newPlan.png');
 const newMore = require('./Images/newMore.png');
+const scroll = require('./Images/scroll.png');
 
 export {
     newCart,
@@ -72,4 +73,5 @@ export {
     pin,
     ooma,
     check,
+    scroll,
 };

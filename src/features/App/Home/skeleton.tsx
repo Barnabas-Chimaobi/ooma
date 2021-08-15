@@ -11,8 +11,9 @@ const Skeleton = () => {
         containerStyle={{flex: 1, width: '70%'}}
         isLoading={isloading1}
         animationType="shiver"
-        boneColor="rgba(225, 225, 225,0.3)"
-        highlightColor="rgba(225, 225, 225,0.3)"
+        boneColor="#E1E9EE"
+        highlightColor="#F2F8FC"
+        animationDirection="horizontalLeft"
         layout={[
           {
             key: 'someId',
@@ -20,7 +21,7 @@ const Skeleton = () => {
             height: Dimensions.get('window').width / 12,
             marginBottom: 6,
             marginLeft: 5,
-            backgroundColor: 'rgba(225, 225, 225,0.3)',
+            // backgroundColor: 'rgba(225, 225, 225,0.8)',
             borderRadius: 10,
           },
         ]}></SkeletonContent>
@@ -28,8 +29,9 @@ const Skeleton = () => {
         containerStyle={{flex: 1, width: '100%'}}
         isLoading={isloading1}
         animationType="shiver"
-        boneColor="rgba(225, 225, 225,0.3)"
-        highlightColor="rgba(225, 225, 225,0.3)"
+        boneColor="#E1E9EE"
+        highlightColor="#F2F8FC"
+        animationDirection="horizontalLeft"
         layout={[
           {
             key: 'someId',
@@ -38,7 +40,7 @@ const Skeleton = () => {
             height: Dimensions.get('window').width / 12,
             marginBottom: 6,
             marginLeft: 5,
-            backgroundColor: 'rgba(225, 225, 225,0.3)',
+            // backgroundColor: 'rgba(225, 225, 225,0.8)',
           },
         ]}></SkeletonContent>
       {/* </View> */}
@@ -47,8 +49,9 @@ const Skeleton = () => {
         containerStyle={{flex: 1, width: '100%'}}
         isLoading={isloading1}
         animationType="shiver"
-        boneColor="rgba(225, 225, 225,0.3)"
-        highlightColor="rgba(225, 225, 225,0.3)"
+        boneColor="#E1E9EE"
+        highlightColor="#F2F8FC"
+        animationDirection="horizontalLeft"
         layout={[
           {
             key: 'someId',
@@ -56,7 +59,7 @@ const Skeleton = () => {
             height: Dimensions.get('window').width / 1.5,
             marginBottom: 6,
             marginLeft: 5,
-            backgroundColor: 'rgba(225, 225, 225,0.3)',
+            // backgroundColor: 'rgba(225, 225, 225,0.8)',
             borderRadius: 10,
           },
         ]}></SkeletonContent>
@@ -64,8 +67,9 @@ const Skeleton = () => {
         containerStyle={{flex: 1, width: '70%'}}
         isLoading={isloading1}
         animationType="shiver"
-        boneColor="rgba(225, 225, 225,0.3)"
-        highlightColor="rgba(225, 225, 225,0.3)"
+        boneColor="#E1E9EE"
+        highlightColor="#F2F8FC"
+        animationDirection="horizontalLeft"
         layout={[
           {
             key: 'someId',
@@ -74,7 +78,7 @@ const Skeleton = () => {
             marginBottom: 6,
             // marginLeft: '-50%',
             marginLeft: 5,
-            backgroundColor: 'rgba(225, 225, 225,0.3)',
+            // backgroundColor: 'rgba(225, 225, 225,0.8)',
           },
         ]}></SkeletonContent>
       {/* </View> */}
@@ -83,8 +87,9 @@ const Skeleton = () => {
         containerStyle={{flex: 1, width: '85%'}}
         isLoading={isloading1}
         animationType="shiver"
-        boneColor="rgba(225, 225, 225,0.3)"
-        highlightColor="rgba(225, 225, 225,0.3)"
+        boneColor="#E1E9EE"
+        highlightColor="#F2F8FC"
+        animationDirection="horizontalLeft"
         layout={[
           {
             key: 'someId',
@@ -92,7 +97,7 @@ const Skeleton = () => {
             height: Dimensions.get('window').width / 12,
             marginBottom: 6,
             marginLeft: 5,
-            backgroundColor: 'rgba(225, 225, 225,0.3)',
+            backgroundColor: 'rgba(225, 225, 225,0.8)',
             borderRadius: 10,
           },
         ]}></SkeletonContent>
@@ -100,8 +105,9 @@ const Skeleton = () => {
         containerStyle={{flex: 1, width: '95%'}}
         isLoading={isloading1}
         animationType="shiver"
-        boneColor="rgba(225, 225, 225,0.3)"
-        highlightColor="rgba(225, 225, 225,0.3)"
+        boneColor="#E1E9EE"
+        highlightColor="#F2F8FC"
+        animationDirection="horizontalLeft"
         layout={[
           {
             key: 'someId',
@@ -110,7 +116,7 @@ const Skeleton = () => {
             marginBottom: 6,
             // marginLeft: '-50%',
             marginLeft: 5,
-            backgroundColor: 'rgba(225, 225, 225,0.3)',
+            // backgroundColor: 'rgba(225, 225, 225,0.8)',
           },
         ]}></SkeletonContent>
       {/* </View> */}

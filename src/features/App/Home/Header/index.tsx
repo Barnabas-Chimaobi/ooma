@@ -171,6 +171,18 @@ export default function Header() {
   //   return newMenuItems
   // }
 
+  const getMenuPlanCategory = async (branchID: string) => {
+    const planCategories = await GetAllMenuPlanCategory(branchID);
+    dispatch(useMenuPlanCategory(planCategories));
+    console.log(planCategories, '====plancategory==========' + branchID);
+  };
+
+  const getMenuPlansForYouCategory = async (branchID: string, page: number) => {
+    const menuItem = await getMenuPlansByBranch(branchID, page);
+    console.log(menuItem, 'menuplanforyouuuuu');
+    dispatch(getMenuItemsPlanForYou(menuItem));
+  };
+
   const getMenuItem = async (branchID: string, page: number) => {
     const menuItem = await getMenuItemsByBranch(branchID, page);
 
@@ -196,12 +208,6 @@ export default function Header() {
     dispatch(getNewItem(newMenuItems));
   };
 
-  const getMenuPlansForYouCategory = async (branchID: string, page: number) => {
-    const menuItem = await getMenuPlansByBranch(branchID, page);
-    console.log(menuItem, 'menuplanforyouuuuu');
-    dispatch(getMenuItemsPlanForYou(menuItem));
-  };
-
   const getGlutenCategory = async (branchID: number, page: number) => {
     const menuItem = await SearchMenuItemByCategoryId(branchID, page);
 
@@ -225,13 +231,8 @@ export default function Header() {
     const menuItem = await SearchMenuItemByCategoryId(branchID, page);
   };
 
-  const getMenuPlanCategory = async (branchID: string) => {
-    const planCategories = await GetAllMenuPlanCategory(branchID);
-    dispatch(useMenuPlanCategory(planCategories));
-    console.log(planCategories, '====plancategory==========' + branchID);
-  };
-
   const getAllMenuItems = async (branchID: string, page: number) => {
+    getMenuPlanCategory(branchID);
     getMenuPlansForYouCategory('82059935-89dc-4daf-aff3-adcf997d6859', page);
     getMenuItem(branchID, page);
     getNew(branchID, page);
@@ -250,7 +251,7 @@ export default function Header() {
       getBreakFastCategory(shuffled[1], page);
       getDrinkCategory(shuffled[2], page);
     }
-    getMenuPlanCategory(branchID);
+    // getMenuPlanCategory(branchID);
   };
 
   const Drop = ({closeModal}: Props) => {
@@ -316,7 +317,9 @@ export default function Header() {
       </View>
       <View style={S.locationBar}>
         <HeaderBar
-          onPressImg={() => setShowModal(!showModal)}
+          onPressImg={() =>
+            navigation.navigate('Branch', {branch: 'changeBranch'})
+          }
           image1={pointDown}
           title={`${bName}, ${rName}`}
           image2={clock}

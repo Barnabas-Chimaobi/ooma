@@ -12,6 +12,7 @@ import s from './styles1';
 import {Divider} from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {DateFormatter} from '../../Utils';
+import {useNavigation} from '@react-navigation/native';
 
 interface IProps {
   image1: any;
@@ -37,6 +38,7 @@ const HeaderBar = ({
   checkout,
 }: IProps) => {
   const [date, setDate] = useState();
+  const navigation = useNavigation();
 
   const [show, setShow] = useState(modes);
 
@@ -53,7 +55,7 @@ const HeaderBar = ({
   };
 
   const showDatepicker = () => {
-    showMode('date');
+    showMode('time');
   };
   console.log(otherTitle, 'title');
   return (
@@ -65,7 +67,7 @@ const HeaderBar = ({
               {onPressImg ? (
                 <TouchableOpacity
                   onPress={() => {
-                    showDatepicker(), onPressImg();
+                    navigation.navigate('Branch'), onPressImg();
                   }}>
                   <Image source={image1} style={s.locationImage} />
                 </TouchableOpacity>
@@ -103,7 +105,7 @@ const HeaderBar = ({
             <DateTimePicker
               testID="dateTimePicker"
               value={date || new Date()}
-              mode={'date'}
+              mode={'time'}
               is24Hour={true}
               display="default"
               onChange={onChange}
@@ -193,7 +195,7 @@ const HeaderBar = ({
             <DateTimePicker
               testID="dateTimePicker"
               value={date || new Date()}
-              mode={'date'}
+              mode={'time'}
               is24Hour={true}
               display="default"
               onChange={onChange}

@@ -35,7 +35,7 @@ const Login = () => {
     <ImageBackground
       source={require('../../../assets/Images/AuthImage.png')}
       style={{flex: 1}}>
-      {/* <SafeAreaView style={{backgroundColor: '#FFF'}}>
+      <SafeAreaView style={{backgroundColor: '#FFF'}}>
         <View
           style={{
             justifyContent: 'space-between',
@@ -56,7 +56,7 @@ const Login = () => {
             onPress={() => wizard.current.next()}
           />
         </View>
-      </SafeAreaView> */}
+      </SafeAreaView>
       <Logo />
       <View
         style={{

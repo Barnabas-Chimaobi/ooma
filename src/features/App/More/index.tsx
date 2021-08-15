@@ -152,6 +152,7 @@ const More: React.FC<Props> = ({navigation}) => {
         break;
 
       case 'Logout':
+        await AsyncStorage.removeItem('intro');
         await AsyncStorage.removeItem('token');
         navigation.navigate('Splash');
         // dispatch(reset());
@@ -192,7 +193,7 @@ const More: React.FC<Props> = ({navigation}) => {
             <CheckBox1
               checked={menuPlan}
               circle
-              title="Menu Plan"
+              title="Meal Plan"
               containerStyle={{backgroundColor: 'transparent'}}
               onPress={() => {
                 toggleOverlay();

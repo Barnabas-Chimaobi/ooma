@@ -37,8 +37,8 @@ interface IProps {
 }
 
 const initialLayout = {width: Dimensions.get('window').width};
-
 const MenuDetails: FC<IProps> = ({route}) => {
+  const dispatch: AppDispatch = useDispatch();
   const basketItem = useSelector(
     (state: RootState) => state.basketState.payload,
   );
@@ -102,6 +102,7 @@ const MenuDetails: FC<IProps> = ({route}) => {
     //   menuplanscart?.items.map((item: any) => item.MenuPlan),
     //   '=======planscarttttttt=========',
     // );
+    dispatch(basketStates(menuplanscart?.items));
     const all = menuplanscart?.items.map((item: any) => item.MenuPlan);
     let all1 = all.map((item: any) => item.MenuPlanDetails);
     console.log(menuplanscart, '=====all1======');

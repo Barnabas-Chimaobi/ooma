@@ -166,7 +166,11 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   };
 
   useEffect(() => {
-    console.log(route.params, '====eachitemmm ====');
+    console.log(
+      route.params,
+      menuItem?.imageUrl,
+      '====eachitemmm ====andurllllll====',
+    );
     const handleData = async () => {
       const regionName = await AsyncStorage.getItem('regionName');
       const branchName = await AsyncStorage.getItem('branchName');
@@ -496,11 +500,13 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   const toggleCheckOptions = (item: any) => {
     if (item === 'Pick-Up') {
       setChecks(true);
+      setShow1(false);
     } else {
       setChecks(false);
     }
 
     if (item === 'Delivery') {
+      setShow(false);
       setChecks1(true);
     } else {
       setChecks1(false);
@@ -833,21 +839,6 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                       />
                     ) : null}
                   </View>
-
-                  <View
-                    style={{
-                      backgroundColor: 'rgba(246, 246, 246, 0.75)',
-                      padding: 5,
-                      top: 8,
-                    }}>
-                    <TouchableHighlight
-                      underlayColor="rgba(0, 0, 0, 0.2)"
-                      onPress={() => deliveryTime()}>
-                      <Text style={{fontSize: 16, marginLeft: 10}}>
-                        Select Time
-                      </Text>
-                    </TouchableHighlight>
-                  </View>
                 </View>
 
                 <View style={{marginTop: 10}}>
@@ -910,6 +901,21 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                       </View>
                     </View>
                   ) : null}
+                </View>
+
+                <View
+                  style={{
+                    backgroundColor: 'rgba(246, 246, 246, 0.75)',
+                    padding: 5,
+                    top: 8,
+                  }}>
+                  <TouchableHighlight
+                    underlayColor="rgba(0, 0, 0, 0.2)"
+                    onPress={() => deliveryTime()}>
+                    <Text style={{fontSize: 16, marginLeft: 10}}>
+                      Select Time
+                    </Text>
+                  </TouchableHighlight>
                 </View>
 
                 {showTime == true ? (

@@ -8,6 +8,7 @@ import {
   Image,
   ImageBackground,
   Dimensions,
+  TouchableHighlight,
 } from 'react-native';
 import {Card} from '../../../../components';
 import Card1 from '../../MenuPlan/components/menuCards/card';
@@ -34,7 +35,8 @@ import {getMenuItemsHistory} from '../../../../reducers/HistoryMenu';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FlatList} from 'react-native';
 import styles from './styles';
-import {hearts} from '../../../../assets';
+import {hearts, scroll} from '../../../../assets';
+import {colors} from '../../../../colors';
 
 interface CarouselProps {
   menuItem?: [];
@@ -57,7 +59,7 @@ const MyCarousel: FC<CarouselProps> = ({menuItem, page = 1, keyProp}) => {
   }, []);
 
   const navigation = useNavigation();
-  const _renderItem = ({item}: any) => {
+  const _renderItem = ({item, index}: any) => {
     // console.log(item, 'item');
     let Image_Http_URL = {uri: item.imageUrl};
     const mainRating = item?.rating / item?.ratingCount;
@@ -81,36 +83,59 @@ const MyCarousel: FC<CarouselProps> = ({menuItem, page = 1, keyProp}) => {
       // />
 
       <View style={{}}>
-        <TouchableOpacity
-          onPress={() => {
-            console.log(item.id, 'props.id');
-            navigation.navigate('Detail', {planId: item.id});
-          }}>
-          <View style={styles.container} key={item.imageurl}>
-            <ImageBackground
-              source={{uri: item.imageurl}}
-              style={styles.menuImage}>
-              <TouchableOpacity>
-                <Image
-                  source={hearts}
-                  style={{marginEnd: 12, alignSelf: 'flex-end', top: 10}}
-                />
-              </TouchableOpacity>
-            </ImageBackground>
-            <View style={styles.titleContainer}>
-              <Text style={styles.title}>{item?.name}</Text>
-              <View style={styles.ratingContainer}>
-                {/* <Text>{props.rating}</Text> */}
+        <View>
+          <TouchableOpacity
+            onPress={() => {
+              console.log(item.id, 'props.id');
+              navigation.navigate('Detail', {planId: item.id});
+            }}>
+            <View style={styles.container} key={item.imageurl}>
+              <ImageBackground
+                source={{uri: item.imageurl}}
+                style={styles.menuImage}>
+                <TouchableOpacity>
+                  <Image
+                    source={hearts}
+                    style={{marginEnd: 12, alignSelf: 'flex-end', top: 10}}
+                  />
+                </TouchableOpacity>
+              </ImageBackground>
+              <View style={styles.titleContainer}>
+                <Text style={styles.title}>{item?.name}</Text>
+                <View style={styles.ratingContainer}>
+                  {/* <Text>{props.rating}</Text> */}
+                </View>
+              </View>
+              <View style={{flexDirection: 'row'}}>
+                {/* <Image source={square} style={styles.ratingStar} /> */}
+                <Text style={styles.description}>
+                  {item?.description.trim()}
+                </Text>
               </View>
             </View>
-            <View style={{flexDirection: 'row'}}>
-              {/* <Image source={square} style={styles.ratingStar} /> */}
-              <Text style={styles.description}>
-                {item.MenuPlanCategory.name}
-              </Text>
-            </View>
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </View>
+
+        <View style={{marginTop: 10}}>
+          <TouchableHighlight
+            underlayColor=""
+            onPress={() => navigation.navigate('Menu')}>
+            <Text
+              style={{
+                backgroundColor: colors.start,
+                // marginTop: '-8%',
+                color: colors.white,
+                width: 126,
+                padding: 8,
+                borderRadius: 5,
+                marginLeft: 12,
+                // paddingBottom: 10,
+                // marginBottom: 10,
+              }}>
+              CREATE PLAN
+            </Text>
+          </TouchableHighlight>
+        </View>
       </View>
     ) : (
       <Card
@@ -144,7 +169,7 @@ const MyCarousel: FC<CarouselProps> = ({menuItem, page = 1, keyProp}) => {
       //     }}
       data={menuItem}
       renderItem={_renderItem}
-      sliderWidth={380}
+      sliderWidth={350}
       itemWidth={315}
       activeSlideAlignment="start"
     />

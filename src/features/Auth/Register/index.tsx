@@ -67,7 +67,7 @@ const Register = () => {
     // console.log(number, password, 'login');
     try {
       setLoading(true);
-      const loginUser = await api.post(`/users/login?`, {
+      const loginUser = await api.post(`/users/login`, {
         username: number,
         password,
       });

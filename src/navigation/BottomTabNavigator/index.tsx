@@ -79,6 +79,22 @@ export default function App() {
         }}
       />
       <Tab.Screen
+        name="Meal plan"
+        component={MenuNavigation}
+        options={{
+          title: 'My profile',
+          tabBarLabel: 'Meal plan',
+          tabBarIcon: ({color, size}) => (
+            <View>
+              <Image
+                source={newPlan}
+                style={{tintColor: color, width: size, height: size}}
+              />
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
         name="Explore"
         component={Explore}
         options={{
@@ -88,22 +104,6 @@ export default function App() {
               source={exploreIcon}
               style={{tintColor: color, width: size, height: size}}
             />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Menu plan"
-        component={MenuNavigation}
-        options={{
-          title: 'My profile',
-          tabBarLabel: 'Menu plan',
-          tabBarIcon: ({color, size}) => (
-            <View>
-              <Image
-                source={newPlan}
-                style={{tintColor: color, width: size, height: size}}
-              />
-            </View>
           ),
         }}
       />
