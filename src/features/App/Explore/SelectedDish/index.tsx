@@ -102,11 +102,12 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   const [items, setItems] = useState([]);
   const [addressId, setAddressId] = useState(null);
   const [myAddress, setMyAddress] = useState('');
-  const [deliveryCharges, setDeliveryCharges] = useState(1);
+  const [deliveryCharges, setDeliveryCharges] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState('');
   const [cartid, setCartId] = useState('');
   const [showTime, setShowTime] = useState(false);
   const [prefAmount, setPrefAmount] = useState(0);
+  const [myId, setId] = useState('');
 
   const visibility = () => {
     setVisible((previousState) => !previousState);
@@ -165,7 +166,14 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     }
   };
 
+  const userId = async () => {
+    const userId = await AsyncStorage.getItem('userId');
+    setId(userId);
+    console.log(userId, '======= = =useriddd');
+  };
+
   useEffect(() => {
+    userId();
     console.log(
       route.params,
       menuItem?.imageUrl,
@@ -198,6 +206,16 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     Preferences: JSON.stringify(Preferences),
     specialInstruction: value,
     menuplanid: planId,
+    createdBy: myId,
+    deliveryCharge: deliveryCharges,
+    deliveryAddId: addressId,
+    deliveryTime: time,
+    deliveryAddress: myAddress,
+    deliveryOption: deliveryOption,
+    orderForFriend: switchs,
+    friendName: friendName,
+    friendPhoneNumber: friendPhone,
+    deliveryDate: plandate,
   };
 
   const body1 = {
@@ -231,6 +249,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
         Preferences: body.Preferences,
         specialInstruction: body.specialInstruction,
         menuplanid: planId,
+        createdBy: myId,
       });
       const addedCart = await cart?.data?.data;
       if (item == 'Buy now' && addedCart?.amount !== undefined) {
@@ -270,7 +289,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           'please check if you have selected a delivery location, time and enter your delivery address',
         ); // dispatch(cartStates(addedCart));
       } else {
-        const cart = await api.post(`orders/basket/`, {
+        const cart = await api.post(`orders/basket`, {
           branchId: body.branchId,
           menuitemid: body.menuitemid,
           quantity: body.quantity,
@@ -288,6 +307,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           friendName: friendName,
           friendPhoneNumber: friendPhone,
           deliveryDate: plandate,
+          createdBy: myId,
         });
         const addedCart = cart?.data?.data;
         if (menuPlan == 'menuPlan') {
@@ -728,7 +748,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                     marginRight: 15,
                   }}>
                   <TouchableHighlight
-                    underlayColor="rgba(0, 0, 0, 0.2)"
+                    underlayColor=""
                     activeOpacity={1}
                     onPress={() => setOpenModal(false)}>
                     <Text
@@ -737,7 +757,9 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                     </Text>
                   </TouchableHighlight>
 
-                  <TouchableHighlight onPress={() => createBasket()}>
+                  <TouchableHighlight
+                    underlayColor=""
+                    onPress={() => createBasket()}>
                     <Text style={{fontSize: 16, color: '#05944F'}}>Done</Text>
                   </TouchableHighlight>
                 </View>
@@ -912,7 +934,8 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                   <TouchableHighlight
                     underlayColor="rgba(0, 0, 0, 0.2)"
                     onPress={() => deliveryTime()}>
-                    <Text style={{fontSize: 16, marginLeft: 10}}>
+                    <Text
+                      style={{fontSize: 16, marginLeft: 10, marginBottom: 15}}>
                       Select Time
                     </Text>
                   </TouchableHighlight>

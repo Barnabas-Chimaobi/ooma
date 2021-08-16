@@ -119,7 +119,10 @@ const MyCarousel: FC<CarouselProps> = ({menuItem, page = 1, keyProp}) => {
         <View style={{marginTop: 10}}>
           <TouchableHighlight
             underlayColor=""
-            onPress={() => navigation.navigate('Menu')}>
+            onPress={() =>
+              // navigation.navigate('Menu')
+              navigation.navigate('Detail', {planId: item.id})
+            }>
             <Text
               style={{
                 backgroundColor: colors.start,

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -19,13 +19,13 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import AccordionListItem from '../../../../components/AccordionList/index';
-import { RadioButton } from '../../../../components/RadioButton/index';
+import {RadioButton} from '../../../../components/RadioButton/index';
 import ModalMessage from '../../../../components/CartMessagesModal';
-import { List } from './innerListItem';
-import { cartData } from './cartData';
-import { styles } from './styles';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { ListItems } from './listItem';
+import {List} from './innerListItem';
+import {cartData} from './cartData';
+import {styles} from './styles';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {ListItems} from './listItem';
 import SimpleHeader from '../../../../components/HeaderBar/simpleHeader';
 import PriceTag from '../../../../components/PriceTag/index';
 import {
@@ -33,14 +33,14 @@ import {
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
-import { EmptyList } from '../../../../components';
+import {EmptyList} from '../../../../components';
 import Modal from 'react-native-modal';
-import { colors } from '../../../../colors';
-import { useDispatch, useSelector } from 'react-redux';
-import { basketStates } from '../../../../reducers/basket';
-import { AppDispatch, RootState } from '../../../../store';
+import {colors} from '../../../../colors';
+import {useDispatch, useSelector} from 'react-redux';
+import {basketStates} from '../../../../reducers/basket';
+import {AppDispatch, RootState} from '../../../../store';
 
-const { width: windowWidth } = Dimensions.get('window');
+const {width: windowWidth} = Dimensions.get('window');
 
 interface ListItemDataProps {
   hour: string;
@@ -86,7 +86,25 @@ export const Cart = () => {
     }
     toggleVisible();
   };
+
+  const groupBasketItem = (item: any) => {
+    let basketData: any = [];
+
+    basketItem?.forEach((item: any) => {
+      groupByDate(item, basketData);
+    });
+    basketData.forEach((item: any) => {
+      //replace the already exist data with the grouped plan data
+      item['data'] = groupByPlanTypeDate(item.data);
+    });
+    setgrouped(basketData);
+    console.log('====baket items======= ', JSON.stringify(basketData));
+    return item;
+  };
+
   useEffect(() => {
+    groupBasketItem();
+
     console.log(basketItem, 'consolleedd========');
     if (basketItem !== undefined) {
       const all = route?.params?.cartItems?.map((item: any) => item.MenuPlan);
@@ -108,7 +126,6 @@ export const Cart = () => {
         ),
       );
       setDateTime(all1);
-    
     }
 
     // console.log(all1, '=====all1======');
@@ -125,14 +142,14 @@ export const Cart = () => {
   let ttl = basketItem;
 
   const [isLiked, setIsLiked] = useState([
-    { id: 1, value: true, name: 'QuickTeller', selected: false },
-    { id: 2, value: false, name: 'Pay from My Wallet', selected: false },
+    {id: 1, value: true, name: 'QuickTeller', selected: false},
+    {id: 2, value: false, name: 'Pay from My Wallet', selected: false},
   ]);
   const onRadioBtnClick = (item: any) => {
     let updatedState = isLiked.map((isLikedItem) =>
       isLikedItem.id === item.id
-        ? { ...isLikedItem, selected: true }
-        : { ...isLikedItem, selected: false },
+        ? {...isLikedItem, selected: true}
+        : {...isLikedItem, selected: false},
     );
     setIsLiked(updatedState);
   };
@@ -177,55 +194,51 @@ export const Cart = () => {
     };
   });
 
-  const groupBasketItem = (item: any) => {
-    let basketData: any = [];
-
-
-    item.forEach((item: any) => {
-      groupByDate(item, basketData);
-    })
-    basketData.forEach((item: any) => {
-      //replace the already exist data with the grouped plan data
-      item['data'] = groupByPlanTypeDate(item.data);
-    })
-    console.log("====baket items======= ", JSON.stringify(basketData));
-    return item
-  }
-
   const groupByDate = (itemData: any, basketItems: any) => {
     for (const item of basketItems) {
       if (itemData.deliveryDate == item.deliveryDate) {
-        item.data.push({ planType: itemData.MenuPlan.MenuplanDetail.plantype, itemData });
+        item.data.push({
+          planType: itemData.MenuPlan.MenuplanDetail.plantype,
+          itemData,
+        });
 
         return;
       }
     }
     // if the basket item date doesnt exist before
-    basketItems.push({ deliveryDate: itemData.deliveryDate, data: [{ planType: itemData.MenuPlan.MenuplanDetail.plantype, itemData }] });
-  }
+    basketItems.push({
+      deliveryDate: itemData.deliveryDate,
+      data: [{planType: itemData.MenuPlan.MenuplanDetail.plantype, itemData}],
+    });
+  };
 
   const groupByPlanTypeDate = (basketItems: any) => {
     let planTypeData: any = [];
     for (const item of basketItems) {
       if (planTypeData.length == 0) {
-        planTypeData.push({ planType: item.planType, data: [{ itemData: item.itemData }] })
+        planTypeData.push({
+          planType: item.planType,
+          data: [{itemData: item.itemData}],
+        });
       } else {
         for (const planData of planTypeData) {
-          console.log("======hello world=====", planData)
+          console.log('======hello world=====', planData);
           if (planData.planType == item.planType) {
-            if (!checkIfPlanExist(item,planData.data)) {
-              planData.data.push({ itemData: item.itemData });
+            if (!checkIfPlanExist(item, planData.data)) {
+              planData.data.push({itemData: item.itemData});
             }
             break;
           } else {
-            planTypeData.push({ planType: item.planType, data: [{ itemData: item.itemData }] })
+            planTypeData.push({
+              planType: item.planType,
+              data: [{itemData: item.itemData}],
+            });
           }
         }
       }
     }
     return planTypeData;
-
-  }
+  };
 
   const checkIfPlanExist = (item: any, plans: any) => {
     for (const plan of plans) {
@@ -234,17 +247,16 @@ export const Cart = () => {
       }
     }
     return false;
-  }
+  };
 
-
-  const ListItem = ({ hour, list }: ListItemDataProps) => {
+  const ListItem = ({hour, list}: ListItemDataProps) => {
     return (
       <View style={styles.listView}>
         <Text style={styles.hour}>{hour}</Text>
         <FlatList
           data={list}
           style={styles.listStyle}
-          renderItem={({ item }) => {
+          renderItem={({item}) => {
             return (
               <List
                 styles={styles}
@@ -269,13 +281,13 @@ export const Cart = () => {
       <KeyboardAvoidingView
         keyboardVerticalOffset={-305}
         behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
-        style={{ flex: 1 }}>
-        <SimpleHeader style={{ paddingLeft: 10 }} />
+        style={{flex: 1}}>
+        <SimpleHeader style={{paddingLeft: 10}} />
         <View style={styles.root}>
           <FlatList
-            data={basketItem}
+            data={grouped}
             style={styles.listStyle}
-            renderItem={({ item }) => {
+            renderItem={({item}) => {
               return basketItem.length == 0 ? (
                 <EmptyList
                   image={require('../../../../assets/Images/emptyCart.png')}
@@ -284,14 +296,14 @@ export const Cart = () => {
                   onPress={() => navigation.goBack()}
                 />
               ) : (
-                  // <ListItems
-                  //   hour={eachTime}
-                  //   date={eachDate}
-                  //   list={route?.params?.cartItems}
-                  //   styles={styles}
-                  // />
-                  <View>
-                    <List
+                // <ListItems
+                //   hour={eachTime}
+                //   date={eachDate}
+                //   list={route?.params?.cartItems}
+                //   styles={styles}
+                // />
+                <View>
+                  {/* <List
                       plantime={item?.MenuPlan?.MenuplanDetail?.deliveryTime}
                       date={item?.MenuPlan?.MenuplanDetail?.plandate}
                       // planDetails={Object.values(item)}
@@ -305,9 +317,24 @@ export const Cart = () => {
                       count={item?.quantity}
                       time={item?.MenuPlan?.MenuplanDetail?.plantype}
                       basketId={item?.id}
-                    />
-                  </View>
-                );
+                    /> */}
+                  <List
+                    plantime={item?.MenuPlan?.MenuplanDetail?.deliveryTime}
+                    date={item?.deliveryDate}
+                    planDetails={item?.data}
+                    styles={styles}
+                    // imageUrl={
+                    //   item?.MenuPlan?.MenuplanDetail?.MenuItem?.imageUrl
+                    // }
+                    // itemName={item?.MenuPlan?.name}
+                    // price={item?.amount}
+                    // delivery={item?.deliveryAddress}
+                    // count={item?.quantity}
+                    // time={item?.MenuPlan?.MenuplanDetail?.plantype}
+                    // basketId={item?.id}
+                  />
+                </View>
+              );
             }}
             // pagingEnabled
             // nestedScrollEnabled
@@ -352,7 +379,7 @@ export const Cart = () => {
                     marginTop: 20,
                   }}>
                   <Text
-                    style={{ marginLeft: 15, fontWeight: 'bold', fontSize: 17 }}>
+                    style={{marginLeft: 15, fontWeight: 'bold', fontSize: 17}}>
                     Create a name for your new plan
                   </Text>
                   <TextInput
@@ -430,8 +457,8 @@ export const Cart = () => {
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                     }}>
-                    <Text style={{ fontSize: 15 }}>Sub Total</Text>
-                    <Text style={{ fontSize: 15 }}>
+                    <Text style={{fontSize: 15}}>Sub Total</Text>
+                    <Text style={{fontSize: 15}}>
                       {' '}
                       <PriceTag price={9500.0} clear />
                     </Text>
@@ -451,10 +478,10 @@ export const Cart = () => {
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                     }}>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
+                    <Text style={{fontSize: 18, fontWeight: 'bold'}}>
                       Total
                     </Text>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
+                    <Text style={{fontSize: 18, fontWeight: 'bold'}}>
                       <PriceTag price={10000.0} clear />
                     </Text>
                   </View>

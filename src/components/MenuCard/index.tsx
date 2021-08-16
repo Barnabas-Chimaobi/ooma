@@ -94,7 +94,7 @@ const Card: FC<IProps> = ({
         </TouchableOpacity>
       ) : (
         <TouchableOpacity onPress={onPress}>
-          <View style={S.rowMain}>
+          <View style={S.rowMain1}>
             <ImageBackground source={img} style={S.imageBackgroundRow}>
               <View style={S.flexRow}>
                 <Label
@@ -114,7 +114,7 @@ const Card: FC<IProps> = ({
             <View style={S.textBarRow}>
               <Text style={S.title}>{title}</Text>
               <PriceTag price={price} />
-              <View style={S.rating}>
+              <View style={S.rating1}>
                 <Rating1 />
                 <RatingCount
                   ratingCount={ratingCount}

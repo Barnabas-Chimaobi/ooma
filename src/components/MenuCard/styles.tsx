@@ -73,6 +73,12 @@ export default StyleSheet.create({
     marginTop: 13,
     justifyContent: 'space-between',
   },
+  rating1: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 13,
+    // justifyContent: 'space-between',
+  },
   ratingImage: {
     width: 15,
     height: 15,
@@ -94,10 +100,17 @@ export default StyleSheet.create({
     borderRadius: 15,
     elevation: 10,
   },
+  rowMain1: {
+    flexDirection: 'row',
+    width: '100%',
+    borderRadius: 15,
+  },
   imageBackgroundRow: {
     width: 130,
-    height: 110,
+    height: 140,
     marginTop: 15,
+    borderRadius: 10,
+    overflow: 'hidden',
   },
   flexRow: {
     marginTop: 14,
@@ -111,5 +124,6 @@ export default StyleSheet.create({
     marginStart: 10,
     flexWrap: 'wrap',
     paddingTop: 10,
+    marginTop: 15,
   },
 });

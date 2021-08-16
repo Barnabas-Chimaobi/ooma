@@ -125,7 +125,9 @@ const HeaderBar = ({
               Deliver to
             </Text>
             <View style={S.locationDetails}>
-              <Text style={{fontSize: 13}}>{title}</Text>
+              <Text style={{fontSize: 13}}>
+                {title.length > 25 ? title.substring(0, 25) + '..' : title}
+              </Text>
 
               {onPressImg ? (
                 <TouchableOpacity
