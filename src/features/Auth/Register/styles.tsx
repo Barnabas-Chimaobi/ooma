@@ -5,7 +5,7 @@ export default StyleSheet.create({
   omaTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    margin:10
+    margin: 10,
   },
   omaSubTitle: {
     fontSize: 12,
@@ -15,7 +15,7 @@ export default StyleSheet.create({
   omaMainStyle: {
     flex: 1,
     alignSelf: 'center',
-    margin:10
+    margin: 10,
   },
   phoneInput: {
     fontFamily: 'OpenSans',
@@ -39,8 +39,8 @@ export default StyleSheet.create({
   },
   codeInputContainerStyle: {
     alignItems: 'center',
-    margin:10,
-    marginBottom:40
+    margin: 10,
+    marginBottom: 40,
   },
   passwordInputContainerStyle: {
     backgroundColor: 'rgba(48, 48, 48, 0.3)',
@@ -60,7 +60,7 @@ export default StyleSheet.create({
   },
   overStyle: {
     fontSize: 12,
-    margin:10
+    margin: 10,
   },
   backButtonStyle: {
     backgroundColor: 'transparent',
@@ -70,8 +70,9 @@ export default StyleSheet.create({
   logoStyle: {
     alignSelf: 'center',
     position: 'absolute',
-    top: 80,
-    width: 163,
+    // top: 250,
+    marginTop: '10%',
+    width: 350,
   },
   registerBody: {
     flexDirection: 'column',

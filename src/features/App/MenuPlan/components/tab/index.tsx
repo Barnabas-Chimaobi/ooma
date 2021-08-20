@@ -25,6 +25,7 @@ import {
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState, AppDispatch} from './../../../../../store';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import {Item} from 'react-native-paper/lib/typescript/components/List/List';
 
 const initialLayout = {width: Dimensions.get('window').width};
 
@@ -43,7 +44,7 @@ const MenuTab = () => {
     {key: 'vegan', title: 'beans'},
     {key: 'office', title: 'rice'},
   ]);
-  const [routes1, setRoutes1] = useState(params?.items);
+  const [routes1, setRoutes1] = useState();
   let [scenes, setScenes] = useState({});
   const [branchId, setBranchId] = useState('');
   const [menuPlans, setMenuPlans]: any = useState();
@@ -58,16 +59,24 @@ const MenuTab = () => {
   );
 
   const menuPlan = async (id: any) => {
-    // console.log(id, 'allplannnnnssss');
-    // const allPlan = await GetAllMenuPlanCategory(id);
-    // const mapPlan = allPlan?.map((item: any) =>
-    //   routes.push({
-    //     key: 'test',
-    //     title: item.name,
-    //   }),
-    // );
+    console.log(id, 'allplannnnnssss');
+    const allPlan = await GetAllMenuPlanCategory(id);
+    const mapPlan = allPlan?.map(
+      (item: any) => {
+        return {
+          key: item.name,
+          title: item.name,
+        };
+      },
+      // routes.push({
+      //   key: 'test',
+      //   title: item.name,
+      // }),
+    );
+    setRoutes1(mapPlan);
     // setRoutes(mapPlan);
-    // console.log(mapPlan, 'allplannnnnsssseccccccc');
+    console.log(routes1, 'allplannnnnsssseccccccc');
+    console.log(mapPlan, 'allplannnnnsssseccccccc');
   };
 
   // const mapScenes = () => {
@@ -97,7 +106,7 @@ const MenuTab = () => {
       const id: any = await AsyncStorage.getItem('branchId');
       setBranchId(id);
 
-      // menuPlan('82059935-89dc-4daf-aff3-adcf997d6859');
+      menuPlan('82059935-89dc-4daf-aff3-adcf997d6859');
     };
     // console.log(params.planId, '=====planid=====');
     getBranchId();

@@ -35,8 +35,10 @@ const newCart = require('./Images/newCart.png');
 const newPlan = require('./Images/newPlan.png');
 const newMore = require('./Images/newMore.png');
 const scroll = require('./Images/scroll.png');
+const nologo = require('./Images/oomaNologo.png');
 
 export {
+    nologo,
     newCart,
     newMore,
     newPlan,

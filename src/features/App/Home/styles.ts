@@ -23,6 +23,7 @@ export default StyleSheet.create({
   notificationBar: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginRight: 10
   },
   activenotifications: {
     position: 'relative',

@@ -39,6 +39,7 @@ import {colors} from '../../../../colors';
 import {useDispatch, useSelector} from 'react-redux';
 import {basketStates} from '../../../../reducers/basket';
 import {AppDispatch, RootState} from '../../../../store';
+import {getMenuitemCart, getOrderById} from '../../../../FetchData';
 
 const {width: windowWidth} = Dimensions.get('window');
 
@@ -102,7 +103,15 @@ export const Cart = () => {
     return item;
   };
 
+  const getMenuplanKart = async () => {
+    const menuplanscart = await getOrderById(route?.params?.id);
+    // setPlanCart(menuplanscart?.items);
+    // dispatch(basketStates(menuplanscart?.items));
+    console.log(menuplanscart, '=======planscartttttttssssss=========');
+  };
+
   useEffect(() => {
+    getMenuplanKart();
     groupBasketItem();
 
     console.log(basketItem, 'consolleedd========');

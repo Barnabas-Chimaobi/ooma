@@ -11,8 +11,8 @@ import {Button, ButtonType, PriceTag, EmptyList} from '../../../components';
 import Card from './Card';
 import shortid from 'shortid';
 import MessageModal from '../../../components/CartMessagesModal';
-import {useNavigation} from '@react-navigation/native';
-import {getMenuitemCart} from '../../../FetchData';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {getMenuitemCart, getOrderById} from '../../../FetchData';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
 import {cartStates} from '../../../reducers/cart';
@@ -26,6 +26,7 @@ const MyCart = () => {
   const [total, setTotal] = useState('');
   let [reload, setReload] = useState(false);
   const navigation = useNavigation();
+  const route = useRoute();
   const [refreshing, setRefreshing] = useState(true);
 
   const dispatch: AppDispatch = useDispatch();
@@ -82,13 +83,14 @@ const MyCart = () => {
     getCart();
   };
   useEffect(() => {
-    console.log(cartItem, 'cartitemmmm======');
     const unsubscribe = navigation.addListener('focus', () => {
       // this.componentDidMount();
       getCart();
     });
 
     getCart();
+    getMenuplanKart();
+
     return unsubscribe;
   }, [cartItem !== undefined && cartItem?.length]);
   // cartItem.length === 0 ? cartItem : reload === true ? cartItem : null;

@@ -512,3 +512,17 @@ export const getMenuItemOrders = async (id: any) => {
     return error;
   }
 };
+
+export const getOrderById = async (id: any) => {
+  try {
+    const MenuItemCart = await api.get(
+      `/orders/byId?orderId=${id}&isMenuplan=${true}`,
+    );
+    const menuOrderId = MenuItemCart?.data;
+    console.log(menuOrderId, 'menuPlanOrderByidddd');
+    return menuOrderId;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};

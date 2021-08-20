@@ -23,6 +23,7 @@ import {
   oomaNotify,
   profilePics,
   pointDown,
+  nologo,
 } from '../../../../assets';
 import S from '../styles';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -309,7 +310,7 @@ export default function Header() {
             <Avatar
               size="small"
               rounded
-              source={profilePics}
+              source={user}
               iconStyle={{width: 30, height: 30}}
             />
           </TouchableOpacity>

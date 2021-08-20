@@ -36,7 +36,7 @@ interface ListItemProps {
     time: string;
     status: string;
     time1: any;
-  }[];
+  };
 }
 interface ListProps {
   imageUrl: any;
@@ -45,6 +45,7 @@ interface ListProps {
   time: string;
   status: string;
   time1: any;
+  planId: any;
 }
 
 interface Props {
@@ -80,7 +81,34 @@ export const MyPlans = ({findPlan}: Props) => {
     // ),
   };
 
-  const getOrders = async () => {
+  // const getOrders = async () => {
+  //   const userId = await AsyncStorage.getItem('userId');
+  //   console.log(userId, 'useriddd');
+  //   // const gottenId = JSON.parse(userId);
+
+  //   try {
+  //     // console.log(newsum, 'cartttttt');
+  //     const order = await getMenuPlanOrders(userId);
+
+  //     groupBasketItem()
+  //     // setOrders(order?.items);
+  //     //  await dispatch(cartStates(menuICart?.items));
+  //     console.log(order, 'cart ===value');
+  //     console.log(
+  //       order?.items?.map((item: any) => item),
+  //       'cart ===valuesssss',
+  //     );
+
+  //     // setRefreshing(false);
+  //   } catch (error) {
+  //     console.log(error, '====errorrsss====');
+  //     // setRefreshing(false);
+  //   }
+  // };
+
+  const groupBasketItem = async (item: any) => {
+    let basketData: any = [];
+
     const userId = await AsyncStorage.getItem('userId');
     console.log(userId, 'useriddd');
     // const gottenId = JSON.parse(userId);
@@ -88,13 +116,24 @@ export const MyPlans = ({findPlan}: Props) => {
     try {
       // console.log(newsum, 'cartttttt');
       const order = await getMenuPlanOrders(userId);
-      setOrders(order?.items);
+
+      console.log(order?.items);
+
+      order?.items?.forEach((item: any) => {
+        console.log(item);
+        groupByDate(item, basketData);
+      });
+
+      basketData.forEach((item: any) => {
+        //replace the already exist data with the grouped plan data
+        item['data'] = groupByPlanTypeDate(item.data);
+      });
+
+      setOrders(basketData);
+      console.log('====baket items======= ', JSON.stringify(basketData));
+      // setOrders(order?.items);
       //  await dispatch(cartStates(menuICart?.items));
-      console.log(order, 'cart ===value');
-      console.log(
-        order?.items?.map((item: any) => item),
-        'cart ===valuesssss',
-      );
+      return item;
 
       // setRefreshing(false);
     } catch (error) {
@@ -103,8 +142,97 @@ export const MyPlans = ({findPlan}: Props) => {
     }
   };
 
+  const groupByPlanTypeDate = (basketItems: any) => {
+    let planTypeData: any = [];
+    for (const item of basketItems) {
+      if (planTypeData.length == 0) {
+        planTypeData.push({
+          planType: item.planType,
+          data: [{itemData: item.itemData}],
+        });
+      } else {
+        for (const planData of planTypeData) {
+          console.log('======hello world=====', planData);
+          if (planData.planType == item.planType) {
+            if (!checkIfPlanExist(item, planData.data)) {
+              planData.data.push({itemData: item.itemData});
+            }
+            break;
+          } else {
+            planTypeData.push({
+              planType: item.planType,
+              data: [{itemData: item.itemData}],
+            });
+          }
+        }
+      }
+    }
+    return planTypeData;
+  };
+
+  const checkIfPlanExist = (item: any, plans: any) => {
+    for (const plan of plans) {
+      if (plan.itemData.id == item?.itemData?.id) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const groupByDate = (itemData: any, basketItems: any) => {
+    console.log(basketItems, '=====panadetailsss=====');
+    for (const item of basketItems) {
+      console.log(item, '=====itemsssssss');
+      if (itemData.orderInfo.orderName == item.planName) {
+        item.data.push({
+          planType: itemData.orderInfo.orderName,
+          itemData,
+        });
+
+        return;
+      }
+    }
+    // if the basket item date doesnt exist before
+    basketItems.push({
+      planName: itemData.orderInfo.orderName,
+      plantotal: itemData.orderInfo.total,
+      planImage: itemData.orderInfo.MenuPlan.imageurl,
+      planStart: itemData.orderInfo.MenuPlan.startDate,
+      planEnd: itemData.orderInfo.MenuPlan.endDate,
+      planStatus: itemData.orderInfo.status,
+      planId: itemData.orderInfo.orderId,
+      data: [
+        {
+          planType: itemData.orderInfo.orderName,
+          itemData,
+        },
+      ],
+    });
+  };
+
+  // const groupByDate = (orderInfo: any, basketItems: any) => {
+  //   console.log(orderInfo, 'orderinfoconsoled====');
+  //   console.log(basketItems, 'orderinfoconsoled====');
+
+  //   for (const item of basketItems) {
+  //     if (orderInfo.orderName == item.orderName) {
+  //       item.data.push({
+  //         PlanType: orderInfo.MenuPlanDetail.plantype,
+  //         orderInfo,
+  //       });
+
+  //       return;
+  //     }
+  //   }
+  //   // if the basket item date doesnt exist before
+  //   basketItems.push({
+  //     deliveryDate: orderInfo.orderName,
+  //     data: [{PlanType: orderInfo.MenuPlanDetail.plantype, orderInfo}],
+  //   });
+  // };
+
   useEffect(() => {
-    getOrders();
+    groupBasketItem();
   }, []);
 
   const Item = ({
@@ -114,10 +242,11 @@ export const MyPlans = ({findPlan}: Props) => {
     time,
     status,
     time1,
+    planId,
   }: ListProps) => {
     return (
       <TouchableWithoutFeedback
-        onPress={openDrawer}
+        onPress={() => navigation.navigate('Cart', {id: planId})}
         style={styles.innerListItemStyle}>
         <Image
           style={{height: 100, width: 100, borderRadius: 10}}
@@ -161,12 +290,13 @@ export const MyPlans = ({findPlan}: Props) => {
           renderItem={({item}) => {
             return (
               <Item
-                imageUrl={item?.orderInfo?.MenuPlan?.imageurl}
-                itemName={item?.orderInfo?.orderName}
+                imageUrl={item?.planImage}
+                itemName={item?.planName}
                 pecentage={item.pecentage}
-                time={item?.orderInfo?.MenuPlan?.startDate}
-                status={item?.orderInfo?.status}
-                time1={item?.orderInfo?.MenuPlan?.endDate}
+                time={item.planStart}
+                status={item?.planStatus}
+                time1={item?.planEnd}
+                planId={item?.planId}
               />
             );
           }}

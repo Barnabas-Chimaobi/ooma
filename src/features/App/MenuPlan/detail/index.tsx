@@ -32,6 +32,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
 import {basketStates} from '../../../../reducers/basket';
 import {AppDispatch, RootState} from '../../../../store';
+import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+
 interface IProps {
   route?: {};
 }
@@ -71,6 +73,8 @@ const MenuDetails: FC<IProps> = ({route}) => {
   const [morning, setMorning] = useState();
   const [planType, setPlanType] = useState('Morning');
   const [planCart, setPlanCart] = useState('');
+  const [startDate, setStartDates] = useState('');
+  const [endDate, setEndDates] = useState('');
 
   const [show, setShow] = useState(false);
 
@@ -112,7 +116,16 @@ const MenuDetails: FC<IProps> = ({route}) => {
     const getMenuPlanDetails = async () => {
       const menuPlansDetail = await getMenuPlansById(planId);
       setMenuPlan(menuPlansDetail);
-      console.log(menuPlansDetail, 'menuplandetailsconsoled');
+      let d1 = new Date(menuPlansDetail?.startDate).toISOString();
+      let d2 = new Date(menuPlansDetail?.endDate).toISOString();
+      setStartDates(d1.substring(0, 10).toString());
+      setEndDates(d2.substring(0, 10).toString());
+      console.log(
+        menuPlansDetail,
+        d1.substring(0, 10).toString(),
+        d2.substring(0, 10).toString(),
+        'menuplandetailsconsoled',
+      );
     };
 
     // const getMenuplanKart = async () => {
@@ -217,6 +230,7 @@ const MenuDetails: FC<IProps> = ({route}) => {
     />
   );
 
+  let one = '2021-08-22';
   return (
     <>
       <SimpleHeader
@@ -266,17 +280,43 @@ const MenuDetails: FC<IProps> = ({route}) => {
                 //   mode="date"
                 //   // is24Hour={true}
                 //   display="default"
-                //   onChange={(e: any) => onChange(e)}
+                //   onChange={(e: any) => onChanges(e)}
                 // />
 
-                <DateTimePicker
-                  testID="dateTimePicker"
-                  value={date1 || new Date()}
-                  mode={'date'}
-                  is24Hour={true}
-                  display="default"
-                  onChange={onChanges}
+                <Calendar
+                  // markingType="multi-period"
+                  // markingType={'multi-dot'}
+                  markedDates={{
+                    one: {textColor: 'green', selected: true},
+                    two: {
+                      startingDay: true,
+                      color: 'green',
+                      selected: true,
+                    },
+                    '2021-08-23': {
+                      selected: true,
+                      endingDay: true,
+                      color: 'green',
+                      textColor: 'gray',
+                    },
+                    '2021-08-24': {
+                      selected: true,
+                      startingDay: true,
+                      color: 'green',
+                      endingDay: true,
+                    },
+                  }}
+                  disabledByDefault={true}
                 />
+
+                // <DateTimePicker
+                //   testID="dateTimePicker"
+                //   value={date1 || new Date()}
+                //   mode={'date'}
+                //   is24Hour={true}
+                //   display="default"
+                //   onChange={onChanges}
+                // />
               )}
 
               <Text style={styles.date}>
