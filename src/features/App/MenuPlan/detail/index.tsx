@@ -93,7 +93,12 @@ const MenuDetails: FC<IProps> = ({route}) => {
       planId,
       item,
     );
-    setMorning(morningorAfterOrEve);
+    var uniq = {};
+    var arrFiltered = morningorAfterOrEve?.filter(
+      (obj) => !uniq[obj.MenuItem.id] && (uniq[obj.MenuItem.id] = true),
+    );
+    setMorning(arrFiltered);
+    console.log('arrFiltered=================', arrFiltered);
     console.log(date, 'morningsssss');
   };
 
@@ -138,6 +143,15 @@ const MenuDetails: FC<IProps> = ({route}) => {
     console.log(newDaysObject, '=======dayssssssssssssss-=========');
     setMarked(newDaysObject);
     // loopDate();
+  };
+
+  const checkIfPlanExist = (item: any, plans: any) => {
+    for (const plan of plans) {
+      if (plan.itemData.id == item.itemData.id) {
+        return true;
+      }
+    }
+    return false;
   };
 
   useEffect(() => {
