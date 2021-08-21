@@ -6,8 +6,8 @@ const request = axios.create({
   timeout: 60000,
   timeoutErrorMessage:
     'Either your internet connect is not strong or you have no internet connectiom',
-  // baseURL: 'https://api.staging.ooma.kitchen/api/v1',
-  baseURL: 'https://api.ooma.kitchen/api/v1',
+  baseURL: 'https://api.staging.ooma.kitchen/api/v1',
+  // baseURL: 'https://api.ooma.kitchen/api/v1',
 });
 class Api {
   post = async (URL: any, data?: any) => {

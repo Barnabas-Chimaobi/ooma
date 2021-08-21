@@ -75,6 +75,7 @@ const MenuDetails: FC<IProps> = ({route}) => {
   const [planCart, setPlanCart] = useState('');
   const [startDate, setStartDates] = useState('');
   const [endDate, setEndDates] = useState('');
+  const [marked, setMarked] = useState('');
 
   const [show, setShow] = useState(false);
 
@@ -107,57 +108,84 @@ const MenuDetails: FC<IProps> = ({route}) => {
     //   '=======planscarttttttt=========',
     // );
     dispatch(basketStates(menuplanscart?.items));
-    const all = menuplanscart?.items.map((item: any) => item.MenuPlan);
-    let all1 = all.map((item: any) => item.MenuPlanDetails);
+    const all = menuplanscart?.items?.map((item: any) => item.MenuPlan);
+    let all1 = all?.map((item: any) => item.MenuPlanDetails);
     console.log(menuplanscart, '=====all1======');
   };
 
+  const getMenuPlanDetails = async () => {
+    const menuPlansDetail = await getMenuPlansById(planId);
+    setMenuPlan(menuPlansDetail);
+    let d1 = new Date(menuPlansDetail?.startDate)
+      .toISOString()
+      .substring(0, 10);
+    let d2 = new Date(menuPlansDetail?.endDate).toISOString().substring(0, 10);
+    var now = new Date(d2);
+    var daysOfYear = [];
+    for (var d = new Date(d1); d <= now; d.setDate(d.getDate() + 1)) {
+      daysOfYear.push(d.toISOString().substring(0, 10));
+    }
+
+    let newDaysObject = {};
+    daysOfYear.forEach((day) => {
+      newDaysObject[day] = {
+        selected: true,
+        marked: true,
+        color: '#50cebb',
+        textColor: 'green',
+      };
+    });
+    console.log(newDaysObject, '=======dayssssssssssssss-=========');
+    setMarked(newDaysObject);
+    // loopDate();
+  };
+
   useEffect(() => {
-    const getMenuPlanDetails = async () => {
-      const menuPlansDetail = await getMenuPlansById(planId);
-      setMenuPlan(menuPlansDetail);
-      let d1 = new Date(menuPlansDetail?.startDate).toISOString();
-      let d2 = new Date(menuPlansDetail?.endDate).toISOString();
-      setStartDates(d1.substring(0, 10).toString());
-      setEndDates(d2.substring(0, 10).toString());
-      console.log(
-        menuPlansDetail,
-        d1.substring(0, 10).toString(),
-        d2.substring(0, 10).toString(),
-        'menuplandetailsconsoled',
-      );
-    };
-
-    // const getMenuplanKart = async () => {
-    //   const menuplanscart = await getMenuPlanCart();
-    //   setPlanCart(menuplanscart?.items);
-    //   // console.log(
-    //   //   menuplanscart?.items.map((item: any) => item.MenuPlan),
-    //   //   '=======planscarttttttt=========',
-    //   // );
-    //   const all = menuplanscart?.items.map((item: any) => item.MenuPlan);
-    //   let all1 = all.map((item: any) => item.MenuPlanDetails);
-    //   console.log(all1, '=====all1======');
-    // };
-
     console.log(date, planId, planType, 'consoleedddddsss');
     const unsubscribe = navigation.addListener('focus', () => {
       getMenuplanKart();
     });
     getMenuPlanDetails();
     getMenuplanKart();
-    getMorningAfternoonNight('Morning');
-  }, [date]);
+    getMorningAfternoonNight('Morning', null);
+  }, []);
+
+  // const mark = {
+  //   [startDate]: {
+  //     startingDay: true,
+  //     color: '#50cebb',
+  //     textColor: 'white',
+  //     marked: true,
+  //   },
+  //   [endDate]: {endingDay: true, color: '#50cebb', textColor: 'white'},
+  // };
+
+  const mark = {
+    [startDate]: {
+      // startingDay: true,
+      color: '#50cebb',
+      textColor: 'white',
+      marked: true,
+      selected: true,
+    },
+    [endDate]: {
+      // endingDay: true,
+      color: '#50cebb',
+      textColor: 'white',
+      marked: true,
+      selected: true,
+    },
+  };
 
   console.log(planId);
 
   const onChanges = (e: any, selectedDate: any) => {
-    const newDate = JSON.stringify(selectedDate).substring(1, 11);
-
+    const newDate = e?.dateString;
+    // const newDate = JSON.stringify(e).substring(1, 11);
     console.log(planType, '======plantype=====');
     console.log(selectedDate, '======plandatesssss======');
     const currentDate = newDate || date;
-    setDate1(selectedDate || date1);
+    setDate1(e?.dateString || date1);
     setDate(currentDate);
     setShow(Platform.OS === 'ios');
     // setTimeout(() => {
@@ -204,6 +232,7 @@ const MenuDetails: FC<IProps> = ({route}) => {
                 : route.key == 'night'
                 ? 'Evening'
                 : null,
+              date,
             ),
               console.log(route, '======routerssss=====');
           }}
@@ -284,27 +313,12 @@ const MenuDetails: FC<IProps> = ({route}) => {
                 // />
 
                 <Calendar
+                  // markingType={'period'}
                   // markingType="multi-period"
                   // markingType={'multi-dot'}
-                  markedDates={{
-                    one: {textColor: 'green', selected: true},
-                    two: {
-                      startingDay: true,
-                      color: 'green',
-                      selected: true,
-                    },
-                    '2021-08-23': {
-                      selected: true,
-                      endingDay: true,
-                      color: 'green',
-                      textColor: 'gray',
-                    },
-                    '2021-08-24': {
-                      selected: true,
-                      startingDay: true,
-                      color: 'green',
-                      endingDay: true,
-                    },
+                  markedDates={marked}
+                  onDayPress={(day) => {
+                    onChanges(day), setShow(false);
                   }}
                   disabledByDefault={true}
                 />
