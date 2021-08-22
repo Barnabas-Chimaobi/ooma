@@ -952,6 +952,21 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                         setShowTime(false), setTime(planTime);
                       }}
                     />
+
+                    <DropDownPicker
+                      placeholder="Select location"
+                      // open={open}
+                      // value={value}
+                      items={planTime}
+                      // setOpen={setOpen}
+                      setValue={value}
+                      setItems={planTime}
+                      onChangeItem={(value) => {
+                        setShowTime(false), setTime(value.label);
+                        // setMyAddress(value?.label);
+                        console.log(value, 'amountt');
+                      }}
+                    />
                   </View>
                 ) : null}
               </ScrollView>

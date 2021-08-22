@@ -23,6 +23,7 @@ type Props = {
   planId: any;
   planTime: any;
   plandate: any;
+  // times: any;
 };
 
 function percentageCalc(oldPrice: any, newPrice: any) {
@@ -30,6 +31,7 @@ function percentageCalc(oldPrice: any, newPrice: any) {
 }
 
 const DetailCard: React.FC<Props> = (props: Props) => {
+  console.log(props.planTime, '====plantimessss===========');
   const discount = percentageCalc(props.oldPrice, props.amount);
   const navigation = useNavigation();
   return (
@@ -65,9 +67,9 @@ const DetailCard: React.FC<Props> = (props: Props) => {
   );
 };
 
-const Morning = (morning: any, planIds: any) => {
+const Morning = (morning: any, planIds: any, times: any) => {
   const navigation = useNavigation();
-  console.log(morning.morning, 'cardmorning');
+  console.log(morning, times, 'cardmorning');
   console.log(morning.planIds, '=======planidsss======');
   const [refreshing] = useState(false);
   const [, setDataSource] = useState([]);
@@ -102,8 +104,8 @@ const Morning = (morning: any, planIds: any) => {
               image={item?.MenuItem?.imageUrl}
               title={item?.MenuItem?.itemName}
               amount={item?.MenuItem?.amount}
-              oldPrice={item.oldPrice}
-              planTime={item?.deliveryTime}
+              oldPrice={item?.oldPrice}
+              planTime={morning.times}
               plandate={item?.plandate}
             />
           )}

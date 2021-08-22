@@ -22,6 +22,7 @@ type Props = {
   planId: any;
   planTime: any;
   plandate: any;
+  times: any;
 };
 
 function percentageCalc(oldPrice: any, newPrice: any) {
@@ -64,7 +65,7 @@ const DetailCard: React.FC<Props> = (props: Props) => {
   );
 };
 
-const Night = (night: any, planIds: any) => {
+const Night = (night: any, planIds: any, times: any) => {
   const navigation = useNavigation();
   console.log(night.planIds, '=====planidsssss=====');
   const [refreshing] = useState(false);
@@ -100,8 +101,8 @@ const Night = (night: any, planIds: any) => {
               image={item?.MenuItem?.imageUrl}
               title={item?.MenuItem?.itemName}
               amount={item?.MenuItem?.amount}
-              oldPrice={item.oldPrice}
-              planTime={item?.deliveryTime}
+              oldPrice={item?.oldPrice}
+              planTime={night?.times}
               plandate={item?.plandate}
             />
           )}

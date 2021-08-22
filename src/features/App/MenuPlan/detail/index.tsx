@@ -33,6 +33,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {basketStates} from '../../../../reducers/basket';
 import {AppDispatch, RootState} from '../../../../store';
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+import {NativeBaseProvider, Box} from 'native-base';
 
 interface IProps {
   route?: {};
@@ -49,19 +50,19 @@ const MenuDetails: FC<IProps> = ({route}) => {
 
   const MorningRoute = () => (
     <View style={styles.scene}>
-      <Morning morning={morning} planIds={planId} />
+      <Morning times={deliveryTime} morning={morning} planIds={planId} />
     </View>
   );
 
   const AfternoonRoute = () => (
     <View style={styles.scene}>
-      <Afternoon afternoon={morning} planIds={planId} />
+      <Afternoon times={deliveryTime} afternoon={morning} planIds={planId} />
     </View>
   );
 
   const NightRoute = () => (
     <View style={styles.scene}>
-      <Night night={morning} planIds={planId} />
+      <Night times={deliveryTime} night={morning} planIds={planId} />
     </View>
   );
 
@@ -76,6 +77,7 @@ const MenuDetails: FC<IProps> = ({route}) => {
   const [startDate, setStartDates] = useState('');
   const [endDate, setEndDates] = useState('');
   const [marked, setMarked] = useState('');
+  const [deliveryTime, setDeliveryTime] = useState('');
 
   const [show, setShow] = useState(false);
 
@@ -93,6 +95,16 @@ const MenuDetails: FC<IProps> = ({route}) => {
       planId,
       item,
     );
+    const getPlanTimes = morningorAfterOrEve?.map((item: any) => {
+      return {
+        label: item?.deliveryTime,
+        value: item?.deliveryTime,
+        amount: item?.deliveryTime,
+        id: item?.deliveryTime,
+      };
+    });
+    setDeliveryTime(getPlanTimes);
+    console.log(getPlanTimes, 'plantimesssss===========');
     var uniq = {};
     var arrFiltered = morningorAfterOrEve?.filter(
       (obj) => !uniq[obj.MenuItem.id] && (uniq[obj.MenuItem.id] = true),
