@@ -21,11 +21,28 @@ import Search from '../homeSearchComp/search';
 import {
   getMenuPlansByBranch,
   GetAllMenuPlanCategory,
+  getPlanCatId,
+  getMenuPlanCart,
 } from '../../../../../FetchData';
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState, AppDispatch} from './../../../../../store';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {Item} from 'react-native-paper/lib/typescript/components/List/List';
+import {NativeBaseProvider, Box} from 'native-base';
+import DynamicTabView from 'react-native-dynamic-tab-view';
+import {getMenuItemsPlanForYou} from '../../../../../reducers/MenuPlansForYou';
+import Spinner from 'react-native-loading-spinner-overlay';
+import {
+  BallIndicator,
+  BarIndicator,
+  DotIndicator,
+  MaterialIndicator,
+  PacmanIndicator,
+  PulseIndicator,
+  SkypeIndicator,
+  UIActivityIndicator,
+  WaveIndicator,
+} from 'react-native-indicators';
 
 const initialLayout = {width: Dimensions.get('window').width};
 
@@ -44,18 +61,23 @@ const MenuTab = () => {
     {key: 'vegan', title: 'beans'},
     {key: 'office', title: 'rice'},
   ]);
-  const [routes1, setRoutes1] = useState();
+  const [routes1, setRoutes1] = useState([]);
   let [scenes, setScenes] = useState({});
   const [branchId, setBranchId] = useState('');
   const [menuPlans, setMenuPlans]: any = useState();
   const [menuPlans1, setMenuPlans1] = useState();
   const [menuPlan2, setMenuPlan2] = useState();
   const [refreshing, setRefreshing] = useState(false);
+  const [loader, setLoader] = useState(false);
   const {menuPlanCategories} = useSelector(
     (state: RootState) => state.menuPlanCategories,
   );
   const menuPlansMenuItem = useSelector(
     (state: RootState) => state.menuItemPlanForYou.payload,
+  );
+  const dispatch: AppDispatch = useDispatch();
+  const basketItem = useSelector(
+    (state: RootState) => state.basketState.payload,
   );
 
   const menuPlan = async (id: any) => {
@@ -64,8 +86,9 @@ const MenuTab = () => {
     const mapPlan = allPlan?.map(
       (item: any) => {
         return {
-          key: item.name,
           title: item.name,
+          key: item.name,
+          id: item.id,
         };
       },
       // routes.push({
@@ -73,10 +96,11 @@ const MenuTab = () => {
       //   title: item.name,
       // }),
     );
+    // console.log(allPlan, '====alllrplannnn=======');
     setRoutes1(mapPlan);
     // setRoutes(mapPlan);
     console.log(routes1, 'allplannnnnsssseccccccc');
-    console.log(mapPlan, 'allplannnnnsssseccccccc');
+    console.log(menuPlansMenuItem, 'allplannnnnssssecccccccitemmmsss');
   };
 
   // const mapScenes = () => {
@@ -99,7 +123,21 @@ const MenuTab = () => {
   //   });
   // };
 
+  const getMenuplanKart = async (id) => {
+    const branch = await AsyncStorage.getItem('branchId');
+    const newbranch = JSON.parse(branch);
+    setLoader(true);
+    const menuplanscart = await getPlanCatId(newbranch, id);
+    console.log(newbranch, 'useriddd');
+    // setPlanCart(menuplanscart?.items);
+    dispatch(getMenuItemsPlanForYou(menuplanscart));
+    console.log(menuplanscart, '=======planscategoryyyyyyyyy=========');
+    setLoader(false);
+    // console.log(all1, '=====all1======');
+  };
+
   useEffect(() => {
+    getMenuplanKart(1);
     // mapScenes();
     // console.log(params?.items, 'itemmmssss');
     const getBranchId = async () => {
@@ -152,11 +190,33 @@ const MenuTab = () => {
     </View>
   );
 
-  const FamilyRoute = () => (
-    <View style={styles.scene}>
-      <FamilyMenu allFamilyMenuPlans={menuPlansMenuItem} />
-    </View>
-  );
+  const FamilyRoute = (item, index) => {
+    console.log(item, '====itemsssss===');
+    return (
+      <View>
+        {menuPlansMenuItem ? (
+          <View key={item?.id} style={styles.scene}>
+            <FamilyMenu allFamilyMenuPlans={menuPlansMenuItem} />
+          </View>
+        ) : (
+          <View style={styles.noData}>
+            <Image
+              style={{marginTop: 20}}
+              source={require('../../assets/no-data.png')}
+            />
+            <Text style={styles.btnText}>No meal plan available.</Text>
+
+            <View style={styles.btn}>
+              <Text style={{color: 'white', fontWeight: 'bold', fontSize: 14}}>
+                FIND PLANS
+              </Text>
+            </View>
+          </View>
+        )}
+      </View>
+    );
+  };
+
   let test = {
     all: AllRoute,
     office: OfficeRoute,
@@ -165,6 +225,7 @@ const MenuTab = () => {
     test: FamilyRoute,
     testing: FamilyRoute,
   };
+
   const renderScene = SceneMap(test);
 
   return (
@@ -174,13 +235,29 @@ const MenuTab = () => {
         backgroundColor="transparent"
         barStyle={'dark-content'}
       />
-      {menuPlansMenuItem ? (
-        <ScrollView
-          style={{flex: 1}}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }>
-          <View
+      <Spinner
+        visible={loader}
+        // textStyle={styles.spinnerTextStyle}
+        overlayColor="rgba(66, 66, 66,0.6)"
+        customIndicator={<BallIndicator color="white" />}
+      />
+      {/* {menuPlansMenuItem ? ( */}
+      <ScrollView
+        style={{flex: 1}}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
+        <DynamicTabView
+          data={routes1}
+          renderTab={FamilyRoute}
+          headerTextStyle={styles.headerText}
+          onChangeTab={(index) => getMenuplanKart(index + 1)}
+          // defaultIndex={defaultIndex}
+          containerStyle={{flex: 1}}
+          headerBackgroundColor={'white'}
+          // headerUnderlayColor={'blue'}
+        />
+        {/* <View
             style={{
               display: 'flex',
               flexDirection: 'row',
@@ -205,7 +282,7 @@ const MenuTab = () => {
             </TouchableOpacity>
           </View>
           {/* {routes.length != 0 ? ( */}
-          <TabView
+        {/* <TabView
             renderTabBar={(routers) => (
               <TabBar
                 {...routers}
@@ -224,24 +301,24 @@ const MenuTab = () => {
             renderScene={renderScene}
             onIndexChange={setIndex}
             initialLayout={initialLayout}
-          />
-          {/* ) : null} */}
-        </ScrollView>
-      ) : (
-        <View style={styles.noData}>
-          <Image
-            style={{marginTop: 20}}
-            source={require('../../assets/no-data.png')}
-          />
-          <Text style={styles.btnText}>No meal plan available.</Text>
+          />  */}
+        {/* ) : null} */}
+      </ScrollView>
+      {/* ) : ( */}
+      {/* <View style={styles.noData}> */}
+      {/* </View> <Image
+      //       style={{marginTop: 20}}
+      //       source={require('../../assets/no-data.png')}
+      //     />
+      //     <Text style={styles.btnText}>No meal plan available.</Text>
 
-          <View style={styles.btn}>
-            <Text style={{color: 'white', fontWeight: 'bold', fontSize: 14}}>
-              FIND PLANS
-            </Text>
-          </View>
-        </View>
-      )}
+      //     <View style={styles.btn}>
+      //       <Text style={{color: 'white', fontWeight: 'bold', fontSize: 14}}>
+      //         FIND PLANS
+      //       </Text>
+      //     </View>
+      //   </View>
+      // )} */}
     </View>
   );
 };

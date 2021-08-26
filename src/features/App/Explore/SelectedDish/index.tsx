@@ -513,9 +513,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     return null;
   };
 
-  const deliveryTime = () => {
-    setShowTime(true);
-  };
+  const deliveryTime = () => setShowTime((prev) => !prev);
 
   const toggleCheckOptions = (item: any) => {
     if (item === 'Pick-Up') {
@@ -942,7 +940,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                 </View>
 
                 {showTime == true ? (
-                  <View style={{marginTop: -20}}>
+                  <View style={{marginTop: -50}}>
                     <Button
                       titleStyle={s.buttonTitle}
                       type={ButtonType.clear}
@@ -954,7 +952,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                     />
 
                     <DropDownPicker
-                      placeholder="Select location"
+                      placeholder="Set times"
                       // open={open}
                       // value={value}
                       items={planTime}

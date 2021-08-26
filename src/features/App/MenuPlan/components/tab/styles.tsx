@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { colors } from '../../../../../colors/index'
+import {StyleSheet} from 'react-native';
+import {colors} from '../../../../../colors/index';
 export const styles = StyleSheet.create({
   scene: {
     // flex: 1,
@@ -10,20 +10,20 @@ export const styles = StyleSheet.create({
     paddingLeft: 15,
     justifyContent: 'center',
     alignItems: 'center',
-},
+  },
 
-tabStyle: {
+  tabStyle: {
     borderBottomColor: 'grey',
     borderBottomWidth: 15,
     elevation: 45,
-},
+  },
 
-activeTabStyle: {
+  activeTabStyle: {
     backgroundColor: colors.lightGrey,
-    borderBottomColor:colors.lightGrey,
+    borderBottomColor: colors.lightGrey,
     borderBottomWidth: 5,
-    borderWidth: 0
-},
+    borderWidth: 0,
+  },
   indicatorStyle: {
     backgroundColor: 'white',
   },
@@ -80,5 +80,8 @@ activeTabStyle: {
     width: '100%',
     alignItems: 'center',
     flexDirection: 'column',
+  },
+  headerText: {
+    color: 'black',
   },
 });

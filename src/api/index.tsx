@@ -6,7 +6,7 @@ const request = axios.create({
   timeout: 60000,
   timeoutErrorMessage:
     'Either your internet connect is not strong or you have no internet connectiom',
-   baseURL: 'https://api.staging.ooma.kitchen/api/v1',
+  baseURL: 'https://api.staging.ooma.kitchen/api/v1',
   // baseURL: 'https://api.ooma.kitchen/api/v1',
 });
 class Api {
@@ -57,6 +57,7 @@ class Api {
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log(res.data, 'get');
       return {errorStatus: false, ...res};
     } catch (err) {
       console.log(err.response.data, 'get');

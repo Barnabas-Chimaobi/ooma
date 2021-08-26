@@ -62,6 +62,7 @@ const Checkout = () => {
   const [cartId, setCartId] = useState('');
   const [orderChannel, setOrderChannel] = useState('');
   const [orderName, setOrderName] = useState('');
+  const [branch, setBranch] = useState('');
 
   const getAddress = async () => {
     const adress = await AsyncStorage.getItem('branchId');
@@ -95,6 +96,10 @@ const Checkout = () => {
     const handleData = async () => {
       const regionName = await AsyncStorage.getItem('regionName');
       const branchName = await AsyncStorage.getItem('branchName');
+      const newBranchId: any = await AsyncStorage.getItem('branchId');
+      const branchs = JSON.parse(newBranchId);
+      setBranch(newBranchId);
+      console.log(branchs, 'branchiddddd');
 
       setBname(branchName);
       setRname(regionName);
@@ -112,7 +117,7 @@ const Checkout = () => {
       : params?.paramsBuynow === 'buynow'
       ? false
       : true,
-    branchId: '82059935-89dc-4daf-aff3-adcf997d6859',
+    branchId: branch,
     subTotal: params?.subTotal || params?.params?.amount,
     total:
       params?.paramsBuynow === 'buynow'

@@ -89,7 +89,7 @@ const MyCart = () => {
     });
 
     getCart();
-    getMenuplanKart();
+    // getMenuplanKart();
 
     return unsubscribe;
   }, [cartItem !== undefined && cartItem?.length]);

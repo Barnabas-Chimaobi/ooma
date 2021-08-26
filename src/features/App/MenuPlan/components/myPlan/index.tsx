@@ -117,7 +117,7 @@ export const MyPlans = ({findPlan}: Props) => {
       // console.log(newsum, 'cartttttt');
       const order = await getMenuPlanOrders(userId);
 
-      console.log(order?.items);
+      console.log(order?.items, 'orderItemsss=======');
 
       order?.items?.forEach((item: any) => {
         console.log(item);
