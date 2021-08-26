@@ -6976,6 +6976,11 @@ react-native-dropdown-picker@4.0.9:
   dependencies:
     react-native-vector-icons "^7.0.0"
 
+react-native-dynamic-tab-view@1.0.7-0:
+  version "1.0.7-0"
+  resolved "https://registry.yarnpkg.com/react-native-dynamic-tab-view/-/react-native-dynamic-tab-view-1.0.7-0.tgz#32b518f48af55d01a7102ec6cc6dccd9f7712e79"
+  integrity sha512-4W2LBFPUFFqUT6S0aJUpOblLJdEXV4TksUZhpf607eIyzzBksQJL6bk4eS0YV9LMTqnoo0NvjhbdtnihSDV70A==
+
 react-native-elements@^3.1.0:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/react-native-elements/-/react-native-elements-3.3.2.tgz#42cc05c90a5c85c8aee95ce363bce0c5a39fe633"
