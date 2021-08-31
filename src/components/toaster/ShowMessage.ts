@@ -7,7 +7,7 @@ const types: any = {
     backgroundColor: '#ff6347',
     actionText: null,
     actionTextColor: '#fff',
-    position: WSnackBar.position.BOTTOM,
+    position: WSnackBar.position.TOP,
   },
   DONE: {
     textColor: '#fff',
@@ -28,7 +28,7 @@ const types: any = {
     backgroundColor: '#FFC043',
     actionText: null,
     actionTextColor: '#fff',
-    position: WSnackBar.position.BOTTOM,
+    position: WSnackBar.position.TOP,
   },
 };
 
@@ -40,9 +40,9 @@ export default (type: string, message: string, url?: string) => {
       //   :
       message,
     // position: WSnackBar.position.BOTTOM, // 1.TOP 2.CENTER 3.BOTTOM
-    duration: WSnackBar.duration.LONG, //1.SHORT 2.LONG 3.INDEFINITE
+    duration: 10000, //1.SHORT 2.LONG 3.INDEFINITE
     ...types[type],
-    numberOfLines: 3,
+    numberOfLines: 2,
     onActionHide: () => {
       // Click Action
       Alert.alert(`To redirect to ${url} !`);

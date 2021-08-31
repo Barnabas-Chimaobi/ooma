@@ -20,7 +20,9 @@ export const Basket = ({counts, onBasketPress, otherStyles}: BasketProps) => (
     onPress={() => onBasketPress(counts)}
     style={{...styles.basket, ...otherStyles}}>
     <View style={styles.counter}>
-      <Text style={styles.counterText}>{counts}</Text>
+      <Text style={styles.counterText}>
+        {counts === undefined ? 0 : counts}
+      </Text>
     </View>
     <Image
       style={styles.basketImg}

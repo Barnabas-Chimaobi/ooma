@@ -310,20 +310,29 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           createdBy: myId,
         });
         const addedCart = cart?.data?.data;
-        if (menuPlan == 'menuPlan') {
+        if (menuPlan == 'menuPlan' && addedCart?.id !== undefined) {
+          setCartItem(addedCart);
+          setCartId(addedCart?.id);
           ShowMessage(type.DONE, 'Item added to basket successfully');
-        } else {
+          navigation.goBack();
+        } else if (addedCart?.id !== undefined) {
           ShowMessage(type.DONE, 'Item added to cart successfully'); // dispatch(cartStates(addedCart));
         }
-        setCartItem(addedCart);
-        setCartId(addedCart?.id);
-        // if (menuPlan != 'menuPlan') {
-        navigation.goBack();
-        // }
-        console.log(addedCart?.id, 'addedcaart');
+        console.log(addedCart, 'addedcaart');
       }
       setOpenModal(false);
     } catch (err) {
+      if (menuPlan == 'menuPlan' && err) {
+        ShowMessage(
+          type.ERROR,
+          'An Error occured while adding your item to basket. Please ensure you supplied all the required details and try again',
+        );
+      } else {
+        ShowMessage(
+          type.ERROR,
+          'An Error occured while adding your item to cart. please ensure you supplied all the required details and try again',
+        ); // dispatch(cartStates(addedCart));
+      }
       console.log(err, 'cartError');
     }
   };

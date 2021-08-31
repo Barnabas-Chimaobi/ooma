@@ -411,8 +411,8 @@ export const createMenuItemOrder = async (body: any) => {
       deliveryAddId: body.deliveryAddId,
       orderChannel: body.orderChannel,
     });
-    const addedCart = cart?.data?.data;
-    console.log(cart.data, 'addedcaart');
+    const addedCart = cart?.data;
+    // console.log(cart.data, 'addedcaart');
     return addedCart;
   } catch (err) {
     console.log(err, 'cartError');
@@ -436,8 +436,8 @@ export const createMenuPlanOrder = async (body: any) => {
       basketIds: body.cartIds,
       orderChannel: body.orderChannel,
     });
-    const addedCart = cart?.data?.data;
-    console.log(cart?.data, 'addedcaart');
+    const addedCart = cart?.data;
+    // console.log(cart?.data, 'addedcaart');
     return addedCart;
   } catch (err) {
     console.log(err, 'cartError');
@@ -463,6 +463,7 @@ export const createMenuItemOrderDetail = async (body: any, orderId: any) => {
     });
     const addedCart = cart?.data?.data;
     console.log(addedCart, 'order completed');
+    return addedCart;
   } catch (err) {
     console.log(err, 'orderError');
   }
@@ -477,7 +478,8 @@ export const createmenuplanorderDetail = async (body: any, orderId: any) => {
       cartIds: body.cartIds,
     });
     const addedCart = cart?.data?.data;
-    console.log(addedCart, 'order completed');
+    // console.log(addedCart, 'order completed');
+    return addedCart;
   } catch (err) {
     console.log(err, 'orderError');
   }

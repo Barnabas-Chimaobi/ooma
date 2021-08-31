@@ -98,7 +98,7 @@ const Checkout = () => {
       const branchName = await AsyncStorage.getItem('branchName');
       const newBranchId: any = await AsyncStorage.getItem('branchId');
       const branchs = JSON.parse(newBranchId);
-      setBranch(newBranchId);
+      setBranch(branchs);
       console.log(branchs, 'branchiddddd');
 
       setBname(branchName);
@@ -152,11 +152,16 @@ const Checkout = () => {
       ); // dispatch(cartStates(addedCart));
     } else {
       const cart = await createMenuItemOrder(body);
-      // const orderNow = await createMenuItemOrderDetail(body, cart?.id);
-      ShowMessage(type.DONE, 'Order Placed successfully'); // dispatch(cartStates(addedCart));
-      // console.log(cart, 'cart');
-      // console.log(orderNow, 'cart');
-      navigation.navigate('RateUs');
+      console.log(cart, 'cartttttt=====');
+      if (cart?.statusCode === 201) {
+        ShowMessage(type.DONE, 'Order Placed successfully'); // dispatch(cartStates(addedCart));
+        navigation.navigate('HomeNav');
+      } else {
+        ShowMessage(
+          type.ERROR,
+          'An error occured while placing your orders. Please try again',
+        ); // dispatch(cartStates(addedCart));
+      }
     }
   };
 
@@ -170,10 +175,18 @@ const Checkout = () => {
     // } else {
     const cart = await createMenuPlanOrder(body);
     // const orderNow = await createMenuItemOrderDetail(body, cart?.id);
-    ShowMessage(type.DONE, 'Order Placed successfully'); // dispatch(cartStates(addedCart));
+    if (cart?.statusCode === 201) {
+      ShowMessage(type.DONE, 'Order Placed successfully'); // dispatch(cartStates(addedCart));
+      navigation.navigate('HomeNav');
+    } else {
+      ShowMessage(
+        type.ERROR,
+        'An error occured while placing your orders. Please try again',
+      ); // dispatch(cartStates(addedCart));
+    }
     console.log(cart, 'cart');
     console.log(orderNow, 'cart');
-    navigation.navigate('RateUs');
+    navigation.navigate('HomeNav');
     // }
   };
 

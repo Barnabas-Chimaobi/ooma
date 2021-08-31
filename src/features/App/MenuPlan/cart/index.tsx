@@ -111,49 +111,70 @@ export const Cart = () => {
     let basketData: any = [];
     const menuplanscart = await getOrderById(route?.params?.id);
     // setPlanCart(menuplanscart?.items);
-    dispatch(basketStates(menuplanscart?.data));
+    // dispatch(basketStates(menuplanscart?.data));
 
     menuplanscart?.data?.forEach((item: any) => {
-      groupByDate(item, basketData);
+      groupByDate1(item, basketData);
     });
     basketData.forEach((item: any) => {
       //replace the already exist data with the grouped plan data
-      item['data'] = groupByPlanTypeDate(item.data);
+      item['data'] = groupByPlanTypeDate1(item.data);
     });
     setgrouped(basketData);
-    console.log('====baket items======= ', JSON.stringify(basketData));
+
+    if (basketData !== undefined) {
+      const all = basketData?.map((item: any) =>
+        item.data?.map((item: any) =>
+          item.data?.map((item: any) => item.itemData.orderInfo.total),
+        ),
+      );
+
+      const total = all?.map((item: any) =>
+        console.log(item, '=====newsum====='),
+      );
+      let newsum = all?.reduce(
+        (sum: any, current: any) => parseInt(sum) + parseInt(current),
+      );
+      // console.log(newsum, '=====newsum=====');
+      setTotal(newsum);
+    }
+    console.log('====baket itemsssssssss======= ', JSON.stringify(basketData));
     setRefreshing(false);
     console.log(menuplanscart?.data, '=======planscartttttttssssss=========');
     return basketData;
   };
 
   useEffect(() => {
-    onRefresh();
-    // getMenuplanKart();
-    groupBasketItem();
-
-    console.log(basketItem, 'consolleedd========');
-    if (basketItem !== undefined) {
-      const all = route?.params?.cartItems?.map((item: any) => item.MenuPlan);
-      const total = route?.params?.cartItems?.map((item: any) => item.amount);
-      let newsum = total?.reduce(
-        (sum: any, current: any) => parseInt(sum) + parseInt(current),
-      );
-      setTotal(newsum);
-      console.log(newsum, '====newwwsummmtoatlllll');
-      let all1 = all?.map((item: any) =>
-        item?.MenuPlanDetails?.map(
-          (item: any) => {
-            setEachTime(item.plantype), setEachDate(item.plandate);
-          },
-          // console.log(item.plantype, item.plandate, '=======itemmmmssss====='),
-          // {
-          //   return {time: item.plantype, date: item.plandate};
-          // },
-        ),
-      );
-      setDateTime(all1);
+    if (route?.params?.plan !== 'plan') {
+      groupBasketItem();
+      console.log(basketItem, 'consolleedd========');
+      if (basketItem !== undefined) {
+        const all = route?.params?.cartItems?.map((item: any) => item.MenuPlan);
+        const total = route?.params?.cartItems?.map((item: any) => item.amount);
+        let newsum = total?.reduce(
+          (sum: any, current: any) => parseInt(sum) + parseInt(current),
+        );
+        setTotal(newsum);
+        console.log(newsum, '====newwwsummmtoatlllll');
+        let all1 = all?.map((item: any) =>
+          item?.MenuPlanDetails?.map(
+            (item: any) => {
+              setEachTime(item.plantype), setEachDate(item.plandate);
+            },
+            // console.log(item.plantype, item.plandate, '=======itemmmmssss====='),
+            // {
+            //   return {time: item.plantype, date: item.plandate};
+            // },
+          ),
+        );
+        setDateTime(all1);
+      }
+    } else {
+      getMenuplanKart();
     }
+
+    // onRefresh();
+    // groupBasketItem();
 
     // console.log(all1, '=====all1======');
   }, [basketItem?.length]);
@@ -239,6 +260,24 @@ export const Cart = () => {
     });
   };
 
+  const groupByDate1 = (itemData: any, basketItems: any) => {
+    for (const item of basketItems) {
+      if (itemData.orderInfo.deliveryDate == item.deliveryDate) {
+        item.data.push({
+          planType: itemData.orderInfo.MenuPlanDetail.plantype,
+          itemData,
+        });
+
+        return;
+      }
+    }
+    // if the basket item date doesnt exist before
+    basketItems.push({
+      deliveryDate: itemData.orderInfo.deliveryDate,
+      data: [{planType: itemData.orderInfo.MenuPlanDetail.plantype, itemData}],
+    });
+  };
+
   const groupByPlanTypeDate = (basketItems: any) => {
     let planTypeData: any = [];
     let planTypeArray: any = [];
@@ -271,9 +310,44 @@ export const Cart = () => {
     return planTypeData;
   };
 
+  const groupByPlanTypeDate1 = (basketItems: any) => {
+    let planTypeData: any = [];
+    let planTypeArray: any = [];
+    for (const item of basketItems) {
+      console.log(item, '=======itemmmm=====');
+      if (planTypeData.length == 0) {
+        planTypeData.push({
+          planType: item.planType,
+          data: [{itemData: item.itemData}],
+        });
+        planTypeArray.push(item.planType);
+      } else {
+        for (const planData of planTypeData) {
+          if (planData.planType == item.planType) {
+            if (!checkIfPlanExist(item, planData.data)) {
+              planData.data.push({itemData: item.itemData});
+            }
+            break;
+          }
+          //Ensure that unique plantype exist
+          if (!planTypeArray.includes(item.planType)) {
+            planTypeData.push({
+              planType: item.planType,
+              data: [{itemData: item.itemData}],
+            });
+            planTypeArray.push(item.planType);
+          }
+        }
+      }
+    }
+    return planTypeData;
+  };
+
   const checkIfPlanExist = (item: any, plans: any) => {
     for (const plan of plans) {
-      if (plan.itemData.id == item.itemData.id) {
+      if (
+        plan.itemData.orderInfo.basketid == item.itemData.orderInfo.basketId
+      ) {
         return true;
       }
     }
@@ -283,7 +357,7 @@ export const Cart = () => {
   const onRefresh = () => {
     setRefreshing(true);
     // getMenuplanKart();
-    groupBasketItem();
+    // groupBasketItem();
   };
 
   const ListItem = ({hour, list}: ListItemDataProps) => {
@@ -313,6 +387,8 @@ export const Cart = () => {
     );
   };
 
+  let plan = 'plan';
+
   return (
     <>
       <KeyboardAvoidingView
@@ -320,6 +396,18 @@ export const Cart = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
         style={{flex: 1}}>
         <SimpleHeader style={{paddingLeft: 10}} />
+        {route?.params?.plan === 'plan' ? (
+          <Text
+            style={{
+              marginLeft: 10,
+              fontWeight: 'bold',
+              alignSelf: 'flex-start',
+              fontSize: 16,
+            }}>
+            {route?.params?.planName}
+          </Text>
+        ) : null}
+
         <View style={styles.root}>
           <ScrollView
             refreshControl={
@@ -359,21 +447,41 @@ export const Cart = () => {
                       time={item?.MenuPlan?.MenuplanDetail?.plantype}
                       basketId={item?.id}
                     /> */}
-                    <List
-                      plantime={item?.MenuPlan?.MenuplanDetail?.deliveryTime}
-                      date={item?.deliveryDate}
-                      planDetails={item?.data}
-                      styles={styles}
-                      // imageUrl={
-                      //   item?.MenuPlan?.MenuplanDetail?.MenuItem?.imageUrl
-                      // }
-                      // itemName={item?.MenuPlan?.name}
-                      // price={item?.amount}
-                      // delivery={item?.deliveryAddress}
-                      // count={item?.quantity}
-                      // time={item?.MenuPlan?.MenuplanDetail?.plantype}
-                      // basketId={item?.id}
-                    />
+                    {route?.params?.plan === 'plan' ? (
+                      <List
+                        plantime={item?.deliveryDate}
+                        date={item?.deliveryDate}
+                        planDetails={item?.data}
+                        styles={styles}
+                        plandiff={plan}
+                        planName={route?.params?.planName}
+                        // imageUrl={
+                        //   item?.MenuPlan?.MenuplanDetail?.MenuItem?.imageUrl
+                        // }
+                        // itemName={item?.MenuPlan?.name}
+                        // price={item?.amount}
+                        // delivery={item?.deliveryAddress}
+                        // count={item?.quantity}
+                        // time={item?.MenuPlan?.MenuplanDetail?.plantype}
+                        // basketId={item?.id}
+                      />
+                    ) : (
+                      <List
+                        plantime={item?.MenuPlan?.MenuplanDetail?.deliveryTime}
+                        date={item?.deliveryDate}
+                        planDetails={item?.data}
+                        styles={styles}
+                        // imageUrl={
+                        //   item?.MenuPlan?.MenuplanDetail?.MenuItem?.imageUrl
+                        // }
+                        // itemName={item?.MenuPlan?.name}
+                        // price={item?.amount}
+                        // delivery={item?.deliveryAddress}
+                        // count={item?.quantity}
+                        // time={item?.MenuPlan?.MenuplanDetail?.plantype}
+                        // basketId={item?.id}
+                      />
+                    )}
                   </View>
                 );
               }}
@@ -471,65 +579,66 @@ export const Cart = () => {
                 <Text style={styles.totalText}>Total:</Text>
                 <Text style={styles.totalPrice}>{total} NGN</Text>
               </View>
-
-              <ModalMessage
-                onpress={() => toggleVisible()}
-                total={total}
-                cartParams={route?.params?.cartItems}
-                route="Cart"
-                openButtonTitle="PROCEED"
-                closeButtonTitle="SUBSCRIBE NOW"
-                otherCardViewStyle={styles.cardView}
-                btnClose={styles.btnClose}
-                otherModalViewStyle={styles.modalView}
-                btnStyles={styles.btnStyles}>
-                <View style={styles.radioSection}>
-                  <Text style={styles.paymentText}>Payment Method</Text>
-                  {isLiked.map((item) => (
-                    <RadioButton
-                      onPress={() => onRadioBtnClick(item)}
-                      selected={item.selected}
-                      key={item.id}>
-                      {item.name}
-                    </RadioButton>
-                  ))}
-                </View>
-                <View style={styles.priceSection}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                    }}>
-                    <Text style={{fontSize: 15}}>Sub Total</Text>
-                    <Text style={{fontSize: 15}}>
-                      {' '}
-                      <PriceTag price={9500.0} clear />
-                    </Text>
+              {route?.params?.plan === 'plan' ? null : (
+                <ModalMessage
+                  onpress={() => toggleVisible()}
+                  total={total}
+                  cartParams={route?.params?.cartItems}
+                  route="Cart"
+                  openButtonTitle="PROCEED"
+                  closeButtonTitle="SUBSCRIBE NOW"
+                  otherCardViewStyle={styles.cardView}
+                  btnClose={styles.btnClose}
+                  otherModalViewStyle={styles.modalView}
+                  btnStyles={styles.btnStyles}>
+                  <View style={styles.radioSection}>
+                    <Text style={styles.paymentText}>Payment Method</Text>
+                    {isLiked.map((item) => (
+                      <RadioButton
+                        onPress={() => onRadioBtnClick(item)}
+                        selected={item.selected}
+                        key={item.id}>
+                        {item.name}
+                      </RadioButton>
+                    ))}
                   </View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                    }}>
-                    <Text>Delivery Charges</Text>
-                    <Text>
-                      <PriceTag price={500.0} clear />
-                    </Text>
+                  <View style={styles.priceSection}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <Text style={{fontSize: 15}}>Sub Total</Text>
+                      <Text style={{fontSize: 15}}>
+                        {' '}
+                        <PriceTag price={9500.0} clear />
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <Text>Delivery Charges</Text>
+                      <Text>
+                        <PriceTag price={500.0} clear />
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+                        Total
+                      </Text>
+                      <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+                        <PriceTag price={10000.0} clear />
+                      </Text>
+                    </View>
                   </View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                    }}>
-                    <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-                      Total
-                    </Text>
-                    <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-                      <PriceTag price={10000.0} clear />
-                    </Text>
-                  </View>
-                </View>
-              </ModalMessage>
+                </ModalMessage>
+              )}
             </View>
           ) : null}
         </View>

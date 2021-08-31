@@ -46,6 +46,7 @@ const VeryInnerList = ({
   return (
     <View>
       <View>
+        <Text>{}</Text>
         <TouchableHighlight
           style={{zIndex: 200}}
           underlayColor=""
@@ -95,6 +96,7 @@ const VeryInnerList = ({
             }}>
             {/* <MoreAction title="Edit Order" iconName="pen" /> */}
             {/* <MoreAction title="Add Quantity" iconName="signal" count /> */}
+            <MoreAction params={'details'} title="View Details" />
             <MoreAction
               cart={basketId}
               params={'deleteBasket'}

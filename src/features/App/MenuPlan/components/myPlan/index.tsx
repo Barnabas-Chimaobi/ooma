@@ -23,6 +23,8 @@ import {
   EmptyList,
 } from '../../../../../components';
 import {useNavigation} from '@react-navigation/native';
+import Spinner from 'react-native-loading-spinner-overlay';
+import {BallIndicator} from 'react-native-indicators';
 
 const {width: windowWidth} = Dimensions.get('window');
 
@@ -56,6 +58,7 @@ export const MyPlans = ({findPlan}: Props) => {
   const navigation = useNavigation();
   const [isOpen, setOpen] = useState<boolean>(false);
   const [planOrders, setOrders] = useState([]);
+  const [loader, setLoader] = useState(false);
   const openDrawer = useCallback(() => {
     setOpen(true);
   }, []);
@@ -112,7 +115,7 @@ export const MyPlans = ({findPlan}: Props) => {
     const userId = await AsyncStorage.getItem('userId');
     console.log(userId, 'useriddd');
     // const gottenId = JSON.parse(userId);
-
+    setLoader(true);
     try {
       // console.log(newsum, 'cartttttt');
       const order = await getMenuPlanOrders(userId);
@@ -133,6 +136,7 @@ export const MyPlans = ({findPlan}: Props) => {
       console.log('====baket items======= ', JSON.stringify(basketData));
       // setOrders(order?.items);
       //  await dispatch(cartStates(menuICart?.items));
+      setLoader(false);
       return item;
 
       // setRefreshing(false);
@@ -246,7 +250,13 @@ export const MyPlans = ({findPlan}: Props) => {
   }: ListProps) => {
     return (
       <TouchableWithoutFeedback
-        onPress={() => navigation.navigate('Cart', {id: planId})}
+        onPress={() =>
+          navigation.navigate('Cart', {
+            id: planId,
+            plan: 'plan',
+            planName: itemName,
+          })
+        }
         style={styles.innerListItemStyle}>
         <Image
           style={{height: 100, width: 100, borderRadius: 10}}
@@ -301,15 +311,15 @@ export const MyPlans = ({findPlan}: Props) => {
             );
           }}
           {...flatListOptimizationProps}
-          ListEmptyComponent={
-            <EmptyList
-              image={require('../../../../../assets/Images/emptyCart.png')}
-              title="FIND MEAL"
-              message="Oops! You don't have any ongoing plan"
-              onPress={() => navigation.goBack()}
-            />
-          }
-          ListHeaderComponent={<Header icon={icon} location={location} />}
+          // ListEmptyComponent={
+          //   <EmptyList
+          //     image={require('../../../../../assets/Images/emptyCart.png')}
+          //     title="FIND MEAL"
+          //     message="Oops! You don't have any ongoing plan"
+          //     onPress={() => navigation.goBack()}
+          //   />
+          // }
+          // ListHeaderComponent={<Header icon={icon} location={location} />}
         />
       </View>
     );
@@ -319,32 +329,38 @@ export const MyPlans = ({findPlan}: Props) => {
 
   return (
     <>
-      {planOrders?.length !== 0 ? (
-        <>
-          {/* <FlatList
+      <Spinner
+        visible={loader}
+        // textStyle={styles.spinnerTextStyle}
+        overlayColor="rgba(66, 66, 66,0.6)"
+        customIndicator={<BallIndicator color="white" />}
+      />
+      {/* {planOrders?.length !== 0 ? ( */}
+      <>
+        {/* <FlatList
             data={myPlanData || []}
             style={styles.listStyle}
             renderItem={({item}) => {
               return ( */}
-          <ListItem
-          // icon={item.icon}
-          // location={item.location}
-          // list={item.list}
-          />
-          {/* );
+        <ListItem
+        // icon={item.icon}
+        // location={item.location}
+        // list={item.list}
+        />
+        {/* );
             }}
             {...flatListOptimizationProps}
           /> */}
-          <BottomSheet
-            isOpen={isOpen}
-            openedPercentage={0.7}
-            onClose={closeDrawer}>
-            <View style={styles.buttonContainer}>
-              <BottomSheetList onSubmit={closeDrawer} />
-            </View>
-          </BottomSheet>
-        </>
-      ) : (
+        <BottomSheet
+          isOpen={isOpen}
+          openedPercentage={0.7}
+          onClose={closeDrawer}>
+          <View style={styles.buttonContainer}>
+            <BottomSheetList onSubmit={closeDrawer} />
+          </View>
+        </BottomSheet>
+      </>
+      {/* ) : (
         <View style={styles.noData}>
           <Image
             style={{marginTop: 20}}
@@ -361,7 +377,7 @@ export const MyPlans = ({findPlan}: Props) => {
             </View>
           </TouchableWithoutFeedback>
         </View>
-      )}
+      )} */}
     </>
   );
 };

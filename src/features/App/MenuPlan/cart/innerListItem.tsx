@@ -23,6 +23,8 @@ interface ListDataProps {
   planDetails: any;
   date: any;
   plantime: any;
+  plandiff: any;
+  planName;
 }
 
 export const List = ({
@@ -37,7 +39,11 @@ export const List = ({
   planDetails,
   date,
   plantime,
+  plandiff,
+  planName,
 }: ListDataProps) => {
+  console.log(planDetails, plantime, plandiff, '===planDetailsss===');
+
   //  const remapp = (Id) => {
   //    console.log('ASSIGN ID: ', assignmentId);
   //    const newObject = this.state.CourseId.map((item) => {
@@ -182,8 +188,6 @@ export const List = ({
   //   '===planDetailsss===',
   // );
 
-  console.log(planDetails, plantime, '===planDetailsss===');
-
   return (
     <View>
       <View style={{borderBottomWidth: 1}}>
@@ -207,7 +211,29 @@ export const List = ({
               data={item?.data}
               style={styles.listStyle}
               renderItem={({item, index}) => {
-                return (
+                return plandiff === 'plan' ? (
+                  <View>
+                    <InnerList
+                      // plantime={planName}
+                      // date={item?.deliveryDate}
+                      // planDetails={item?.data}
+                      styles={styles}
+                      imageUrl={
+                        item?.itemData?.orderInfo?.MenuPlanDetail?.MenuItem
+                          ?.imageUrl
+                      }
+                      itemName={
+                        item?.itemData?.orderInfo?.MenuPlanDetail?.MenuItem
+                          ?.itemName
+                      }
+                      price={item?.itemData?.orderInfo?.amount}
+                      delivery={item?.itemData?.orderInfo?.deliveryAddress}
+                      count={item?.itemData?.orderInfo?.quantity}
+                      time={item?.itemData?.orderInfo?.deliveryTime}
+                      basketId={item?.itemData?.orderInfo?.basketid}
+                    />
+                  </View>
+                ) : (
                   <InnerList
                     // plantime={item?.MenuPlan?.MenuplanDetail?.deliveryTime}
                     // date={item?.deliveryDate}
@@ -225,7 +251,7 @@ export const List = ({
                     delivery={item?.itemData?.deliveryAddress}
                     count={item?.itemData?.quantity}
                     time={item?.itemData?.deliveryTime}
-                    basketId={item?.itemData?.id}
+                    basketId={item?.itemData?.basketid}
                   />
                 );
               }}

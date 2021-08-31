@@ -44,7 +44,7 @@ const MyCart = () => {
       setCart(menuICart?.items);
       await dispatch(cartStates(menuICart?.items));
 
-      console.log(menuICart.items.length, 'cart ===value');
+      console.log(menuICart?.items?.length, 'cart ===value');
       setRefreshing(false);
     } catch (error) {
       setRefreshing(false);

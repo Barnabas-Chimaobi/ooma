@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   View,
@@ -11,8 +11,8 @@ import {
   ScrollView,
   RefreshControl,
 } from 'react-native';
-import { styles } from './styles';
-import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import {styles} from './styles';
+import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import AllMenu from './all';
 import OfficeMenu from './office';
 import VeganMenu from './vegan';
@@ -24,13 +24,13 @@ import {
   getPlanCatId,
   getMenuPlanCart,
 } from '../../../../../FetchData';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState, AppDispatch } from './../../../../../store';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { Item } from 'react-native-paper/lib/typescript/components/List/List';
-import { NativeBaseProvider, Box } from 'native-base';
+import {useSelector, useDispatch} from 'react-redux';
+import {RootState, AppDispatch} from './../../../../../store';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {Item} from 'react-native-paper/lib/typescript/components/List/List';
+import {NativeBaseProvider, Box} from 'native-base';
 import DynamicTabView from 'react-native-dynamic-tab-view';
-import { getMenuItemsPlanForYou } from '../../../../../reducers/MenuPlansForYou';
+import {getMenuItemsPlanForYou} from '../../../../../reducers/MenuPlansForYou';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {
   BallIndicator,
@@ -44,7 +44,7 @@ import {
   WaveIndicator,
 } from 'react-native-indicators';
 
-const initialLayout = { width: Dimensions.get('window').width };
+const initialLayout = {width: Dimensions.get('window').width};
 
 const MenuTab = () => {
   const navigation = useNavigation();
@@ -61,7 +61,7 @@ const MenuTab = () => {
   const [menuPlan2, setMenuPlan2] = useState();
   const [refreshing, setRefreshing] = useState(false);
   const [loader, setLoader] = useState(false);
-  const { menuPlanCategories } = useSelector(
+  const {menuPlanCategories} = useSelector(
     (state: RootState) => state.menuPlanCategories,
   );
   const menuPlansMenuItem = useSelector(
@@ -94,16 +94,15 @@ const MenuTab = () => {
     console.log(menuPlansMenuItem, 'allplannnnnssssecccccccitemmmsss');
   };
 
-
-
   const getMenuplanKart = async (id) => {
     const branch = await AsyncStorage.getItem('branchId');
     const newbranch = JSON.parse(branch);
-    // setLoader(false);
+    setLoader(true);
     const menuplanscart = await getPlanCatId(newbranch, id);
     console.log(newbranch, 'useriddd');
     // setPlanCart(menuplanscart?.items);
     dispatch(getMenuItemsPlanForYou(menuplanscart));
+    setLoader(false);
     console.log(menuplanscart, '=======planscategoryyyyyyyyy=========');
     // setLoader(false);
     // console.log(all1, '=====all1======');
@@ -143,9 +142,7 @@ const MenuTab = () => {
     }
   };
 
-  const onRefresh = () => { };
-
-
+  const onRefresh = () => {};
 
   const FamilyRoute = (item, index) => {
     console.log(item, '====itemsssss===');
@@ -156,27 +153,26 @@ const MenuTab = () => {
             <FamilyMenu allFamilyMenuPlans={menuPlansMenuItem} />
           </View>
         ) : (
-            <View style={styles.noData}>
-              <Image
-                style={{ marginTop: 20 }}
-                source={require('../../assets/no-data.png')}
-              />
-              <Text style={styles.btnText}>No meal plan available.</Text>
+          <View style={styles.noData}>
+            <Image
+              style={{marginTop: 20}}
+              source={require('../../assets/no-data.png')}
+            />
+            <Text style={styles.btnText}>No meal plan available.</Text>
 
-              <View style={styles.btn}>
-                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 14 }}>
-                  FIND PLANS
+            <View style={styles.btn}>
+              <Text style={{color: 'white', fontWeight: 'bold', fontSize: 14}}>
+                FIND PLANS
               </Text>
-              </View>
             </View>
-          )}
+          </View>
+        )}
       </View>
     );
   };
 
-
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <StatusBar
         hidden={false}
         backgroundColor="transparent"
@@ -190,7 +186,7 @@ const MenuTab = () => {
       />
       {/* {menuPlansMenuItem ? ( */}
       <ScrollView
-        style={{ flex: 1 }}
+        style={{flex: 1}}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }>
@@ -200,9 +196,9 @@ const MenuTab = () => {
           headerTextStyle={styles.headerText}
           onChangeTab={(index) => getMenuplanKart(routes1[index].id)}
           // defaultIndex={defaultIndex}
-          containerStyle={{ flex: 1 }}
+          containerStyle={{flex: 1}}
           headerBackgroundColor={'white'}
-        // headerUnderlayColor={'blue'}
+          // headerUnderlayColor={'blue'}
         />
         {/* <View
             style={{

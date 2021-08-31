@@ -125,6 +125,14 @@ const MoreAction: FC<IProps> = ({
       }
       // Run delete function here
       // Alert.alert('No function to call');
+    } else if (params == 'details') {
+      navigation.navigate('OrderDetails', {
+        id: id,
+        cartId: cart,
+        eachItem: editItems,
+        editParams: 'editParams',
+        addon: addons,
+      });
     } else {
       navigation.navigate('Cart1', {
         id: id,
