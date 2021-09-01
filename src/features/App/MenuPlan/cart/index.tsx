@@ -324,7 +324,7 @@ export const Cart = () => {
       } else {
         for (const planData of planTypeData) {
           if (planData.planType == item.planType) {
-            if (!checkIfPlanExist(item, planData.data)) {
+            if (!checkIfPlanExist1(item, planData.data)) {
               planData.data.push({itemData: item.itemData});
             }
             break;
@@ -344,6 +344,15 @@ export const Cart = () => {
   };
 
   const checkIfPlanExist = (item: any, plans: any) => {
+    for (const plan of plans) {
+      if (plan.itemData.id == item.itemData.id) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const checkIfPlanExist1 = (item: any, plans: any) => {
     for (const plan of plans) {
       if (
         plan.itemData.orderInfo.basketid == item.itemData.orderInfo.basketId
@@ -455,6 +464,7 @@ export const Cart = () => {
                         styles={styles}
                         plandiff={plan}
                         planName={route?.params?.planName}
+                        allDetails={item?.data}
                         // imageUrl={
                         //   item?.MenuPlan?.MenuplanDetail?.MenuItem?.imageUrl
                         // }
@@ -471,6 +481,7 @@ export const Cart = () => {
                         date={item?.deliveryDate}
                         planDetails={item?.data}
                         styles={styles}
+                        allDetails={item?.data}
                         // imageUrl={
                         //   item?.MenuPlan?.MenuplanDetail?.MenuItem?.imageUrl
                         // }

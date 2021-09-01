@@ -23,7 +23,9 @@ interface IProps {
   cart?: any;
   editItems: any;
   params: any;
-  addons;
+  addons: any;
+  details: any;
+  basket: any;
 }
 
 const MoreAction: FC<IProps> = ({
@@ -38,6 +40,8 @@ const MoreAction: FC<IProps> = ({
   editItems,
   params,
   addons,
+  details,
+  basket,
 }) => {
   const [isCounter, setIsCounter] = useState(false);
   const [countValue, setCountValue] = useState(0);
@@ -101,14 +105,17 @@ const MoreAction: FC<IProps> = ({
       });
       const addedCart = carts?.data?.data;
       getBasket();
-      // if (cart?.config?.response == 'Cart updated successfully') {
-      ShowMessage(type.DONE, 'Item deleted successfully'); // dispatch(cartStates(addedCart));
-      // setCartItem(addedCart);
-      navigation.navigate('Cart');
-      console.log(carts, 'deletedbasket');
-      // } else {
-      //   ShowMessage(type.ERROR, 'Item could not be updated'); // dispatch(cartStates(addedCart));
-      // }
+      if (carts?.statusCode === 201) {
+        ShowMessage(type.DONE, 'Item deleted successfully'); // dispatch(cartStates(addedCart));
+        // setCartItem(addedCart);
+        navigation.navigate('Cart');
+        console.log(carts, 'deletedbasket');
+      } else {
+        ShowMessage(
+          type.ERROR,
+          'Cannot delete cart, cart item already paid for',
+        ); // dispatch(cartStates(addedCart));
+      }
     } catch (err) {
       console.log(err.response.data, 'cartError');
     }
@@ -127,11 +134,13 @@ const MoreAction: FC<IProps> = ({
       // Alert.alert('No function to call');
     } else if (params == 'details') {
       navigation.navigate('OrderDetails', {
+        basket: basket,
         id: id,
         cartId: cart,
         eachItem: editItems,
         editParams: 'editParams',
         addon: addons,
+        itemDetails: details,
       });
     } else {
       navigation.navigate('Cart1', {

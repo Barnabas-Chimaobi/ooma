@@ -24,7 +24,8 @@ interface ListDataProps {
   date: any;
   plantime: any;
   plandiff: any;
-  planName;
+  planName: any;
+  allDetails: any;
 }
 
 export const List = ({
@@ -41,6 +42,7 @@ export const List = ({
   plantime,
   plandiff,
   planName,
+  allDetails,
 }: ListDataProps) => {
   console.log(planDetails, plantime, plandiff, '===planDetailsss===');
 
@@ -187,7 +189,7 @@ export const List = ({
   //   planDetails?.map((item) => item?.plantype),
   //   '===planDetailsss===',
   // );
-
+  let basket = 'basket';
   return (
     <View>
       <View style={{borderBottomWidth: 1}}>
@@ -231,6 +233,7 @@ export const List = ({
                       count={item?.itemData?.orderInfo?.quantity}
                       time={item?.itemData?.orderInfo?.deliveryTime}
                       basketId={item?.itemData?.orderInfo?.basketid}
+                      details={item}
                     />
                   </View>
                 ) : (
@@ -251,7 +254,9 @@ export const List = ({
                     delivery={item?.itemData?.deliveryAddress}
                     count={item?.itemData?.quantity}
                     time={item?.itemData?.deliveryTime}
-                    basketId={item?.itemData?.basketid}
+                    basketId={item?.itemData?.id}
+                    details={item}
+                    diffParams={basket}
                   />
                 );
               }}

@@ -3,6 +3,7 @@ import {View, Text, Image, TouchableHighlight} from 'react-native';
 import PriceTag from '../../../../components/PriceTag/index';
 import shortid from 'shortid';
 import MoreAction from '../../MyCart/MoreAction/index';
+import basket from '../../../../reducers/basket';
 
 interface ListDataProps {
   styles: any;
@@ -16,6 +17,8 @@ interface ListDataProps {
   planDetails: any;
   date: any;
   plantime: any;
+  details: any;
+  diffParams: any;
 }
 
 const VeryInnerList = ({
@@ -30,6 +33,8 @@ const VeryInnerList = ({
   planDetails,
   date,
   plantime,
+  details,
+  diffParams,
 }: ListDataProps) => {
   const [toggle, setToggle] = useState(false);
   const toggleView = () => {
@@ -96,7 +101,12 @@ const VeryInnerList = ({
             }}>
             {/* <MoreAction title="Edit Order" iconName="pen" /> */}
             {/* <MoreAction title="Add Quantity" iconName="signal" count /> */}
-            <MoreAction params={'details'} title="View Details" />
+            <MoreAction
+              basket={diffParams}
+              details={details}
+              params={'details'}
+              title="View Details"
+            />
             <MoreAction
               cart={basketId}
               params={'deleteBasket'}
