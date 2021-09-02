@@ -125,19 +125,19 @@ export const Cart = () => {
     if (basketData !== undefined) {
       const all = basketData?.map((item: any) =>
         item.data?.map((item: any) =>
-          item.data?.map((item: any) => item.itemData.orderInfo.total),
+          item.data?.map((item: any) => item.itemData.orderInfo.amount),
         ),
       );
 
-      const total = all?.map((item: any) =>
-        console.log(item, '=====newsum====='),
+      const total = menuplanscart?.data?.map(
+        (item: any) => item.orderInfo.amount,
       );
-      let newsum = all?.reduce(
+      let newsum = total?.reduce(
         (sum: any, current: any) => parseInt(sum) + parseInt(current),
       );
-      // console.log(newsum, '=====newsum=====');
       setTotal(newsum);
     }
+
     console.log('====baket itemsssssssss======= ', JSON.stringify(basketData));
     setRefreshing(false);
     console.log(menuplanscart?.data, '=======planscartttttttssssss=========');
@@ -155,7 +155,7 @@ export const Cart = () => {
           (sum: any, current: any) => parseInt(sum) + parseInt(current),
         );
         setTotal(newsum);
-        console.log(newsum, '====newwwsummmtoatlllll');
+        console.log(total, '====newwwsummmtoatlllll');
         let all1 = all?.map((item: any) =>
           item?.MenuPlanDetails?.map(
             (item: any) => {

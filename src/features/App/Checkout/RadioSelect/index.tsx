@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {View, Text} from 'react-native';
 import {CheckBox, Divider} from 'react-native-elements';
 import S from '../../../../components/MultipleSelect/styles';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 interface IProps {
   onPress?: () => void;
@@ -19,6 +20,9 @@ interface IProps {
   props?: any;
   props1?: any;
   props2?: any;
+  amount: any;
+  orderId: any;
+  branchId: any;
 }
 
 const RadioSelect = ({
@@ -35,6 +39,9 @@ const RadioSelect = ({
   props,
   props1,
   props2,
+  amount,
+  branchId,
+  orderId,
 }: IProps) => {
   const [switchs, setSwitchs] = useState(false);
   const [checkedValue, setCheckedValue] = useState('');
@@ -47,6 +54,7 @@ const RadioSelect = ({
         : type,
   });
   const {isChecked} = state;
+  const navigation = useNavigation();
 
   const setTitle = (title: any) => {
     props(title);
@@ -62,15 +70,25 @@ const RadioSelect = ({
   const toggleSwitch = () => setSwitchs((previousState) => !previousState);
 
   const handleRadioCheck = (type: any, value: any, title: any) => {
-    console.log(value, type, title, 'valueeee');
+    console.log(value, type, title, orderId, branchId, amount, 'valueeee');
     if (type === 'I Will Pay') {
       setCheckedValue(value);
       // dispatch(useCategory(value));
       console.log(type, value, 'fffffff');
       return;
     } else if (type === 'Payment Method') {
+      if (value === 'Card') {
+        setCheckedValue(value);
+        navigation.navigate('Payment', {
+          amount: amount,
+          branchId: branchId,
+          orderId: orderId,
+          paymentMethod: value,
+        });
+      } else {
+        setCheckedValue(value);
+      }
       // setCombine(value);
-      setCheckedValue(value);
       // dispatch(useCombination(value));
       console.log(type, value);
       return;

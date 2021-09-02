@@ -66,9 +66,9 @@ const Total = ({
           <Text style={totalTitle ? {} : S.textStyle1}>
             {totalTitle || `Total`}
           </Text>
-          <Text style={totalTitle ? {} : S.textStyle1}>{`\u20A6${currencyFormat(
-            total,
-          )}`}</Text>
+          <Text style={totalTitle ? {} : S.textStyle1}>
+            {`\u20A6${currencyFormat(total)}`}
+          </Text>
         </View>
       )}
     </View>

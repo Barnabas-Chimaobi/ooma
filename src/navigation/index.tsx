@@ -45,6 +45,7 @@ import {
   Menu,
   Cart,
   Cart1,
+  Payment,
 } from '../features/App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AppearanceProvider, useColorScheme} from 'react-native-appearance';
@@ -179,6 +180,7 @@ export default function App() {
             <MainStack.Screen name="Region" component={Region} />
             <MainStack.Screen name="Branch" component={Branch} />
             <MainStack.Screen name="Login" component={Login} />
+            <MainStack.Screen name="Payment" component={Payment} />
             <MainStack.Screen
               name="SearchMenuitemandPlan"
               component={SearchMenuitemandPlan}

@@ -544,3 +544,35 @@ export const getPlanCatId = async (branch: any, id: any) => {
     return error;
   }
 };
+
+export const generatePaymentRef = async (body: any) => {
+  console.log(body, '====detailllsssss');
+  try {
+    const payment = await api.post(`/payments/pos`, {
+      amount: body.amount,
+      branchId: body.branchId,
+      orderId: body.orderId,
+      paymentMethod: body.paymentMethod,
+      currency: 'NGN',
+    });
+    const generated = payment.data;
+    console.log(generated, 'categoryidddss==');
+    return generated;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
+export const verifyPayment = async (key: any) => {
+  console.log(body, '====detailllsssss');
+  try {
+    const confirmPayment = await api.post(`payments/verify/${key}`);
+    const generated = confirmPayment.data;
+    console.log(generated, 'categoryidddss==');
+    return generated;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};

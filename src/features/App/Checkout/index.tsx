@@ -129,10 +129,10 @@ const Checkout = () => {
     deliveryAddId: addressId,
     cartIds:
       params?.paramsBuynow === 'buynow'
-        ? (params?.params?.id).toString()
+        ? params?.params?.id?.toString()
         : !params?.planOrder
-        ? params?.params?.map((item: any) => item.cartId).toString()
-        : params?.params?.map((item: any) => item.id).toString(),
+        ? params?.params?.map((item: any) => item.cartId)?.toString()
+        : params?.params?.map((item: any) => item.id)?.toString(),
     deliveryTime: date?.toLocaleDateString(),
     deliveryAddress: myAddress,
     deliveryOption: deliveryOption,
@@ -430,6 +430,14 @@ const Checkout = () => {
       )} */}
       <View style={{backgroundColor: '#FFFFFF', marginTop: 10}}>
         <RadioSelect
+          amount={
+            parseInt(deliveryCharges) +
+            parseInt(
+              params?.subTotal || params?.amount || params?.params?.amount,
+            )
+          }
+          orderId={cartId}
+          branchId={branch}
           title="Payment Method"
           title1="Card"
           title2="Cash"

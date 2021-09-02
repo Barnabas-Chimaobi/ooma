@@ -36,8 +36,14 @@ const newPlan = require('./Images/newPlan.png');
 const newMore = require('./Images/newMore.png');
 const scroll = require('./Images/scroll.png');
 const nologo = require('./Images/oomaNologo.png');
+const paystack = require('./Images/paystack.png');
+const flutter = require('./Images/flutterwave.png');
+const forward = require('./Images/forwardArrow.png');
 
 export {
+    forward,
+    paystack,
+    flutter,
     nologo,
     newCart,
     newMore,
