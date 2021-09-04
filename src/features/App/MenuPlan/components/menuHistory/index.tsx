@@ -237,11 +237,12 @@ export const MenuHistory = () => {
         overlayColor="rgba(66, 66, 66,0.6)"
         customIndicator={<BallIndicator color="white" />}
       />
-      {planOrders.includes('completed') === false ? (
+      {planOrders?.includes('completed') === false ||
+      planOrders?.length === 0 ? (
         <EmptyList
           image={require('../../../../../assets/Images/emptyCart.png')}
           title="FIND MEAL"
-          message="Oops! You don't have any ongoing plan"
+          message="Oops! You don't have any completed plan"
           onPress={() => navigation.goBack()}
         />
       ) : (

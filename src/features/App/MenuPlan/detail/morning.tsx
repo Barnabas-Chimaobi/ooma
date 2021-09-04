@@ -71,7 +71,7 @@ const Morning = (morning: any, planIds: any, times: any) => {
   const navigation = useNavigation();
   console.log(morning, times, 'cardmorning');
   console.log(morning.planIds, '=======planidsss======');
-  const [refreshing] = useState(false);
+  const [refreshing, setRefreshing] = useState(true);
   const [, setDataSource] = useState([]);
 
   const onRefresh = () => {
@@ -81,13 +81,12 @@ const Morning = (morning: any, planIds: any, times: any) => {
   return (
     <View style={{flex: 1}}>
       {refreshing ? <ActivityIndicator /> : null}
-      {morning.morning === undefined ? (
-        <EmptyList
-          style={{height: 80, width: 80, marginTop: -120}}
-          image={require('../../../../assets/Images/emptyCart.png')}
-          title="FIND PLAN"
-          message="Please wait while we load the plan for this date!"
-          onPress={() => navigation.goBack()}
+      {morning.morning === '' ? (
+        <ActivityIndicator
+          size={'large'}
+          color={'green'}
+          animating={refreshing}
+          style={{marginBottom: 30}}
         />
       ) : (
         <FlatList
@@ -109,8 +108,14 @@ const Morning = (morning: any, planIds: any, times: any) => {
               plandate={item?.plandate}
             />
           )}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          ListEmptyComponent={
+            <EmptyList
+              style={{height: 80, width: 80, marginTop: -120}}
+              image={require('../../../../assets/Images/emptyCart.png')}
+              title="FIND PLAN"
+              message="No Meal plan for this date!"
+              onPress={() => navigation.goBack()}
+            />
           }
         />
       )}

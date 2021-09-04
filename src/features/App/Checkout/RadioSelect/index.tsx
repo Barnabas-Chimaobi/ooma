@@ -79,12 +79,6 @@ const RadioSelect = ({
     } else if (type === 'Payment Method') {
       if (value === 'Card') {
         setCheckedValue(value);
-        navigation.navigate('Payment', {
-          amount: amount,
-          branchId: branchId,
-          orderId: orderId,
-          paymentMethod: value,
-        });
       } else {
         setCheckedValue(value);
       }

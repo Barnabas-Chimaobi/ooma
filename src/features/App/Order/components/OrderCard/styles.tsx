@@ -7,6 +7,7 @@ export default StyleSheet.create({
     borderRadius: 10,
     elevation: 2,
     marginTop: 18,
+    marginBottom: 15,
   },
   right: {
     fontSize: 11,

@@ -10,6 +10,7 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useSelector, useDispatch} from 'react-redux';
 import S from './styles';
 import Categories from './Categories';
@@ -44,6 +45,8 @@ import s from '../../../components/MenuCard/styles';
 import {hearts, scroll} from '../../../assets';
 import Label from '../../../components/MenuCard/Label';
 import {PriceTag, RatingCount, Rating1, DishTypes} from '../../../components';
+import {getMenuPlansByBranch} from '../../../FetchData';
+import {getMenuItemsPlanForYou} from '../../../reducers/MenuPlansForYou';
 
 const Home = () => {
   const navigation = useNavigation();
@@ -73,8 +76,21 @@ const Home = () => {
   const glutenMenuItem = useSelector(
     (state: RootState) => state.glutenMenuItem.payload,
   );
+  const dispatch = useDispatch();
 
-  useEffect(() => {}, []);
+  const getMenuPlansForYouCategory = async () => {
+    const branch = await AsyncStorage.getItem('branchId');
+    const newbranch = JSON.parse(branch);
+    const menuItem = await getMenuPlansByBranch(newbranch, 1);
+    console.log(menuItem, 'menuplanforyouuuuu');
+    dispatch(getMenuItemsPlanForYou(menuItem));
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      getMenuPlansForYouCategory();
+    });
+  }, [0]);
   //  const {categories} = useSelector(
   //    (state: RootState) => state.itemCategory,
   //  );
@@ -443,62 +459,62 @@ const Home = () => {
           </Modal>
         ) : null}
 
-        {newMenuItem.length == 0 ? (
+        {newMenuItem?.length == 0 ? (
           <Skeleton />
         ) : (
           <Categories
-            bool={newMenuItem.length == 0 ? true : false}
+            bool={newMenuItem?.length == 0 ? true : false}
             menuItem={newMenuItem}
             title="New"
             // subtitle="Fantastic items on the menu, for you."
           />
         )}
 
-        {popularMenuItem.length == 0 ? (
+        {popularMenuItem?.length == 0 ? (
           <Skeleton />
         ) : (
           <Categories
-            bool={popularMenuItem.length == 0 ? true : false}
+            bool={popularMenuItem?.length == 0 ? true : false}
             menuItem={popularMenuItem}
             title="Popular"
             // subtitle="Based On searches. We Picked these for you"
           />
         )}
 
-        {glutenMenuItem.length == 0 ? (
+        {glutenMenuItem?.length == 0 ? (
           <Skeleton />
         ) : (
           <Categories
-            bool={glutenMenuItem.length == 0 ? true : false}
+            bool={glutenMenuItem?.length == 0 ? true : false}
             menuItem={breakFastMenuItem}
             title={secondCategory1[0]}
             // subtitle={secondDescription1[0]}
           />
         )}
 
-        {drinksMenuItem.length == 0 ? (
+        {drinksMenuItem?.length == 0 ? (
           <Skeleton />
         ) : (
           <Categories
-            bool={drinksMenuItem.length == 0 ? true : false}
+            bool={drinksMenuItem?.length == 0 ? true : false}
             menuItem={drinksMenuItem}
             title={firstCategory1[0]}
             // subtitle={firstDescription1[0]}
           />
         )}
 
-        {breakFastMenuItem.length == 0 ? (
+        {breakFastMenuItem?.length == 0 ? (
           <Skeleton />
         ) : (
           <Categories
-            bool={breakFastMenuItem.length == 0 ? true : false}
+            bool={breakFastMenuItem?.length == 0 ? true : false}
             menuItem={glutenMenuItem}
             title={thirdCategory1[0]}
             // subtitle={thirdDescription1[0]}
           />
         )}
 
-        {menuItem.length == 0 ? (
+        {menuItem?.length == 0 ? (
           <Skeleton />
         ) : (
           // <Categories

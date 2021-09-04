@@ -6,6 +6,7 @@ import {
   TextInput,
   Image,
   TouchableHighlight,
+  ActivityIndicator,
 } from 'react-native';
 import {
   HeaderBar,
@@ -63,6 +64,8 @@ const Checkout = () => {
   const [orderChannel, setOrderChannel] = useState('');
   const [orderName, setOrderName] = useState('');
   const [branch, setBranch] = useState('');
+  const [payState, setPayState] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const getAddress = async () => {
     const adress = await AsyncStorage.getItem('branchId');
@@ -143,20 +146,39 @@ const Checkout = () => {
     orderName: params?.planOrder ? params?.planOrderName : orderName,
   };
 
+  const totalAmount =
+    params?.paramsBuynow === 'buynow'
+      ? parseInt(deliveryCharges) + parseInt(params?.params?.amount)
+      : parseInt(deliveryCharges) + parseInt(params?.subTotal);
+
   const orderNow = async () => {
+    setLoading(true);
     console.log(body, 'idddddddd');
     if (myAddress === '' && deliveryOption === 'Delivery') {
       ShowMessage(
         type.INFO,
         'please select a pick-up location and enter your delivery address',
       ); // dispatch(cartStates(addedCart));
+      setLoading(false);
     } else {
       const cart = await createMenuItemOrder(body);
       console.log(cart, 'cartttttt=====');
       if (cart?.statusCode === 201) {
         ShowMessage(type.DONE, 'Order Placed successfully'); // dispatch(cartStates(addedCart));
-        navigation.navigate('HomeNav');
+        setLoading(false);
+        if (payState === 'CARD') {
+          navigation.navigate('Payment', {
+            amount: totalAmount,
+            branchId: branch,
+            orderId: cart?.data?.data?.id,
+            paymentMethod: payState,
+          });
+        } else {
+          setLoading(false);
+          navigation.navigate('HomeNav');
+        }
       } else {
+        setLoading(false);
         ShowMessage(
           type.ERROR,
           'An error occured while placing your orders. Please try again',
@@ -166,6 +188,7 @@ const Checkout = () => {
   };
 
   const PlanOrder = async () => {
+    setLoading(true);
     console.log(body, 'idddddddd');
     // if (myAddress == '' && deliveryOption == '') {
     //   ShowMessage(
@@ -176,9 +199,21 @@ const Checkout = () => {
     const cart = await createMenuPlanOrder(body);
     // const orderNow = await createMenuItemOrderDetail(body, cart?.id);
     if (cart?.statusCode === 201) {
+      setLoading(false);
       ShowMessage(type.DONE, 'Order Placed successfully'); // dispatch(cartStates(addedCart));
-      navigation.navigate('HomeNav');
+      if (payState === 'CARD') {
+        navigation.navigate('Payment', {
+          amount: totalAmount,
+          branchId: branch,
+          orderId: cart?.data?.data?.id,
+          paymentMethod: payState,
+        });
+      } else {
+        setLoading(false);
+        navigation.navigate('HomeNav');
+      }
     } else {
+      setLoading(false);
       ShowMessage(
         type.ERROR,
         'An error occured while placing your orders. Please try again',
@@ -186,7 +221,6 @@ const Checkout = () => {
     }
     console.log(cart, 'cart');
     console.log(orderNow, 'cart');
-    navigation.navigate('HomeNav');
     // }
   };
 
@@ -195,6 +229,7 @@ const Checkout = () => {
   const radio2 = (item: any) => {
     setPaymentMethod(item);
     console.log(item, 'eachvalue');
+    setPayState(item);
   };
 
   const radio3 = (item: any) => {
@@ -439,8 +474,8 @@ const Checkout = () => {
           orderId={cartId}
           branchId={branch}
           title="Payment Method"
-          title1="Card"
-          title2="Cash"
+          title1="CARD"
+          title2="CASH"
           type="Payment Method"
           props={(item: any) => radio2(item)}
         />
@@ -573,25 +608,33 @@ const Checkout = () => {
       /> */}
       {params?.planOrder ? (
         <View style={S.footerStyle}>
-          <Button
-            onPress={() => {
-              PlanOrder();
-            }}
-            title="SUBSCRIBE NOW"
-            type={ButtonType.solid}
-            containerStyle={S.buttonStyle}
-          />
+          {loading ? (
+            <ActivityIndicator color="green" size="large" animating={loading} />
+          ) : (
+            <Button
+              onPress={() => {
+                PlanOrder();
+              }}
+              title="SUBSCRIBE NOW"
+              type={ButtonType.solid}
+              containerStyle={S.buttonStyle}
+            />
+          )}
         </View>
       ) : (
         <View style={S.footerStyle}>
-          <Button
-            onPress={() => {
-              orderNow();
-            }}
-            title="ORDER NOW"
-            type={ButtonType.solid}
-            containerStyle={S.buttonStyle}
-          />
+          {loading ? (
+            <ActivityIndicator color="green" size="large" animating={loading} />
+          ) : (
+            <Button
+              onPress={() => {
+                orderNow();
+              }}
+              title="ORDER NOW"
+              type={ButtonType.solid}
+              containerStyle={S.buttonStyle}
+            />
+          )}
         </View>
       )}
     </ScrollView>

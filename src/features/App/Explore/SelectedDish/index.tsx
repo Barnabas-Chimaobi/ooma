@@ -9,6 +9,7 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import {
   PriceTag,
@@ -108,6 +109,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   const [showTime, setShowTime] = useState(false);
   const [prefAmount, setPrefAmount] = useState(0);
   const [myId, setId] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const visibility = () => {
     setVisible((previousState) => !previousState);
@@ -237,6 +239,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     cartIds: cartid,
   };
   const createCart = async (item: any) => {
+    setLoading(true);
     console.log(addsTotal, 'bodyyyquntyyss');
     console.log(body, 'bodyyy');
     try {
@@ -253,6 +256,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
       });
       const addedCart = await cart?.data?.data;
       if (item == 'Buy now' && addedCart?.amount !== undefined) {
+        setLoading(false);
         navigation.navigate('Checkout', {
           branchId: menuItem?.branchId,
           params: addedCart,
@@ -260,6 +264,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           // amount: menuItem?.amount,
         });
       } else if (addedCart?.amount !== undefined) {
+        setLoading(false);
         ShowMessage(type.DONE, 'Item added to cart successfully'); // dispatch(cartStates(addedCart));
         setCartItem(addedCart);
         setCartId(addedCart?.id);
@@ -268,22 +273,30 @@ const CardItem: FC<IProps> = ({route, menu}) => {
         // }
         console.log(addedCart, 'addedcaart');
       } else {
+        setLoading(false);
         ShowMessage(
           type.ERROR,
           'Sorry we could not process your order at this time',
         );
       }
     } catch (err) {
+      setLoading(false);
+      ShowMessage(
+        type.ERROR,
+        'Sorry we could not process your order at this time',
+      );
       console.log(err, 'cartError');
     }
   };
 
   const createBasket = async () => {
+    setLoading(true);
     console.log(addsTotal, 'bodyyyquntyyss');
     console.log(body, 'bodyyy');
 
     try {
       if ((myAddress == '' && deliveryOption == 'Delivery') || time == '') {
+        setLoading(false);
         ShowMessage(
           type.INFO,
           'please check if you have selected a delivery location, time and enter your delivery address',
@@ -311,11 +324,13 @@ const CardItem: FC<IProps> = ({route, menu}) => {
         });
         const addedCart = cart?.data?.data;
         if (menuPlan == 'menuPlan' && addedCart?.id !== undefined) {
+          setLoading(false);
           setCartItem(addedCart);
           setCartId(addedCart?.id);
           ShowMessage(type.DONE, 'Item added to basket successfully');
           navigation.goBack();
         } else if (addedCart?.id !== undefined) {
+          setLoading(false);
           ShowMessage(type.DONE, 'Item added to cart successfully'); // dispatch(cartStates(addedCart));
         }
         console.log(addedCart, 'addedcaart');
@@ -323,11 +338,13 @@ const CardItem: FC<IProps> = ({route, menu}) => {
       setOpenModal(false);
     } catch (err) {
       if (menuPlan == 'menuPlan' && err) {
+        setLoading(false);
         ShowMessage(
           type.ERROR,
           'An Error occured while adding your item to basket. Please ensure you supplied all the required details and try again',
         );
       } else {
+        setLoading(false);
         ShowMessage(
           type.ERROR,
           'An Error occured while adding your item to cart. please ensure you supplied all the required details and try again',
@@ -764,11 +781,19 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                     </Text>
                   </TouchableHighlight>
 
-                  <TouchableHighlight
-                    underlayColor=""
-                    onPress={() => createBasket()}>
-                    <Text style={{fontSize: 16, color: '#05944F'}}>Done</Text>
-                  </TouchableHighlight>
+                  {loading ? (
+                    <ActivityIndicator
+                      color="green"
+                      size="large"
+                      animating={loading}
+                    />
+                  ) : (
+                    <TouchableHighlight
+                      underlayColor=""
+                      onPress={() => createBasket()}>
+                      <Text style={{fontSize: 16, color: '#05944F'}}>Done</Text>
+                    </TouchableHighlight>
+                  )}
                 </View>
 
                 <View
@@ -1074,45 +1099,66 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           </View>
         ) : menuPlan == 'menuPlan' ? (
           <View style={{marginBottom: 20}}>
-            <Button
-              title="Add To Basket"
-              type={ButtonType.solid}
-              containerStyle={{alignSelf: 'center', height: 40}}
-              buttonStyle={{backgroundColor: '#303030', paddingVertical: 12}}
-              iconColor="#FFF"
-              iconName="cart-plus"
-              iconSize={18}
-              titleStyle={{color: 'white', marginHorizontal: 20}}
-              onPress={() => {
-                setOpenModal(true);
-              }}
-            />
+            {loading ? (
+              <ActivityIndicator
+                color="green"
+                size="large"
+                animating={loading}
+              />
+            ) : (
+              <Button
+                title="Add To Basket"
+                type={ButtonType.solid}
+                containerStyle={{alignSelf: 'center', height: 40}}
+                buttonStyle={{backgroundColor: '#303030', paddingVertical: 12}}
+                iconColor="#FFF"
+                iconName="cart-plus"
+                iconSize={18}
+                titleStyle={{color: 'white', marginHorizontal: 20}}
+                onPress={() => {
+                  setOpenModal(true);
+                }}
+              />
+            )}
           </View>
         ) : (
-          <View style={S.sdButtonBar}>
-            <Button
-              title="Add to cart"
-              type={ButtonType.solid}
-              containerStyle={{width: '65%'}}
-              buttonStyle={{backgroundColor: '#303030', paddingVertical: 12}}
-              iconColor="#FFF"
-              iconName="cart-plus"
-              iconSize={18}
-              titleStyle={{color: 'white', marginHorizontal: 20}}
-              onPress={() => {
-                createCart('Add to cart');
-              }}
-            />
-            <Button
-              title="Buy now"
-              type={ButtonType.solid}
-              containerStyle={{width: '30%'}}
-              buttonStyle={{backgroundColor: '#EEE'}}
-              titleStyle={{color: 'black', fontWeight: 'bold'}}
-              onPress={() => {
-                createCart('Buy now');
-              }}
-            />
+          <View>
+            {loading ? (
+              <ActivityIndicator
+                color="green"
+                size="large"
+                animating={loading}
+              />
+            ) : (
+              <View style={S.sdButtonBar}>
+                <Button
+                  title="Add to cart"
+                  type={ButtonType.solid}
+                  containerStyle={{width: '65%'}}
+                  buttonStyle={{
+                    backgroundColor: '#303030',
+                    paddingVertical: 12,
+                  }}
+                  iconColor="#FFF"
+                  iconName="cart-plus"
+                  iconSize={18}
+                  titleStyle={{color: 'white', marginHorizontal: 20}}
+                  onPress={() => {
+                    createCart('Add to cart');
+                  }}
+                />
+                <Button
+                  title="Buy now"
+                  type={ButtonType.solid}
+                  containerStyle={{width: '30%'}}
+                  buttonStyle={{backgroundColor: '#EEE'}}
+                  titleStyle={{color: 'black', fontWeight: 'bold'}}
+                  onPress={() => {
+                    createCart('Buy now');
+                  }}
+                />
+              </View>
+            )}
           </View>
         )}
       </ScrollView>

@@ -40,7 +40,7 @@ export default (type: string, message: string, url?: string) => {
       //   :
       message,
     // position: WSnackBar.position.BOTTOM, // 1.TOP 2.CENTER 3.BOTTOM
-    duration: 10000, //1.SHORT 2.LONG 3.INDEFINITE
+    duration: 5000, //1.SHORT 2.LONG 3.INDEFINITE
     ...types[type],
     numberOfLines: 2,
     onActionHide: () => {

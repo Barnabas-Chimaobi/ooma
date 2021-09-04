@@ -47,7 +47,6 @@ import {getSpecialOffer} from '../../../../reducers/SpecialOffer';
 import {getNewItem} from '../../../../reducers/NewMenuItem';
 import {getPopularItem} from '../../../../reducers/PopularItem';
 import {getMenuItemsForYou} from '../../../../reducers/MoreForYouMenu';
-import {getMenuItemsPlanForYou} from '../../../../reducers/MenuPlansForYou';
 import {getGlutenMenuItems} from '../../../../reducers/GlutenFreeMenu';
 import {getDrinkMenuItems} from '../../../../reducers/DrinkMenu';
 import {getBreakFastMenuItems} from '../../../../reducers/BreakFastMenu';

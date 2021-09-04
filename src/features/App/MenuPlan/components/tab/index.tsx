@@ -10,6 +10,7 @@ import {
   StatusBar,
   ScrollView,
   RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
 import {styles} from './styles';
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
@@ -43,6 +44,7 @@ import {
   UIActivityIndicator,
   WaveIndicator,
 } from 'react-native-indicators';
+import {latest} from 'immer/dist/internal';
 
 const initialLayout = {width: Dimensions.get('window').width};
 
@@ -60,7 +62,7 @@ const MenuTab = () => {
   const [menuPlans1, setMenuPlans1] = useState();
   const [menuPlan2, setMenuPlan2] = useState();
   const [refreshing, setRefreshing] = useState(false);
-  const [loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState(true);
   const {menuPlanCategories} = useSelector(
     (state: RootState) => state.menuPlanCategories,
   );
@@ -73,6 +75,7 @@ const MenuTab = () => {
   );
 
   const menuPlan = async (id: any) => {
+    setLoader(true);
     console.log(id, 'allplannnnnssss');
     const allPlan = await GetAllMenuPlanCategory(id);
     const mapPlan = allPlan?.map(
@@ -88,6 +91,8 @@ const MenuTab = () => {
       //   title: item.name,
       // }),
     );
+    // await getMenuplanKart(1);
+    setLoader(false);
     // console.log(allPlan, '====alllrplannnn=======');
     setRoutes1(mapPlan);
     // setRoutes(mapPlan);
@@ -95,21 +100,21 @@ const MenuTab = () => {
   };
 
   const getMenuplanKart = async (id) => {
+    setLoader(true);
     const branch = await AsyncStorage.getItem('branchId');
     const newbranch = JSON.parse(branch);
-    setLoader(true);
     const menuplanscart = await getPlanCatId(newbranch, id);
     console.log(newbranch, 'useriddd');
     // setPlanCart(menuplanscart?.items);
     dispatch(getMenuItemsPlanForYou(menuplanscart));
-    setLoader(false);
-    console.log(menuplanscart, '=======planscategoryyyyyyyyy=========');
     // setLoader(false);
+    console.log(menuplanscart, '=======planscategoryyyyyyyyy=========');
+    setLoader(false);
     // console.log(all1, '=====all1======');
   };
 
   useEffect(() => {
-    getMenuplanKart(1);
+    // getMenuplanKart(1);
     // mapScenes();
     // console.log(params?.items, 'itemmmssss');
     const getBranchId = async () => {
@@ -142,12 +147,23 @@ const MenuTab = () => {
     }
   };
 
-  const onRefresh = () => {};
+  const onRefresh = () => {
+    setLoader(true);
+    getMenuplanKart(1);
+    // menuPlan('82059935-89dc-4daf-aff3-adcf997d6859');
+  };
 
   const FamilyRoute = (item, index) => {
     console.log(item, '====itemsssss===');
     return (
       <View>
+        <RefreshControl
+          onRefresh={onRefresh}
+          refreshing={loader}
+          enabled={loader}
+          style={{marginTop: 30}}
+        />
+        {/* <ActivityIndicator color={'green'} size={'large'} animating={true} /> */}
         {menuPlansMenuItem ? (
           <View key={item?.id} style={styles.scene}>
             <FamilyMenu allFamilyMenuPlans={menuPlansMenuItem} />
@@ -178,17 +194,17 @@ const MenuTab = () => {
         backgroundColor="transparent"
         barStyle={'dark-content'}
       />
-      <Spinner
+      {/* <Spinner
         visible={loader}
         // textStyle={styles.spinnerTextStyle}
         overlayColor="rgba(66, 66, 66,0.6)"
         customIndicator={<BallIndicator color="white" />}
-      />
+      /> */}
       {/* {menuPlansMenuItem ? ( */}
       <ScrollView
         style={{flex: 1}}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl refreshing={loader} onRefresh={onRefresh} />
         }>
         <DynamicTabView
           data={routes1}

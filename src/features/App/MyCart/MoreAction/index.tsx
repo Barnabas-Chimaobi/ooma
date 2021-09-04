@@ -1,5 +1,11 @@
 import React, {FC, useState} from 'react';
-import {View, Text, TouchableOpacity, Alert} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
 import {Icon} from 'react-native-elements';
 import {useNavigation} from '@react-navigation/native';
 import {styles} from './styles';
@@ -45,6 +51,7 @@ const MoreAction: FC<IProps> = ({
 }) => {
   const [isCounter, setIsCounter] = useState(false);
   const [countValue, setCountValue] = useState(0);
+  const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
   const dispatch: AppDispatch = useDispatch();
 
@@ -77,46 +84,60 @@ const MoreAction: FC<IProps> = ({
   };
 
   const deleteCart = async () => {
+    setLoading(true);
     console.log(cart, '===deltessss===');
     try {
       const carts = await api.delete(`/orders/cart`, {
         cartId: cart,
       });
-      const addedCart = carts?.data?.data;
+      const addedCart = carts?.data;
       getCart();
+      if (addedCart?.statusCode === 201) {
+        setLoading(false);
+        ShowMessage(type.DONE, 'Item deleted successfully'); // dispatch(cartStates(addedCart));
+      } else {
+        setLoading(false);
+        ShowMessage(type.ERROR, 'Could not delete item'); // dispatch(cartStates(addedCart));
+      }
       // if (cart?.config?.response == 'Cart updated successfully') {
-      ShowMessage(type.DONE, 'Item deleted successfully'); // dispatch(cartStates(addedCart));
       // setCartItem(addedCart);
       // navigation.goBack('Mycart');
-      console.log(carts, 'editedcartttt');
+      console.log(addedCart, 'deleteddddddartttt');
       // } else {
       //   ShowMessage(type.ERROR, 'Item could not be updated'); // dispatch(cartStates(addedCart));
       // }
     } catch (err) {
+      setLoading(false);
+      ShowMessage(type.ERROR, 'Could not delete item'); // dispatch(cartStates(addedCart));
       console.log(err, 'cartError');
     }
   };
 
   const deleteBasket = async () => {
+    setLoading(true);
     console.log(cart, '===deltessss===');
     try {
       const carts = await api.delete(`/orders/basket`, {
         basketId: cart,
       });
-      const addedCart = carts?.data?.data;
+      const addedCart = carts?.data;
       getBasket();
-      if (carts?.statusCode === 201) {
+      if (addedCart?.statusCode === 201) {
+        setLoading(false);
         ShowMessage(type.DONE, 'Item deleted successfully'); // dispatch(cartStates(addedCart));
         // setCartItem(addedCart);
         navigation.navigate('Cart');
         console.log(carts, 'deletedbasket');
       } else {
+        setLoading(false);
         ShowMessage(
           type.ERROR,
-          'Cannot delete cart, cart item already paid for',
+          'Cannot delete item, cart item already paid for',
         ); // dispatch(cartStates(addedCart));
       }
     } catch (err) {
+      setLoading(false);
+      ShowMessage(type.ERROR, 'Unable to delete item');
       console.log(err.response.data, 'cartError');
     }
   };
@@ -178,6 +199,8 @@ const MoreAction: FC<IProps> = ({
             <Text style={styles.countIcon}>+</Text>
           </TouchableOpacity>
         </View>
+      ) : loading ? (
+        <ActivityIndicator size={'large'} color={'red'} animating={loading} />
       ) : (
         <TouchableOpacity onPress={() => handleActions()}>
           <Icon

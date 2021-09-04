@@ -64,6 +64,7 @@
         "react-native-swipeout": "^2.3.6",
         "react-native-tab-view": "^2.15.2",
         "react-native-vector-icons": "^8.0.0",
+        "react-native-webview": "11.13.0",
         "react-native-wheel-picker-android": "^2.0.6",
         "react-native-wizard": "^2.1.0",
         "react-redux": "^7.2.2",

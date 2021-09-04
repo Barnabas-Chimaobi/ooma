@@ -13,6 +13,7 @@ interface IProps {
   randomValue?: string | number;
   randomStyle?: object;
   randomTitleStyle?: object;
+  value: any;
 }
 
 const Total = ({
@@ -25,28 +26,25 @@ const Total = ({
   totalTitle,
   randomStyle,
   randomTitleStyle,
+  value,
 }: IProps) => {
-  // console.log(
-  //   subTotal,
-  //   deliveryCharges,
-  //   total,
-  //   mainStyle,
-  //   randomTitle,
-  //   randomValue,
-  //   totalTitle,
-  //   randomStyle,
-  //   randomTitleStyle,
-  //   '=======listssss=====',
-  // );
+  console.log(
+    subTotal,
+    deliveryCharges,
+    total,
+
+    '=======listssss=====',
+  );
   return (
     <View style={[S.main, mainStyle]}>
       {randomTitle && (
         <View style={S.bodyStyle}>
           <Text style={[S.textStyle, randomTitleStyle]}>{randomTitle}</Text>
           <Text style={[S.textStyle, randomStyle]}>{randomValue}</Text>
+          <Text></Text>
         </View>
       )}
-      {subTotal && (
+      {subTotal !== undefined && typeof subTotal === 'number' && (
         <View style={S.bodyStyle}>
           <Text style={S.textStyle}>Sub Total</Text>
           <Text style={S.textStyle}>{`\u20A6${currencyFormat(subTotal)}`}</Text>
@@ -61,7 +59,7 @@ const Total = ({
           <Text style={S.textStyle}># {deliveryCharges}</Text>
         </View>
       ) : null} */}
-      {total && (
+      {total !== undefined && typeof total === 'number' && (
         <View style={S.bodyStyle}>
           <Text style={totalTitle ? {} : S.textStyle1}>
             {totalTitle || `Total`}

@@ -6,6 +6,7 @@ import {
   FlatList,
   Dimensions,
   Image,
+  RefreshControl,
 } from 'react-native';
 
 import shortid from 'shortid';
@@ -329,38 +330,40 @@ export const MyPlans = ({findPlan}: Props) => {
 
   return (
     <>
-      <Spinner
+      <View style={{flex: 1, marginBottom: 30}}>
+        <RefreshControl refreshing={loader} />
+        {/* <Spinner
         visible={loader}
         // textStyle={styles.spinnerTextStyle}
         overlayColor="rgba(66, 66, 66,0.6)"
         customIndicator={<BallIndicator color="white" />}
-      />
-      {/* {planOrders?.length !== 0 ? ( */}
-      <>
-        {/* <FlatList
+      /> */}
+        {/* {planOrders?.length !== 0 ? ( */}
+        <>
+          {/* <FlatList
             data={myPlanData || []}
             style={styles.listStyle}
             renderItem={({item}) => {
               return ( */}
-        <ListItem
-        // icon={item.icon}
-        // location={item.location}
-        // list={item.list}
-        />
-        {/* );
+          <ListItem
+          // icon={item.icon}
+          // location={item.location}
+          // list={item.list}
+          />
+          {/* );
             }}
             {...flatListOptimizationProps}
           /> */}
-        <BottomSheet
-          isOpen={isOpen}
-          openedPercentage={0.7}
-          onClose={closeDrawer}>
-          <View style={styles.buttonContainer}>
-            <BottomSheetList onSubmit={closeDrawer} />
-          </View>
-        </BottomSheet>
-      </>
-      {/* ) : (
+          <BottomSheet
+            isOpen={isOpen}
+            openedPercentage={0.7}
+            onClose={closeDrawer}>
+            <View style={styles.buttonContainer}>
+              <BottomSheetList onSubmit={closeDrawer} />
+            </View>
+          </BottomSheet>
+        </>
+        {/* ) : (
         <View style={styles.noData}>
           <Image
             style={{marginTop: 20}}
@@ -378,6 +381,7 @@ export const MyPlans = ({findPlan}: Props) => {
           </TouchableWithoutFeedback>
         </View>
       )} */}
+      </View>
     </>
   );
 };
@@ -395,7 +399,8 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   main: {
-    marginBottom: 20,
+    marginBottom: 200,
+    flex: 1,
   },
   innerListItemStyle: {
     borderBottomColor: '#44444475',

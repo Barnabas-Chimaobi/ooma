@@ -11,7 +11,7 @@ const RenderItems = ({item}: any) => {
   const navigation = useNavigation();
   return (
     <OrderCard
-      onPress={() => navigation.navigate('OrderDetails')}
+      onPress={() => navigation.navigate('OrderDetails1')}
       dateTitle="24/9/2021"
       titlePosition="left"
       children={
@@ -54,7 +54,7 @@ const Current = ({item}) => {
 
   return (
     <View style={S.main}>
-      <FlatList
+      {/* <FlatList
         ListHeaderComponent={<>{data.length > 0 && <SortBy />}</>}
         renderItem={({item}) => <RenderItems item={item} />}
         data={data}
@@ -67,7 +67,7 @@ const Current = ({item}) => {
             // onPress={() => navigation.navigate('Explore')}
           />
         }
-      />
+      /> */}
     </View>
   );
 };
