@@ -57,8 +57,8 @@ const MyCart = () => {
     await cart();
     // setTimeout(() => {
     const sum = cartItem?.map((v) => v?.amount);
-    console.log(sum, cartItem.length, '====summm====');
-    if (cartItem.length !== 0) {
+    console.log(sum, cartItem?.length, '====summm====');
+    if (cartItem?.length !== 0) {
       let newsum = sum?.reduce(
         (sum: any, current: any) => parseInt(sum) + parseInt(current),
       );
