@@ -10,6 +10,7 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useSelector, useDispatch} from 'react-redux';
 import S from './styles';
 import Categories from './Categories';
@@ -44,6 +45,8 @@ import s from '../../../components/MenuCard/styles';
 import {hearts, scroll} from '../../../assets';
 import Label from '../../../components/MenuCard/Label';
 import {PriceTag, RatingCount, Rating1, DishTypes} from '../../../components';
+import {getMenuPlansByBranch} from '../../../FetchData';
+import {getMenuItemsPlanForYou} from '../../../reducers/MenuPlansForYou';
 
 const Home = () => {
   const navigation = useNavigation();
@@ -73,8 +76,21 @@ const Home = () => {
   const glutenMenuItem = useSelector(
     (state: RootState) => state.glutenMenuItem.payload,
   );
+  const dispatch = useDispatch();
 
-  useEffect(() => {}, [0]);
+  const getMenuPlansForYouCategory = async () => {
+    const branch = await AsyncStorage.getItem('branchId');
+    const newbranch = JSON.parse(branch);
+    const menuItem = await getMenuPlansByBranch(newbranch, 1);
+    console.log(menuItem, 'menuplanforyouuuuu');
+    dispatch(getMenuItemsPlanForYou(menuItem));
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      getMenuPlansForYouCategory();
+    });
+  }, [0]);
   //  const {categories} = useSelector(
   //    (state: RootState) => state.itemCategory,
   //  );

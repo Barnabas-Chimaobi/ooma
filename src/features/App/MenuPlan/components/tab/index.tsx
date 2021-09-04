@@ -75,7 +75,7 @@ const MenuTab = () => {
   );
 
   const menuPlan = async (id: any) => {
-    // setLoader(true);
+    setLoader(true);
     console.log(id, 'allplannnnnssss');
     const allPlan = await GetAllMenuPlanCategory(id);
     const mapPlan = allPlan?.map(
@@ -91,7 +91,7 @@ const MenuTab = () => {
       //   title: item.name,
       // }),
     );
-    await getMenuplanKart(1);
+    // await getMenuplanKart(1);
     setLoader(false);
     // console.log(allPlan, '====alllrplannnn=======');
     setRoutes1(mapPlan);
@@ -149,7 +149,8 @@ const MenuTab = () => {
 
   const onRefresh = () => {
     setLoader(true);
-    menuPlan('82059935-89dc-4daf-aff3-adcf997d6859');
+    getMenuplanKart(1);
+    // menuPlan('82059935-89dc-4daf-aff3-adcf997d6859');
   };
 
   const FamilyRoute = (item, index) => {
