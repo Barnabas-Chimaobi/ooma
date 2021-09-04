@@ -548,11 +548,12 @@ export const getPlanCatId = async (branch: any, id: any) => {
 export const generatePaymentRef = async (body: any) => {
   console.log(body, '====detailllsssss');
   try {
-    const payment = await api.post(`/payments/pos`, {
+    const payment = await api.post(`/payments`, {
       amount: body.amount,
       branchId: body.branchId,
       orderId: body.orderId,
       paymentMethod: body.paymentMethod,
+      gateWayType: body.gateWayType,
       currency: 'NGN',
     });
     const generated = payment.data;
@@ -567,7 +568,7 @@ export const generatePaymentRef = async (body: any) => {
 export const verifyPayment = async (key: any) => {
   console.log(body, '====detailllsssss');
   try {
-    const confirmPayment = await api.post(`payments/verify/${key}`);
+    const confirmPayment = await api.get(`payments/verify/${key}`);
     const generated = confirmPayment.data;
     console.log(generated, 'categoryidddss==');
     return generated;

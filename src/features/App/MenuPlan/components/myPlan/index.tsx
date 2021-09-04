@@ -6,6 +6,7 @@ import {
   FlatList,
   Dimensions,
   Image,
+  RefreshControl,
 } from 'react-native';
 
 import shortid from 'shortid';
@@ -329,12 +330,13 @@ export const MyPlans = ({findPlan}: Props) => {
 
   return (
     <>
-      <Spinner
+      <RefreshControl refreshing={loader} />
+      {/* <Spinner
         visible={loader}
         // textStyle={styles.spinnerTextStyle}
         overlayColor="rgba(66, 66, 66,0.6)"
         customIndicator={<BallIndicator color="white" />}
-      />
+      /> */}
       {/* {planOrders?.length !== 0 ? ( */}
       <>
         {/* <FlatList

@@ -46,6 +46,7 @@ import {
   Cart,
   Cart1,
   Payment,
+  OrderDetails1,
 } from '../features/App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AppearanceProvider, useColorScheme} from 'react-native-appearance';
@@ -108,6 +109,7 @@ export type MainStackParamList = {
   SearchMenuitemandPlan: undefined;
   Cart: undefined;
   Cart1: undefined;
+  OrderDetails1: undefined;
 };
 
 const MainStack = createStackNavigator<MainStackParamList>();
@@ -191,6 +193,7 @@ export default function App() {
             <MainStack.Screen name="Dish" component={Dish} />
             <MainStack.Screen name="Order" component={Order} />
             <MainStack.Screen name="OrderDetails" component={OrderDetails} />
+            <MainStack.Screen name="OrderDetails1" component={OrderDetails1} />
             <MainStack.Screen name="MenuPlanByCategory" component={Menu} />
             <MainStack.Screen name="Detail" component={Detail} />
             <MainStack.Screen

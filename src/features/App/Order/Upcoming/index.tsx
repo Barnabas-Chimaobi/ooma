@@ -51,7 +51,7 @@ const Current = ({item}) => {
 
   return (
     <View style={S.main}>
-      <FlatList
+      {/* <FlatList
         ListHeaderComponent={<>{data.length > 0 && <SortBy />}</>}
         renderItem={({item}) => <RenderItems item={item} />}
         data={data}
@@ -64,7 +64,7 @@ const Current = ({item}) => {
             // onPress={() => navigation.navigate('Explore')}
           />
         }
-      />
+      /> */}
     </View>
   );
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, FlatList} from 'react-native';
+import {View, FlatList, Text} from 'react-native';
 import {SortBy, OrderCard} from '../components';
 import {Total, EmptyList} from '../../../../components';
 import shortid from 'shortid';
@@ -8,44 +8,59 @@ import {emptyCart} from '../../../../assets';
 import {colors} from '../../../../colors';
 
 const RenderItems = ({item}: any) => {
-  console.log(item?.menuitemorders?.MenuItemOrderDetails, 'item');
+  // console.log(
+  let ones = item?.data?.map((item) => item?.data?.map((item) => item));
+  console.log(ones, 'ones=======');
+  //   'item',
+  // );
   return (
-    <OrderCard
-      dateTitle={item?.menuitemorders?.deliveryTime}
-      titlePosition="right"
-      children={
-        <>
-          <Total
-            randomTitle="ORDER ID"
-            randomValue={item?.id}
-            mainStyle={S.totalStyle}
-          />
-          <Total
-            randomTitle="ITEM"
-            randomValue={item?.id}
-            mainStyle={S.totalStyle}
-          />
-          <Total
-            total={Number(item?.menuitemorders?.total)}
-            totalTitle="PRICE"
-            mainStyle={S.totalStyle}
-          />
-          <Total
-            randomTitle="STATUS"
-            randomValue={item?.paymentStatus}
-            mainStyle={S.totalStyle}
-            randomStyle={{
-              color:
-                item?.paymentStatus == 'Cancelled'
-                  ? colors.red
-                  : item?.paymentStatus == 'NOT-PAID'
-                  ? colors.primary
-                  : colors.black,
-            }}
-          />
-        </>
-      }
-    />
+    <View>
+      <Text>{item?.deliveryTime}</Text>
+      {item?.data?.map((item) =>
+        item?.data?.map((item) => {
+          console.log(item, 'item===========');
+          return (
+            <OrderCard
+              details={item}
+              dateTitle={item?.deliveryTime}
+              titlePosition="right"
+              children={
+                <>
+                  <Total
+                    randomTitle="ORDER ID"
+                    randomValue={item?.itemData?.id}
+                    mainStyle={S.totalStyle}
+                  />
+                  <Total
+                    randomTitle="ITEM"
+                    randomValue={item?.itemData?.menuitemorders?.id}
+                    mainStyle={S.totalStyle}
+                  />
+                  <Total
+                    total={Number(item?.itemData?.menuitemorders?.total)}
+                    totalTitle="PRICE"
+                    mainStyle={S.totalStyle}
+                  />
+                  <Total
+                    randomTitle="STATUS"
+                    randomValue={item?.itemData?.menuitemorders?.status}
+                    mainStyle={S.totalStyle}
+                    randomStyle={{
+                      color:
+                        item?.paymentStatus == 'Cancelled'
+                          ? colors.red
+                          : item?.paymentStatus == 'NOT-PAID'
+                          ? colors.primary
+                          : colors.black,
+                    }}
+                  />
+                </>
+              }
+            />
+          );
+        }),
+      )}
+    </View>
   );
 };
 

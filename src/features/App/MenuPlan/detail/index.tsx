@@ -8,6 +8,7 @@ import {
   Platform,
   TouchableOpacity,
   ScrollView,
+  RefreshControl,
 } from 'react-native';
 import {styles} from './styles';
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
@@ -71,13 +72,14 @@ const MenuDetails: FC<IProps> = ({route}) => {
   const [date, setDate] = useState();
   const [date1, setDate1] = useState();
   const [menuPlan, setMenuPlan] = useState();
-  const [morning, setMorning] = useState();
+  const [morning, setMorning] = useState('');
   const [planType, setPlanType] = useState('Morning');
   const [planCart, setPlanCart] = useState('');
   const [startDate, setStartDates] = useState('');
   const [endDate, setEndDates] = useState('');
   const [marked, setMarked] = useState('');
   const [deliveryTime, setDeliveryTime] = useState('');
+  const [refreshing, setRefreshing] = useState(true);
 
   const [show, setShow] = useState(false);
 
@@ -154,6 +156,7 @@ const MenuDetails: FC<IProps> = ({route}) => {
     });
     console.log(newDaysObject, '=======dayssssssssssssss-=========');
     setMarked(newDaysObject);
+    setRefreshing(false);
     // loopDate();
   };
 
@@ -244,6 +247,10 @@ const MenuDetails: FC<IProps> = ({route}) => {
     // await getMorningAfternoonNight();
   };
 
+  const onRefresh = () => {
+    getMenuPlanDetails();
+  };
+
   const TabViewContent = () => (
     <TabView
       renderTabBar={(routers) => (
@@ -315,7 +322,14 @@ const MenuDetails: FC<IProps> = ({route}) => {
         />
         <View style={styles.line} />
         <View style={{flex: 1}}>
-          <ScrollView>
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                tintColor={'green'}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+            }>
             <View style={{flex: 1}}>
               <TouchableOpacity
                 style={styles.calendar}

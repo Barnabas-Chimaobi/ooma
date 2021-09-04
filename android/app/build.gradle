@@ -191,6 +191,8 @@ android {
 }
 
 dependencies {
+        // implementation project(':react-native-webview')
+
     implementation 'androidx.multidex:multidex:2.0.1'
 
       implementation 'com.facebook.fresco:animated-base-support:1.3.0'

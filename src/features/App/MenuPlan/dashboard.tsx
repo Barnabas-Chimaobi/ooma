@@ -35,6 +35,7 @@ const App = () => {
       console.log(menuplanscart, '=======planscarttttttt=========');
       const all = menuplanscart?.items.map((item: any) => item.MenuPlan);
       let all1 = all.map((item: any) => item.MenuPlanDetails);
+      setRefreshing(false);
       // console.log(all1, '=====all1======');
     };
     const unsubscribe = navigation.addListener('focus', () => {
@@ -61,7 +62,13 @@ const App = () => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
       <View style={styles.container}>
-        {refreshing ? <ActivityIndicator /> : null}
+        {/* {refreshing ? (
+          <ActivityIndicator
+            animating={refreshing}
+            color={'green'}
+            size={'large'}
+          />
+        ) : null} */}
         <View style={styles.nav}>
           <Basket
             counts={basketItem?.length}

@@ -13,6 +13,7 @@ import {
   TouchableHighlight,
   KeyboardAvoidingView,
   RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
 import moment from 'moment';
 import shortid from 'shortid';
@@ -75,7 +76,7 @@ export const Cart = () => {
   const [visible, setVisible] = useState(false);
   const [grouped, setgrouped] = useState([]);
   const [plantime, setPlantime] = useState([]);
-  const [refreshing, setRefreshing] = useState(false);
+  const [refreshing, setRefreshing] = useState(true);
 
   const toggleVisible = () => setVisible((prevstate) => !prevstate);
 
@@ -194,7 +195,7 @@ export const Cart = () => {
     {id: 2, value: false, name: 'Pay from My Wallet', selected: false},
   ]);
   const onRadioBtnClick = (item: any) => {
-    let updatedState = isLiked.map((isLikedItem) =>
+    let updatedState = isLiked?.map((isLikedItem) =>
       isLikedItem.id === item.id
         ? {...isLikedItem, selected: true}
         : {...isLikedItem, selected: false},
@@ -235,7 +236,7 @@ export const Cart = () => {
     ),
   };
 
-  const newData = cartData.map((item, idx) => {
+  const newData = cartData?.map((item, idx) => {
     item.date = moment(date).format('dddd, Do MMM YYYY');
     return {
       ...item,
@@ -365,8 +366,11 @@ export const Cart = () => {
 
   const onRefresh = () => {
     setRefreshing(true);
-    // getMenuplanKart();
-    // groupBasketItem();
+    if (route?.params?.plan !== 'plan') {
+      groupBasketItem();
+    } else {
+      getMenuplanKart();
+    }
   };
 
   const ListItem = ({hour, list}: ListItemDataProps) => {
@@ -422,26 +426,34 @@ export const Cart = () => {
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }>
-            <FlatList
-              data={grouped}
-              style={styles.listStyle}
-              renderItem={({item}) => {
-                return basketItem?.length === 0 ? (
-                  <EmptyList
-                    image={require('../../../../assets/Images/emptyCart.png')}
-                    title="FIND PLAN"
-                    message="Oops! Your basket is still empty"
-                    onPress={() => navigation.goBack()}
-                  />
-                ) : (
-                  // <ListItems
-                  //   hour={eachTime}
-                  //   date={eachDate}
-                  //   list={route?.params?.cartItems}
-                  //   styles={styles}
-                  // />
-                  <View>
-                    {/* <List
+            {/* {grouped.length === 0 ? (
+              <ActivityIndicator
+                animating={refreshing}
+                color={'green'}
+                size={'large'}
+              />
+            ) : ( */}
+            {grouped.length !== 0 && (
+              <FlatList
+                data={grouped}
+                style={styles.listStyle}
+                renderItem={({item}) => {
+                  return basketItem?.length === 0 ? (
+                    <EmptyList
+                      image={require('../../../../assets/Images/emptyCart.png')}
+                      title="FIND PLAN"
+                      message="Oops! Your basket is still empty"
+                      onPress={() => navigation.goBack()}
+                    />
+                  ) : (
+                    // <ListItems
+                    //   hour={eachTime}
+                    //   date={eachDate}
+                    //   list={route?.params?.cartItems}
+                    //   styles={styles}
+                    // />
+                    <View>
+                      {/* <List
                       plantime={item?.MenuPlan?.MenuplanDetail?.deliveryTime}
                       date={item?.MenuPlan?.MenuplanDetail?.plandate}
                       // planDetails={Object.values(item)}
@@ -456,61 +468,64 @@ export const Cart = () => {
                       time={item?.MenuPlan?.MenuplanDetail?.plantype}
                       basketId={item?.id}
                     /> */}
-                    {route?.params?.plan === 'plan' ? (
-                      <List
-                        plantime={item?.deliveryDate}
-                        date={item?.deliveryDate}
-                        planDetails={item?.data}
-                        styles={styles}
-                        plandiff={plan}
-                        planName={route?.params?.planName}
-                        allDetails={item?.data}
-                        // imageUrl={
-                        //   item?.MenuPlan?.MenuplanDetail?.MenuItem?.imageUrl
-                        // }
-                        // itemName={item?.MenuPlan?.name}
-                        // price={item?.amount}
-                        // delivery={item?.deliveryAddress}
-                        // count={item?.quantity}
-                        // time={item?.MenuPlan?.MenuplanDetail?.plantype}
-                        // basketId={item?.id}
-                      />
-                    ) : (
-                      <List
-                        plantime={item?.MenuPlan?.MenuplanDetail?.deliveryTime}
-                        date={item?.deliveryDate}
-                        planDetails={item?.data}
-                        styles={styles}
-                        allDetails={item?.data}
-                        // imageUrl={
-                        //   item?.MenuPlan?.MenuplanDetail?.MenuItem?.imageUrl
-                        // }
-                        // itemName={item?.MenuPlan?.name}
-                        // price={item?.amount}
-                        // delivery={item?.deliveryAddress}
-                        // count={item?.quantity}
-                        // time={item?.MenuPlan?.MenuplanDetail?.plantype}
-                        // basketId={item?.id}
-                      />
-                    )}
-                  </View>
-                );
-              }}
-              // pagingEnabled
-              // nestedScrollEnabled
-              showsHorizontalScrollIndicator={false}
-              showsVerticalScrollIndicator={false}
-              // {...flatListOptimizationProps}
-              keyExtractor={() => shortid.generate()}
-              ListEmptyComponent={
-                <EmptyList
-                  image={require('../../../../assets/Images/emptyCart.png')}
-                  title="FIND PLAN"
-                  message="Oops! Your basket is still empty"
-                  onPress={() => navigation.goBack()}
-                />
-              }
-            />
+                      {route?.params?.plan === 'plan' ? (
+                        <List
+                          plantime={item?.deliveryDate}
+                          date={item?.deliveryDate}
+                          planDetails={item?.data}
+                          styles={styles}
+                          plandiff={plan}
+                          planName={route?.params?.planName}
+                          allDetails={item?.data}
+                          // imageUrl={
+                          //   item?.MenuPlan?.MenuplanDetail?.MenuItem?.imageUrl
+                          // }
+                          // itemName={item?.MenuPlan?.name}
+                          // price={item?.amount}
+                          // delivery={item?.deliveryAddress}
+                          // count={item?.quantity}
+                          // time={item?.MenuPlan?.MenuplanDetail?.plantype}
+                          // basketId={item?.id}
+                        />
+                      ) : (
+                        <List
+                          plantime={
+                            item?.MenuPlan?.MenuplanDetail?.deliveryTime
+                          }
+                          date={item?.deliveryDate}
+                          planDetails={item?.data}
+                          styles={styles}
+                          allDetails={item?.data}
+                          // imageUrl={
+                          //   item?.MenuPlan?.MenuplanDetail?.MenuItem?.imageUrl
+                          // }
+                          // itemName={item?.MenuPlan?.name}
+                          // price={item?.amount}
+                          // delivery={item?.deliveryAddress}
+                          // count={item?.quantity}
+                          // time={item?.MenuPlan?.MenuplanDetail?.plantype}
+                          // basketId={item?.id}
+                        />
+                      )}
+                    </View>
+                  );
+                }}
+                // pagingEnabled
+                // nestedScrollEnabled
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+                // {...flatListOptimizationProps}
+                keyExtractor={() => shortid.generate()}
+                ListEmptyComponent={
+                  <EmptyList
+                    image={require('../../../../assets/Images/emptyCart.png')}
+                    title="FIND PLAN"
+                    message="Oops! Your basket is still empty"
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+              />
+            )}
           </ScrollView>
 
           {/* <ListItems list={route?.params?.cartItems} styles={styles} /> */}
@@ -604,7 +619,7 @@ export const Cart = () => {
                   btnStyles={styles.btnStyles}>
                   <View style={styles.radioSection}>
                     <Text style={styles.paymentText}>Payment Method</Text>
-                    {isLiked.map((item) => (
+                    {isLiked?.map((item) => (
                       <RadioButton
                         onPress={() => onRadioBtnClick(item)}
                         selected={item.selected}
