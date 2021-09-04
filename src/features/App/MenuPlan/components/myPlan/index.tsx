@@ -236,7 +236,7 @@ export const MyPlans = ({findPlan}: Props) => {
   // };
 
   useEffect(() => {
-    groupBasketItem();
+     groupBasketItem();
   }, []);
 
   const Item = ({
