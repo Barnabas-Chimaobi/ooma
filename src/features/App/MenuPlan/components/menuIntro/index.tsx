@@ -44,10 +44,12 @@ const Slide = ({data}: DataProps): any => {
 
   useEffect(() => {
     const getBranchId = async () => {
-      const id: any = await AsyncStorage.getItem('branchId');
+      const branch = await AsyncStorage.getItem('branchId');
+      const newbranch = JSON.parse(branch);
+      //  setBranch(newbranch);
       // setBranchId(id);
 
-      menuPlan(id || '82059935-89dc-4daf-aff3-adcf997d6859');
+      menuPlan(newbranch);
     };
     console.log('allplannnnnsssseccccccc');
 

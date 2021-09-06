@@ -56,10 +56,12 @@ const Explore = () => {
     getAllCategories();
   };
 
-  const getAllCategories = () => {
+  const getAllCategories = async () => {
+    const branch = await AsyncStorage.getItem('branchId');
+    const newbranch = JSON.parse(branch);
     Promise.all([
-      GetAllMenuItemCategory('82059935-89dc-4daf-aff3-adcf997d6859'),
-      GetAllMenuPlanCategory('82059935-89dc-4daf-aff3-adcf997d6859'),
+      GetAllMenuItemCategory(newbranch),
+      GetAllMenuPlanCategory(newbranch),
     ])
       .then((values) => {
         let [itemCategories, planCategories] = values;
@@ -75,10 +77,9 @@ const Explore = () => {
   };
 
   const search = async () => {
-    const getSearch = await SearchMenuItemAndMenuPlan(
-      input,
-      '82059935-89dc-4daf-aff3-adcf997d6859',
-    );
+    const branch = await AsyncStorage.getItem('branchId');
+    const newbranch = JSON.parse(branch);
+    const getSearch = await SearchMenuItemAndMenuPlan(input, newbranch);
     console.log(getSearch, 'searchresultsssss');
   };
 

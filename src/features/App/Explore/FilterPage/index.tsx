@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { View, ScrollView } from 'react-native';
-import { Divider } from 'react-native-elements';
-import { Slider, Radio, Button, SimpleHeader } from '../../../../components';
+import React, {useEffect, useState} from 'react';
+import {View, ScrollView} from 'react-native';
+import {Divider} from 'react-native-elements';
+import {Slider, Radio, Button, SimpleHeader} from '../../../../components';
 import S from './styles';
 import {
   clearAll,
@@ -9,12 +9,12 @@ import {
   useCategory,
   useFilter,
 } from '../../../../reducers';
-import { useSelector, useDispatch } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
-import { RootState, AppDispatch } from '../../../../store';
+import {useSelector, useDispatch} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
+import {RootState, AppDispatch} from '../../../../store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { filterMenuItems } from '../../../../FetchData';
-import { useMenuItemByCategory } from '../../../../reducers';
+import {filterMenuItems} from '../../../../FetchData';
+import {useMenuItemByCategory} from '../../../../reducers';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {
   BallIndicator,
@@ -62,10 +62,12 @@ const Filter = () => {
   const combination1: string = sorts !== '' ? sorts : '';
 
   const filterMenuItem = async () => {
+    const branch = await AsyncStorage.getItem('branchId');
+    const newbranch = JSON.parse(branch);
     // loading(true, false);
     setLoader(true);
     const filteredItem = await filterMenuItems(
-      branchId,
+      newbranch,
       1,
       category1,
       minPrice1,
@@ -73,10 +75,9 @@ const Filter = () => {
       combination1,
     );
     setLoader(false);
-    navigation.navigate('SelectedCategory',{filteredItem});
+    navigation.navigate('SelectedCategory', {filteredItem});
     console.log(filteredItem.length, 'filteredItem');
     dispatch(useMenuItemByCategory(filteredItem));
-
   };
 
   const setTitle = (title: any) => {
@@ -135,14 +136,14 @@ const Filter = () => {
 
   return (
     <View style={S.mainStyle}>
-      <SimpleHeader style={{ paddingLeft: 10 }} />
+      <SimpleHeader style={{paddingLeft: 10}} />
       <Spinner
         visible={loader}
         // textStyle={styles.spinnerTextStyle}
         overlayColor="rgba(66, 66, 66,0.6)"
         customIndicator={<BallIndicator color="white" />}
       />
-      <ScrollView style={{ flex: 1, marginBottom: 50 }}>
+      <ScrollView style={{flex: 1, marginBottom: 50}}>
         <Radio
           title="Category"
           title1="Popular"

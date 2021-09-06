@@ -90,6 +90,7 @@ const Home = () => {
     const unsubscribe = navigation.addListener('focus', () => {
       getMenuPlansForYouCategory();
     });
+    // getMenuPlansForYouCategory();
   }, [0]);
   //  const {categories} = useSelector(
   //    (state: RootState) => state.itemCategory,
@@ -143,15 +144,15 @@ const Home = () => {
     (item) => item?.ItemCategory?.description,
   );
 
-  console.log(
-    menuPlanCategories,
-    firstCategory1,
-    secondCategory1,
-    thirdCategory1,
-    '====actegoriesss ====eachcategorynaje',
-  );
+  // console.log(
+  //   menuPlanCategories,
+  //   firstCategory1,
+  //   secondCategory1,
+  //   thirdCategory1,
+  //   '====actegoriesss ====eachcategorynaje',
+  // );
 
-  console.log(menuPlansMenuItem, 'plapalapllappalappapalpapp');
+  // console.log(menuPlansMenuItem, 'plapalapllappalappapalpapp');
 
   const renderItems = ({item}) => {
     return (

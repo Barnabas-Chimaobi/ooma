@@ -10,7 +10,7 @@ import {colors} from '../../../../colors';
 const RenderItems = ({item}: any) => {
   // console.log(
   let ones = item?.data?.map((item) => item?.data?.map((item) => item));
-  console.log(ones, 'ones=======');
+  // console.log(ones, 'ones=======');
   //   'item',
   // );
   return (
@@ -18,7 +18,7 @@ const RenderItems = ({item}: any) => {
       <Text>{item?.deliveryTime}</Text>
       {item?.data?.map((item) =>
         item?.data?.map((item) => {
-          console.log(item, 'item===========');
+          // console.log(item, 'item===========');
           return (
             <OrderCard
               details={item}
@@ -31,11 +31,16 @@ const RenderItems = ({item}: any) => {
                     randomValue={item?.itemData?.id}
                     mainStyle={S.totalStyle}
                   />
-                  <Total
-                    randomTitle="ITEM"
-                    randomValue={item?.itemData?.menuitemorders?.id}
-                    mainStyle={S.totalStyle}
-                  />
+                  {item?.itemData?.menuitemorders?.MenuItemOrderDetails?.map(
+                    (item, index) => (
+                      <Total
+                        randomTitle={`ITEM ${index + 1}`}
+                        randomValue={item?.Cart?.quantity}
+                        mainStyle={S.totalStyle}
+                      />
+                    ),
+                  )}
+
                   <Total
                     total={Number(item?.itemData?.menuitemorders?.total)}
                     totalTitle="PRICE"
@@ -65,7 +70,7 @@ const RenderItems = ({item}: any) => {
 };
 
 const Current = ({item}) => {
-  console.log(item, 'consoleditemmm======');
+  // console.log(item, 'consoleditemmm======');
   const data: any = [
     {
       orderId: 'ZS214298',

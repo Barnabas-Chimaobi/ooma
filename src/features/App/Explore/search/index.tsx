@@ -7,6 +7,7 @@ import {Icon} from 'react-native-elements';
 import S from '../styles';
 import {colors} from '../../../../colors';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SearchMenuitemandPlan = () => {
   const navigation = useNavigation();
@@ -14,10 +15,9 @@ const SearchMenuitemandPlan = () => {
   const [gottenSearch, setGottenSearch] = useState<any>([]);
 
   const search = async () => {
-    const getSearch = await SearchMenuItemAndMenuPlan(
-      input,
-      '82059935-89dc-4daf-aff3-adcf997d6859',
-    );
+    const branch = await AsyncStorage.getItem('branchId');
+    const newbranch = JSON.parse(branch);
+    const getSearch = await SearchMenuItemAndMenuPlan(input, newbranch);
     setGottenSearch(getSearch?.data);
     console.log(gottenSearch, 'searchresultsssss');
   };

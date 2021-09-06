@@ -26,15 +26,17 @@ const App = () => {
 
   useEffect(() => {
     const getMenuplanKart = async () => {
+      const branch = await AsyncStorage.getItem('branchId');
+      const newbranch = JSON.parse(branch);
       const userId = await AsyncStorage.getItem('userId');
       console.log(userId, 'useriddd');
 
-      const menuplanscart = await getMenuPlanCart(userId);
+      const menuplanscart = await getMenuPlanCart(userId, newbranch);
       setPlanCart(menuplanscart?.items);
       dispatch(basketStates(menuplanscart?.items));
-      console.log(menuplanscart, '=======planscarttttttt=========');
-      const all = menuplanscart?.items.map((item: any) => item.MenuPlan);
-      let all1 = all.map((item: any) => item.MenuPlanDetails);
+      // console.log(menuplanscart, '=======planscarttttttt=========');
+      const all = menuplanscart?.items?.map((item: any) => item.MenuPlan);
+      let all1 = all?.map((item: any) => item.MenuPlanDetails);
       setRefreshing(false);
       // console.log(all1, '=====all1======');
     };

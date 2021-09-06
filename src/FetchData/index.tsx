@@ -9,7 +9,7 @@ export const getRegion = async () => {
   try {
     const regionData = await api.get('/utils/region');
     const allRegion = regionData?.data?.data?.data?.rows || [];
-    console.log(allRegion, 'allRegionnnnn');
+    // console.log(allRegion, 'allRegionnnnn');
     return allRegion;
   } catch (error) {
     console.log(error);
@@ -22,7 +22,7 @@ export const getBranches = async (regionId: number) => {
       `/branches/getbyregion?regionId=${regionId}`,
     );
     const allBranches = branchData?.data?.data?.data?.rows || [];
-    console.log(allBranches, 'allbranchesss');
+    // console.log(allBranches, 'allbranchesss');
     return allBranches;
   } catch (error) {
     console.log(error);
@@ -32,10 +32,10 @@ export const getBranches = async (regionId: number) => {
 export const getMenuItemsByBranch = async (branchId: string, page: number) => {
   try {
     const menuData = await api.get(
-      `/menuitems?branchId=82059935-89dc-4daf-aff3-adcf997d6859&page=${page}`,
+      `/menuitems?branchId=${branchId}&page=${page}`,
     );
     const allMenuItemsByBranch = menuData?.data?.data?.items;
-    console.log(allMenuItemsByBranch, 'allmenuitemmmss');
+    // console.log(allMenuItemsByBranch, 'allmenuitemmmss=======================');
     return allMenuItemsByBranch;
   } catch (error) {
     console.log(error);
@@ -48,10 +48,10 @@ export const getMenuItemsSpecialOffer = async (
 ) => {
   try {
     const menuData = await api.get(
-      `/menuitems/filter?branchId=82059935-89dc-4daf-aff3-adcf997d6859&page=${page}&category=SPECIAL_OFFER`,
+      `/menuitems/filter?branchId=${branchId}&page=${page}&category=SPECIAL_OFFER`,
     );
     const allMenuItemsSpecialOffer = menuData?.data?.data.items;
-    console.log(allMenuItemsSpecialOffer, 'allmenuitemspecaloffer');
+    // console.log(allMenuItemsSpecialOffer, 'allmenuitemspecaloffer');
     return allMenuItemsSpecialOffer;
   } catch (error) {
     console.log(error);
@@ -62,10 +62,10 @@ export const getMenuItemsNew = async (branchId: string, page: number) => {
   console.log(page, 'paggeee');
   try {
     const menuData = await api.get(
-      `/menuitems/filter?branchId=82059935-89dc-4daf-aff3-adcf997d6859&page=${page}&category=NEW`,
+      `/menuitems/filter?branchId=${branchId}&page=${page}&category=NEW`,
     );
     const allMenuItemsNew = menuData?.data?.data.items;
-    console.log(allMenuItemsNew, 'allmenuitemsnew');
+    // console.log(allMenuItemsNew, 'allmenuitemsnew');
     return allMenuItemsNew;
   } catch (error) {
     console.log(error);
@@ -75,10 +75,10 @@ export const getMenuItemsNew = async (branchId: string, page: number) => {
 export const getMenuItemsPopular = async (branchId: string, page: number) => {
   try {
     const menuData = await api.get(
-      `/menuitems/filter?branchId=82059935-89dc-4daf-aff3-adcf997d6859&page=${page}&category=POPULAR`,
+      `/menuitems/filter?branchId=${branchId}&page=${page}&category=POPULAR`,
     );
     const allMenuItemsPopular = menuData?.data?.data.items;
-    console.log(allMenuItemsPopular, 'allMenuItemsPopular');
+    // console.log(allMenuItemsPopular, 'allMenuItemsPopular');
     return allMenuItemsPopular;
   } catch (error) {
     console.log(error);
@@ -89,7 +89,7 @@ export const getMenuItemsCategories = async (branchId: string) => {
   try {
     const menuData = await api.get(`/menuitems/categories`);
     const allMenuItemsCategories = menuData?.data?.data;
-    console.log(allMenuItemsCategories, 'allMenuItemsCategories');
+    // console.log(allMenuItemsCategories, 'allMenuItemsCategories');
     return allMenuItemsCategories;
   } catch (error) {
     console.log(error);
@@ -99,12 +99,10 @@ export const getMenuItemsCategories = async (branchId: string) => {
 export const GetAllMenuItemCategory = async (branchId: string) => {
   try {
     const menuItemCategory = await api.get(
-      `/menuitems/categories?branchId=${
-        branchId ? branchId : '82059935-89dc-4daf-aff3-adcf997d6859'
-      }`,
+      `/menuitems/categories?branchId=${branchId ? branchId : branchId}`,
     );
     const MenuItemCategories = menuItemCategory?.data?.data?.rows;
-    console.log(MenuItemCategories, 'MenuItemCategories');
+    // console.log(MenuItemCategories, 'MenuItemCategories');
     return MenuItemCategories;
   } catch (error) {
     console.log(error);
@@ -115,11 +113,7 @@ export const GetAllMenuItemCategory = async (branchId: string) => {
 export const GetAllMenuPlanCategory = async (branchId: string) => {
   try {
     const menuPlanCategory = await api.get(
-      `menuplans/categories/${
-        branchId
-          ? '82059935-89dc-4daf-aff3-adcf997d6859'
-          : '82059935-89dc-4daf-aff3-adcf997d6859'
-      }`,
+      `menuplans/categories/${branchId ? branchId : branchId}`,
     );
     const MenuPlanCategories = menuPlanCategory?.data?.data?.data?.rows;
     console.log(MenuPlanCategories, 'MenuPlanCategories');
@@ -139,7 +133,7 @@ export const SearchMenuItemByCategoryId = async (
       `menuitems/search?categoryId=${categoryId}&page=${page}`,
     );
     const MenuItemByCategoriesId = menuItemByCategory?.data;
-    console.log(MenuItemByCategoriesId, 'MenuItemByCategoriesId');
+    // console.log(MenuItemByCategoriesId, 'MenuItemByCategoriesId');
     return MenuItemByCategoriesId;
   } catch (error) {
     console.log(error);
@@ -155,7 +149,7 @@ export const SearchMenuItemAndMenuPlan = async (
       `explore?name=${name}&branchId=${branchId}`,
     );
     const MenuItemAndPlan = menuItemAndMenuPlan?.data;
-    console.log(MenuItemAndPlan, 'MenuItemByCategoriesId');
+    // console.log(MenuItemAndPlan, 'MenuItemByCategoriesId');
     return MenuItemAndPlan;
   } catch (error) {
     console.log(error);
@@ -166,7 +160,7 @@ export const getMenuItemsById = async (itemId: string) => {
   try {
     const singleMenuData = await api.get(`/menuitems/${itemId}/detail`);
     const menuItem = singleMenuData?.data?.data;
-    console.log(menuItem, 'menuItem');
+    // console.log(menuItem, 'menuItem');
     return menuItem;
   } catch (error) {
     console.log(error);
@@ -177,11 +171,11 @@ export const getMenuPlansByBranch = async (branchId: string, page: number) => {
   try {
     const MenuPlansData = await api.get(
       `/menuplans/plan/branch?branchId=${
-        branchId ? branchId : '82059935-89dc-4daf-aff3-adcf997d6859'
+        branchId ? branchId : branchId
       }&page=${page}`,
     );
     const menuPlans = MenuPlansData?.data?.data?.data?.items;
-    console.log(menuPlans, 'menuPlanss');
+    // console.log(menuPlans, 'menuPlanss');
     return menuPlans;
   } catch (error) {
     console.log(error);
@@ -198,7 +192,7 @@ export const getMenuPlansByBranchAndCategory = async (
       `/menuplans/plan/branch/category?branchId=${branchId}&page=${page}&categoryid=${categoryId}`,
     );
     const menuPlans = MenuPlansData?.data?.data?.data?.items;
-    console.log(menuPlans, 'menuPlans');
+    // console.log(menuPlans, 'menuPlans');
     return menuPlans;
   } catch (error) {
     console.log(error);
@@ -208,7 +202,7 @@ export const getMenuPlansById = async (palnId: string) => {
   try {
     const MenuPlanData = await api.get(`/menuplans/${palnId}`);
     const menuPlan = MenuPlanData?.data?.data?.data;
-    console.log(menuPlan, 'menuPlan');
+    // console.log(menuPlan, 'menuPlan');
     return menuPlan;
   } catch (error) {
     console.log(error);
@@ -225,17 +219,9 @@ export const filterMenuItems = async (
 ) => {
   try {
     //82059935-89dc-4daf-aff3-adcf997d6859
-    console.log(
-      branchId,
-      page,
-      category,
-      minPrice,
-      maxPrice,
-      menuItemType,
-      'detailsssss',
-    );
+
     const MenuItemData = await api.get(
-      `/menuitems/filter?branchId=82059935-89dc-4daf-aff3-adcf997d6859&page=${page}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}&menuItemType=${menuItemType}`,
+      `/menuitems/filter?branchId=${branchId}&page=${page}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}&menuItemType=${menuItemType}`,
     );
     const menuItem = MenuItemData?.data.data.items;
     return menuItem;
@@ -249,7 +235,7 @@ export const getMenuPlanTime = async (branchId: string) => {
     const MenuPlanTime = await api.get(`/menuplans/time/branch/${branchId}`);
     // console.log(MenuPlanTime, 'MenuPlanDataMenuPlanDataMenuPlanData');
     const menuPlan = MenuPlanTime?.data?.data?.data?.rows;
-    console.log(menuPlan, 'menuPlanTime');
+    // console.log(menuPlan, 'menuPlanTime');
     return menuPlan;
   } catch (error) {
     console.log(error);
@@ -266,12 +252,12 @@ export const getMenuPlanDetailBydateAndtypePlanId = async (
     const MenuPlanData = await api.get(
       `/menuplans/detail/plan/datetype?date=${date}&menuplanId=${menuPlanId}&plantype=${planType}&page=${page}`,
     );
-    console.log(
-      MenuPlanData?.data?.data?.data?.items,
-      'MenuPlanDataMenuPlanDataMenuPlanData',
-    );
+    // console.log(
+    //   MenuPlanData?.data?.data?.data?.items,
+    //   'MenuPlanDataMenuPlanDataMenuPlanData',
+    // );
     const menuPlans = MenuPlanData?.data?.data?.data?.items;
-    console.log(menuPlans, 'menuPlan');
+    // console.log(menuPlans, 'menuPlan');
     return menuPlans;
   } catch (error) {
     console.log(error);
@@ -287,9 +273,9 @@ export const getMenuPlanDetailBydatePlanId = async (
     const MenuPlanData = await api.get(
       `/menuplans/detail/plan/date_id?date=${date}&menuplanId=${menuPlanId}&page=${page}`,
     );
-    console.log(MenuPlanData, 'MenuPlanDataMenuPlanDataMenuPlanData....');
+    // console.log(MenuPlanData, 'MenuPlanDataMenuPlanDataMenuPlanData....');
     const menuPlan = MenuPlanData?.data?.data?.data;
-    console.log(menuPlan, 'menuPlan');
+    // console.log(menuPlan, 'menuPlan');
     return menuPlan;
   } catch (error) {
     console.log(error);
@@ -304,15 +290,15 @@ const body = {
   amount: 1000,
 };
 
-export const getMenuitemCart = async (id: any) => {
+export const getMenuitemCart = async (branchId: any, id: any) => {
   console.log(id, '===userId===');
   try {
     const MenuItemCart = await api.get(
-      `/orders/cart/menuitem?page=1&branchId=82059935-89dc-4daf-aff3-adcf997d6859&userId=${id}`,
+      `/orders/cart/menuitem?page=1&branchId=${branchId}&userId=${id}`,
     );
-    console.log(MenuItemCart, 'MenuPlanDataMenuPlanDataMenuPlanData....');
+    // console.log(MenuItemCart, 'MenuPlanDataMenuPlanDataMenuPlanData....');
     const menuCart = MenuItemCart?.data?.data;
-    console.log(menuCart, 'menuPlan');
+    // console.log(menuCart, 'menuPlan');
     return menuCart;
   } catch (error) {
     console.log(error);
@@ -320,14 +306,14 @@ export const getMenuitemCart = async (id: any) => {
   }
 };
 
-export const getMenuPlanCart = async (id: any) => {
+export const getMenuPlanCart = async (id: any, branchId: any) => {
   try {
     const MenuItemCart = await api.get(
-      `/orders/cart/menuplan?page=1&branchId=82059935-89dc-4daf-aff3-adcf997d6859&userId=${id}`,
+      `/orders/cart/menuplan?page=1&branchId=${branchId}&userId=${id}`,
     );
-    console.log(MenuItemCart, 'MenuPlanDataMenuPlanDataMenuPlanData....');
+    // console.log(MenuItemCart, 'MenuPlanDataMenuPlanDataMenuPlanData....');
     const menuCart = MenuItemCart?.data?.data;
-    console.log(menuCart, 'menuPlan');
+    // console.log(menuCart, 'menuPlan');
     return menuCart;
   } catch (error) {
     console.log(error);
@@ -462,7 +448,7 @@ export const createMenuItemOrderDetail = async (body: any, orderId: any) => {
       //"friendPhoneNumber": "090540904" // optional
     });
     const addedCart = cart?.data?.data;
-    console.log(addedCart, 'order completed');
+    // console.log(addedCart, 'order completed');
     return addedCart;
   } catch (err) {
     console.log(err, 'orderError');
@@ -490,9 +476,9 @@ export const getMenuPlanOrders = async (id: any) => {
     const MenuItemCart = await api.get(
       `orders/menuplan/detail?page=${1}&userId=${id}`,
     );
-    console.log(MenuItemCart, 'MenuPlanDataMenuPlanDataMenuPlanData....');
+    // console.log(MenuItemCart, 'MenuPlanDataMenuPlanDataMenuPlanData....');
     const menuCart = MenuItemCart?.data?.data;
-    console.log(menuCart, 'menuPlan');
+    // console.log(menuCart, 'menuPlan');
     return menuCart;
   } catch (error) {
     console.log(error);
@@ -505,9 +491,9 @@ export const getMenuItemOrders = async (id: any) => {
     const MenuItemCart = await api.get(
       `/orders/menuitem/detail?page=${1}&userId=${id}`,
     );
-    console.log(MenuItemCart, 'MenuPlanDataMenuPlanDataMenuPlanData....');
+    // console.log(MenuItemCart, 'MenuPlanDataMenuPlanDataMenuPlanData....');
     const menuCart = MenuItemCart?.data?.data;
-    console.log(menuCart, 'menuPlan');
+    // console.log(menuCart, 'menuPlan');
     return menuCart;
   } catch (error) {
     console.log(error);
@@ -521,7 +507,7 @@ export const getOrderById = async (id: any) => {
       `/orders/byId?orderId=${id}&isMenuplan=${true}`,
     );
     const menuOrderId = MenuItemCart?.data;
-    console.log(menuOrderId, 'menuPlanOrderByidddd');
+    // console.log(menuOrderId, 'menuPlanOrderByidddd');
     return menuOrderId;
   } catch (error) {
     console.log(error);
@@ -537,7 +523,7 @@ export const getPlanCatId = async (branch: any, id: any) => {
       // `/menuplans/plan/branch/category?branchId=${branch}&page=${1}&categoryid=${id}`,
     );
     const menuOrderId = MenuItemCart?.data?.data?.data?.items;
-    console.log(menuOrderId, 'categoryidddss==');
+    // console.log(menuOrderId, 'categoryidddss==');
     return menuOrderId;
   } catch (error) {
     console.log(error);
@@ -557,7 +543,7 @@ export const generatePaymentRef = async (body: any) => {
       currency: 'NGN',
     });
     const generated = payment.data;
-    console.log(generated, 'categoryidddss==');
+    // console.log(generated, 'categoryidddss==');
     return generated;
   } catch (error) {
     console.log(error);
@@ -570,7 +556,7 @@ export const verifyPayment = async (key: any) => {
   try {
     const confirmPayment = await api.get(`payments/verify/${key}`);
     const generated = confirmPayment.data;
-    console.log(generated, 'categoryidddss==');
+    // console.log(generated, 'categoryidddss==');
     return generated;
   } catch (error) {
     console.log(error);

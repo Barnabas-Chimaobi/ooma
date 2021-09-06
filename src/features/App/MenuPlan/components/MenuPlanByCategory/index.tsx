@@ -41,9 +41,11 @@ const AllMenuPlanByCategory: FC<selectedProps> = ({route}) => {
   useEffect(() => {
     console.log('planssssss');
     const getMenuPlans = async () => {
+      const branch = await AsyncStorage.getItem('branchId');
+      const newbranch = JSON.parse(branch);
       // Remember to set real branch value
       const menuPlans = await getMenuPlansByBranchAndCategory(
-        '82059935-89dc-4daf-aff3-adcf997d6859',
+        newbranch,
         1,
         categoryId,
       );

@@ -44,7 +44,7 @@ export const List = ({
   planName,
   allDetails,
 }: ListDataProps) => {
-  console.log(planDetails, plantime, plandiff, '===planDetailsss===');
+  // console.log(planDetails, plantime, plandiff, '===planDetailsss===');
 
   //  const remapp = (Id) => {
   //    console.log('ASSIGN ID: ', assignmentId);
@@ -106,7 +106,7 @@ export const List = ({
   // }
 
   const renderItem = ({item, index}) => {
-    console.log(index, 'indexxxx====');
+    // console.log(index, 'indexxxx====');
     return (
       <View>
         <View>
@@ -176,7 +176,7 @@ export const List = ({
   const [toggle, setToggle] = useState(false);
   const toggleView = () => {
     setToggle(!toggle);
-    console.log('consoleedddd');
+    // console.log('consoleedddd');
   };
 
   const format = (amount: Number) => {

@@ -60,9 +60,11 @@ const MoreAction: FC<IProps> = ({
   const getBasket = async () => {
     // const getMenuplanKart = async () => {
     const userId = await AsyncStorage.getItem('userId');
+    const branch = await AsyncStorage.getItem('branchId');
+    const newbranch = JSON.parse(branch);
     console.log(userId, 'useriddd');
 
-    const menuplanscart = await getMenuPlanCart(userId);
+    const menuplanscart = await getMenuPlanCart(userId, newbranch);
     dispatch(basketStates(menuplanscart?.items));
     console.log(menuplanscart, '=======planscarttttttt=========');
     const all = menuplanscart?.items.map((item: any) => item.MenuPlan);
@@ -72,12 +74,14 @@ const MoreAction: FC<IProps> = ({
   };
 
   const getCart = async () => {
+    const branch = await AsyncStorage.getItem('branchId');
+    const newbranch = JSON.parse(branch);
     const userId = await AsyncStorage.getItem('userId');
     console.log(userId, 'useriddd');
     // const gottenId = JSON.parse(userId);
 
     try {
-      const menuICart = await getMenuitemCart(userId);
+      const menuICart = await getMenuitemCart(newbranch, userId);
       dispatch(cartStates(menuICart?.items));
       console.log(menuICart, 'cart ===value');
     } catch (error) {}

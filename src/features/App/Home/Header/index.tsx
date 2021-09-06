@@ -53,6 +53,7 @@ import {getBreakFastMenuItems} from '../../../../reducers/BreakFastMenu';
 import {useMenuItemCategory} from '../../../../reducers/ItemCategory';
 import {useMenuPlanCategory} from '../../../../reducers/MenuPlanCategory';
 import {getMenuItemsHistory} from '../../../../reducers/HistoryMenu';
+import {getMenuItemsPlanForYou} from '../../../../reducers/MenuPlansForYou';
 import {AppDispatch} from '../../../../store';
 interface Props {
   closeModal: () => void;
@@ -69,6 +70,7 @@ export default function Header() {
   const [asyncBranchId, setAsyncBranchId] = useState('');
   const [bName, setBname] = useState('');
   const [rName, setRname] = useState('');
+  const [branch, setBranch] = useState('');
   const dispatch: AppDispatch = useDispatch();
 
   // const handleGetRegion = async () => {
@@ -90,46 +92,56 @@ export default function Header() {
     }
   };
 
+  const anyBranch = async () => {
+    const branch = await AsyncStorage.getItem('branchId');
+    const newbranch = JSON.parse(branch);
+    setBranch(newbranch);
+  };
+
   useEffect(() => {
+    anyBranch();
     handleGetBranches();
-    const checkBranch = async () => {
-      if (await AsyncStorage.getItem('branchId')) {
-        const branchId = await AsyncStorage.getItem('branchId');
-        branchId && getAllMenuItems(branchId, 1);
-        // setShowModal(false);
-      }
-    };
+    // const checkBranch = async () => {
+    //   if (await AsyncStorage.getItem('branchId')) {
+    //     const branchId = await AsyncStorage.getItem('branchId');
+    //     branchId && getAllMenuItems(branchId, 1);
+    //     // setShowModal(false);
+    //   }
+    // };
     console.log('connssssoollleedddd');
     const handleData = async () => {
-      const branchId = await AsyncStorage.getItem('branchId');
-      const regionIds = await AsyncStorage.getItem('regionId');
+      const branch = await AsyncStorage.getItem('branchId');
+      const newbranch = JSON.parse(branch);
+      // setBranch(newbranch);
+      // const branchId = await AsyncStorage.getItem('branchId');
+      // const regionIds = await AsyncStorage.getItem('regionId');
       const regionName = await AsyncStorage.getItem('regionName');
       const branchName = await AsyncStorage.getItem('branchName');
 
       setBname(branchName);
       setRname(regionName);
-      console.log(regionName, branchName, 'regionbranch');
+      // console.log(regionName, branchName, 'regionbranch');
 
-      setRegionId(Number(regionIds));
-      setAsyncBranchId(String(branchId));
-      if (Number(regionIds) === 0) {
-        // handleGetRegion();
-        // setShowModal(!showModal);
-      } else if (branchId != null) {
-        // setShowModal(showModal);
-        // showBranches(Number(regionIds));
-      } else {
-        setRegionId(Number(regionIds));
-        showBranches(Number(regionIds));
-      }
+      // setRegionId(Number(regionIds));
+      // setAsyncBranchId(String(branchId));
+      // if (Number(regionIds) === 0) {
+      //   // handleGetRegion();
+      //   // setShowModal(!showModal);
+      // } else if (branchId != null) {
+      //   // setShowModal(showModal);
+      //   // showBranches(Number(regionIds));
+      // } else {
+      //   setRegionId(Number(regionIds));
+      //   showBranches(Number(regionIds));
+      // }
 
-      if (branchId != null) {
-        getAllMenuItems(asyncBranchId, 1);
-      }
+      // if (branch != null) {
+      getAllMenuItems(newbranch, 1);
+      // }
     };
 
     handleData();
-    checkBranch();
+    // checkBranch();
   }, []);
 
   // useEffect(() => {
@@ -174,7 +186,7 @@ export default function Header() {
   const getMenuPlanCategory = async (branchID: string) => {
     const planCategories = await GetAllMenuPlanCategory(branchID);
     dispatch(useMenuPlanCategory(planCategories));
-    console.log(planCategories, '====plancategory==========' + branchID);
+    // console.log(planCategories, '====plancategory==========' + branchID);
   };
 
   const getMenuPlansForYouCategory = async (branchID: string, page: number) => {
@@ -185,9 +197,8 @@ export default function Header() {
 
   const getMenuItem = async (branchID: string, page: number) => {
     const menuItem = await getMenuItemsByBranch(branchID, page);
-
     dispatch(getMenuItems(menuItem));
-    console.log(menuItem?.data?.item, 'newmenuitemmmmsss');
+    // console.log(menuItem, 'newmenuitemmmmsss=========================');
   };
   const getSpecial = async (branchID: string, page: number) => {
     const specialOffer = await getMenuItemsSpecialOffer(branchID, page);
@@ -233,17 +244,18 @@ export default function Header() {
 
   const getAllMenuItems = async (branchID: string, page: number) => {
     getMenuPlanCategory(branchID);
-    getMenuPlansForYouCategory('82059935-89dc-4daf-aff3-adcf997d6859', page);
+    getMenuPlansForYouCategory(branchID, page);
     getMenuItem(branchID, page);
     getNew(branchID, page);
     getPopular(branchID, page);
     getSpecial(branchID, page);
-    const allCategory = await GetAllMenuItemCategory(branchId);
+    const allCategory = await GetAllMenuItemCategory(branchID);
+    console.log(allCategory, 'alllcategoryyyyyyy=====================');
     dispatch(useMenuItemCategory(allCategory));
     let shuffled = allCategory
-      .map((a: any) => ({sort: Math.random(), value: a}))
-      .sort((a: any, b: any) => a.sort - b.sort)
-      .map((a: any) => a.value.id);
+      ?.map((a: any) => ({sort: Math.random(), value: a}))
+      ?.sort((a: any, b: any) => a.sort - b.sort)
+      ?.map((a: any) => a.value.id);
     console.log(shuffled, 'shuffleddd');
     // const moreForYou = await SearchMenuItemByCategoryId(shuffled[1], page);
     if (allCategory != null) {

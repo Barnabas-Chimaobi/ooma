@@ -42,7 +42,7 @@ const UnitOrders = ({
   addons,
 }: any) => {
   let allAddons = JSON.parse(addons);
-  console.log(allAddons, 'addons======');
+  // console.log(allAddons, 'addons======');
 
   return (
     <>
@@ -61,14 +61,14 @@ const UnitOrders = ({
 const Adds = ({price, count, description, unitPrice, style, addons}: any) => {
   let allAdds = JSON.parse(addons);
   let newadd = JSON.parse(allAdds);
-  console.log(newadd, '====newwww===');
+  // console.log(newadd, '====newwww===');
   return (
     <>
       {newadd?.map((item) => (
         <View style={[S.UnitOrdersmainadds, style]}>
           <Text style={S.countStyle}>{`${item?.quantity}x`}</Text>
           <View style={{width: '70%', flexWrap: 'wrap'}}>
-            <Text style={S.descriptionStyle}>{item?.name}</Text>
+            <Text style={S.AddonsdescriptionStyle}>{item?.name}</Text>
             <PriceTag price={item?.initialPrice} clear />
           </View>
           <PriceTag price={item?.totalPrice} clear />
@@ -82,21 +82,21 @@ const OrderDetails = () => {
   const [value, setValue] = useState('');
   const navigation = useNavigation();
   const route = useRoute();
-  console.log(route?.params, 'consolledddFDetailssss=====');
+  // console.log(route?.params, 'consolledddFDetailssss=====');
 
   let newlist = route?.params?.detail;
-  console.log(newlist, 'newlist========');
+  // console.log(newlist, 'newlist========');
   useEffect(() => {}, [0]);
 
   let renderItem = ({item}) => {
-    console.log(newlist, 'individualllitemsssss========');
+    // console.log(newlist, 'individualllitemsssss========');
     return (
       // <ScrollView>
       <View>
         {item?.map((item) => {
           return item?.itemData?.menuitemorders?.MenuItemOrderDetails?.map(
             (item) => {
-              console.log(item, 'individualllitemsssss========');
+              // console.log(item, 'individualllitemsssss========');
               return (
                 <View>
                   <View style={S.main}>
@@ -243,7 +243,7 @@ const OrderDetails = () => {
           <View style={S.main}>
             {newlist?.itemData?.menuitemorders?.MenuItemOrderDetails?.map(
               (item) => {
-                console.log(item, 'itemsss=====');
+                // console.log(item, 'itemsss=====');
                 let allAdds = JSON.parse(item?.Cart?.addons);
                 let newadd = JSON.parse(allAdds);
                 let mapped = newadd?.map((item) => {
@@ -257,11 +257,11 @@ const OrderDetails = () => {
                     />
                   );
                 });
-                console.log(mapped, 'typeffffff===========');
-                console.log(
-                  newadd?.map((item) => item.name),
-                  'itemsssalllllll=====',
-                );
+                // console.log(mapped, 'typeffffff===========');
+                // console.log(
+                //   newadd?.map((item) => item.name),
+                //   'itemsssalllllll=====',
+                // );
                 return (
                   <View>
                     <OrderStack

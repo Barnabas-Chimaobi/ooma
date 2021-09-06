@@ -66,7 +66,7 @@ export class State extends Component {
     const verify = await verifyPayment(this.state.refdata);
     if (verify?.data.status === 'success') {
       ShowMessage(type.DONE, 'Payment was Successful');
-      this.props.navigation.navigate('HomeNav');
+      this.props.navigation.navigate('Home');
     } else {
       ShowMessage(type.ERROR, 'Failed Transaction. please retry');
     }
@@ -164,19 +164,20 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     elevation: 5,
     flexDirection: 'row',
-    padding: 15,
+    padding: 10,
     marginTop: 20,
     marginBottom: 10,
     justifyContent: 'space-between',
     borderRadius: 10,
+    height: 110,
   },
   image: {
-    height: 40,
-    width: 200,
+    height: 30,
+    width: 150,
   },
   paymentStack: {
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 5,
     marginTop: 10,
   },
   image1: {
@@ -185,7 +186,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   details: {
-    marginTop: 10,
+    marginTop: 5,
   },
   mainContainer: {
     padding: 10,
