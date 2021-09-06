@@ -33,6 +33,8 @@ const MyCart = () => {
   const cartItem = useSelector((state: RootState) => state.addedCart.payload);
 
   const cart = async () => {
+    const branch = await AsyncStorage.getItem('branchId');
+    const newbranch = JSON.parse(branch);
     const userId = await AsyncStorage.getItem('userId');
     console.log(userId, 'useriddd');
     // const gottenId = JSON.parse(userId);
@@ -40,7 +42,7 @@ const MyCart = () => {
     try {
       // console.log(newsum, 'cartttttt');
 
-      const menuICart = await getMenuitemCart(userId);
+      const menuICart = await getMenuitemCart(newbranch, userId);
       setCart(menuICart?.items);
       await dispatch(cartStates(menuICart?.items));
 

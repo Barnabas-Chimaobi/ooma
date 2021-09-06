@@ -106,6 +106,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   const [cartid, setCartId] = useState('');
   const [showTime, setShowTime] = useState(false);
   const [newItem, setNewItem] = useState([]);
+  const [branch, setBranch] = useState('');
 
   const visibility = () => {
     setVisible((previousState) => !previousState);
@@ -170,6 +171,9 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     const handleData = async () => {
       const regionName = await AsyncStorage.getItem('regionName');
       const branchName = await AsyncStorage.getItem('branchName');
+      const branch = await AsyncStorage.getItem('branchId');
+      const newbranch = JSON.parse(branch);
+      setBranch(newbranch);
 
       setBname(branchName);
       setRname(regionName);
@@ -195,7 +199,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
 
   const body1 = {
     isMenuPlan: true,
-    branchId: '82059935-89dc-4daf-aff3-adcf997d6859',
+    branchId: branch,
     subTotal: parseInt(total) * parseInt(itemQty) + parseInt(addsTotal),
     total: parseInt(total) * parseInt(itemQty) + parseInt(addsTotal),
     paymentMethod: paymentMethod,

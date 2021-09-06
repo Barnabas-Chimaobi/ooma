@@ -117,10 +117,12 @@ const MenuDetails: FC<IProps> = ({route}) => {
   };
 
   const getMenuplanKart = async () => {
+    const branch = await AsyncStorage.getItem('branchId');
+    const newbranch = JSON.parse(branch);
     const userId = await AsyncStorage.getItem('userId');
     console.log(userId, 'useriddd');
 
-    const menuplanscart = await getMenuPlanCart(userId);
+    const menuplanscart = await getMenuPlanCart(userId, newbranch);
     setPlanCart(menuplanscart?.items);
     // console.log(
     //   menuplanscart?.items.map((item: any) => item.MenuPlan),

@@ -75,8 +75,10 @@ const FilterBar = () => {
   });
 
   const filterMenuItem = async () => {
+    const branch = await AsyncStorage.getItem('branchId');
+    const newbranch = JSON.parse(branch);
     const filteredItem = await filterMenuItems(
-      branch,
+      newbranch,
       1,
       // category1,
       category,

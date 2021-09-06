@@ -72,9 +72,10 @@ const RadioSelect = ({
 
   useEffect(() => {
     const getBranchId = async () => {
-      const newBranchId: any = await AsyncStorage.getItem('branchId');
-      setBranchId(newBranchId);
-      console.log(newBranchId, 'branchiddddd');
+      const branch = await AsyncStorage.getItem('branchId');
+      const newbranch = JSON.parse(branch);
+      setBranchId(newbranch);
+      console.log(newbranch, 'branchiddddd');
     };
 
     getBranchId();
@@ -95,10 +96,12 @@ const RadioSelect = ({
   const toggleSwitch = () => setSwitchs((previousState) => !previousState);
 
   const filterMenuItem = async () => {
+    const branch = await AsyncStorage.getItem('branchId');
+    const newbranch = JSON.parse(branch);
     // setLoad(true);
     console.log(switchs, 'switchssss');
     const filteredItem = await filterMenuItems(
-      branchId,
+      newbranch,
       1,
       // category1,
       // category,

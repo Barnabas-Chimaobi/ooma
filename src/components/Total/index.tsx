@@ -28,13 +28,13 @@ const Total = ({
   randomTitleStyle,
   value,
 }: IProps) => {
-  console.log(
-    subTotal,
-    deliveryCharges,
-    total,
+  // console.log(
+  //   subTotal,
+  //   deliveryCharges,
+  //   total,
 
-    '=======listssss=====',
-  );
+  //   '=======listssss=====',
+  // );
   return (
     <View style={[S.main, mainStyle]}>
       {randomTitle && (
@@ -60,13 +60,15 @@ const Total = ({
         </View>
       ) : null} */}
       {total !== undefined && typeof total === 'number' && (
-        <View style={S.bodyStyle}>
+        <View style={S.bodyStyleAmout}>
           <Text style={totalTitle ? {} : S.textStyle1}>
             {totalTitle || `Total`}
           </Text>
-          <Text style={totalTitle ? {} : S.textStyle1}>
-            {`\u20A6${currencyFormat(total)}`}
-          </Text>
+          <View style={{marginLeft: '35%'}}>
+            <Text style={totalTitle ? {} : S.textStyle2}>
+              {`\u20A6${currencyFormat(total)}`}
+            </Text>
+          </View>
         </View>
       )}
     </View>

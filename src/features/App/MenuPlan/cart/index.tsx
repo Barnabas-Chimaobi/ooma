@@ -98,12 +98,12 @@ export const Cart = () => {
     basketItem?.forEach((item: any) => {
       groupByDate(item, basketData);
     });
-    basketData.forEach((item: any) => {
+    basketData?.forEach((item: any) => {
       //replace the already exist data with the grouped plan data
-      item['data'] = groupByPlanTypeDate(item.data);
+      item['data'] = groupByPlanTypeDate(item?.data);
     });
     setgrouped(basketData);
-    console.log('====baket items======= ', JSON.stringify(basketData));
+    // console.log('====baket items======= ', JSON.stringify(basketData));
     setRefreshing(false);
     return basketData;
   };
@@ -117,21 +117,21 @@ export const Cart = () => {
     menuplanscart?.data?.forEach((item: any) => {
       groupByDate1(item, basketData);
     });
-    basketData.forEach((item: any) => {
+    basketData?.forEach((item: any) => {
       //replace the already exist data with the grouped plan data
-      item['data'] = groupByPlanTypeDate1(item.data);
+      item['data'] = groupByPlanTypeDate1(item?.data);
     });
     setgrouped(basketData);
 
     if (basketData !== undefined) {
       const all = basketData?.map((item: any) =>
-        item.data?.map((item: any) =>
-          item.data?.map((item: any) => item.itemData.orderInfo.amount),
+        item?.data?.map((item: any) =>
+          item?.data?.map((item: any) => item?.itemData?.orderInfo?.amount),
         ),
       );
 
       const total = menuplanscart?.data?.map(
-        (item: any) => item.orderInfo.amount,
+        (item: any) => item?.orderInfo?.amount,
       );
       let newsum = total?.reduce(
         (sum: any, current: any) => parseInt(sum) + parseInt(current),
@@ -139,16 +139,16 @@ export const Cart = () => {
       setTotal(newsum);
     }
 
-    console.log('====baket itemsssssssss======= ', JSON.stringify(basketData));
+    // console.log('====baket itemsssssssss======= ', JSON.stringify(basketData));
     setRefreshing(false);
-    console.log(menuplanscart?.data, '=======planscartttttttssssss=========');
+    // console.log(menuplanscart?.data, '=======planscartttttttssssss=========');
     return basketData;
   };
 
   useEffect(() => {
     if (route?.params?.plan !== 'plan') {
       groupBasketItem();
-      console.log(basketItem, 'consolleedd========');
+      // console.log(basketItem, 'consolleedd========');
       if (basketItem !== undefined) {
         const all = route?.params?.cartItems?.map((item: any) => item.MenuPlan);
         const total = route?.params?.cartItems?.map((item: any) => item.amount);
@@ -156,7 +156,7 @@ export const Cart = () => {
           (sum: any, current: any) => parseInt(sum) + parseInt(current),
         );
         setTotal(newsum);
-        console.log(total, '====newwwsummmtoatlllll');
+        // console.log(total, '====newwwsummmtoatlllll');
         let all1 = all?.map((item: any) =>
           item?.MenuPlanDetails?.map(
             (item: any) => {
@@ -245,9 +245,9 @@ export const Cart = () => {
 
   const groupByDate = (itemData: any, basketItems: any) => {
     for (const item of basketItems) {
-      if (itemData.deliveryDate == item.deliveryDate) {
-        item.data.push({
-          planType: itemData.MenuPlan.MenuplanDetail.plantype,
+      if (itemData?.deliveryDate == item?.deliveryDate) {
+        item?.data?.push({
+          planType: itemData?.MenuPlan?.MenuplanDetail?.plantype,
           itemData,
         });
 
@@ -256,16 +256,18 @@ export const Cart = () => {
     }
     // if the basket item date doesnt exist before
     basketItems.push({
-      deliveryDate: itemData.deliveryDate,
-      data: [{planType: itemData.MenuPlan.MenuplanDetail.plantype, itemData}],
+      deliveryDate: itemData?.deliveryDate,
+      data: [
+        {planType: itemData?.MenuPlan?.MenuplanDetail?.plantype, itemData},
+      ],
     });
   };
 
   const groupByDate1 = (itemData: any, basketItems: any) => {
     for (const item of basketItems) {
-      if (itemData.orderInfo.deliveryDate == item.deliveryDate) {
+      if (itemData?.orderInfo?.deliveryDate == item?.deliveryDate) {
         item.data.push({
-          planType: itemData.orderInfo.MenuPlanDetail.plantype,
+          planType: itemData?.orderInfo?.MenuPlanDetail?.plantype,
           itemData,
         });
 
@@ -274,8 +276,10 @@ export const Cart = () => {
     }
     // if the basket item date doesnt exist before
     basketItems.push({
-      deliveryDate: itemData.orderInfo.deliveryDate,
-      data: [{planType: itemData.orderInfo.MenuPlanDetail.plantype, itemData}],
+      deliveryDate: itemData?.orderInfo?.deliveryDate,
+      data: [
+        {planType: itemData?.orderInfo?.MenuPlanDetail?.plantype, itemData},
+      ],
     });
   };
 
@@ -283,27 +287,27 @@ export const Cart = () => {
     let planTypeData: any = [];
     let planTypeArray: any = [];
     for (const item of basketItems) {
-      if (planTypeData.length == 0) {
+      if (planTypeData?.length == 0) {
         planTypeData.push({
-          planType: item.planType,
-          data: [{itemData: item.itemData}],
+          planType: item?.planType,
+          data: [{itemData: item?.itemData}],
         });
-        planTypeArray.push(item.planType);
+        planTypeArray.push(item?.planType);
       } else {
         for (const planData of planTypeData) {
-          if (planData.planType == item.planType) {
-            if (!checkIfPlanExist(item, planData.data)) {
-              planData.data.push({itemData: item.itemData});
+          if (planData.planType == item?.planType) {
+            if (!checkIfPlanExist(item, planData?.data)) {
+              planData.data.push({itemData: item?.itemData});
             }
             break;
           }
           //Ensure that unique plantype exist
-          if (!planTypeArray.includes(item.planType)) {
-            planTypeData.push({
-              planType: item.planType,
-              data: [{itemData: item.itemData}],
+          if (!planTypeArray?.includes(item.planType)) {
+            planTypeData?.push({
+              planType: item?.planType,
+              data: [{itemData: item?.itemData}],
             });
-            planTypeArray.push(item.planType);
+            planTypeArray.push(item?.planType);
           }
         }
       }
@@ -315,28 +319,28 @@ export const Cart = () => {
     let planTypeData: any = [];
     let planTypeArray: any = [];
     for (const item of basketItems) {
-      console.log(item, '=======itemmmm=====');
-      if (planTypeData.length == 0) {
-        planTypeData.push({
-          planType: item.planType,
-          data: [{itemData: item.itemData}],
+      // console.log(item, '=======itemmmm=====');
+      if (planTypeData?.length == 0) {
+        planTypeData?.push({
+          planType: item?.planType,
+          data: [{itemData: item?.itemData}],
         });
-        planTypeArray.push(item.planType);
+        planTypeArray.push(item?.planType);
       } else {
         for (const planData of planTypeData) {
-          if (planData.planType == item.planType) {
-            if (!checkIfPlanExist1(item, planData.data)) {
-              planData.data.push({itemData: item.itemData});
+          if (planData?.planType == item?.planType) {
+            if (!checkIfPlanExist1(item, planData?.data)) {
+              planData?.data?.push({itemData: item?.itemData});
             }
             break;
           }
           //Ensure that unique plantype exist
-          if (!planTypeArray.includes(item.planType)) {
-            planTypeData.push({
-              planType: item.planType,
-              data: [{itemData: item.itemData}],
+          if (!planTypeArray.includes(item?.planType)) {
+            planTypeData?.push({
+              planType: item?.planType,
+              data: [{itemData: item?.itemData}],
             });
-            planTypeArray.push(item.planType);
+            planTypeArray.push(item?.planType);
           }
         }
       }
@@ -346,7 +350,7 @@ export const Cart = () => {
 
   const checkIfPlanExist = (item: any, plans: any) => {
     for (const plan of plans) {
-      if (plan.itemData.id == item.itemData.id) {
+      if (plan?.itemData?.id == item?.itemData?.id) {
         return true;
       }
     }
@@ -356,7 +360,8 @@ export const Cart = () => {
   const checkIfPlanExist1 = (item: any, plans: any) => {
     for (const plan of plans) {
       if (
-        plan.itemData.orderInfo.basketid == item.itemData.orderInfo.basketId
+        plan?.itemData?.orderInfo?.basketid ==
+        item?.itemData?.orderInfo?.basketId
       ) {
         return true;
       }
@@ -433,7 +438,7 @@ export const Cart = () => {
                 size={'large'}
               />
             ) : ( */}
-            {grouped.length !== 0 && (
+            {grouped?.length !== 0 ? (
               <FlatList
                 data={grouped}
                 style={styles.listStyle}
@@ -524,6 +529,13 @@ export const Cart = () => {
                     onPress={() => navigation.goBack()}
                   />
                 }
+              />
+            ) : (
+              <EmptyList
+                image={require('../../../../assets/Images/emptyCart.png')}
+                title="FIND PLAN"
+                message="Oops! Your basket is still empty"
+                onPress={() => navigation.goBack()}
               />
             )}
           </ScrollView>
@@ -623,8 +635,8 @@ export const Cart = () => {
                       <RadioButton
                         onPress={() => onRadioBtnClick(item)}
                         selected={item.selected}
-                        key={item.id}>
-                        {item.name}
+                        key={item?.id}>
+                        {item?.name}
                       </RadioButton>
                     ))}
                   </View>

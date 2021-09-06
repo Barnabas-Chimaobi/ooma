@@ -96,7 +96,7 @@ const MenuTab = () => {
     // console.log(allPlan, '====alllrplannnn=======');
     setRoutes1(mapPlan);
     // setRoutes(mapPlan);
-    console.log(menuPlansMenuItem, 'allplannnnnssssecccccccitemmmsss');
+    // console.log(menuPlansMenuItem, 'allplannnnnssssecccccccitemmmsss');
   };
 
   const getMenuplanKart = async (id) => {
@@ -108,7 +108,7 @@ const MenuTab = () => {
     // setPlanCart(menuplanscart?.items);
     dispatch(getMenuItemsPlanForYou(menuplanscart));
     // setLoader(false);
-    console.log(menuplanscart, '=======planscategoryyyyyyyyy=========');
+    // console.log(menuplanscart, '=======planscategoryyyyyyyyy=========');
     setLoader(false);
     // console.log(all1, '=====all1======');
   };
@@ -118,10 +118,11 @@ const MenuTab = () => {
     // mapScenes();
     // console.log(params?.items, 'itemmmssss');
     const getBranchId = async () => {
-      const id: any = await AsyncStorage.getItem('branchId');
-      setBranchId(id);
+      const branch = await AsyncStorage.getItem('branchId');
+      const newbranch = JSON.parse(branch);
+      setBranchId(newbranch);
 
-      menuPlan('82059935-89dc-4daf-aff3-adcf997d6859');
+      menuPlan(newbranch);
     };
     // console.log(params.planId, '=====planid=====');
     getBranchId();
@@ -154,7 +155,7 @@ const MenuTab = () => {
   };
 
   const FamilyRoute = (item, index) => {
-    console.log(item, '====itemsssss===');
+    // console.log(item, '====itemsssss===');
     return (
       <View>
         <RefreshControl

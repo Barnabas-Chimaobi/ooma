@@ -128,8 +128,8 @@ const More: React.FC<Props> = ({navigation}) => {
 
       await setOrders(basketData);
       //  await dispatch(cartStates(menuICart?.items));
-      console.log(basketData, 'cart ===value');
-      console.log(orders?.items, 'cart ===value');
+      // console.log(basketData, 'cart ===value');
+      // console.log(orders?.items, 'cart ===value');
       setLoading(false);
       return basketData;
       // setRefreshing(false);
@@ -140,9 +140,9 @@ const More: React.FC<Props> = ({navigation}) => {
   };
 
   const groupByDate = (itemData: any, basketItems: any) => {
-    console.log(basketItems, 'basketitems====');
+    // console.log(basketItems, 'basketitems====');
     for (const item of basketItems) {
-      console.log(item, 'iiiiiiiiiitems====');
+      // console.log(item, 'iiiiiiiiiitems====');
       if (itemData?.menuitemorders?.deliveryTime == item?.deliveryTime) {
         item.data.push({
           planType: itemData?.menuitemorders?.deliveryTime,
@@ -252,7 +252,7 @@ const More: React.FC<Props> = ({navigation}) => {
       {/* <RefreshControl refreshing={loading} /> */}
       <ActivityIndicator size={'large'} color={'green'} animating={loading} />
       <ScrollView>
-        {items.map(({icon, name, borderBottom, routeTo}, idx) => (
+        {items?.map(({icon, name, borderBottom, routeTo}, idx) => (
           <TouchableOpacity
             onPress={() => handleNavigate(name)}
             key={idx}

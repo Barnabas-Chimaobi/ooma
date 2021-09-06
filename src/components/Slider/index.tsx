@@ -64,9 +64,11 @@ const SliderBar = ({
   };
 
   const filterMenuItem = async () => {
+    const branch = await AsyncStorage.getItem('branchId');
+    const newbranch = JSON.parse(branch);
     loading(true, false);
     const filteredItem = await filterMenuItems(
-      branchId,
+      newbranch,
       1,
       category1,
       minPrice1,

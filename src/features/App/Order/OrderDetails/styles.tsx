@@ -56,5 +56,10 @@ export default StyleSheet.create({
   descriptionStyle: {
     width: '100%',
     fontWeight: 'bold',
+    fontSize: 15,
+  },
+  AddonsdescriptionStyle: {
+    width: '100%',
+    // fontWeight: 'bold',
   },
 });

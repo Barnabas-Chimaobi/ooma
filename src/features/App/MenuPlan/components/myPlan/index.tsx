@@ -7,6 +7,7 @@ import {
   Dimensions,
   Image,
   RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
 
 import shortid from 'shortid';
@@ -59,7 +60,7 @@ export const MyPlans = ({findPlan}: Props) => {
   const navigation = useNavigation();
   const [isOpen, setOpen] = useState<boolean>(false);
   const [planOrders, setOrders] = useState([]);
-  const [loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState(true);
   const openDrawer = useCallback(() => {
     setOpen(true);
   }, []);
@@ -116,12 +117,12 @@ export const MyPlans = ({findPlan}: Props) => {
     const userId = await AsyncStorage.getItem('userId');
     console.log(userId, 'useriddd');
     // const gottenId = JSON.parse(userId);
-    setLoader(true);
+    // setLoader(true);
     try {
       // console.log(newsum, 'cartttttt');
       const order = await getMenuPlanOrders(userId);
 
-      console.log(order?.items, 'orderItemsss=======');
+      // console.log(order?.items, 'orderItemsss=======');
 
       order?.items?.forEach((item: any) => {
         console.log(item);
@@ -134,7 +135,7 @@ export const MyPlans = ({findPlan}: Props) => {
       });
 
       setOrders(basketData);
-      console.log('====baket items======= ', JSON.stringify(basketData));
+      // console.log('====baket items======= ', JSON.stringify(basketData));
       // setOrders(order?.items);
       //  await dispatch(cartStates(menuICart?.items));
       setLoader(false);
@@ -142,7 +143,8 @@ export const MyPlans = ({findPlan}: Props) => {
 
       // setRefreshing(false);
     } catch (error) {
-      console.log(error, '====errorrsss====');
+      setLoader(false);
+      // console.log(error, '====errorrsss====');
       // setRefreshing(false);
     }
   };
@@ -157,7 +159,7 @@ export const MyPlans = ({findPlan}: Props) => {
         });
       } else {
         for (const planData of planTypeData) {
-          console.log('======hello world=====', planData);
+          // console.log('======hello world=====', planData);
           if (planData.planType == item.planType) {
             if (!checkIfPlanExist(item, planData.data)) {
               planData.data.push({itemData: item.itemData});
@@ -185,9 +187,9 @@ export const MyPlans = ({findPlan}: Props) => {
   };
 
   const groupByDate = (itemData: any, basketItems: any) => {
-    console.log(basketItems, '=====panadetailsss=====');
+    // console.log(basketItems, '=====panadetailsss=====');
     for (const item of basketItems) {
-      console.log(item, '=====itemsssssss');
+      // console.log(item, '=====itemsssssss');
       if (itemData.orderInfo.orderName == item.planName) {
         item.data.push({
           planType: itemData.orderInfo.orderName,
@@ -312,15 +314,15 @@ export const MyPlans = ({findPlan}: Props) => {
             );
           }}
           {...flatListOptimizationProps}
-          // ListEmptyComponent={
-          //   <EmptyList
-          //     image={require('../../../../../assets/Images/emptyCart.png')}
-          //     title="FIND MEAL"
-          //     message="Oops! You don't have any ongoing plan"
-          //     onPress={() => navigation.goBack()}
-          //   />
-          // }
-          // ListHeaderComponent={<Header icon={icon} location={location} />}
+          ListEmptyComponent={
+            <EmptyList
+              image={require('../../../../../assets/Images/emptyCart.png')}
+              title="FIND MEAL"
+              message="Oops! You don't have any ongoing plan"
+              onPress={() => navigation.goBack()}
+            />
+          }
+          ListHeaderComponent={<Header icon={icon} location={location} />}
         />
       </View>
     );
@@ -345,11 +347,20 @@ export const MyPlans = ({findPlan}: Props) => {
             style={styles.listStyle}
             renderItem={({item}) => {
               return ( */}
-          <ListItem
-          // icon={item.icon}
-          // location={item.location}
-          // list={item.list}
-          />
+          {planOrders?.length === 0 ? (
+            <ActivityIndicator
+              color={'green'}
+              size={'large'}
+              animating={loader}
+            />
+          ) : (
+            <ListItem
+            // icon={item.icon}
+            // location={item.location}
+            // list={item.list}
+            />
+          )}
+
           {/* );
             }}
             {...flatListOptimizationProps}
