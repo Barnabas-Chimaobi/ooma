@@ -66,7 +66,7 @@ export class State extends Component {
     const verify = await verifyPayment(this.state.refdata);
     if (verify?.data.status === 'success') {
       ShowMessage(type.DONE, 'Payment was Successful');
-      this.props.navigation.navigate('Home');
+      this.props.navigation.navigate('HomeNav');
     } else {
       ShowMessage(type.ERROR, 'Failed Transaction. please retry');
     }

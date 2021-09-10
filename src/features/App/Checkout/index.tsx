@@ -154,10 +154,20 @@ const Checkout = () => {
   const orderNow = async () => {
     setLoading(true);
     console.log(body, 'idddddddd');
-    if (myAddress === '' && deliveryOption === 'Delivery') {
+    if (
+      myAddress === '' &&
+      deliveryOption === 'Delivery' &&
+      addressId === null
+    ) {
       ShowMessage(
         type.INFO,
         'please select a pick-up location and enter your delivery address',
+      ); // dispatch(cartStates(addedCart));
+      setLoading(false);
+    } else if (paymentMethod === '') {
+      ShowMessage(
+        type.INFO,
+        'please select a payment method to proceed with your order',
       ); // dispatch(cartStates(addedCart));
       setLoading(false);
     } else {
@@ -198,27 +208,36 @@ const Checkout = () => {
     // } else {
     const cart = await createMenuPlanOrder(body);
     // const orderNow = await createMenuItemOrderDetail(body, cart?.id);
-    if (cart?.statusCode === 201) {
+    if (paymentMethod === '') {
+      ShowMessage(
+        type.INFO,
+        'please select a payment method to proceed with your order',
+      ); // dispatch(cartStates(addedCart));
       setLoading(false);
-      ShowMessage(type.DONE, 'Order Placed successfully'); // dispatch(cartStates(addedCart));
-      if (payState === 'CARD') {
-        navigation.navigate('Payment', {
-          amount: totalAmount,
-          branchId: branch,
-          orderId: cart?.data?.data?.id,
-          paymentMethod: payState,
-        });
+    } else {
+      if (cart?.statusCode === 201) {
+        setLoading(false);
+        ShowMessage(type.DONE, 'Order Placed successfully'); // dispatch(cartStates(addedCart));
+        if (payState === 'CARD') {
+          navigation.navigate('Payment', {
+            amount: totalAmount,
+            branchId: branch,
+            orderId: cart?.data?.data?.id,
+            paymentMethod: payState,
+          });
+        } else {
+          setLoading(false);
+          navigation.navigate('HomeNav');
+        }
       } else {
         setLoading(false);
-        navigation.navigate('HomeNav');
+        ShowMessage(
+          type.ERROR,
+          'An error occured while placing your orders. Please try again',
+        ); // dispatch(cartStates(addedCart));
       }
-    } else {
-      setLoading(false);
-      ShowMessage(
-        type.ERROR,
-        'An error occured while placing your orders. Please try again',
-      ); // dispatch(cartStates(addedCart));
     }
+
     console.log(cart, 'cart');
     console.log(orderNow, 'cart');
     // }

@@ -10,10 +10,12 @@ interface IProps {
   children?: any;
   mainStyle?: object;
   details: any;
+  total: any;
   onPress?: () => void;
 }
 
 const OrderCard = ({
+  total,
   details,
   dateTitle,
   titlePosition,
@@ -28,7 +30,9 @@ const OrderCard = ({
     // <Pressable onPress={onPress}>
     <TouchableHighlight
       underlayColor=""
-      onPress={() => navigation.navigate('OrderDetails1', {detail: details})}>
+      onPress={() =>
+        navigation.navigate('OrderDetails1', {detail: details, total: total})
+      }>
       <View style={[S.main, mainStyle]}>
         <Text style={titlePosition == 'right' ? S.right : S.left}>
           {dateTitle}

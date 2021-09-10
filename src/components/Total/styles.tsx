@@ -27,6 +27,6 @@ export default StyleSheet.create({
   textStyle2: {
     fontSize: 14,
     fontWeight: 'bold',
-    paddingLeft: 150,
+    paddingLeft: 120,
   },
 });

@@ -18,6 +18,7 @@ const OrderStack = ({
   children,
   style,
   addons,
+  total,
 }: any) => {
   return (
     <>
@@ -80,121 +81,126 @@ const Adds = ({price, count, description, unitPrice, style, addons}: any) => {
 
 const OrderDetails = () => {
   const [value, setValue] = useState('');
+  const [newAmount, setNewAmount] = useState();
   const navigation = useNavigation();
   const route = useRoute();
   // console.log(route?.params, 'consolledddFDetailssss=====');
 
   let newlist = route?.params?.detail;
-  // console.log(newlist, 'newlist========');
-  useEffect(() => {}, [0]);
+  // console.log(newlist, route?.params?.total, 'newlist========');
+  useEffect(() => {
+    let amount = route?.params?.total;
+    setNewAmount(amount);
+    console.log(newAmount, 'newamount=====');
+  }, [0]);
 
-  let renderItem = ({item}) => {
-    // console.log(newlist, 'individualllitemsssss========');
-    return (
-      // <ScrollView>
-      <View>
-        {item?.map((item) => {
-          return item?.itemData?.menuitemorders?.MenuItemOrderDetails?.map(
-            (item) => {
-              // console.log(item, 'individualllitemsssss========');
-              return (
-                <View>
-                  <View style={S.main}>
-                    <Total
-                      randomTitle="ORDER ID"
-                      // value={item?.id}
-                      randomValue={item?.id}
-                      mainStyle={S.totalHeaderStyle}
-                      randomTitleStyle={S.totalHeadertitle}
-                    />
-                    <Total
-                      randomTitle="STATUS"
-                      randomValue={item?.status}
-                      mainStyle={S.totalHeaderStyle}
-                      randomTitleStyle={S.totalHeadertitle}
-                      // randomStyle={{
-                      //   color:
-                      //     item.status == 'Cancelled'
-                      //       ? colors.red
-                      //       : item.status == 'Delivered'
-                      //       ? colors.primary
-                      //       : colors.black,
-                      // }}
-                    />
-                    <Total
-                      randomTitle="Requested at:"
-                      randomValue={item?.itemData?.menuitemorders?.deliveryTime}
-                      mainStyle={S.totalHeaderStyle}
-                    />
-                  </View>
-                  {/* <View style={S.main}> */}
-                  <OrderStack
-                    headerCount={item?.quantity}
-                    headerDescription={
-                      item?.itemData?.MenuPlan?.MenuplanDetail?.MenuItem
-                        ?.itemName
-                    }
-                    headerPrice={item?.itemData?.menuitemorders?.amount}
-                    children={<Adds />}
-                    style={{position: 'relative', bottom: -25, zIndex: 10}}
-                  />
-                  {/* </View> */}
-                  <View style={S.main}>
-                    <Total
-                      total={item?.itemData?.amount}
-                      mainStyle={S.totalHeaderStyle}
-                    />
-                  </View>
-                  <OrderCard
-                    dateTitle="Collection Details"
-                    mainStyle={S.main}
-                    children={
-                      <>
-                        <Total
-                          randomTitle="Collection"
-                          randomValue={item?.itemData?.deliveryOption}
-                        />
-                        <Total
-                          randomTitle="Time of collection"
-                          randomValue={item?.itemData?.deliveryTime}
-                        />
-                        <Total
-                          randomTitle="Location"
-                          randomValue={item?.itemData?.deliveryAddress}
-                        />
-                      </>
-                    }
-                  />
-                  <OrderCard
-                    dateTitle="Payment Details"
-                    mainStyle={S.main}
-                    children={
-                      <>
-                        <Total
-                          randomTitle="style"
-                          randomValue={item?.itemData?.paymentType}
-                        />
-                        <Total
-                          randomTitle="Method"
-                          randomValue={item?.itemData?.paymentMethod}
-                        />
-                        <Total
-                          randomTitle="Location"
-                          randomValue={item?.itemData?.deliveryAddress}
-                        />
-                      </>
-                    }
-                  />
-                </View>
-              );
-            },
-          );
-        })}
-      </View>
-      //  </ScrollView>
-    );
-    // });
-  };
+  // let renderItem = ({item}) => {
+  //   // console.log(newlist, 'individualllitemsssss========');
+  //   return (
+  //     // <ScrollView>
+  //     <View>
+  //       {item?.map((item) => {
+  //         return item?.itemData?.menuitemorders?.MenuItemOrderDetails?.map(
+  //           (item) => {
+  //             // console.log(
+  //             //   route?.params?.detail,
+  //             //   'individualllitemsssss========',
+  //             // );
+  //             return (
+  //               <View>
+  //                 <View style={S.main}>
+  //                   <Total
+  //                     randomTitle="ORDER ID"
+  //                     // value={item?.id}
+  //                     randomValue={item?.id}
+  //                     mainStyle={S.totalHeaderStyle}
+  //                     randomTitleStyle={S.totalHeadertitle}
+  //                   />
+  //                   <Total
+  //                     randomTitle="STATUS"
+  //                     randomValue={item?.status}
+  //                     mainStyle={S.totalHeaderStyle}
+  //                     randomTitleStyle={S.totalHeadertitle}
+  //                     // randomStyle={{
+  //                     //   color:
+  //                     //     item.status == 'Cancelled'
+  //                     //       ? colors.red
+  //                     //       : item.status == 'Delivered'
+  //                     //       ? colors.primary
+  //                     //       : colors.black,
+  //                     // }}
+  //                   />
+  //                   <Total
+  //                     randomTitle="Requested at:"
+  //                     randomValue={item?.itemData?.menuitemorders?.deliveryTime}
+  //                     mainStyle={S.totalHeaderStyle}
+  //                   />
+  //                 </View>
+  //                 {/* <View style={S.main}> */}
+  //                 <OrderStack
+  //                   headerCount={item?.quantity}
+  //                   headerDescription={
+  //                     item?.itemData?.MenuPlan?.MenuplanDetail?.MenuItem
+  //                       ?.itemName
+  //                   }
+  //                   headerPrice={item?.itemData?.menuitemorders?.amount}
+  //                   children={<Adds />}
+  //                   style={{position: 'relative', bottom: -25, zIndex: 10}}
+  //                 />
+  //                 {/* </View> */}
+  //                 {/* <View style={S.main}>
+  //                   <Total total={amount} mainStyle={S.totalHeaderStyle} />
+  //                 </View> */}
+  //                 <OrderCard
+  //                   dateTitle="Collection Details"
+  //                   mainStyle={S.main}
+  //                   children={
+  //                     <>
+  //                       <Total
+  //                         randomTitle="Collection"
+  //                         randomValue={item?.itemData?.deliveryOption}
+  //                       />
+  //                       <Total
+  //                         randomTitle="Time of collection"
+  //                         randomValue={item?.itemData?.deliveryTime}
+  //                       />
+  //                       <Total
+  //                         randomTitle="Location"
+  //                         randomValue={item?.itemData?.deliveryAddress}
+  //                       />
+  //                     </>
+  //                   }
+  //                 />
+  //                 <OrderCard
+  //                   dateTitle="Payment Details"
+  //                   mainStyle={S.main}
+  //                   children={
+  //                     <>
+  //                       <Total
+  //                         randomTitle="style"
+  //                         randomValue={item?.itemData?.paymentType}
+  //                       />
+  //                       <Total
+  //                         randomTitle="Method"
+  //                         randomValue={item?.itemData?.paymentMethod}
+  //                       />
+  //                       <Total
+  //                         randomTitle="Location"
+  //                         randomValue={item?.itemData?.deliveryAddress}
+  //                       />
+  //                     </>
+  //                   }
+  //                 />
+  //               </View>
+  //             );
+  //           },
+  //         );
+  //       })}
+  //     </View>
+  //     //  </ScrollView>
+  //   );
+  //   // });
+  // };
 
   return (
     <View>
@@ -298,10 +304,7 @@ const OrderDetails = () => {
             )}
           </View>
           <View style={S.main}>
-            <Total
-              total={newlist?.itemData?.menuitemorders.amount}
-              mainStyle={S.totalHeaderStyle}
-            />
+            <Total total={Number(newAmount)} mainStyle={S.totalHeaderStyle} />
           </View>
           <OrderCard
             dateTitle="Collection Details"

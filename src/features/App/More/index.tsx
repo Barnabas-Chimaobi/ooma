@@ -34,56 +34,56 @@ const items: itemProp[] = [
     borderBottom: true,
     routeTo: 'Order',
   },
-  {
-    name: 'Order for a friend',
-    icon: <Feather name="users" size={18} />,
-    borderBottom: false,
-    routeTo: 'Explore',
-  },
-  {
-    name: 'Favourites',
-    icon: <FontAwesome name="heart-o" size={18} />,
-    borderBottom: true,
-    routeTo: 'Order',
-  },
-  {
-    name: 'Promotions/rewards',
-    icon: <Octicons name="tag" size={18} />,
-    borderBottom: false,
-    routeTo: 'Order',
-  },
-  {
-    name: 'Voucher',
-    icon: (
-      <MaterialCommunityIcons name="ticket-confirmation-outline" size={18} />
-    ),
-    borderBottom: false,
-    routeTo: 'Order',
-  },
-  {
-    name: 'Wallet',
-    icon: <Ionicons name="wallet-outline" size={18} />,
-    borderBottom: false,
-    routeTo: `'MyCartNavigation', { screen: 'Wallet' }`,
-  },
-  {
-    name: 'Rate Us',
-    icon: <Feather name="star" size={18} />,
-    borderBottom: true,
-    routeTo: 'RateUs',
-  },
-  {
-    name: 'Invite a friend',
-    icon: '',
-    borderBottom: false,
-    routeTo: 'Order',
-  },
-  {
-    name: 'Help',
-    icon: '',
-    borderBottom: false,
-    routeTo: 'Order',
-  },
+  // {
+  //   name: 'Order for a friend',
+  //   icon: <Feather name="users" size={18} />,
+  //   borderBottom: false,
+  //   routeTo: 'Explore',
+  // },
+  // {
+  //   name: 'Favourites',
+  //   icon: <FontAwesome name="heart-o" size={18} />,
+  //   borderBottom: true,
+  //   routeTo: 'Order',
+  // },
+  // {
+  //   name: 'Promotions/rewards',
+  //   icon: <Octicons name="tag" size={18} />,
+  //   borderBottom: false,
+  //   routeTo: 'Order',
+  // },
+  // {
+  //   name: 'Voucher',
+  //   icon: (
+  //     <MaterialCommunityIcons name="ticket-confirmation-outline" size={18} />
+  //   ),
+  //   borderBottom: false,
+  //   routeTo: 'Order',
+  // },
+  // {
+  //   name: 'Wallet',
+  //   icon: <Ionicons name="wallet-outline" size={18} />,
+  //   borderBottom: false,
+  //   routeTo: `'MyCartNavigation', { screen: 'Wallet' }`,
+  // },
+  // {
+  //   name: 'Rate Us',
+  //   icon: <Feather name="star" size={18} />,
+  //   borderBottom: true,
+  //   routeTo: 'RateUs',
+  // },
+  // {
+  //   name: 'Invite a friend',
+  //   icon: '',
+  //   borderBottom: false,
+  //   routeTo: 'Order',
+  // },
+  // {
+  //   name: 'Help',
+  //   icon: '',
+  //   borderBottom: false,
+  //   routeTo: 'Order',
+  // },
   {
     name: 'Logout',
     icon: '',
@@ -102,13 +102,14 @@ const More: React.FC<Props> = ({navigation}) => {
   const [dish, setDish] = useState(false);
   const [menuPlan, setMenuPlan] = useState(false);
   const [order, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const toggleOverlay = () => {
     setVisible(!visible);
   };
 
   const getOrders = async () => {
+    setLoading(true);
     const userId = await AsyncStorage.getItem('userId');
     console.log(userId, 'useriddd');
     let basketData: any = [];
@@ -204,6 +205,11 @@ const More: React.FC<Props> = ({navigation}) => {
   useEffect(() => {
     getOrders();
   }, []);
+
+  const onrefresh = () => {
+    setLoading(true);
+    getOrders();
+  };
   const handleNavigate = async (name: string) => {
     switch (name) {
       case 'My Order':
@@ -250,8 +256,15 @@ const More: React.FC<Props> = ({navigation}) => {
     <View style={{flex: 1, paddingHorizontal: 10}}>
       <SimpleHeader hasBottomBorder />
       {/* <RefreshControl refreshing={loading} /> */}
-      <ActivityIndicator size={'large'} color={'green'} animating={loading} />
-      <ScrollView>
+      {/* <ActivityIndicator size={'large'} color={'green'} animating={loading} /> */}
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            onRefresh={onrefresh}
+            size={20}
+            refreshing={loading}
+          />
+        }>
         {items?.map(({icon, name, borderBottom, routeTo}, idx) => (
           <TouchableOpacity
             onPress={() => handleNavigate(name)}

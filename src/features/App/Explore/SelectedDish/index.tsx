@@ -258,29 +258,33 @@ const CardItem: FC<IProps> = ({route, menu}) => {
         createdBy: myId,
       });
       const addedCart = await cart?.data?.data;
-      if (item == 'Buy now' && addedCart?.amount !== undefined) {
-        setLoading(false);
-        navigation.navigate('Checkout', {
-          branchId: menuItem?.branchId,
-          params: addedCart,
-          paramsBuynow: 'buynow',
-          // amount: menuItem?.amount,
-        });
-      } else if (addedCart?.amount !== undefined) {
-        setLoading(false);
-        ShowMessage(type.DONE, 'Item added to cart successfully'); // dispatch(cartStates(addedCart));
-        setCartItem(addedCart);
-        setCartId(addedCart?.id);
-        // if (menuPlan != 'menuPlan') {
-        navigation.goBack();
-        // }
-        console.log(addedCart, 'addedcaart');
+      if (body?.amount === 'NaN') {
+        ShowMessage(type.INFO, 'Please wait as the item details load ');
       } else {
-        setLoading(false);
-        ShowMessage(
-          type.ERROR,
-          'Sorry we could not process your order at this time',
-        );
+        if (item == 'Buy now' && addedCart?.amount !== undefined) {
+          setLoading(false);
+          navigation.navigate('Checkout', {
+            branchId: menuItem?.branchId,
+            params: addedCart,
+            paramsBuynow: 'buynow',
+            // amount: menuItem?.amount,
+          });
+        } else if (addedCart?.amount !== undefined) {
+          setLoading(false);
+          ShowMessage(type.DONE, 'Item added to cart successfully'); // dispatch(cartStates(addedCart));
+          setCartItem(addedCart);
+          setCartId(addedCart?.id);
+          // if (menuPlan != 'menuPlan') {
+          navigation.goBack();
+          // }
+          console.log(addedCart, 'addedcaart');
+        } else {
+          setLoading(false);
+          ShowMessage(
+            type.ERROR,
+            'Sorry we could not process your order at this time',
+          );
+        }
       }
     } catch (err) {
       setLoading(false);
@@ -298,7 +302,12 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     console.log(body, 'bodyyy');
 
     try {
-      if ((myAddress == '' && deliveryOption == 'Delivery') || time == '') {
+      if (
+        myAddress == '' &&
+        deliveryOption == 'Delivery' &&
+        time == '' &&
+        addressId === null
+      ) {
         setLoading(false);
         ShowMessage(
           type.INFO,

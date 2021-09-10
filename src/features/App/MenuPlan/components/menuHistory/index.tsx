@@ -259,7 +259,6 @@ export const MenuHistory = () => {
                 status={item?.planStatus}
                 time1={item?.planEnd}
                 planId={item?.planId}
-                // list={item?.menuplanorders?.MenuplanOrderDetails}
               />
             );
           }}

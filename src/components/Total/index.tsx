@@ -6,7 +6,7 @@ import {currencyFormat} from '../../Utils';
 interface IProps {
   subTotal?: number;
   deliveryCharges?: any;
-  total?: number;
+  total?: any;
   totalTitle?: string;
   mainStyle?: object;
   randomTitle?: string;
@@ -28,13 +28,7 @@ const Total = ({
   randomTitleStyle,
   value,
 }: IProps) => {
-  // console.log(
-  //   subTotal,
-  //   deliveryCharges,
-  //   total,
-
-  //   '=======listssss=====',
-  // );
+  console.log(total, typeof total, '=======listssss===ssss==');
   return (
     <View style={[S.main, mainStyle]}>
       {randomTitle && (

@@ -9,6 +9,7 @@ import {
   FlatList,
   ImageBackground,
   TouchableOpacity,
+  BackHandler,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useSelector, useDispatch} from 'react-redux';
@@ -86,10 +87,21 @@ const Home = () => {
     dispatch(getMenuItemsPlanForYou(menuItem));
   };
 
+  const backHandler = () => {
+    if (navigation.isFocused('Home')) {
+      BackHandler.exitApp();
+    } else {
+      navigation.goBack(null);
+    }
+    return true;
+  };
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       getMenuPlansForYouCategory();
     });
+    BackHandler.addEventListener('hardwareBackPress', backHandler);
+
     // getMenuPlansForYouCategory();
   }, [0]);
   //  const {categories} = useSelector(
