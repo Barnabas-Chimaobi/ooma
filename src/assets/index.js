@@ -39,8 +39,10 @@ const nologo = require('./Images/oomaNologo.png');
 const paystack = require('./Images/paystack.png');
 const flutter = require('./Images/flutterwave.png');
 const forward = require('./Images/forwardArrow.png');
+const oomaNew = require('./Images/ooma.jpeg');
 
 export {
+    oomaNew,
     forward,
     paystack,
     flutter,

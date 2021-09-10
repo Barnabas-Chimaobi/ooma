@@ -24,6 +24,7 @@ import {
   profilePics,
   pointDown,
   nologo,
+  oomaNew,
 } from '../../../../assets';
 import S from '../styles';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -311,7 +312,7 @@ export default function Header() {
   return (
     <View style={S.header}>
       <View style={S.logoBar}>
-        <Logo logoStyle={{width: 40, height: 40}} />
+        <Logo logoStyle={{width: 35, height: 35, marginLeft: 8}} />
         <View style={S.notificationBar}>
           <Image source={oomaNotify} style={{height: 20, width: 20}} />
           <Image source={active} style={S.activenotifications} />
