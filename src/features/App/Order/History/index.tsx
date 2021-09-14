@@ -90,20 +90,29 @@ const Current = ({item}) => {
 
   return (
     <View style={S.main}>
-      <FlatList
-        ListHeaderComponent={<>{item.length > 0 && <SortBy />}</>}
-        renderItem={({item}) => <RenderItems item={item} />}
-        data={item}
-        keyExtractor={() => shortid.generate()}
-        ListEmptyComponent={
-          <EmptyList
-            image={emptyCart}
-            title="Make Order"
-            message="Oops! Your order is empty"
-            // onPress={() => navigation.navigate('Explore')}
-          />
-        }
-      />
+      {item?.includes('completed') === false ? (
+        <EmptyList
+          image={require('../../../../assets/Images/emptyCart.png')}
+          title="FIND MEAL"
+          message="Oops! You don't have any completed order"
+          onPress={() => navigation.goBack()}
+        />
+      ) : (
+        <FlatList
+          ListHeaderComponent={<>{item.length > 0 && <SortBy />}</>}
+          renderItem={({item}) => <RenderItems item={item} />}
+          data={item}
+          keyExtractor={() => shortid.generate()}
+          ListEmptyComponent={
+            <EmptyList
+              image={emptyCart}
+              title="Make Order"
+              message="Oops! Your order is empty"
+              // onPress={() => navigation.navigate('Explore')}
+            />
+          }
+        />
+      )}
     </View>
   );
 };

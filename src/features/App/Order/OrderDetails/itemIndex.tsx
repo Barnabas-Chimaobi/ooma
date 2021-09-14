@@ -205,7 +205,7 @@ const OrderDetails = () => {
   // };
 
   return (
-    <View>
+    <View style={{marginBottom: 70}}>
       {/* <FlatList
         data={route?.params?.detail}
         numColumns={2}
