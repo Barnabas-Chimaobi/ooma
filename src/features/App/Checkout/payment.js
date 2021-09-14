@@ -54,11 +54,12 @@ export class State extends Component {
       //   paystackWebViewRef.current.startTransaction();
       // }, 3000);
     }
-    // console.log(genRef?.data?.publicKey, 'genrefernce======');
+    console.log(genRef?.data?.publicKey, 'genrefernce======');
     setTimeout(() => {
       this.paystackWebViewRef.current.startTransaction();
+      console.log(this.state.pubkey, '==keyyyy====refdata');
     }, 2000);
-    // console.log(this.state.refdata, '======refdata');
+    console.log(this.state.refdata, '======refdata');
     // verifyRef();
   };
 
@@ -70,11 +71,11 @@ export class State extends Component {
     } else {
       ShowMessage(type.ERROR, 'Failed Transaction. please retry');
     }
-    // console.log(verify, 'paymentverify======');
+    console.log(verify, 'paymentverify======');
   };
 
   componentDidMount() {
-    // console.log(this.props.route.params, 'params=========');
+    console.log(this.props.route.params, 'params=========');
   }
 
   render() {
@@ -130,7 +131,7 @@ export class State extends Component {
 
         <Paystack
           paystackKey={this.state.pubkey}
-          billingEmail="paystackwebview@something.com"
+          billingEmail="help.ooma@gmail.com"
           amount={this.state.amount}
           onCancel={(e) => {
             console.log(
@@ -141,7 +142,7 @@ export class State extends Component {
             // handle response here
           }}
           onSuccess={(res) => {
-            // console.log(res, 'responsefromstack========');
+            console.log(res, 'responsefromstack========');
             this.verifyRef();
             // handle response here
           }}

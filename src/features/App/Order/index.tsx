@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Text,
   Platform,
+  FlatList,
 } from 'react-native';
 import CurrentOrder from './Current';
 import OrderHistory from './History';
@@ -74,7 +75,7 @@ const OrderTab = () => {
           },
         }}>
         <Tab.Screen name="Current" component={Current} />
-        <Tab.Screen name="Upcoming" component={Upcoming} />
+        {/* <Tab.Screen name="Upcoming" component={Upcoming} /> */}
         <Tab.Screen name="History" component={History} />
       </Tab.Navigator>
     </>
