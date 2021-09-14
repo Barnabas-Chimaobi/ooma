@@ -13,6 +13,7 @@ import {TouchableNativeFeedback} from 'react-native-gesture-handler';
 import {cardDetails} from '../components/menuCards/cardInfo';
 import {styles} from './styles';
 import {EmptyList} from '../../../../components';
+import Skeleton from '../../Home/skeleton';
 
 type Props = {
   id: Number;
@@ -31,7 +32,7 @@ function percentageCalc(oldPrice: any, newPrice: any) {
 }
 
 const DetailCard: React.FC<Props> = (props: Props) => {
-  console.log(props.planTime, '====plantimessss===========');
+  // console.log(props.planTime, '====plantimessss===========');
   const discount = percentageCalc(props.oldPrice, props.amount);
   const navigation = useNavigation();
   return (
@@ -69,8 +70,8 @@ const DetailCard: React.FC<Props> = (props: Props) => {
 
 const Morning = (morning: any, planIds: any, times: any) => {
   const navigation = useNavigation();
-  console.log(morning, times, 'cardmorning');
-  console.log(morning.planIds, '=======planidsss======');
+  // console.log(morning, times, 'cardmorning');
+  // console.log(morning.planIds, '=======planidsss======');
   const [refreshing, setRefreshing] = useState(true);
   const [, setDataSource] = useState([]);
 
@@ -82,12 +83,13 @@ const Morning = (morning: any, planIds: any, times: any) => {
     <View style={{flex: 1}}>
       {refreshing ? <ActivityIndicator /> : null}
       {morning.morning === '' ? (
-        <ActivityIndicator
-          size={'large'}
-          color={'green'}
-          animating={refreshing}
-          style={{marginBottom: 30}}
-        />
+        // <ActivityIndicator
+        //   size={'large'}
+        //   color={'green'}
+        //   animating={refreshing}
+        //   style={{marginBottom: 30}}
+        // />
+        <Skeleton />
       ) : (
         <FlatList
           data={morning.morning}
@@ -113,7 +115,7 @@ const Morning = (morning: any, planIds: any, times: any) => {
               style={{height: 80, width: 80, marginTop: -120}}
               image={require('../../../../assets/Images/emptyCart.png')}
               title="FIND PLAN"
-              message="No Meal plan for this date!"
+              message="No Meal plan for this time!"
               onPress={() => navigation.goBack()}
             />
           }

@@ -128,7 +128,7 @@ export default function App() {
           tabBarIcon: ({color, size}) => (
             <Image
               source={newMore}
-              style={{tintColor: '#26C867', width: size, height: size}}
+              style={{tintColor: color, width: size, height: size}}
             />
           ),
         }}

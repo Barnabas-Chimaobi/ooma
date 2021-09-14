@@ -84,10 +84,10 @@ export default function Header() {
   const handleGetBranches = async () => {
     const regionIds = await AsyncStorage.getItem('regionId');
     const allBranches = await getBranches(regionIds);
-    console.log(allBranches, '====alllbranchesss=====');
+    // console.log(allBranches, '====alllbranchesss=====');
 
     if (allBranches) {
-      console.log(allBranches, '====alllbranchesss=====');
+      // console.log(allBranches, '====alllbranchesss=====');
       setModalData2(allBranches);
       setModalData(allBranches);
     }
@@ -109,7 +109,7 @@ export default function Header() {
     //     // setShowModal(false);
     //   }
     // };
-    console.log('connssssoollleedddd');
+    // console.log('connssssoollleedddd');
     const handleData = async () => {
       const branch = await AsyncStorage.getItem('branchId');
       const newbranch = JSON.parse(branch);
@@ -229,7 +229,7 @@ export default function Header() {
   const getDrinkCategory = async (branchID: number, page: number) => {
     const menuItem = await SearchMenuItemByCategoryId(branchID, page);
 
-    console.log(menuItem, 'drinks');
+    // console.log(menuItem, 'drinks');
     dispatch(getDrinkMenuItems(menuItem?.data?.items));
   };
 
@@ -251,13 +251,13 @@ export default function Header() {
     getPopular(branchID, page);
     getSpecial(branchID, page);
     const allCategory = await GetAllMenuItemCategory(branchID);
-    console.log(allCategory, 'alllcategoryyyyyyy=====================');
+    // console.log(allCategory, 'alllcategoryyyyyyy=====================');
     dispatch(useMenuItemCategory(allCategory));
     let shuffled = allCategory
       ?.map((a: any) => ({sort: Math.random(), value: a}))
       ?.sort((a: any, b: any) => a.sort - b.sort)
       ?.map((a: any) => a.value.id);
-    console.log(shuffled, 'shuffleddd');
+    // console.log(shuffled, 'shuffleddd');
     // const moreForYou = await SearchMenuItemByCategoryId(shuffled[1], page);
     if (allCategory != null) {
       getGlutenCategory(shuffled[0], page);

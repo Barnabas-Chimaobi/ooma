@@ -172,7 +172,7 @@ const Checkout = () => {
       setLoading(false);
     } else {
       const cart = await createMenuItemOrder(body);
-      console.log(cart, 'cartttttt=====');
+      // console.log(cart, 'cartttttt=====');
       if (cart?.statusCode === 201) {
         ShowMessage(type.DONE, 'Order Placed successfully'); // dispatch(cartStates(addedCart));
         setLoading(false);
@@ -199,7 +199,7 @@ const Checkout = () => {
 
   const PlanOrder = async () => {
     setLoading(true);
-    console.log(body, 'idddddddd');
+    // console.log(body, 'idddddddd');
     // if (myAddress == '' && deliveryOption == '') {
     //   ShowMessage(
     //     type.INFO,
@@ -238,8 +238,8 @@ const Checkout = () => {
       }
     }
 
-    console.log(cart, 'cart');
-    console.log(orderNow, 'cart');
+    // console.log(cart, 'cart');
+    // console.log(orderNow, 'cart');
     // }
   };
 
@@ -312,165 +312,167 @@ const Checkout = () => {
     }
   };
   return (
-    <ScrollView style={S.main}>
-      {!params?.planOrder && (
-        <View style={S.header}>
-          <HeaderBar
-            checkout="checkout"
-            image1={require('../../../assets/Images/clock.png')}
-            title="Set Time"
-            image2={require('../../../assets/Images/clock.png')}
-            rejig
-            // rejigTitle="4:30 pm"
-            // otherTitle = date
-            modes={(item: any) => text(item)}
-            onPressImg={() => {}}
-          />
-        </View>
-      )}
-
-      {/* <DeliveryOptions title="Delivery Options" /> */}
-      {/* {!params?.planOrder && ( */}
-      {!params?.planOrder && (
-        <View style={{backgroundColor: '#FFFFFF'}}>
-          <Text
-            style={{
-              fontFamily: 'Poppins',
-              fontSize: 16,
-              fontWeight: 'bold',
-              marginLeft: 15,
-              marginTop: 15,
-            }}>
-            {'Delivery Options'}
-          </Text>
-
-          <View style={{flexDirection: 'row'}}>
-            <Button
-              title="Pick-up"
-              type={ButtonType.clear}
-              imageIcon={require('../../../assets/Images/shipping.png')}
-              containerStyle={s.buttonContainer}
-              titleStyle={s.buttonTitle}
-              onPress={() => {
-                optionsForDelivery('Pick-Up'), toggleCheckOptions('Pick-Up');
-              }}
+    <View style={{flex: 1}}>
+      <ScrollView style={S.main}>
+        {!params?.planOrder && (
+          <View style={S.header}>
+            <HeaderBar
+              checkout="checkout"
+              image1={require('../../../assets/Images/clock.png')}
+              title="Schedule order"
+              image2={require('../../../assets/Images/clock.png')}
+              rejig
+              // rejigTitle="4:30 pm"
+              // otherTitle = date
+              modes={(item: any) => text(item)}
+              onPressImg={() => {}}
             />
-            {checks == true ? (
-              <Image
-                style={{height: 15, width: 15, marginTop: 10, marginLeft: 10}}
-                source={check}
-              />
-            ) : null}
           </View>
+        )}
 
-          {show == true ? (
-            <TouchableOpacity
-              onPress={() => {
-                optionsForDelivery('Pick-Up'), toggleCheckOptions('Pick-Up');
-              }}
-              style={{marginVertical: 10}}>
-              <View>
-                <Text
-                  style={{
-                    borderWidth: 0.5,
-                    padding: 5,
-                    width: '70%',
-                    alignSelf: 'flex-start',
-                    marginLeft: 20,
-                    borderRadius: 5,
-                  }}>{`${bName}, ${rName}`}</Text>
-              </View>
-            </TouchableOpacity>
-          ) : null}
+        {/* <DeliveryOptions title="Delivery Options" /> */}
+        {/* {!params?.planOrder && ( */}
+        {!params?.planOrder && (
+          <View style={{backgroundColor: '#FFFFFF'}}>
+            <Text
+              style={{
+                fontFamily: 'Poppins',
+                fontSize: 16,
+                fontWeight: 'bold',
+                marginLeft: 15,
+                marginTop: 15,
+              }}>
+              {'Delivery Options'}
+            </Text>
 
-          <View style={{flexDirection: 'row'}}>
-            <TouchableOpacity
-              activeOpacity={0.5}
-              onPress={() => {
-                optionsForDelivery1('Delivery'), toggleCheckOptions('Delivery');
-              }}
-              style={{marginLeft: 10, marginBottom: 10}}>
-              <View style={{flexDirection: 'row', marginTop: 10}}>
+            <View style={{flexDirection: 'row'}}>
+              <Button
+                title="Pick-up"
+                type={ButtonType.clear}
+                imageIcon={require('../../../assets/Images/shipping.png')}
+                containerStyle={s.buttonContainer}
+                titleStyle={s.buttonTitle}
+                onPress={() => {
+                  optionsForDelivery('Pick-Up'), toggleCheckOptions('Pick-Up');
+                }}
+              />
+              {checks == true ? (
                 <Image
-                  style={{marginLeft: 10}}
-                  source={require('../../../assets/Images/truck.png')}
+                  style={{height: 15, width: 15, marginTop: 10, marginLeft: 10}}
+                  source={check}
                 />
-                <Text style={{marginLeft: 15}}>Delivery</Text>
-              </View>
-            </TouchableOpacity>
-            {checks1 == true ? (
-              <Image
-                style={{height: 15, width: 15, marginTop: 10, marginLeft: 10}}
-                source={check}
-              />
-            ) : null}
-          </View>
-        </View>
-      )}
+              ) : null}
+            </View>
 
-      {/* )} */}
-      <View style={{marginTop: 10}}>
-        {show1 == true ? (
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              margin: 10,
-              marginLeft: 15,
-            }}>
+            {show == true ? (
+              <TouchableOpacity
+                onPress={() => {
+                  optionsForDelivery('Pick-Up'), toggleCheckOptions('Pick-Up');
+                }}
+                style={{marginVertical: 10}}>
+                <View>
+                  <Text
+                    style={{
+                      borderWidth: 0.5,
+                      padding: 5,
+                      width: '70%',
+                      alignSelf: 'flex-start',
+                      marginLeft: 20,
+                      borderRadius: 5,
+                    }}>{`${bName}, ${rName}`}</Text>
+                </View>
+              </TouchableOpacity>
+            ) : null}
+
+            <View style={{flexDirection: 'row'}}>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={() => {
+                  optionsForDelivery1('Delivery'),
+                    toggleCheckOptions('Delivery');
+                }}
+                style={{marginLeft: 10, marginBottom: 10}}>
+                <View style={{flexDirection: 'row', marginTop: 10}}>
+                  <Image
+                    style={{marginLeft: 10}}
+                    source={require('../../../assets/Images/truck.png')}
+                  />
+                  <Text style={{marginLeft: 15}}>Delivery</Text>
+                </View>
+              </TouchableOpacity>
+              {checks1 == true ? (
+                <Image
+                  style={{height: 15, width: 15, marginTop: 10, marginLeft: 10}}
+                  source={check}
+                />
+              ) : null}
+            </View>
+          </View>
+        )}
+
+        {/* )} */}
+        <View style={{marginTop: 10}}>
+          {show1 == true ? (
             <View
               style={{
                 flexDirection: 'row',
-                width: '50%',
-                borderRadius: 5,
-                // borderWidth: 0.5,
-                backgroundColor: '#fff',
-                height: 45,
-                marginRight: 5,
+                justifyContent: 'space-between',
+                margin: 10,
+                marginLeft: 15,
               }}>
-              <TextInput
+              <View
                 style={{
-                  backgroundColor: '#fff',
+                  flexDirection: 'row',
+                  width: '50%',
                   borderRadius: 5,
-                }}
-                placeholder="12 ooma street Enugu"
-                onChangeText={(text) => setMyAddress(text)}
-                multiline={true}
-              />
-              <Image
-                style={{
-                  // marginLeft: 5,
-                  height: 15,
-                  width: 15,
-                  top: 15,
-                  marginRight: 0,
-                }}
-                source={require('../../../assets/Images/edit.png')}
-                resizeMode="contain"
-              />
-            </View>
+                  // borderWidth: 0.5,
+                  backgroundColor: '#fff',
+                  height: 45,
+                  marginRight: 5,
+                }}>
+                <TextInput
+                  style={{
+                    backgroundColor: '#fff',
+                    borderRadius: 5,
+                  }}
+                  placeholder="enter address"
+                  onChangeText={(text) => setMyAddress(text)}
+                  multiline={true}
+                />
+                <Image
+                  style={{
+                    // marginLeft: 5,
+                    height: 15,
+                    width: 15,
+                    top: 15,
+                    marginRight: 0,
+                  }}
+                  source={require('../../../assets/Images/edit.png')}
+                  resizeMode="contain"
+                />
+              </View>
 
-            <View style={{width: '50%'}}>
-              <DropDownPicker
-                placeholder="Select location"
-                // open={open}
-                // value={value}
-                items={items}
-                // setOpen={setOpen}
-                setValue={value}
-                setItems={items}
-                onChangeItem={(value) => {
-                  setDeliveryCharges(value.amount);
-                  setAddressId(value.id);
-                  // setMyAddress(value?.label);
-                  console.log(value, 'amountt');
-                }}
-              />
+              <View style={{width: '50%'}}>
+                <DropDownPicker
+                  placeholder="Select location"
+                  // open={open}
+                  // value={value}
+                  items={items}
+                  // setOpen={setOpen}
+                  setValue={value}
+                  setItems={items}
+                  onChangeItem={(value) => {
+                    setDeliveryCharges(value.amount);
+                    setAddressId(value.id);
+                    // setMyAddress(value?.label);
+                    console.log(value, 'amountt');
+                  }}
+                />
+              </View>
             </View>
-          </View>
-        ) : null}
-      </View>
-      {/* {!params?.planOrder && (
+          ) : null}
+        </View>
+        {/* {!params?.planOrder && (
         <View style={{backgroundColor: '#FFFFFF'}}>
           <RadioSelect
             title="I Will Pay"
@@ -482,25 +484,25 @@ const Checkout = () => {
           />
         </View>
       )} */}
-      <View style={{backgroundColor: '#FFFFFF', marginTop: 10}}>
-        <RadioSelect
-          amount={
-            parseInt(deliveryCharges) +
-            parseInt(
-              params?.subTotal || params?.amount || params?.params?.amount,
-            )
-          }
-          orderId={cartId}
-          branchId={branch}
-          title="Payment Method"
-          title1="CARD"
-          title2="CASH"
-          type="Payment Method"
-          props={(item: any) => radio2(item)}
-        />
-      </View>
+        <View style={{backgroundColor: '#FFFFFF', marginTop: 10}}>
+          <RadioSelect
+            amount={
+              parseInt(deliveryCharges) +
+              parseInt(
+                params?.subTotal || params?.amount || params?.params?.amount,
+              )
+            }
+            orderId={cartId}
+            branchId={branch}
+            title="Payment Method"
+            title1="CARD"
+            title2="CASH"
+            type="Payment Method"
+            props={(item: any) => radio2(item)}
+          />
+        </View>
 
-      {/* <View style={{backgroundColor: '#FFFFFF', marginTop: 10}}>
+        {/* <View style={{backgroundColor: '#FFFFFF', marginTop: 10}}>
         <RadioSelect
           title="Order Channel"
           title1="POS"
@@ -510,7 +512,7 @@ const Checkout = () => {
         />
       </View> */}
 
-      {/* {!params?.planOrder && (
+        {/* {!params?.planOrder && (
         <View
           style={{
             // flexDirection: 'row',
@@ -540,91 +542,104 @@ const Checkout = () => {
         </View>
       )} */}
 
-      {!params?.planOrder ? (
-        <View
-          style={{backgroundColor: '#FFFFFF', marginTop: 10, marginBottom: 10}}>
-          <TouchableHighlight>
-            <View
-              style={{
-                flexDirection: 'row',
-                marginVertical: 10,
-                justifyContent: 'space-between',
-                marginRight: 15,
-              }}>
-              <Text style={{marginLeft: 15, fontWeight: 'bold', fontSize: 17}}>
-                Order For a friend
-              </Text>
-              <ToggleSwitch
-                isOn={switchs}
-                onColor="#fff"
-                offColor="rgba(196, 196, 196, 0.15);"
-                trackOnStyle={{
-                  borderRadius: 50,
-                  backgroundColor: 'rgba(196, 196, 196, 0.15)',
-                }}
-                trackOffStyle={{borderRadius: 50}}
-                thumbOnStyle={{borderRadius: 50, backgroundColor: 'green'}}
-                thumbOffStyle={{
-                  borderRadius: 50,
-                  backgroundColor: 'grey',
-                }}
-                labelStyle={{color: 'black', fontWeight: '900'}}
-                size="small"
-                onToggle={(isOn: any) => {
-                  toggleFriend(), console.log('changed to : ', isOn);
-                }}
-              />
-            </View>
-          </TouchableHighlight>
-          {switchs == true ? (
-            <View style={{backgroundColor: 'white', marginBottom: 20}}>
-              <TextInput
+        {!params?.planOrder ? (
+          <View
+            style={{
+              backgroundColor: '#FFFFFF',
+              marginTop: 10,
+              marginBottom: 10,
+            }}>
+            <TouchableHighlight>
+              <View
                 style={{
-                  backgroundColor: 'rgba(196, 196, 196, 0.15);',
-                  width: '90%',
-                  alignSelf: 'center',
-                  marginTop: 20,
-                  borderRadius: 15,
-                  padding: 5,
-                }}
-                value={friendName}
-                placeholder="Friend's Name"
-                onChangeText={(text) => setFriendName(text)}
-              />
+                  flexDirection: 'row',
+                  marginVertical: 10,
+                  justifyContent: 'space-between',
+                  marginRight: 15,
+                }}>
+                <Text
+                  style={{marginLeft: 15, fontWeight: 'bold', fontSize: 17}}>
+                  Order For a friend
+                </Text>
+                <ToggleSwitch
+                  isOn={switchs}
+                  onColor="#fff"
+                  offColor="rgba(196, 196, 196, 0.15);"
+                  trackOnStyle={{
+                    borderRadius: 50,
+                    backgroundColor: 'rgba(196, 196, 196, 0.15)',
+                  }}
+                  trackOffStyle={{borderRadius: 50}}
+                  thumbOnStyle={{borderRadius: 50, backgroundColor: 'green'}}
+                  thumbOffStyle={{
+                    borderRadius: 50,
+                    backgroundColor: 'grey',
+                  }}
+                  labelStyle={{color: 'black', fontWeight: '900'}}
+                  size="small"
+                  onToggle={(isOn: any) => {
+                    toggleFriend(), console.log('changed to : ', isOn);
+                  }}
+                />
+              </View>
+            </TouchableHighlight>
+            {switchs == true ? (
+              <View style={{backgroundColor: 'white', marginBottom: 20}}>
+                <TextInput
+                  style={{
+                    backgroundColor: 'rgba(196, 196, 196, 0.15);',
+                    width: '90%',
+                    alignSelf: 'center',
+                    marginTop: 20,
+                    borderRadius: 15,
+                    padding: 5,
+                  }}
+                  value={friendName}
+                  placeholder="Friend's Name"
+                  onChangeText={(text) => setFriendName(text)}
+                />
 
-              <TextInput
-                style={{
-                  backgroundColor: 'rgba(196, 196, 196, 0.15);',
-                  width: '90%',
-                  alignSelf: 'center',
-                  marginTop: 20,
-                  borderRadius: 15,
-                  padding: 5,
-                }}
-                value={friendPhone}
-                placeholder="Friend's Phone No"
-                onChangeText={(text) => setFriendPhone(text)}
-              />
-            </View>
-          ) : null}
-        </View>
-      ) : null}
+                <TextInput
+                  style={{
+                    backgroundColor: 'rgba(196, 196, 196, 0.15);',
+                    width: '90%',
+                    alignSelf: 'center',
+                    marginTop: 20,
+                    borderRadius: 15,
+                    padding: 5,
+                  }}
+                  value={friendPhone}
+                  placeholder="Friend's Phone No"
+                  onChangeText={(text) => setFriendPhone(text)}
+                />
+              </View>
+            ) : null}
+          </View>
+        ) : null}
 
-      <Total
-        subTotal={params?.subTotal || params?.amount || params?.params?.amount}
-        deliveryCharges={deliveryCharges}
-        total={
-          parseInt(deliveryCharges) +
-          parseInt(params?.subTotal || params?.amount || params?.params?.amount)
-        }
-        mainStyle={S.totalStyle}
-      />
-      {/* <ModalMessage
+        <Total
+          checkout={'checkout'}
+          subTotal={Number(
+            params?.subTotal || params?.amount || params?.params?.amount,
+          )}
+          deliveryCharges={
+            !params?.planOrder ? Number(deliveryCharges) : undefined
+          }
+          total={Number(
+            parseInt(deliveryCharges) +
+              parseInt(
+                params?.subTotal || params?.amount || params?.params?.amount,
+              ),
+          )}
+          mainStyle={S.totalStyle}
+        />
+        {/* <ModalMessage
         route="Wallet"
         message="Oops! You do not have sufficient funds for this transaction."
         openButtonTitle="ORDER NOW"
         closeButtonTitle="Fund Wallet"
       /> */}
+      </ScrollView>
       {params?.planOrder ? (
         <View style={S.footerStyle}>
           {loading ? (
@@ -656,7 +671,7 @@ const Checkout = () => {
           )}
         </View>
       )}
-    </ScrollView>
+    </View>
   );
 };
 

@@ -152,6 +152,8 @@ export const MyPlans = ({findPlan}: Props) => {
   const groupByPlanTypeDate = (basketItems: any) => {
     let planTypeData: any = [];
     for (const item of basketItems) {
+      // console.log('======hello itemmmssss=====', item);
+      // console.log('======basketitemmmssss=====', basketItems);
       if (planTypeData.length == 0) {
         planTypeData.push({
           planType: item.planType,
@@ -179,7 +181,11 @@ export const MyPlans = ({findPlan}: Props) => {
 
   const checkIfPlanExist = (item: any, plans: any) => {
     for (const plan of plans) {
-      if (plan.itemData.id == item?.itemData?.id) {
+      // console.log('======hello plansss=====', plan);
+      if (
+        plan.itemData.MenuplanOrderDetailId ==
+        item?.itemData?.MenuplanOrderDetailId
+      ) {
         return true;
       }
     }

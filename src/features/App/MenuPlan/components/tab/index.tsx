@@ -24,6 +24,7 @@ import {
   GetAllMenuPlanCategory,
   getPlanCatId,
   getMenuPlanCart,
+  getMenuitemCart,
 } from '../../../../../FetchData';
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState, AppDispatch} from './../../../../../store';
@@ -96,7 +97,11 @@ const MenuTab = () => {
     // console.log(allPlan, '====alllrplannnn=======');
     setRoutes1(mapPlan);
     // setRoutes(mapPlan);
-    // console.log(menuPlansMenuItem, 'allplannnnnssssecccccccitemmmsss');
+    // console.log(
+    //   mapPlan,
+    //   params?.categoryId,
+    //   'allplannnnnssssecccccccitemmmsss',
+    // );
   };
 
   const getMenuplanKart = async (id) => {
@@ -114,7 +119,12 @@ const MenuTab = () => {
   };
 
   useEffect(() => {
-    // getMenuplanKart(1);
+    // console.log(routes1[0]?.id, 'indexxxx=====');
+    if (params?.eachCat === 'eachCat') {
+      getMenuplanKart(params?.categoryId);
+    } else {
+      getMenuplanKart(1);
+    }
     // mapScenes();
     // console.log(params?.items, 'itemmmssss');
     const getBranchId = async () => {
@@ -159,7 +169,7 @@ const MenuTab = () => {
     return (
       <View>
         <RefreshControl
-          onRefresh={onRefresh}
+          onRefresh={() => onRefresh()}
           refreshing={loader}
           enabled={loader}
           style={{marginTop: 30}}
@@ -211,8 +221,10 @@ const MenuTab = () => {
           data={routes1}
           renderTab={FamilyRoute}
           headerTextStyle={styles.headerText}
-          onChangeTab={(index) => getMenuplanKart(routes1[index].id)}
-          // defaultIndex={defaultIndex}
+          onChangeTab={(index) => {
+            getMenuplanKart(routes1[index].id);
+          }}
+          defaultIndex={params?.categoryId - 1 || routes1[0]?.id}
           containerStyle={{flex: 1}}
           headerBackgroundColor={'white'}
           // headerUnderlayColor={'blue'}

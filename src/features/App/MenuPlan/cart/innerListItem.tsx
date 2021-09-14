@@ -26,6 +26,7 @@ interface ListDataProps {
   plandiff: any;
   planName: any;
   allDetails: any;
+  newBasket: (item: any) => void;
 }
 
 export const List = ({
@@ -43,6 +44,7 @@ export const List = ({
   plandiff,
   planName,
   allDetails,
+  newBasket,
 }: ListDataProps) => {
   // console.log(planDetails, plantime, plandiff, '===planDetailsss===');
 
@@ -213,6 +215,7 @@ export const List = ({
               data={item?.data}
               style={styles.listStyle}
               renderItem={({item, index}) => {
+                // console.log(item, 'itemmm======sssss==');
                 return plandiff === 'plan' ? (
                   <View>
                     <InnerList
@@ -233,7 +236,9 @@ export const List = ({
                       count={item?.itemData?.orderInfo?.quantity}
                       time={item?.itemData?.orderInfo?.deliveryTime}
                       basketId={item?.itemData?.orderInfo?.basketid}
+                      option={item?.itemData?.orderInfo?.deliveryOption}
                       details={item}
+                      showDelete={'true'}
                     />
                   </View>
                 ) : (
@@ -256,7 +261,9 @@ export const List = ({
                     time={item?.itemData?.deliveryTime}
                     basketId={item?.itemData?.id}
                     details={item}
+                    option={item?.itemData?.deliveryOption}
                     diffParams={basket}
+                    getNewbasket={(item) => newBasket(item)}
                   />
                 );
               }}

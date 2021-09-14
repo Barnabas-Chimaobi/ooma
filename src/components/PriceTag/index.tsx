@@ -1,15 +1,17 @@
 import React, {FC} from 'react';
 import S from './styles';
 import {Text, View} from 'react-native';
+import {colors} from '../../colors';
 
 interface IProps {
   price: string;
   clear?: boolean;
   style?: object;
   oldPrice?: any;
+  mainPrice?: any;
 }
 
-const PriceTag: FC<IProps> = ({price, clear, oldPrice, style}) => (
+const PriceTag: FC<IProps> = ({price, clear, oldPrice, style, mainPrice}) => (
   <View style={{flexDirection: 'row', alignItems: 'center'}}>
     {/* {oldPrice && (
       <Text
@@ -22,7 +24,12 @@ const PriceTag: FC<IProps> = ({price, clear, oldPrice, style}) => (
     {price && (
       <Text
         style={
-          !clear ? [S.price, style] : [{color: 'black'}, style]
+          !clear
+            ? [S.price, style]
+            : [
+                {color: mainPrice === 'mainprice' ? colors.start : 'black'},
+                style,
+              ]
         }>{`\u20A6${price}`}</Text>
     )}
   </View>

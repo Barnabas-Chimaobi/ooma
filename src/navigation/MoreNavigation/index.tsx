@@ -8,6 +8,7 @@ import {
   PromotionsIntro,
   WalletIntro,
   Voucher,
+  Help,
 } from '../../features/App';
 import {createStackNavigator} from '@react-navigation/stack';
 const {Navigator, Screen} = createStackNavigator();
@@ -22,6 +23,7 @@ const index = () => (
     <Screen name="PromotionsIntro" component={PromotionsIntro} />
     <Screen name="Promotions" component={Promotions} />
     <Screen name="Voucher" component={Voucher} />
+    <Screen name="Help" component={Help} />
   </Navigator>
 );
 

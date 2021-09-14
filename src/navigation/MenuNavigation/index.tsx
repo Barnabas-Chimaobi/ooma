@@ -18,6 +18,7 @@ export default function index() {
   const getIntro = async () => {
     let newIntro = await AsyncStorage.getItem('intro');
     setIntro(newIntro);
+    console.log(intro, 'intro=======');
   };
 
   useEffect(() => {
@@ -27,10 +28,10 @@ export default function index() {
   return (
     <Navigator
       headerMode="none"
-      initialRouteName={intro === 'disable' ? Menu : 'Intro'}>
-      {intro === 'disable' ? null : (
+      initialRouteName={intro === 'disable' ? Menu : MenuPlanIntro}>
+      {/* {intro === 'disable' ? null : (
         <Screen name="Intro" component={MenuPlanIntro} />
-      )}
+      )} */}
       <Screen name="Menu" component={Menu} />
       <Screen name="Detail" component={Detail} />
       <Screen name="Cart" component={Cart} />

@@ -9,6 +9,7 @@ export default StyleSheet.create({
     flex: 1,
     height: 300,
     width: '100%',
+    marginTop: 20,
     // width: Dimensions.get('window').width / 1,
 
     borderRadius: 10,

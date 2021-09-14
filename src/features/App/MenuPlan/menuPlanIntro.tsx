@@ -11,6 +11,7 @@ interface Props {
 }
 const MenuPlanIntro: React.FC<Props> = ({title, externalRoute}) => {
   const [index, setIndex] = useState(0);
+  const [intros, setIntro] = useState('');
   const indexRef = useRef(index);
   indexRef.current = index;
   const onScroll = useCallback((event) => {
@@ -29,6 +30,8 @@ const MenuPlanIntro: React.FC<Props> = ({title, externalRoute}) => {
   const disableIntro = async () => {
     let intro = 'disable';
     const newAsync = await AsyncStorage.setItem('intro', intro);
+    // const getIntro = await AsyncStorage.getItem('intro')
+    // setIntro(getIntro)
   };
 
   useEffect(() => {

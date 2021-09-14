@@ -72,11 +72,12 @@ export const Cart = () => {
   const [eachDate, setEachDate] = useState('');
   const [dateTime, setDateTime] = useState('');
   const [orderName, setOrderName] = useState('');
-  const [total, setTotal] = useState('');
+  let [total, setTotal] = useState(0);
   const [visible, setVisible] = useState(false);
   const [grouped, setgrouped] = useState([]);
   const [plantime, setPlantime] = useState([]);
   const [refreshing, setRefreshing] = useState(true);
+  const [delivery, setDelivery] = useState('');
 
   const toggleVisible = () => setVisible((prevstate) => !prevstate);
 
@@ -87,12 +88,14 @@ export const Cart = () => {
         subTotal: total,
         planOrderName: orderName,
         planOrder: 'planOrder',
+        deliveryCharge: delivery,
       });
     }
     toggleVisible();
   };
 
   const groupBasketItem = () => {
+    setRefreshing(true);
     let basketData: any = [];
 
     basketItem?.forEach((item: any) => {
@@ -102,6 +105,12 @@ export const Cart = () => {
       //replace the already exist data with the grouped plan data
       item['data'] = groupByPlanTypeDate(item?.data);
     });
+    const total = basketItem?.map((item: any) => item.amount);
+    let newsum = total?.reduce(
+      (sum: any, current: any) => parseInt(sum) + parseInt(current),
+    );
+    setTotal(newsum);
+    // console.log(newsum, 'newbasket======sss====');
     setgrouped(basketData);
     // console.log('====baket items======= ', JSON.stringify(basketData));
     setRefreshing(false);
@@ -150,12 +159,15 @@ export const Cart = () => {
       groupBasketItem();
       // console.log(basketItem, 'consolleedd========');
       if (basketItem !== undefined) {
-        const all = route?.params?.cartItems?.map((item: any) => item.MenuPlan);
-        const total = route?.params?.cartItems?.map((item: any) => item.amount);
+        const all = basketItem?.map((item: any) => item.MenuPlan);
+        const total = basketItem?.map((item: any) => item.amount);
         let newsum = total?.reduce(
           (sum: any, current: any) => parseInt(sum) + parseInt(current),
         );
         setTotal(newsum);
+        const Charge = basketItem?.map((item: any) =>
+          setDelivery(item?.deliveryCharge),
+        );
         // console.log(total, '====newwwsummmtoatlllll');
         let all1 = all?.map((item: any) =>
           item?.MenuPlanDetails?.map(
@@ -360,8 +372,8 @@ export const Cart = () => {
   const checkIfPlanExist1 = (item: any, plans: any) => {
     for (const plan of plans) {
       if (
-        plan?.itemData?.orderInfo?.basketid ==
-        item?.itemData?.orderInfo?.basketId
+        plan?.itemData?.MenuplanOrderDetailId ==
+        item?.itemData?.MenuplanOrderDetailId
       ) {
         return true;
       }
@@ -407,6 +419,15 @@ export const Cart = () => {
 
   let plan = 'plan';
 
+  const getNewBasket = (item) => {
+    // const total = item?.map((item: any) => item.amount);
+    // let newsum = total?.reduce(
+    //   (sum: any, current: any) => parseInt(sum) + parseInt(current),
+    // );
+    // setTotal(newsum);
+    // console.log(item, 'newbasket======sss====');
+  };
+
   return (
     <>
       <KeyboardAvoidingView
@@ -425,24 +446,24 @@ export const Cart = () => {
             {route?.params?.planName}
           </Text>
         ) : null}
-
-        <View style={styles.root}>
-          <ScrollView
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }>
-            {/* {grouped.length === 0 ? (
+        {refreshing !== true ? (
+          <View style={styles.root}>
+            <ScrollView
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }>
+              {/* {grouped.length === 0 ? (
               <ActivityIndicator
                 animating={refreshing}
                 color={'green'}
                 size={'large'}
               />
             ) : ( */}
-            {grouped?.length !== 0 ? (
               <FlatList
                 data={grouped}
                 style={styles.listStyle}
                 renderItem={({item}) => {
+                  // console.log(item, 'itemmm=====');
                   return basketItem?.length === 0 ? (
                     <EmptyList
                       image={require('../../../../assets/Images/emptyCart.png')}
@@ -494,6 +515,7 @@ export const Cart = () => {
                         />
                       ) : (
                         <List
+                          newBasket={(item) => getNewBasket(item)}
                           plantime={
                             item?.MenuPlan?.MenuplanDetail?.deliveryTime
                           }
@@ -530,156 +552,159 @@ export const Cart = () => {
                   />
                 }
               />
-            ) : (
-              <EmptyList
-                image={require('../../../../assets/Images/emptyCart.png')}
-                title="FIND PLAN"
-                message="Oops! Your basket is still empty"
-                onPress={() => navigation.goBack()}
-              />
-            )}
-          </ScrollView>
+            </ScrollView>
 
-          {/* <ListItems list={route?.params?.cartItems} styles={styles} /> */}
-          {visible == true ? (
-            <Modal
-              style={{
-                // marginTop: '70%',
-                // marginBottom: '70%',
-                width: '100%',
-                alignSelf: 'center',
-              }}
-              isVisible={true}
-              onBackdropPress={() => toggleVisible()}>
-              <View
+            {/* <ListItems list={route?.params?.cartItems} styles={styles} /> */}
+            {visible == true ? (
+              <Modal
                 style={{
-                  // flex: 1,
-                  // width: 300,
-                  height: 220,
-                  backgroundColor: '#fff',
-                }}>
+                  // marginTop: '70%',
+                  // marginBottom: '70%',
+                  width: '100%',
+                  alignSelf: 'center',
+                }}
+                isVisible={true}
+                onBackdropPress={() => toggleVisible()}>
                 <View
                   style={{
-                    // flexDirection: 'row',
-                    marginVertical: 10,
-                    // justifyContent: 'space-between',
-                    // marginRight: 15,
-                    backgroundColor: '#FFFFFF',
-                    marginTop: 20,
+                    // flex: 1,
+                    // width: 300,
+                    height: 220,
+                    backgroundColor: '#fff',
                   }}>
-                  <Text
-                    style={{marginLeft: 15, fontWeight: 'bold', fontSize: 17}}>
-                    Create a name for your new plan
-                  </Text>
-                  <TextInput
+                  <View
                     style={{
-                      backgroundColor: 'rgba(196, 196, 196, 0.15);',
-                      width: '90%',
-                      alignSelf: 'center',
+                      // flexDirection: 'row',
+                      marginVertical: 10,
+                      // justifyContent: 'space-between',
+                      // marginRight: 15,
+                      backgroundColor: '#FFFFFF',
                       marginTop: 20,
-                      borderRadius: 5,
-                      padding: 5,
-                      marginBottom: 10,
-                    }}
-                    value={orderName}
-                    placeholder="Give your order a name"
-                    onChangeText={(text) => setOrderName(text)}
-                  />
-                  <TouchableHighlight
-                    underlayColor=""
-                    onPress={() => gotoSubscribe()}>
-                    <View
+                    }}>
+                    <Text
                       style={{
-                        backgroundColor: colors.primary,
-                        padding: 10,
+                        marginLeft: 15,
+                        fontWeight: 'bold',
+                        fontSize: 17,
+                      }}>
+                      Create a name for your new plan
+                    </Text>
+                    <TextInput
+                      style={{
+                        backgroundColor: 'rgba(196, 196, 196, 0.15);',
                         width: '90%',
                         alignSelf: 'center',
-                        borderRadius: 5,
                         marginTop: 20,
-                      }}>
-                      <Text
+                        borderRadius: 5,
+                        padding: 5,
+                        marginBottom: 10,
+                      }}
+                      value={orderName}
+                      placeholder="Give your order a name"
+                      onChangeText={(text) => setOrderName(text)}
+                    />
+                    <TouchableHighlight
+                      underlayColor=""
+                      onPress={() => gotoSubscribe()}>
+                      <View
                         style={{
-                          textAlign: 'center',
-                          fontSize: 16,
-                          color: colors.white,
+                          backgroundColor: colors.primary,
+                          padding: 10,
+                          width: '90%',
+                          alignSelf: 'center',
+                          borderRadius: 5,
+                          marginTop: 20,
                         }}>
-                        SAVE
-                      </Text>
-                    </View>
-                  </TouchableHighlight>
+                        <Text
+                          style={{
+                            textAlign: 'center',
+                            fontSize: 16,
+                            color: colors.white,
+                          }}>
+                          SAVE
+                        </Text>
+                      </View>
+                    </TouchableHighlight>
+                  </View>
                 </View>
+              </Modal>
+            ) : null}
+            {total != '' ? (
+              <View style={styles.listFooter}>
+                <View style={styles.total}>
+                  <Text style={styles.totalText}>Total:</Text>
+                  <Text style={styles.totalPrice}>{total} NGN</Text>
+                </View>
+                {route?.params?.plan === 'plan' ? null : (
+                  <ModalMessage
+                    onpress={() => toggleVisible()}
+                    total={total}
+                    cartParams={route?.params?.cartItems}
+                    route="Cart"
+                    openButtonTitle="PROCEED"
+                    closeButtonTitle="SUBSCRIBE NOW"
+                    otherCardViewStyle={styles.cardView}
+                    btnClose={styles.btnClose}
+                    otherModalViewStyle={styles.modalView}
+                    btnStyles={styles.btnStyles}>
+                    <View style={styles.radioSection}>
+                      <Text style={styles.paymentText}>Payment Method</Text>
+                      {isLiked?.map((item) => (
+                        <RadioButton
+                          onPress={() => onRadioBtnClick(item)}
+                          selected={item.selected}
+                          key={item?.id}>
+                          {item?.name}
+                        </RadioButton>
+                      ))}
+                    </View>
+                    <View style={styles.priceSection}>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                        }}>
+                        <Text style={{fontSize: 15}}>Sub Total</Text>
+                        <Text style={{fontSize: 15}}>
+                          {' '}
+                          <PriceTag price={9500.0} clear />
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                        }}>
+                        <Text>Delivery Charges</Text>
+                        <Text>
+                          <PriceTag price={500.0} clear />
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                        }}>
+                        <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+                          Total
+                        </Text>
+                        <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+                          <PriceTag price={10000.0} clear />
+                        </Text>
+                      </View>
+                    </View>
+                  </ModalMessage>
+                )}
               </View>
-            </Modal>
-          ) : null}
-          {total != '' ? (
-            <View style={styles.listFooter}>
-              <View style={styles.total}>
-                <Text style={styles.totalText}>Total:</Text>
-                <Text style={styles.totalPrice}>{total} NGN</Text>
-              </View>
-              {route?.params?.plan === 'plan' ? null : (
-                <ModalMessage
-                  onpress={() => toggleVisible()}
-                  total={total}
-                  cartParams={route?.params?.cartItems}
-                  route="Cart"
-                  openButtonTitle="PROCEED"
-                  closeButtonTitle="SUBSCRIBE NOW"
-                  otherCardViewStyle={styles.cardView}
-                  btnClose={styles.btnClose}
-                  otherModalViewStyle={styles.modalView}
-                  btnStyles={styles.btnStyles}>
-                  <View style={styles.radioSection}>
-                    <Text style={styles.paymentText}>Payment Method</Text>
-                    {isLiked?.map((item) => (
-                      <RadioButton
-                        onPress={() => onRadioBtnClick(item)}
-                        selected={item.selected}
-                        key={item?.id}>
-                        {item?.name}
-                      </RadioButton>
-                    ))}
-                  </View>
-                  <View style={styles.priceSection}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                      }}>
-                      <Text style={{fontSize: 15}}>Sub Total</Text>
-                      <Text style={{fontSize: 15}}>
-                        {' '}
-                        <PriceTag price={9500.0} clear />
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                      }}>
-                      <Text>Delivery Charges</Text>
-                      <Text>
-                        <PriceTag price={500.0} clear />
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                      }}>
-                      <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-                        Total
-                      </Text>
-                      <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-                        <PriceTag price={10000.0} clear />
-                      </Text>
-                    </View>
-                  </View>
-                </ModalMessage>
-              )}
-            </View>
-          ) : null}
-        </View>
+            ) : null}
+          </View>
+        ) : (
+          <ActivityIndicator
+            animating={refreshing}
+            color={'green'}
+            size={'large'}
+          />
+        )}
       </KeyboardAvoidingView>
     </>
   );

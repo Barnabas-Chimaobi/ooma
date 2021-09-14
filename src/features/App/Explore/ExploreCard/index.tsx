@@ -12,6 +12,7 @@ import {useNavigation} from '@react-navigation/native';
 import {ib} from '../../../../assets';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {colors} from '../../../../colors/index';
+import LinearGradient from 'react-native-linear-gradient';
 
 interface IProps {
   title?: string;
@@ -118,6 +119,7 @@ export const ItemCard: FC<IProps> = ({categoryItems, compType}) => {
         compType === 'menuPlan'
           ? navigation.navigate('MenuPlanByCategory', {
               categoryId: categoryItems?.id,
+              eachCat: 'eachCat',
               categoryName: categoryItems?.name,
             })
           : navigation.navigate('SelectedCategory', {
@@ -125,7 +127,14 @@ export const ItemCard: FC<IProps> = ({categoryItems, compType}) => {
             });
       }}>
       <ImageBackground source={{uri: image_Url}} style={S.imageBackground}>
-        <View style={S.imageMaskBackground}>
+        {/* <View style={S.imageMaskBackground}> */}
+        <LinearGradient
+          colors={[
+            'rgba(100, 100, 100, 0.4) 100%',
+            'rgba(100, 100, 100, 0.4)',
+            'rgba(100, 100, 100, 0.4) 46.88%',
+          ]}
+          style={{height: '100%'}}>
           <Text
             style={{
               color: colors.white,
@@ -138,7 +147,9 @@ export const ItemCard: FC<IProps> = ({categoryItems, compType}) => {
             }}>
             {categoryItems?.name}
           </Text>
-        </View>
+        </LinearGradient>
+
+        {/* </View> */}
       </ImageBackground>
     </TouchableOpacity>
   );
@@ -164,7 +175,14 @@ export const ItemCard1: FC<IProps> = ({categoryItems, compType}) => {
             });
       }}>
       <ImageBackground source={{uri: image_Url}} style={S.imageBackground}>
-        <View style={S.imageMaskBackground}>
+        {/* <View style={S.imageMaskBackground}> */}
+        <LinearGradient
+          colors={[
+            'rgba(100, 100, 100, 0.4) 100%',
+            'rgba(100, 100, 100, 0.4)',
+            'rgba(100, 100, 100, 0.4) 46.88%',
+          ]}
+          style={{height: '100%'}}>
           <Text
             style={{
               color: colors.white,
@@ -177,7 +195,8 @@ export const ItemCard1: FC<IProps> = ({categoryItems, compType}) => {
             }}>
             {categoryItems?.name}
           </Text>
-        </View>
+        </LinearGradient>
+        {/* </View> */}
       </ImageBackground>
     </TouchableOpacity>
   );
@@ -203,7 +222,14 @@ export const ItemCard2: FC<IProps> = ({categoryItems, compType}) => {
             });
       }}>
       <ImageBackground source={{uri: image_Url}} style={S.imageBackground1}>
-        <View style={S.imageMaskBackground}>
+        {/* <View style={S.imageMaskBackground}> */}
+        <LinearGradient
+          colors={[
+            'rgba(100, 100, 100, 0.4) 100%',
+            'rgba(100, 100, 100, 0.4)',
+            'rgba(100, 100, 100, 0.4) 46.88%',
+          ]}
+          style={{height: '100%'}}>
           <Text
             style={{
               color: colors.white,
@@ -212,11 +238,12 @@ export const ItemCard2: FC<IProps> = ({categoryItems, compType}) => {
               alignSelf: 'center',
               fontSize: 16,
               textTransform: 'capitalize',
-              // marginTop: '50%',
+              marginTop: '30%',
             }}>
             {categoryItems?.name}
           </Text>
-        </View>
+        </LinearGradient>
+        {/* </View> */}
       </ImageBackground>
     </TouchableOpacity>
   );

@@ -10,6 +10,8 @@ import {
 } from '../../../../components';
 import OrderCard from '../components/OrderCard';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import {colors} from '../../../../colors';
+import {SimpleHeader, CheckBox1} from '../../../../components';
 
 const OrderStack = ({
   headerPrice,
@@ -53,7 +55,7 @@ const UnitOrders = ({
           <Text style={S.descriptionStyle}>{description}</Text>
           {unitPrice && <PriceTag price={unitPrice} clear />}
         </View>
-        {price && <PriceTag price={price} clear />}
+        {price && <PriceTag mainPrice={'mainprice'} price={price} clear />}
       </View>
     </>
   );
@@ -216,6 +218,9 @@ const OrderDetails = () => {
         //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         // }
       /> */}
+      <View style={{marginLeft: 10}}>
+        <SimpleHeader />
+      </View>
       <ScrollView>
         <View>
           <View style={S.main}>
@@ -231,14 +236,14 @@ const OrderDetails = () => {
               randomValue={newlist?.itemData?.menuitemorders?.status}
               mainStyle={S.totalHeaderStyle}
               randomTitleStyle={S.totalHeadertitle}
-              // randomStyle={{
-              //   color:
-              //     item.status == 'Cancelled'
-              //       ? colors.red
-              //       : item.status == 'Delivered'
-              //       ? colors.primary
-              //       : colors.black,
-              // }}
+              randomStyle={{
+                color: colors.start,
+                // item.status == 'Cancelled'
+                //   ? colors.red
+                //   : item.status == 'Delivered'
+                //   ? colors.primary
+                //   : colors.black,
+              }}
             />
             <Total
               randomTitle="Requested at:"
@@ -344,10 +349,8 @@ const OrderDetails = () => {
                   randomValue={newlist?.itemData?.menuitemorders?.paymentMethod}
                 />
                 <Total
-                  randomTitle="Location"
-                  randomValue={
-                    newlist?.itemData?.menuitemorders?.deliveryAddress
-                  }
+                  randomTitle="Status"
+                  randomValue={newlist?.itemData?.paymentStatus}
                 />
               </>
             }

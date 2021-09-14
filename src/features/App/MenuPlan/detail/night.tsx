@@ -12,6 +12,7 @@ import {cardDetails} from '../components/menuCards/cardInfo';
 import {styles} from './styles';
 import {TouchableNativeFeedback} from 'react-native-gesture-handler';
 import {EmptyList} from '../../../../components';
+import Skeleton from '../../Home/skeleton';
 
 type Props = {
   id: Number;
@@ -67,7 +68,7 @@ const DetailCard: React.FC<Props> = (props: Props) => {
 
 const Night = (night: any, planIds: any, times: any) => {
   const navigation = useNavigation();
-  console.log(night.planIds, '=====planidsssss=====');
+  // console.log(night.planIds, '=====planidsssss=====');
   const [refreshing] = useState(false);
   const [, setDataSource] = useState([]);
 
@@ -78,14 +79,8 @@ const Night = (night: any, planIds: any, times: any) => {
   return (
     <View>
       {refreshing ? <ActivityIndicator /> : null}
-      {night.night === undefined ? (
-        <EmptyList
-          style={{height: 80, width: 80, marginTop: -120}}
-          image={require('../../../../assets/Images/emptyCart.png')}
-          title="FIND PLAN"
-          message="Please wait while we load the plan for this date!"
-          onPress={() => navigation.goBack()}
-        />
+      {night.night === '' ? (
+        <Skeleton />
       ) : (
         <FlatList
           data={night.night}
@@ -106,8 +101,14 @@ const Night = (night: any, planIds: any, times: any) => {
               plandate={item?.plandate}
             />
           )}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          ListEmptyComponent={
+            <EmptyList
+              style={{height: 80, width: 80, marginTop: -120}}
+              image={require('../../../../assets/Images/emptyCart.png')}
+              title="FIND PLAN"
+              message="No Meal plan for this time!"
+              onPress={() => navigation.goBack()}
+            />
           }
         />
       )}

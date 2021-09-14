@@ -32,6 +32,7 @@ interface IProps {
   addons: any;
   details: any;
   basket: any;
+  gottenNewCart?: (item: any) => void;
 }
 
 const MoreAction: FC<IProps> = ({
@@ -48,6 +49,7 @@ const MoreAction: FC<IProps> = ({
   addons,
   details,
   basket,
+  gottenNewCart,
 }) => {
   const [isCounter, setIsCounter] = useState(false);
   const [countValue, setCountValue] = useState(0);
@@ -55,7 +57,7 @@ const MoreAction: FC<IProps> = ({
   const navigation = useNavigation();
   const dispatch: AppDispatch = useDispatch();
 
-  console.log(id, cart, editItems, 'idforeditttttt');
+  // console.log(id, cart, editItems, 'idforeditttttt');
 
   const getBasket = async () => {
     // const getMenuplanKart = async () => {
@@ -65,8 +67,9 @@ const MoreAction: FC<IProps> = ({
     console.log(userId, 'useriddd');
 
     const menuplanscart = await getMenuPlanCart(userId, newbranch);
+    gottenNewCart(menuplanscart?.items);
     dispatch(basketStates(menuplanscart?.items));
-    console.log(menuplanscart, '=======planscarttttttt=========');
+    // console.log(menuplanscart, '=======planscarttttttt=========');
     const all = menuplanscart?.items.map((item: any) => item.MenuPlan);
     let all1 = all.map((item: any) => item.MenuPlanDetails);
     // console.log(all1, '=====all1======');
@@ -77,19 +80,20 @@ const MoreAction: FC<IProps> = ({
     const branch = await AsyncStorage.getItem('branchId');
     const newbranch = JSON.parse(branch);
     const userId = await AsyncStorage.getItem('userId');
-    console.log(userId, 'useriddd');
+    // console.log(userId, 'useriddd');
     // const gottenId = JSON.parse(userId);
 
     try {
       const menuICart = await getMenuitemCart(newbranch, userId);
       dispatch(cartStates(menuICart?.items));
-      console.log(menuICart, 'cart ===value');
+      gottenNewCart(menuICart?.items);
+      // console.log(menuICart, 'cart ===value');
     } catch (error) {}
   };
 
   const deleteCart = async () => {
     setLoading(true);
-    console.log(cart, '===deltessss===');
+    // console.log(cart, '===deltessss===');
     try {
       const carts = await api.delete(`/orders/cart`, {
         cartId: cart,
@@ -106,20 +110,20 @@ const MoreAction: FC<IProps> = ({
       // if (cart?.config?.response == 'Cart updated successfully') {
       // setCartItem(addedCart);
       // navigation.goBack('Mycart');
-      console.log(addedCart, 'deleteddddddartttt');
+      // console.log(addedCart, 'deleteddddddartttt');
       // } else {
       //   ShowMessage(type.ERROR, 'Item could not be updated'); // dispatch(cartStates(addedCart));
       // }
     } catch (err) {
       setLoading(false);
       ShowMessage(type.ERROR, 'Could not delete item'); // dispatch(cartStates(addedCart));
-      console.log(err, 'cartError');
+      // console.log(err, 'cartError');
     }
   };
 
   const deleteBasket = async () => {
     setLoading(true);
-    console.log(cart, '===deltessss===');
+    // console.log(cart, '===deltessss===');
     try {
       const carts = await api.delete(`/orders/basket`, {
         basketId: cart,
@@ -131,7 +135,7 @@ const MoreAction: FC<IProps> = ({
         ShowMessage(type.DONE, 'Item deleted successfully'); // dispatch(cartStates(addedCart));
         // setCartItem(addedCart);
         navigation.navigate('Cart');
-        console.log(carts, 'deletedbasket');
+        // console.log(carts, 'deletedbasket');
       } else {
         setLoading(false);
         ShowMessage(
@@ -142,7 +146,7 @@ const MoreAction: FC<IProps> = ({
     } catch (err) {
       setLoading(false);
       ShowMessage(type.ERROR, 'Unable to delete item');
-      console.log(err.response.data, 'cartError');
+      // console.log(err.response.data, 'cartError');
     }
   };
 

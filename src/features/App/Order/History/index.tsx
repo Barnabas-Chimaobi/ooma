@@ -18,11 +18,11 @@ const RenderItems = ({item}: any) => {
       <Text>{item?.deliveryTime}</Text>
       {item?.data?.map((items) =>
         items?.data?.map((item) => {
-          console.log(
-            item?.itemData?.menuitemorders?.MenuItemOrderDetails,
-            '===========orderlenght=====',
-          ),
-            console.log(item, 'item===========');
+          // console.log(
+          //   item?.itemData?.menuitemorders?.MenuItemOrderDetails,
+          //   '===========orderlenght=====',
+          // ),
+          //   console.log(item, 'item===========');
           return (
             <OrderCard
               total={item?.itemData?.menuitemorders?.total}
@@ -59,12 +59,12 @@ const RenderItems = ({item}: any) => {
                     randomValue={item?.itemData?.menuitemorders?.status}
                     mainStyle={S.totalStyle}
                     randomStyle={{
-                      color:
-                        item?.paymentStatus == 'Cancelled'
-                          ? colors.red
-                          : item?.paymentStatus == 'NOT-PAID'
-                          ? colors.primary
-                          : colors.black,
+                      color: colors.start,
+                      // item?.paymentStatus == 'Cancelled'
+                      //   ? colors.red
+                      //   : item?.paymentStatus == 'NOT-PAID'
+                      //   ? colors.primary
+                      //   : colors.black,
                     }}
                   />
                 </>

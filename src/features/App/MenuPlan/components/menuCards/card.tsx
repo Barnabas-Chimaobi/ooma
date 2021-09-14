@@ -32,7 +32,7 @@ const MenuCard: React.FC<Props> = (props: Props) => {
             </View>
           </View>
           <View style={{flexDirection: 'row'}}>
-            <Image source={square} style={styles.ratingStar} />
+            {/* <Image source={square} style={styles.ratingStar} /> */}
             <Text style={styles.description}>{props.description}</Text>
           </View>
         </View>

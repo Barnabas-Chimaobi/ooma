@@ -6,6 +6,7 @@ import {
   FlatList,
   ScrollView,
   RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
 import {Button, ButtonType, PriceTag, EmptyList} from '../../../components';
 import Card from './Card';
@@ -18,6 +19,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {cartStates} from '../../../reducers/cart';
 import {AppDispatch, RootState} from '../../../store';
 import {ShowMessage, type} from '../../../components';
+import Skeleton from '../Home/skeleton';
+import {FunctionSelectItem} from 'native-base/lib/typescript/components/composites/Typeahead/useTypeahead/types';
 
 const MyCart = () => {
   const [state, setState] = useState({toggle: false});
@@ -33,6 +36,7 @@ const MyCart = () => {
   const cartItem = useSelector((state: RootState) => state.addedCart.payload);
 
   const cart = async () => {
+    setRefreshing(true);
     const branch = await AsyncStorage.getItem('branchId');
     const newbranch = JSON.parse(branch);
     const userId = await AsyncStorage.getItem('userId');
@@ -95,86 +99,110 @@ const MyCart = () => {
 
     return unsubscribe;
   }, [cartItem !== undefined && cartItem?.length]);
+
+  const moreAction = (item: any) => {
+    console.log(item, 'deletededddd======ssss====');
+  };
+
   // cartItem.length === 0 ? cartItem : reload === true ? cartItem : null;
 
-  return (
-    <ScrollView
-      contentContainerStyle={{}}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }>
-      <FlatList
-        data={cartItem}
-        keyExtractor={() => shortid.generate()}
-        // style={styles.listStyle}
-        renderItem={({item}) => {
-          return (
-            cartItem?.length >= 1 && (
-              <Card
-                item={item}
-                id={shortid.generate()}
-                title={item?.MenuItem?.itemName}
-                price={item?.amount}
-                quantity={item?.quantity}
-                image={item?.MenuItem?.imageUrl}
-                description={item?.MenuItem?.description}
-                itemId={item?.MenuItem?.id}
-                cartId={item?.id}
-                addons={JSON.parse(item?.addons)}
-              />
-            )
-          );
-        }}
-        ListFooterComponent={
-          <>
-            {cartItem?.length >= 1 && (
-              <View
-                style={{
-                  width: '90%',
-                  alignSelf: 'center',
-                  marginVertical: 20,
-                }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <Text>Total :</Text>
-                  {total !== '' && <PriceTag price={total} clear />}
-                </View>
-                <Button
-                  title="CHECKOUT"
-                  type={ButtonType.solid}
-                  containerStyle={{
-                    marginVertical: 20,
-                  }}
-                  buttonStyle={{backgroundColor: '#303030'}}
-                  onPress={() => {
-                    total === ''
-                      ? ShowMessage(
-                          type.ALERT,
-                          'Please wait while we calculate your total',
-                        )
-                      : navigation.navigate('Checkout', {
-                          params: cartParams,
-                          subTotal: total,
-                        });
-                  }}
-                />
-              </View>
-            )}
-          </>
-        }
-        ListEmptyComponent={
-          <EmptyList
-            image={require('../../../assets/Images/emptyCart.png')}
-            title="FIND MEAL"
-            message="Oops! Your cart is empty"
-            onPress={() => navigation.navigate('Explore')}
+  return refreshing !== true ? (
+    <View style={{flex: 1}}>
+      <ScrollView
+        contentContainerStyle={{}}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => onRefresh()}
           />
-        }
+        }>
+        <FlatList
+          data={cartItem}
+          keyExtractor={() => shortid.generate()}
+          // style={styles.listStyle}
+          renderItem={({item}) => {
+            return (
+              cartItem?.length >= 1 && (
+                <Card
+                  newMenu={(item) => moreAction(item)}
+                  item={item}
+                  id={shortid.generate()}
+                  title={item?.MenuItem?.itemName}
+                  price={item?.amount}
+                  quantity={item?.quantity}
+                  image={item?.MenuItem?.imageUrl}
+                  description={item?.MenuItem?.description}
+                  itemId={item?.MenuItem?.id}
+                  cartId={item?.id}
+                  addons={JSON.parse(item?.addons)}
+                />
+              )
+            );
+          }}
+          ListFooterComponent={<></>}
+          ListEmptyComponent={
+            <EmptyList
+              image={require('../../../assets/Images/emptyCart.png')}
+              title="FIND MEAL"
+              message="Oops! Your cart is empty"
+              onPress={() => navigation.navigate('Explore')}
+            />
+          }
+        />
+      </ScrollView>
+      {cartItem?.length >= 1 && (
+        <View
+          style={{
+            width: '90%',
+            alignSelf: 'center',
+            // marginVertical: 20,
+            bottom: 20,
+            // marginTop: '10%',
+            // position: 'absolute',
+            top: 0,
+          }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <Text>Total :</Text>
+            {total !== '' && <PriceTag price={total} clear />}
+          </View>
+          <Button
+            title="CHECKOUT"
+            type={ButtonType.solid}
+            containerStyle={{
+              marginVertical: 5,
+              bottom: 10,
+            }}
+            buttonStyle={{backgroundColor: '#303030'}}
+            onPress={() => {
+              total === ''
+                ? ShowMessage(
+                    type.ALERT,
+                    'Please wait while we calculate your total',
+                  )
+                : navigation.navigate('Checkout', {
+                    params: cartParams,
+                    subTotal: total,
+                  });
+            }}
+          />
+        </View>
+      )}
+    </View>
+  ) : (
+    <View style={{marginTop: '20%'}}>
+      <ActivityIndicator
+        animating={refreshing}
+        color={'green'}
+        size={'large'}
       />
-    </ScrollView>
+    </View>
+    // <View style={{marginTop: '20%'}}>
+    //   <Skeleton />
+    // </View>
   );
 };
 

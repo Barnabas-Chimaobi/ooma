@@ -34,12 +34,12 @@ const items: itemProp[] = [
     borderBottom: true,
     routeTo: 'Order',
   },
-  // {
-  //   name: 'Order for a friend',
-  //   icon: <Feather name="users" size={18} />,
-  //   borderBottom: false,
-  //   routeTo: 'Explore',
-  // },
+  {
+    name: 'Order for a friend',
+    icon: <Feather name="users" size={18} />,
+    borderBottom: false,
+    routeTo: 'Explore',
+  },
   // {
   //   name: 'Favourites',
   //   icon: <FontAwesome name="heart-o" size={18} />,
@@ -78,12 +78,12 @@ const items: itemProp[] = [
   //   borderBottom: false,
   //   routeTo: 'Order',
   // },
-  // {
-  //   name: 'Help',
-  //   icon: '',
-  //   borderBottom: false,
-  //   routeTo: 'Order',
-  // },
+  {
+    name: 'Help',
+    icon: '',
+    borderBottom: false,
+    routeTo: 'Order',
+  },
   {
     name: 'Logout',
     icon: '',
@@ -240,6 +240,10 @@ const More: React.FC<Props> = ({navigation}) => {
         navigation.navigate('RateUs');
         break;
 
+      case 'Help':
+        navigation.navigate('Help', {screen: 'Help'});
+        break;
+
       case 'Logout':
         await AsyncStorage.removeItem('intro');
         await AsyncStorage.removeItem('token');
@@ -280,18 +284,18 @@ const More: React.FC<Props> = ({navigation}) => {
             <CheckBox1
               checked={dish}
               circle
-              title="Dish"
+              title="Make instant order"
               containerStyle={{backgroundColor: 'transparent'}}
               onPress={() => {
                 toggleOverlay();
-                navigation.navigate('Explorer');
+                navigation.navigate('Explore');
                 setDish(!dish);
               }}
             />
             <CheckBox1
               checked={menuPlan}
               circle
-              title="Meal Plan"
+              title="Create meal Plan"
               containerStyle={{backgroundColor: 'transparent'}}
               onPress={() => {
                 toggleOverlay();

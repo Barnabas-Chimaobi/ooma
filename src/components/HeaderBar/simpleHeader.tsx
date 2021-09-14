@@ -12,6 +12,7 @@ interface Props {
   gridView?: boolean;
   gridToggle?: () => void;
   icon?: any;
+  color: any;
 }
 const SimpleHeader: React.FC<Props> = ({
   onPress,
@@ -20,6 +21,7 @@ const SimpleHeader: React.FC<Props> = ({
   gridView,
   gridToggle,
   icon,
+  color,
 }) => {
   const navigation = useNavigation();
   return (
@@ -36,7 +38,7 @@ const SimpleHeader: React.FC<Props> = ({
           justifyContent: 'center',
         }}
         onPress={() => (onPress ? onPress : navigation.goBack())}>
-        {icon ? icon : <AntDesign name="arrowleft" size={28} />}
+        {icon ? icon : <AntDesign color={color} name="arrowleft" size={28} />}
       </TouchableOpacity>
       {gridView && (
         <TouchableOpacity onPress={gridToggle}>

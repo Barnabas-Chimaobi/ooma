@@ -23,7 +23,7 @@ export const ListItems: FC<IProps> = ({list, styles, hour, date}) => {
   const [open, setOpen] = useState(true);
   let newdate = new Date(date).toDateString();
   const navigation = useNavigation();
-  console.log(hour, date, '===hourssdatesss=====');
+  // console.log(hour, date, '===hourssdatesss=====');
   return (
     <View>
       <TouchableWithoutFeedback

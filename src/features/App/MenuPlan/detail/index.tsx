@@ -224,9 +224,7 @@ const MenuDetails: FC<IProps> = ({route}) => {
     // }, 5000);
   };
 
-  const showMode = (currentMode: any) => {
-    setShow(true);
-  };
+  const showMode = (currentMode: any) => setShow((prev) => !prev);
 
   const showDatepicker = () => {
     showMode('date');
@@ -235,7 +233,7 @@ const MenuDetails: FC<IProps> = ({route}) => {
   const [routes] = useState([
     {key: 'morning', title: 'Morning'},
     {key: 'afternoon', title: 'Afternoon'},
-    {key: 'night', title: 'Night'},
+    {key: 'night', title: 'Evening'},
   ]);
 
   const renderScene = SceneMap({
@@ -268,8 +266,8 @@ const MenuDetails: FC<IProps> = ({route}) => {
                 ? 'Evening'
                 : null,
               date,
-            ),
-              console.log(route, '======routerssss=====');
+            );
+            // console.log(route, '======routerssss=====');
           }}
           indicatorStyle={styles.indicatorStyle}
           style={styles.tabBar}
@@ -283,7 +281,7 @@ const MenuDetails: FC<IProps> = ({route}) => {
         />
       )}
       onSwipeStart={() => {
-        console.log(route, '=====routess=======');
+        // console.log(route, '=====routess=======');
         // getAfternoonAndEvening('Afternoon');
       }}
       swipeEnabled={false}
@@ -337,9 +335,7 @@ const MenuDetails: FC<IProps> = ({route}) => {
                 style={styles.calendar}
                 onPress={() => showDatepicker()}>
                 <Image source={require('../assets/calendar3.png')} />
-                <Text>
-                  {DateFormatter.date2(date) || new Date().toLocaleDateString()}
-                </Text>
+                <Text>{DateFormatter.date2(date) || 'Sort by Date'}</Text>
 
                 {/* <Text>{moment(date).format('D-MM-YYYY')}</Text> */}
               </TouchableOpacity>
