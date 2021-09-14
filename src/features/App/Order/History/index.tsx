@@ -16,11 +16,16 @@ const RenderItems = ({item}: any) => {
   return (
     <View>
       <Text>{item?.deliveryTime}</Text>
-      {item?.data?.map((item) =>
-        item?.data?.map((item) => {
-          // console.log(item, 'item===========');
+      {item?.data?.map((items) =>
+        items?.data?.map((item) => {
+          // console.log(
+          //   item?.itemData?.menuitemorders?.MenuItemOrderDetails,
+          //   '===========orderlenght=====',
+          // ),
+          //   console.log(item, 'item===========');
           return (
             <OrderCard
+              total={item?.itemData?.menuitemorders?.total}
               details={item}
               dateTitle={item?.deliveryTime}
               titlePosition="right"
@@ -31,15 +36,18 @@ const RenderItems = ({item}: any) => {
                     randomValue={item?.itemData?.id}
                     mainStyle={S.totalStyle}
                   />
-                  {item?.itemData?.menuitemorders?.MenuItemOrderDetails?.map(
-                    (item, index) => (
-                      <Total
-                        randomTitle={`ITEM ${index + 1}`}
-                        randomValue={item?.Cart?.quantity}
-                        mainStyle={S.totalStyle}
-                      />
-                    ),
-                  )}
+                  {/* {item?.itemData?.menuitemorders?.MenuItemOrderDetails?.map(
+                    (items, index) => ( */}
+                  <Total
+                    randomTitle={'ITEM'}
+                    randomValue={
+                      item?.itemData?.menuitemorders?.MenuItemOrderDetails
+                        ?.length
+                    }
+                    mainStyle={S.totalStyle}
+                  />
+                  {/* ),
+                  )} */}
 
                   <Total
                     total={Number(item?.itemData?.menuitemorders?.total)}
@@ -51,12 +59,12 @@ const RenderItems = ({item}: any) => {
                     randomValue={item?.itemData?.menuitemorders?.status}
                     mainStyle={S.totalStyle}
                     randomStyle={{
-                      color:
-                        item?.paymentStatus == 'Cancelled'
-                          ? colors.red
-                          : item?.paymentStatus == 'NOT-PAID'
-                          ? colors.primary
-                          : colors.black,
+                      color: colors.start,
+                      // item?.paymentStatus == 'Cancelled'
+                      //   ? colors.red
+                      //   : item?.paymentStatus == 'NOT-PAID'
+                      //   ? colors.primary
+                      //   : colors.black,
                     }}
                   />
                 </>

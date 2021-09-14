@@ -1,5 +1,11 @@
 import React, {useState, useEffect, FC} from 'react';
-import {View, ScrollView, FlatList, Pressable} from 'react-native';
+import {
+  View,
+  ScrollView,
+  FlatList,
+  Pressable,
+  RefreshControl,
+} from 'react-native';
 import {BaseInput} from '../../../../components';
 import S from '../styles';
 import {
@@ -51,20 +57,20 @@ const SelectedCategory: FC<selectedProps> = ({route}) => {
 
   const dispatch: AppDispatch = useDispatch();
 
-  useEffect(() => {
+  const getItemByCategoryId = async () => {
     setLoader(true);
-    const getItemByCategoryId = async () => {
-      const newData = categoryId
-        ? await SearchMenuItemByCategoryId(categoryId, 1)
-        : [];
-      setData(newData);
-      if (newData.length == 0) {
-        setTruth(true);
-      }
-      dispatch(useMenuItemByCategory(newData.data.items));
-      setLoader(false);
-    };
+    const newData = categoryId
+      ? await SearchMenuItemByCategoryId(categoryId, 1)
+      : [];
+    setData(newData);
+    if (newData.length == 0) {
+      setTruth(true);
+    }
+    dispatch(useMenuItemByCategory(newData.data.items));
     setLoader(false);
+  };
+
+  useEffect(() => {
     getItemByCategoryId();
   }, [categoryId]);
 
@@ -73,6 +79,10 @@ const SelectedCategory: FC<selectedProps> = ({route}) => {
   const [input, setInput] = useState('');
   const {gridView} = state;
   const toggleGrid = () => setstate({gridView: !gridView});
+
+  const refreshing = () => {
+    getItemByCategoryId();
+  };
   return (
     <View style={S.exploreMain}>
       <SimpleHeader gridView gridToggle={toggleGrid} />
@@ -86,14 +96,17 @@ const SelectedCategory: FC<selectedProps> = ({route}) => {
       />
       <FilterBar />
       {/* {payload.length < 0 ? ( */}
-      <Spinner
+      {/* <Spinner
         visible={loader}
         // textStyle={styles.spinnerTextStyle}
         overlayColor="rgba(66, 66, 66,0.6)"
         customIndicator={<BallIndicator color="white" />}
-      />
+      /> */}
       {/* ) : ( */}
       <FlatList
+        refreshControl={
+          <RefreshControl refreshing={loader} onRefresh={refreshing} />
+        }
         renderItem={({item}) => (
           <CardItem
             item={item}

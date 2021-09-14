@@ -80,7 +80,7 @@ const Explore = () => {
     const branch = await AsyncStorage.getItem('branchId');
     const newbranch = JSON.parse(branch);
     const getSearch = await SearchMenuItemAndMenuPlan(input, newbranch);
-    console.log(getSearch, 'searchresultsssss');
+    // console.log(getSearch, 'searchresultsssss');
   };
 
   const debouncefunc = debounce(500, () => {

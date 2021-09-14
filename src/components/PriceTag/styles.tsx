@@ -8,7 +8,7 @@ export default StyleSheet.create({
     padding: 8,
     borderRadius: 10,
     marginTop: 9,
-    // width: '0%',
+    minWidth: 100,
     height: 25,
     textAlign: 'center',
     marginRight: 5,

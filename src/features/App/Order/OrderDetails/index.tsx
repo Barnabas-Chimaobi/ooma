@@ -10,6 +10,8 @@ import {
 } from '../../../../components';
 import OrderCard from '../components/OrderCard';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import {colors} from '../../../../colors';
+import {SimpleHeader, CheckBox1} from '../../../../components';
 
 const OrderStack = ({
   headerPrice,
@@ -38,12 +40,32 @@ const UnitOrders = ({price, count, description, unitPrice, style}: any) => {
         {count && <Text style={S.countStyle}>{`${count}x`}</Text>}
         <View style={{width: '70%', flexWrap: 'wrap'}}>
           <Text style={S.descriptionStyle}>{description}</Text>
-          {unitPrice && (
-            <PriceTag price={unitPrice} clear style={{width: '10%'}} />
-          )}
+          {unitPrice && <PriceTag price={unitPrice} clear style={{}} />}
         </View>
-        {price && <PriceTag price={price} style={{width: '18%'}} clear />}
+        {price && (
+          <PriceTag mainPrice={'mainprice'} price={price} style={{}} clear />
+        )}
       </View>
+    </>
+  );
+};
+
+const Adds = ({price, count, description, unitPrice, style, addons}: any) => {
+  let allAdds = JSON.parse(addons);
+  let newadd = JSON.parse(allAdds);
+  console.log(addons, '====newwww===');
+  return (
+    <>
+      {newadd?.map((item) => (
+        <View style={[S.UnitOrdersmainadds, style]}>
+          <Text style={S.countStyle}>{`${item?.quantity}x`}</Text>
+          <View style={{width: '70%', flexWrap: 'wrap'}}>
+            <Text style={S.AddonsdescriptionStyle}>{item?.name}</Text>
+            <PriceTag price={item?.initialPrice} clear />
+          </View>
+          <PriceTag price={item?.totalPrice} clear />
+        </View>
+      ))}
     </>
   );
 };
@@ -52,12 +74,15 @@ const OrderDetails = () => {
   const [value, setValue] = useState('');
   const navigation = useNavigation();
   const route = useRoute();
-  console.log(route.params?.itemDetails, 'consolledddFDetailssss=====');
+  // console.log(
+  //   route.params?.itemDetails?.itemData,
+  //   'consolledddFDetailssss=====',
+  // );
 
   let item = route.params?.itemDetails;
 
   return (
-    <View>
+    <View style={{marginBottom: 50}}>
       {/* <FlatList
         data={route.params?.itemDetails}
         numColumns={2}
@@ -70,6 +95,9 @@ const OrderDetails = () => {
         //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         // }
       /> */}
+      <View style={{marginLeft: 10}}>
+        <SimpleHeader />
+      </View>
       {route.params?.basket !== 'basket' ? (
         <ScrollView>
           <View style={S.main}>
@@ -84,14 +112,14 @@ const OrderDetails = () => {
               randomValue={item?.itemData?.orderInfo?.status}
               mainStyle={S.totalHeaderStyle}
               randomTitleStyle={S.totalHeadertitle}
-              // randomStyle={{
-              //   color:
-              //     item.status == 'Cancelled'
-              //       ? colors.red
-              //       : item.status == 'Delivered'
-              //       ? colors.primary
-              //       : colors.black,
-              // }}
+              randomStyle={{
+                color: colors.start,
+                // item.status == 'Cancelled'
+                //   ? colors.red
+                //   : item.status == 'Delivered'
+                //   ? colors.primary
+                //   : colors.black,
+              }}
             />
             <Total
               randomTitle="Requested at:"
@@ -107,20 +135,16 @@ const OrderDetails = () => {
             headerDescription={
               item?.itemData?.orderInfo?.MenuPlanDetail?.MenuItem?.itemName
             }
-            headerPrice={item?.itemData?.orderInfo?.amount}
-            // children={
-            //   <UnitOrders
-            //     price={1500}
-            //     count={2}
-            //     description="Banga soup and starch"
-            //   />
-            // }
+            headerPrice={
+              item?.itemData?.orderInfo?.MenuPlanDetail?.MenuItem?.amount
+            }
+            children={<Adds addons={item?.itemData?.orderInfo?.addons} />}
             // style={{position: 'relative', bottom: -25, zIndex: 10}}
           />
           {/* </View> */}
           <View style={S.main}>
             <Total
-              total={item?.itemData?.orderInfo?.amount}
+              total={Number(item?.itemData?.orderInfo?.amount)}
               mainStyle={S.totalHeaderStyle}
             />
           </View>
@@ -158,8 +182,8 @@ const OrderDetails = () => {
                   randomValue={item?.itemData?.orderInfo?.paymentMethod}
                 />
                 <Total
-                  randomTitle="Location"
-                  randomValue={item?.itemData?.orderInfo?.deliveryAddress}
+                  randomTitle="Status"
+                  randomValue={item?.itemData?.orderInfo?.paymentStatus}
                 />
               </>
             }
@@ -179,14 +203,9 @@ const OrderDetails = () => {
               randomValue={item?.itemData?.status}
               mainStyle={S.totalHeaderStyle}
               randomTitleStyle={S.totalHeadertitle}
-              // randomStyle={{
-              //   color:
-              //     item.status == 'Cancelled'
-              //       ? colors.red
-              //       : item.status == 'Delivered'
-              //       ? colors.primary
-              //       : colors.black,
-              // }}
+              randomStyle={{
+                color: colors.start,
+              }}
             />
             <Total
               randomTitle="Requested at:"
@@ -203,19 +222,15 @@ const OrderDetails = () => {
               item?.itemData?.MenuPlan?.MenuplanDetail?.MenuItem?.itemName
             }
             headerPrice={item?.itemData?.amount}
-            // children={
-            //   <UnitOrders
-            //     price={1500}
-            //     count={2}
-            //     description="Banga soup and starch"
-            //   />
-            // }
+            children={<Adds addons={item?.itemData?.addons} />}
             // style={{position: 'relative', bottom: -25, zIndex: 10}}
           />
           {/* </View> */}
           <View style={S.main}>
             <Total
-              total={item?.itemData?.amount}
+              total={Number(
+                item?.itemData?.MenuPlan?.MenuplanDetail?.MenuItem?.amount,
+              )}
               mainStyle={S.totalHeaderStyle}
             />
           </View>
@@ -239,7 +254,7 @@ const OrderDetails = () => {
               </>
             }
           />
-          <OrderCard
+          {/* <OrderCard
             dateTitle="Payment Details"
             mainStyle={S.main}
             children={
@@ -253,12 +268,12 @@ const OrderDetails = () => {
                   randomValue={item?.itemData?.paymentMethod}
                 />
                 <Total
-                  randomTitle="Location"
-                  randomValue={item?.itemData?.deliveryAddress}
+                  randomTitle="Status"
+                  randomValue={item?.itemData?.paymentStatus}
                 />
               </>
             }
-          />
+          /> */}
 
           {/* <View style={[S.main, {padding: 20}]}>
           <View

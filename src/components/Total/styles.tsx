@@ -10,12 +10,19 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
+    paddingBottom: 10,
+  },
+  bodyStyleAmout1: {
+    flexDirection: 'row',
+    width: '100%',
     paddingBottom: 15,
+    justifyContent: 'space-between',
   },
   bodyStyleAmout: {
     flexDirection: 'row',
     width: '100%',
     paddingBottom: 15,
+    // justifyContent: 'space-between',
   },
   textStyle: {
     fontSize: 12,
@@ -27,6 +34,7 @@ export default StyleSheet.create({
   textStyle2: {
     fontSize: 14,
     fontWeight: 'bold',
-    paddingLeft: 150,
+    // paddingLeft: 130,
+    // paddingRight: 15,
   },
 });

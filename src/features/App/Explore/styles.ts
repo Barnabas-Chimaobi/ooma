@@ -1,5 +1,6 @@
 import {StyleSheet, Dimensions} from 'react-native';
-import {colors} from '../../../colors';
+import { colors } from '../../../colors';
+
 
 export default StyleSheet.create({
   title: {
@@ -17,7 +18,7 @@ export default StyleSheet.create({
     height: 200,
     margin: 5,
     borderRadius: 5,
-    overflow: 'hidden'
+    overflow: 'hidden',
     
   },
     imageBackground1: {
@@ -33,7 +34,7 @@ export default StyleSheet.create({
     // width: 160,
     flex:1,
     backgroundColor:colors.black,
-    opacity: 0.6,
+    opacity: 0.4,
     alignItems:'center',
     justifyContent:'center',
     borderRadius:3
@@ -73,12 +74,21 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 20,
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+    backgroundColor: 'white',
+    marginTop: -20,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 10
+
   },
   sdRating: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginVertical: 20,
+    // marginVertical: 10,
   },
   sdDelivery: {
     marginTop: 15,

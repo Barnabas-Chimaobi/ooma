@@ -93,12 +93,12 @@ const MyCarousel: FC<CarouselProps> = ({menuItem, page = 1, keyProp}) => {
               <ImageBackground
                 source={{uri: item.imageurl}}
                 style={styles.menuImage}>
-                <TouchableOpacity>
+                {/* <TouchableOpacity>
                   <Image
                     source={hearts}
                     style={{marginEnd: 12, alignSelf: 'flex-end', top: 10}}
                   />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </ImageBackground>
               <View style={styles.titleContainer}>
                 <Text style={styles.title}>{item?.name}</Text>
@@ -142,6 +142,7 @@ const MyCarousel: FC<CarouselProps> = ({menuItem, page = 1, keyProp}) => {
       </View>
     ) : (
       <Card
+        catId={item.MenuItemCategories[0]?.itemCategoryId}
         page={page}
         img={Image_Http_URL}
         labelText={item.caption}

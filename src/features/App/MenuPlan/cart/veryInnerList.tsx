@@ -19,6 +19,9 @@ interface ListDataProps {
   plantime: any;
   details: any;
   diffParams: any;
+  option: any;
+  showDelete: any;
+  getNewbasket: () => void;
 }
 
 const VeryInnerList = ({
@@ -35,11 +38,14 @@ const VeryInnerList = ({
   plantime,
   details,
   diffParams,
+  option,
+  showDelete,
+  getNewbasket,
 }: ListDataProps) => {
   const [toggle, setToggle] = useState(false);
   const toggleView = () => {
     setToggle(!toggle);
-    console.log('consoleedddd');
+    // console.log(option, '=========consoleedddd');
   };
 
   const format = (amount: Number) => {
@@ -47,6 +53,7 @@ const VeryInnerList = ({
       .toFixed(2)
       .replace(/\d(?=(\d{3})+\.)/g, '$&,');
   };
+  // console.log(option, '=========consoleedddd');
 
   return (
     <View>
@@ -78,6 +85,7 @@ const VeryInnerList = ({
                 </Text>
 
                 <Text style={styles.deliveryStyle}>{delivery}</Text>
+                <Text style={styles.deliveryStyle}>{option}</Text>
               </View>
               <Text style={styles.timeStyle}>{time}</Text>
             </View>
@@ -107,14 +115,17 @@ const VeryInnerList = ({
               params={'details'}
               title="View Details"
             />
-            <MoreAction
-              cart={basketId}
-              params={'deleteBasket'}
-              title="Delete"
-              iconName="trash"
-              color="red"
-              del
-            />
+            {!showDelete && (
+              <MoreAction
+                gottenNewCart={(item) => getNewbasket(item)}
+                cart={basketId}
+                params={'deleteBasket'}
+                title="Delete"
+                iconName="trash"
+                color="red"
+                del
+              />
+            )}
           </View>
         </View>
       )}

@@ -24,7 +24,7 @@ const Slide = ({data}: DataProps): any => {
   const navigation = useNavigation();
 
   const menuPlan = async (id: any) => {
-    console.log(id, 'allplannnnnssss');
+    // console.log(id, 'allplannnnnssss');
     const allPlan = await GetAllMenuPlanCategory(id);
     const mapPlan = allPlan?.map(
       (item: any) => {
@@ -39,7 +39,7 @@ const Slide = ({data}: DataProps): any => {
       // }),
     );
     setRoutes(mapPlan);
-    console.log(mapPlan, 'allplannnnnsssseccccccc');
+    // console.log(mapPlan, 'allplannnnnsssseccccccc');
   };
 
   useEffect(() => {
@@ -51,12 +51,12 @@ const Slide = ({data}: DataProps): any => {
 
       menuPlan(newbranch);
     };
-    console.log('allplannnnnsssseccccccc');
+    // console.log('allplannnnnsssseccccccc');
 
     getBranchId();
   }, []);
 
-  console.log('======external route========', data.route);
+  // console.log('======external route========', data.route);
   return (
     <View style={styles.main}>
       <Text style={styles.headerText}>{data.title}</Text>

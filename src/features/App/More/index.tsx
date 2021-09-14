@@ -40,44 +40,44 @@ const items: itemProp[] = [
     borderBottom: false,
     routeTo: 'Explore',
   },
-  {
-    name: 'Favourites',
-    icon: <FontAwesome name="heart-o" size={18} />,
-    borderBottom: true,
-    routeTo: 'Order',
-  },
-  {
-    name: 'Promotions/rewards',
-    icon: <Octicons name="tag" size={18} />,
-    borderBottom: false,
-    routeTo: 'Order',
-  },
-  {
-    name: 'Voucher',
-    icon: (
-      <MaterialCommunityIcons name="ticket-confirmation-outline" size={18} />
-    ),
-    borderBottom: false,
-    routeTo: 'Order',
-  },
-  {
-    name: 'Wallet',
-    icon: <Ionicons name="wallet-outline" size={18} />,
-    borderBottom: false,
-    routeTo: `'MyCartNavigation', { screen: 'Wallet' }`,
-  },
-  {
-    name: 'Rate Us',
-    icon: <Feather name="star" size={18} />,
-    borderBottom: true,
-    routeTo: 'RateUs',
-  },
-  {
-    name: 'Invite a friend',
-    icon: '',
-    borderBottom: false,
-    routeTo: 'Order',
-  },
+  // {
+  //   name: 'Favourites',
+  //   icon: <FontAwesome name="heart-o" size={18} />,
+  //   borderBottom: true,
+  //   routeTo: 'Order',
+  // },
+  // {
+  //   name: 'Promotions/rewards',
+  //   icon: <Octicons name="tag" size={18} />,
+  //   borderBottom: false,
+  //   routeTo: 'Order',
+  // },
+  // {
+  //   name: 'Voucher',
+  //   icon: (
+  //     <MaterialCommunityIcons name="ticket-confirmation-outline" size={18} />
+  //   ),
+  //   borderBottom: false,
+  //   routeTo: 'Order',
+  // },
+  // {
+  //   name: 'Wallet',
+  //   icon: <Ionicons name="wallet-outline" size={18} />,
+  //   borderBottom: false,
+  //   routeTo: `'MyCartNavigation', { screen: 'Wallet' }`,
+  // },
+  // {
+  //   name: 'Rate Us',
+  //   icon: <Feather name="star" size={18} />,
+  //   borderBottom: true,
+  //   routeTo: 'RateUs',
+  // },
+  // {
+  //   name: 'Invite a friend',
+  //   icon: '',
+  //   borderBottom: false,
+  //   routeTo: 'Order',
+  // },
   {
     name: 'Help',
     icon: '',
@@ -102,13 +102,14 @@ const More: React.FC<Props> = ({navigation}) => {
   const [dish, setDish] = useState(false);
   const [menuPlan, setMenuPlan] = useState(false);
   const [order, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const toggleOverlay = () => {
     setVisible(!visible);
   };
 
   const getOrders = async () => {
+    setLoading(true);
     const userId = await AsyncStorage.getItem('userId');
     console.log(userId, 'useriddd');
     let basketData: any = [];
@@ -204,6 +205,11 @@ const More: React.FC<Props> = ({navigation}) => {
   useEffect(() => {
     getOrders();
   }, []);
+
+  const onrefresh = () => {
+    setLoading(true);
+    getOrders();
+  };
   const handleNavigate = async (name: string) => {
     switch (name) {
       case 'My Order':
@@ -234,6 +240,10 @@ const More: React.FC<Props> = ({navigation}) => {
         navigation.navigate('RateUs');
         break;
 
+      case 'Help':
+        navigation.navigate('Help', {screen: 'Help'});
+        break;
+
       case 'Logout':
         await AsyncStorage.removeItem('intro');
         await AsyncStorage.removeItem('token');
@@ -250,8 +260,15 @@ const More: React.FC<Props> = ({navigation}) => {
     <View style={{flex: 1, paddingHorizontal: 10}}>
       <SimpleHeader hasBottomBorder />
       {/* <RefreshControl refreshing={loading} /> */}
-      <ActivityIndicator size={'large'} color={'green'} animating={loading} />
-      <ScrollView>
+      {/* <ActivityIndicator size={'large'} color={'green'} animating={loading} /> */}
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            onRefresh={onrefresh}
+            size={20}
+            refreshing={loading}
+          />
+        }>
         {items?.map(({icon, name, borderBottom, routeTo}, idx) => (
           <TouchableOpacity
             onPress={() => handleNavigate(name)}
@@ -267,18 +284,18 @@ const More: React.FC<Props> = ({navigation}) => {
             <CheckBox1
               checked={dish}
               circle
-              title="Dish"
+              title="Make instant order"
               containerStyle={{backgroundColor: 'transparent'}}
               onPress={() => {
                 toggleOverlay();
-                navigation.navigate('Explorer');
+                navigation.navigate('Explore');
                 setDish(!dish);
               }}
             />
             <CheckBox1
               checked={menuPlan}
               circle
-              title="Meal Plan"
+              title="Create meal Plan"
               containerStyle={{backgroundColor: 'transparent'}}
               onPress={() => {
                 toggleOverlay();

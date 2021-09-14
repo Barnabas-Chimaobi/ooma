@@ -54,27 +54,27 @@ export class State extends Component {
       //   paystackWebViewRef.current.startTransaction();
       // }, 3000);
     }
-    console.log(genRef?.data?.publicKey, 'genrefernce======');
+    // console.log(genRef?.data?.publicKey, 'genrefernce======');
     setTimeout(() => {
       this.paystackWebViewRef.current.startTransaction();
     }, 2000);
-    console.log(this.state.refdata, '======refdata');
+    // console.log(this.state.refdata, '======refdata');
     // verifyRef();
   };
 
   verifyRef = async () => {
     const verify = await verifyPayment(this.state.refdata);
     if (verify?.data.status === 'success') {
-      ShowMessage(type.DONE, 'Payment was Successful');
-      this.props.navigation.navigate('Home');
+      // ShowMessage(type.DONE, 'Payment was Successful');
+      this.props.navigation.navigate('HomeNav');
     } else {
       ShowMessage(type.ERROR, 'Failed Transaction. please retry');
     }
-    console.log(verify, 'paymentverify======');
+    // console.log(verify, 'paymentverify======');
   };
 
   componentDidMount() {
-    console.log(this.props.route.params, 'params=========');
+    // console.log(this.props.route.params, 'params=========');
   }
 
   render() {
@@ -141,7 +141,7 @@ export class State extends Component {
             // handle response here
           }}
           onSuccess={(res) => {
-            console.log(res, 'responsefromstack========');
+            // console.log(res, 'responsefromstack========');
             this.verifyRef();
             // handle response here
           }}

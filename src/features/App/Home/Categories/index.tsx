@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, TouchableHighlight} from 'react-native';
 import S from '../styles';
 import Carousel from '../Carousel';
 import {useNavigation} from '@react-navigation/native';
@@ -28,20 +28,37 @@ const Categories: FC<IProps> = ({
   keys,
   text,
 }) => {
+  // console.log(
+  //   menuItem[0]?.MenuItemCategories?.map((item) => item?.itemCategoryId),
+  //   '===menuitemmm =====',
+  // );
+  if (keys !== 'plan') {
+    // console.log(
+    //   menuItem?.[0]?.MenuItemCategories[0]?.itemCategoryId,
+    //   '===menuitemmm ===',
+    // );
+  }
   const navigation = useNavigation();
+
   return (
     <View style={S.categoryMain}>
       {text !== 'text' && (
         <View>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text style={S.categoryTitle}>{title && capCase(title)}</Text>
-            <Text
-              onPress={() => {
-                console.log('aba');
-              }}
-              style={S.viewAllStyle}>
-              View all
-            </Text>
+
+            {/* <TouchableHighlight
+              underlayColor=""
+              onPress={() =>
+                navigation.navigate('SelectedCategory', {
+                  categoryId:
+                    keys !== 'plan'
+                      ? menuItem?.[0]?.MenuItemCategories[0]?.itemCategoryId
+                      : null,
+                })
+              }>
+              <Text style={S.viewAllStyle}>View all</Text>
+            </TouchableHighlight> */}
           </View>
 
           {subtitle && <Text style={S.categorySubtitle}>{subtitle}</Text>}

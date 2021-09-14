@@ -44,7 +44,7 @@ const App = () => {
       getMenuplanKart();
     });
     getMenuplanKart();
-    console.log('consoleddddddddd');
+    // console.log('consoleddddddddd');
     getData();
   }, []);
   const getData = () => {

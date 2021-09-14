@@ -10,6 +10,8 @@ import {
   TouchableOpacity,
   Image,
   ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import {
   PriceTag,
@@ -30,6 +32,7 @@ import S from '../styles';
 import {StackScreenProps} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../../navigation';
 import {useNavigation} from '@react-navigation/native';
+import {SimpleHeader, CheckBox1} from '../../../../components';
 import {
   getMenuItemsById,
   getDeliveryAddress,
@@ -47,10 +50,11 @@ import Collapsible from 'react-native-collapsible';
 import ss from '../Components/Collapsible/styles';
 import Modal from 'react-native-modal';
 import ToggleSwitch from 'toggle-switch-react-native';
-import {check} from '../../../../assets';
+import {check, clock} from '../../../../assets';
 import DropDownPicker from 'react-native-dropdown-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import s from '../../../App/Checkout/DeliveryOptions/styles';
+import {colors} from '../../../../colors';
 
 type ExploreNavigationProps = StackScreenProps<MainStackParamList, 'Explore'>;
 
@@ -135,7 +139,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
 
   const text = (item: any) => {
     setTime(item);
-    console.log(item?.toDateString(), 'datedsssss');
+    // console.log(item?.toDateString(), 'datedsssss');
   };
 
   const showCheck = () => {
@@ -160,7 +164,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     );
     // setItems(mapping);
     // items.push(mapping);
-    console.log(allAdress?.data?.data?.rows, 'alladress');
+    // console.log(allAdress?.data?.data?.rows, 'alladress');
   };
 
   const modal = () => {
@@ -172,16 +176,32 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   const userId = async () => {
     const userId = await AsyncStorage.getItem('userId');
     setId(userId);
-    console.log(userId, '======= = =useriddd');
+    // console.log(userId, '======= = =useriddd');
   };
+
+  const getItemDetail = async () => {
+    const item = await getMenuItemsById(route?.params?.id);
+    // console.log(item, 'itemssssss');
+    // console.log(menuItem?.menuItemPreferences, '======preferencessss=======');
+    setTotal(item?.amount);
+    setPrice(item?.amount);
+    setPrice1(item?.amount);
+    setMenuItem(item);
+  };
+
+  // console.log(
+  //   route.params,
+  //   menuItem?.imageUrl,
+  //   '====eachitemmm ====andurllllll====',
+  // );
 
   useEffect(() => {
     userId();
-    console.log(
-      route.params,
-      menuItem?.imageUrl,
-      '====eachitemmm ====andurllllll====',
-    );
+    // console.log(
+    //   route.params,
+    //   menuItem?.imageUrl,
+    //   '====eachitemmm ====andurllllll====',
+    // );
     const handleData = async () => {
       const regionName = await AsyncStorage.getItem('regionName');
       const branchName = await AsyncStorage.getItem('branchName');
@@ -190,15 +210,18 @@ const CardItem: FC<IProps> = ({route, menu}) => {
       setBranch(newbranch);
       setBname(branchName);
       setRname(regionName);
-      console.log(regionName, branchName, 'regionbranch');
+      // console.log(regionName, branchName, 'regionbranch');
     };
 
     handleData();
     getAddress();
-    console.log(id, cartId, planId, planTime, 'paramssssmmm');
+    // console.log(id, cartId, planId, planTime, 'paramssssmmm');
     getItemDetail();
     optionsForDelivery('Pick-Up'), toggleCheckOptions('Pick-Up');
-  }, []);
+    // return () => {
+    //   getItemDetail();
+    // };
+  }, [route?.params?.id]);
 
   const body = {
     branchId: menuItem?.branchId,
@@ -243,8 +266,8 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   };
   const createCart = async (item: any) => {
     setLoading(true);
-    console.log(addsTotal, 'bodyyyquntyyss');
-    console.log(body, 'bodyyy');
+    // console.log(addsTotal, 'bodyyyquntyyss');
+    // console.log(body, 'bodyyy');
     try {
       const cart = await api.post(`/orders/cart`, {
         branchId: body.branchId,
@@ -252,35 +275,39 @@ const CardItem: FC<IProps> = ({route, menu}) => {
         quantity: body.quantity,
         amount: body.amount,
         addons: JSON.stringify(body.addons),
-        Preferences: body.Preferences,
+        preferences: body.Preferences,
         specialInstruction: body.specialInstruction,
         menuplanid: planId,
         createdBy: myId,
       });
       const addedCart = await cart?.data?.data;
-      if (item == 'Buy now' && addedCart?.amount !== undefined) {
-        setLoading(false);
-        navigation.navigate('Checkout', {
-          branchId: menuItem?.branchId,
-          params: addedCart,
-          paramsBuynow: 'buynow',
-          // amount: menuItem?.amount,
-        });
-      } else if (addedCart?.amount !== undefined) {
-        setLoading(false);
-        ShowMessage(type.DONE, 'Item added to cart successfully'); // dispatch(cartStates(addedCart));
-        setCartItem(addedCart);
-        setCartId(addedCart?.id);
-        // if (menuPlan != 'menuPlan') {
-        navigation.goBack();
-        // }
-        console.log(addedCart, 'addedcaart');
+      if (body?.amount === 'NaN') {
+        ShowMessage(type.INFO, 'Please wait as the item details load ');
       } else {
-        setLoading(false);
-        ShowMessage(
-          type.ERROR,
-          'Sorry we could not process your order at this time',
-        );
+        if (item == 'Buy now' && addedCart?.amount !== undefined) {
+          setLoading(false);
+          navigation.navigate('Checkout', {
+            branchId: menuItem?.branchId,
+            params: addedCart,
+            paramsBuynow: 'buynow',
+            // amount: menuItem?.amount,
+          });
+        } else if (addedCart?.amount !== undefined) {
+          setLoading(false);
+          ShowMessage(type.DONE, 'Item added to cart successfully'); // dispatch(cartStates(addedCart));
+          setCartItem(addedCart);
+          setCartId(addedCart?.id);
+          // if (menuPlan != 'menuPlan') {
+          navigation.goBack();
+          // }
+          // console.log(addedCart, 'addedcaart');
+        } else {
+          setLoading(false);
+          ShowMessage(
+            type.ERROR,
+            'Sorry we could not process your order at this time',
+          );
+        }
       }
     } catch (err) {
       setLoading(false);
@@ -288,17 +315,22 @@ const CardItem: FC<IProps> = ({route, menu}) => {
         type.ERROR,
         'Sorry we could not process your order at this time',
       );
-      console.log(err, 'cartError');
+      // console.log(err, 'cartError');
     }
   };
 
   const createBasket = async () => {
     setLoading(true);
-    console.log(addsTotal, 'bodyyyquntyyss');
-    console.log(body, 'bodyyy');
+    // console.log(addsTotal, 'bodyyyquntyyss');
+    // console.log(body, 'bodyyy');
 
     try {
-      if ((myAddress == '' && deliveryOption == 'Delivery') || time == '') {
+      if (
+        myAddress == '' &&
+        deliveryOption == 'Delivery' &&
+        time == '' &&
+        addressId === null
+      ) {
         setLoading(false);
         ShowMessage(
           type.INFO,
@@ -311,7 +343,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           quantity: body.quantity,
           amount: body.amount,
           addons: JSON.stringify(body.addons),
-          Preferences: body.Preferences,
+          preferences: body.Preferences,
           specialInstruction: body.specialInstruction,
           menuplanid: planId,
           deliveryCharge: deliveryCharges,
@@ -336,7 +368,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           setLoading(false);
           ShowMessage(type.DONE, 'Item added to cart successfully'); // dispatch(cartStates(addedCart));
         }
-        console.log(addedCart, 'addedcaart');
+        // console.log(addedCart, 'addedcaart');
       }
       setOpenModal(false);
     } catch (err) {
@@ -390,23 +422,13 @@ const CardItem: FC<IProps> = ({route, menu}) => {
       ShowMessage(type.DONE, 'Item edited successfully'); // dispatch(cartStates(addedCart));
       setCartItem(addedCart);
       navigation.goBack();
-      console.log(cart?.config?.data, 'editedcartttt');
+      // console.log(cart?.config?.data, 'editedcartttt');
       // } else {
       //   ShowMessage(type.ERROR, 'Item could not be updated'); // dispatch(cartStates(addedCart));
       // }
     } catch (err) {
       console.log(err, 'cartError');
     }
-  };
-
-  const getItemDetail = async () => {
-    const item = await getMenuItemsById(id);
-    console.log(item.Preference, 'itemssssss');
-    console.log(menuItem?.menuItemPreferences, '======preferencessss=======');
-    setTotal(item?.amount);
-    setPrice(item?.amount);
-    setPrice1(item?.amount);
-    setMenuItem(item);
   };
 
   // const addToCart = async () => {
@@ -421,18 +443,18 @@ const CardItem: FC<IProps> = ({route, menu}) => {
 
   const changeFirst = (newValue: any) => {
     setQuantity(newValue);
-    console.log(quantity, 'quantity');
+    // console.log(quantity, 'quantity');
   };
 
   const getAddons = () => {};
   const getPreference = () => {};
 
   const getQuantity = (item: any) => {
-    console.log(item, 'itemss');
+    // console.log(item, 'itemss');
     setItemqty(item);
     // parseInt(total) * parseInt(item) + parseInt(addsTotal);
     let newPrice = parseInt(item) * parseInt(prices1);
-    console.log(newPrice, prices1, prices, 'newpricess');
+    // console.log(newPrice, prices1, prices, 'newpricess');
     newPrice != 0 ? setPrice(newPrice) : null;
   };
 
@@ -461,7 +483,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   // updatedAt,
 
   const submitProp = (item: any) => {
-    console.log(item, 'quantity');
+    // console.log(item, 'quantity');
     // setFirstProps(item);
     setAdqunty(item);
   };
@@ -488,7 +510,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     setPrice(parseInt(newsum) + parseInt(total));
     setPrice1(parseInt(newsum) + parseInt(total));
     console.log(newsum, 'newsummmmmssssss');
-    console.log(prices, 'pricesss');
+    // console.log(prices, 'pricesss');
   };
 
   //remove item from addons
@@ -514,7 +536,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     let newsum = sum.reduce(
       (sum: any, current: any) => parseInt(sum) + parseInt(current),
     );
-    console.log(newsum, 'newsummmmmssssss');
+    // console.log(newsum, 'newsummmmmssssss');
     setAddsTotal(newsum);
     setPrice(parseInt(newsum) + parseInt(total));
     setPrice1(parseInt(newsum) + parseInt(total));
@@ -561,406 +583,422 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   };
 
   return (
-    <View style={{flex: 1}}>
-      <ImageBackground
-        style={S.sdImage}
-        source={route.params.img || Image_Http_URL}
-      />
-      <ScrollView style={S.sdMain}>
-        <View style={S.sdHold}>
-          <View style={S.sdContainer}>
-            <Text>{menuItem?.itemName}</Text>
-            <PriceTag price={prices} />
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{flex: 1}}>
+      <View style={{flex: 1}}>
+        <ImageBackground
+          style={S.sdImage}
+          source={route.params.img || Image_Http_URL}>
+          <View style={{marginLeft: 10}}>
+            <SimpleHeader color={colors.white} />
           </View>
-          <View style={S.sdRating}>
-            <Rating rating={count} />
-            <Icon
-              name="share-alt"
-              type="font-awesome-5"
-              color="#000"
-              size={18}
-            />
-          </View>
-          <DishTypes
-            categories={menuItem?.menuItemCategories}
-            dish1="Chinese"
-            dish2="Continental"
-            dish3="Gluten"
-          />
-          <Text style={S.sdDelivery}>Delivery fee applies</Text>
+        </ImageBackground>
+        <View style={S.sdContainer}>
+          <Text>{menuItem?.itemName}</Text>
+          <PriceTag price={prices} />
         </View>
-        <OmaCard
-          title="Description"
-          titleStyle={S.cdDescription}
-          subTitle={menuItem?.description}
-          subStyle={{paddingBottom: 13}}
-          mainStyle={{paddingHorizontal: 12}}
-        />
-        <Divider />
-        {/* <CollapsibleView
+        <ScrollView style={S.sdMain}>
+          <View style={S.sdHold}>
+            <View style={S.sdRating}>
+              <Rating rating={count} />
+              {/* <Icon
+                name="share-alt"
+                type="font-awesome-5"
+                color="#000"
+                size={18}
+              /> */}
+            </View>
+            <DishTypes
+              categories={menuItem?.menuItemCategories}
+              dish1="Chinese"
+              dish2="Continental"
+              dish3="Gluten"
+            />
+            {/* <Text style={S.sdDelivery}>Delivery fee applies</Text> */}
+          </View>
+          <OmaCard
+            title="Description"
+            titleStyle={S.cdDescription}
+            subTitle={menuItem?.description}
+            subStyle={{paddingBottom: 13}}
+            mainStyle={{paddingHorizontal: 12}}
+          />
+          <Divider />
+          {/* <CollapsibleView
           itemPreferences={menuItem?.menuItemPreferences}
           addOns={menuItem?.addons}
           title="Add-Ons"
         /> */}
-        <Divider />
+          <Divider />
 
-        <View style={{paddingHorizontal: 12, width: '100%'}}>
-          <Button
-            type={ButtonType.solid}
-            title={'Add -Ons'}
-            iconRight={true}
-            iconName={!visible ? 'plus' : 'minus'}
-            iconColor="rgba(48, 48, 48, 0.85)"
-            iconSize={16}
-            buttonStyle={ss.buttonStyle}
-            titleStyle={ss.titleStyle}
-            onPress={() => visibility()}
-          />
-          <Collapsible collapsed={!visible} style={{width: '100%'}}>
-            <>
-              {menuItem?.addons
-                ? menuItem?.addons.map((addon: any) => {
-                    // console.log(addon, 'addonsss');
-                    return (
-                      <TouchableWithoutFeedback
-                        onPress={() => {
-                          console.log('==do nothing==');
-                        }}>
-                        <View key={addon?.id}>
-                          <Adjust
-                            isAddon
-                            itemAddon={addon}
-                            processAddons={processAddons}
-                            removeAddon={removeAddon}
-                            props={(item: any) => submitProp(item)}
-                            mainStyle={{paddingVertical: 10}}
-                            title={
-                              addon?.isExtra == true
-                                ? `Extra ${addon?.Inventory?.itemName} `
-                                : addon?.Inventory?.itemName
-                            }
-                            price={addon?.price}
-                            titleStyle={ss.adjustTitleStyle}
-                          />
-                          {/* <AddOns /> */}
-                        </View>
-                      </TouchableWithoutFeedback>
-                    );
-                  })
-                : null}
-            </>
-          </Collapsible>
-        </View>
+          <View style={{paddingHorizontal: 12, width: '100%'}}>
+            <Button
+              type={ButtonType.solid}
+              title={'Add -Ons'}
+              iconRight={true}
+              iconName={!visible ? 'plus' : 'minus'}
+              iconColor="rgba(48, 48, 48, 0.85)"
+              iconSize={16}
+              buttonStyle={ss.buttonStyle}
+              titleStyle={ss.titleStyle}
+              onPress={() => visibility()}
+            />
+            <Collapsible collapsed={!visible} style={{width: '100%'}}>
+              <>
+                {menuItem?.addons
+                  ? menuItem?.addons.map((addon: any) => {
+                      // console.log(addon, 'addonsss');
+                      return (
+                        <TouchableWithoutFeedback
+                          onPress={() => {
+                            // console.log('==do nothing==');
+                          }}>
+                          <View key={addon?.id}>
+                            <Adjust
+                              isAddon
+                              itemAddon={addon}
+                              processAddons={processAddons}
+                              removeAddon={removeAddon}
+                              props={(item: any) => submitProp(item)}
+                              mainStyle={{paddingVertical: 10}}
+                              title={
+                                addon?.isExtra == true
+                                  ? `Extra ${addon?.Inventory?.itemName} `
+                                  : addon?.Inventory?.itemName
+                              }
+                              price={addon?.price}
+                              titleStyle={ss.adjustTitleStyle}
+                            />
+                            {/* <AddOns /> */}
+                          </View>
+                        </TouchableWithoutFeedback>
+                      );
+                    })
+                  : null}
+              </>
+            </Collapsible>
+          </View>
 
-        <View style={{paddingHorizontal: 12, width: '100%'}}>
-          <Button
-            type={ButtonType.solid}
-            title={'Preferences'}
-            iconRight={true}
-            iconName={!visible1 ? 'plus' : 'minus'}
-            iconColor="rgba(48, 48, 48, 0.85)"
-            iconSize={16}
-            buttonStyle={ss.buttonStyle}
-            titleStyle={ss.titleStyle}
-            onPress={() => visibility1()}
-          />
-          <Collapsible collapsed={!visible1} style={{width: '100%'}}>
-            <>
-              {menuItem?.menuItemPreferences.map((preference: any) => (
-                <TouchableWithoutFeedback
-                  onPress={() => {
-                    console.log(
-                      preference?.Preference?.name,
-                      '====preefereeeenn====',
-                    );
-                    // JSON.stringify(
-                    //   Preferences.push(preference?.Preference?.name),
-                    // );
-                  }}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
+          <View style={{paddingHorizontal: 12, width: '100%'}}>
+            <Button
+              type={ButtonType.solid}
+              title={'Preferences'}
+              iconRight={true}
+              iconName={!visible1 ? 'plus' : 'minus'}
+              iconColor="rgba(48, 48, 48, 0.85)"
+              iconSize={16}
+              buttonStyle={ss.buttonStyle}
+              titleStyle={ss.titleStyle}
+              onPress={() => visibility1()}
+            />
+            <Collapsible collapsed={!visible1} style={{width: '100%'}}>
+              <>
+                {menuItem?.menuItemPreferences.map((preference: any) => (
+                  <TouchableWithoutFeedback
+                    onPress={() => {
+                      // console.log(
+                      //   preference?.Preference?.name,
+                      //   '====preefereeeenn====',
+                      // );
+                      // JSON.stringify(
+                      //   Preferences.push(preference?.Preference?.name),
+                      // );
                     }}>
-                    <CheckBox
-                      id={preference?.Preference?.id}
-                      value={preference?.Preference?.unitPrice}
-                      key={preference?.Preference?.id}
-                      title={preference?.Preference?.name}
-                      props1={(name: any, unitPrice: any, id: any) => {
-                        Preferences.push({name, unitPrice, id});
-                        const sum = Preferences?.map((v) => v?.unitPrice);
-                        if (unitPrice !== null) {
-                          let names = sum.reduce(
-                            (sum: any, current: any) => +sum + +current,
-                            // console.log(sum, current, 'consolessssssssssloggg'),
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <CheckBox
+                        id={preference?.Preference?.id}
+                        value={preference?.Preference?.unitPrice}
+                        key={preference?.Preference?.id}
+                        title={preference?.Preference?.name}
+                        props1={(name: any, unitPrice: any, id: any) => {
+                          Preferences.push({name, unitPrice, id});
+                          const sum = Preferences?.map((v) => v?.unitPrice);
+                          if (unitPrice !== null) {
+                            let names = sum.reduce(
+                              (sum: any, current: any) => +sum + +current,
+                              // console.log(sum, current, 'consolessssssssssloggg'),
+                            );
+                            setPrefAmount(names);
+                            // console.log(names, '====nameeeesss====');
+                          }
+
+                          if (unitPrice !== null) {
+                            setPrice(+unitPrice + +prices);
+                            setPrice1(+unitPrice + +prices);
+                          }
+
+                          console.log(
+                            name,
+                            unitPrice,
+                            id,
+                            '====itemmmmsss====',
                           );
-                          setPrefAmount(names);
-                          console.log(names, '====nameeeesss====');
-                        }
-
-                        if (unitPrice !== null) {
-                          setPrice(+unitPrice + +prices);
-                          setPrice1(+unitPrice + +prices);
-                        }
-
-                        console.log(name, unitPrice, id, '====itemmmmsss====');
-                      }}
-                    />
-                    <Text style={{paddingTop: 20}}>
-                      {preference?.Preference?.unitPrice}
-                    </Text>
-                  </View>
-                </TouchableWithoutFeedback>
-              ))}
-            </>
-          </Collapsible>
-        </View>
-        {/* <CollapsibleView
+                        }}
+                      />
+                      <Text style={{paddingTop: 20}}>
+                        {preference?.Preference?.unitPrice}
+                      </Text>
+                    </View>
+                  </TouchableWithoutFeedback>
+                ))}
+              </>
+            </Collapsible>
+          </View>
+          {/* <CollapsibleView
           itemPreferences={menuItem?.menuItemPreferences}
           addOns={menuItem?.addons}
           title="Preference"
         /> */}
 
-        <Divider />
-        <Adjust
-          props1={(item: any) => getQuantity(item)}
-          mainStyle={{paddingVertical: 20}}
-          title="Adjust Quantity"
-        />
-        <Divider />
-        <OmaCard
-          title="Special Instructions"
-          titleStyle={{fontSize: 15}}
-          mainStyle={{paddingHorizontal: 12}}
-          otherProps={
-            <BaseInput
-              value={value}
-              onChangeText={(text) => setValue(text)}
-              multiline={true}
-              numberOfLines={5}
-              inputStyle={{textAlignVertical: 'top'}}
+          <Divider />
+          <Adjust
+            props1={(item: any) => getQuantity(item)}
+            mainStyle={{paddingVertical: 20}}
+            title="Adjust Quantity"
+          />
+          <Divider />
+          <OmaCard
+            title="Special Instructions"
+            titleStyle={{fontSize: 15}}
+            mainStyle={{paddingHorizontal: 12}}
+            otherProps={
+              <BaseInput
+                value={value}
+                onChangeText={(text) => setValue(text)}
+                multiline={true}
+                numberOfLines={5}
+                inputStyle={{textAlignVertical: 'top'}}
+                style={{
+                  borderRadius: 4,
+                  borderColor: 'rgba(48, 48, 48, 0.85)',
+                  borderWidth: 1,
+                }}
+              />
+            }
+          />
+          {openModal == true ? (
+            <Modal
               style={{
-                borderRadius: 4,
-                borderColor: 'rgba(48, 48, 48, 0.85)',
-                borderWidth: 1,
+                backgroundColor: '#fff',
+                marginTop: '100%',
+                marginBottom: -20,
+                width: '100%',
+                alignSelf: 'center',
+                borderTopEndRadius: 25,
+                borderTopStartRadius: 25,
               }}
-            />
-          }
-        />
-        {openModal == true ? (
-          <Modal
-            style={{
-              backgroundColor: '#fff',
-              marginTop: '100%',
-              marginBottom: -20,
-              width: '100%',
-              alignSelf: 'center',
-              borderTopEndRadius: 25,
-              borderTopStartRadius: 25,
-            }}
-            isVisible={true}>
-            <View
-              style={{
-                flex: 1,
-                marginBottom: 30,
-              }}>
-              <ScrollView>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    marginTop: 15,
-                    marginLeft: 15,
-                    marginRight: 15,
-                  }}>
-                  <TouchableHighlight
-                    underlayColor=""
-                    activeOpacity={1}
-                    onPress={() => setOpenModal(false)}>
-                    <Text
-                      style={{fontSize: 16, color: 'rgba(31, 31, 31, 0.45)'}}>
-                      Cancel
-                    </Text>
-                  </TouchableHighlight>
-
-                  {loading ? (
-                    <ActivityIndicator
-                      color="green"
-                      size="large"
-                      animating={loading}
-                    />
-                  ) : (
+              isVisible={true}>
+              <View
+                style={{
+                  flex: 1,
+                  marginBottom: 30,
+                }}>
+                <ScrollView>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      marginTop: 15,
+                      marginLeft: 15,
+                      marginRight: 15,
+                    }}>
                     <TouchableHighlight
                       underlayColor=""
-                      onPress={() => createBasket()}>
-                      <Text style={{fontSize: 16, color: '#05944F'}}>Done</Text>
+                      activeOpacity={1}
+                      onPress={() => setOpenModal(false)}>
+                      <Text
+                        style={{fontSize: 16, color: 'rgba(31, 31, 31, 0.45)'}}>
+                        Cancel
+                      </Text>
                     </TouchableHighlight>
-                  )}
-                </View>
 
-                <View
-                  style={{
-                    borderBottomWidth: 1,
-                    borderColor: 'rgba(196, 196, 196, 0.35);',
-                    marginTop: 15,
-                  }}
-                />
-                <View style={{backgroundColor: '#FFFFFF'}}>
-                  <View style={{backgroundColor: 'rgba(246, 246, 246, 0.75)'}}>
-                    <Text
-                      style={{
-                        fontFamily: 'Poppins',
-                        fontSize: 16,
-                        marginLeft: 15,
-                        marginTop: 15,
-                        marginBottom: 15,
-                      }}>
-                      {'Delivery Options'}
-                    </Text>
-                  </View>
-
-                  <View style={{flexDirection: 'row'}}>
-                    <Button
-                      title="Pick-up"
-                      type={ButtonType.clear}
-                      imageIcon={require('../../../../assets/Images/shipping.png')}
-                      containerStyle={s.buttonContainer}
-                      titleStyle={s.buttonTitle}
-                      onPress={() => {
-                        optionsForDelivery('Pick-Up'),
-                          toggleCheckOptions('Pick-Up');
-                      }}
-                    />
-                    {checks == true ? (
-                      <Image
-                        style={{
-                          height: 15,
-                          width: 15,
-                          marginTop: 10,
-                          marginLeft: 10,
-                        }}
-                        source={check}
+                    {loading ? (
+                      <ActivityIndicator
+                        color="green"
+                        size="large"
+                        animating={loading}
                       />
-                    ) : null}
+                    ) : (
+                      <TouchableHighlight
+                        underlayColor=""
+                        onPress={() => createBasket()}>
+                        <Text style={{fontSize: 16, color: '#05944F'}}>
+                          Done
+                        </Text>
+                      </TouchableHighlight>
+                    )}
                   </View>
 
-                  {show == true ? (
-                    <TouchableOpacity
-                      onPress={() => {
-                        setDeliveryOptions('Pick-Up'),
-                          toggleCheckOptions('Pick-Up');
-                      }}
-                      style={{marginVertical: 10}}>
-                      <View>
-                        <Text
-                          style={{
-                            borderWidth: 0.5,
-                            padding: 5,
-                            width: '70%',
-                            alignSelf: 'flex-start',
-                            marginLeft: 20,
-                            borderRadius: 5,
-                          }}>{`${bName}, ${rName}`}</Text>
-                      </View>
-                    </TouchableOpacity>
-                  ) : null}
-
-                  <View style={{flexDirection: 'row'}}>
-                    <TouchableOpacity
-                      activeOpacity={0.5}
-                      onPress={() => {
-                        optionsForDelivery1('Delivery'),
-                          toggleCheckOptions('Delivery');
-                        // showCheck1(),
-                        // setChecks(false);
-                      }}
-                      style={{marginLeft: 10, marginBottom: 10}}>
-                      <View style={{flexDirection: 'row', marginTop: 10}}>
-                        <Image
-                          style={{marginLeft: 10}}
-                          source={require('../../../../assets/Images/truck.png')}
-                        />
-                        <Text style={{marginLeft: 15}}>Delivery</Text>
-                      </View>
-                    </TouchableOpacity>
-                    {checks1 == true ? (
-                      <Image
-                        style={{
-                          height: 15,
-                          width: 15,
-                          marginTop: 10,
-                          marginLeft: 10,
-                        }}
-                        source={check}
-                      />
-                    ) : null}
-                  </View>
-                </View>
-
-                <View style={{marginTop: 10}}>
-                  {show1 == true ? (
+                  <View
+                    style={{
+                      borderBottomWidth: 1,
+                      borderColor: 'rgba(196, 196, 196, 0.35);',
+                      marginTop: 15,
+                    }}
+                  />
+                  <View style={{backgroundColor: '#FFFFFF'}}>
                     <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        margin: 10,
-                        marginLeft: 15,
-                      }}>
+                      style={{backgroundColor: 'rgba(246, 246, 246, 0.75)'}}>
+                      <Text
+                        style={{
+                          fontFamily: 'Poppins',
+                          fontSize: 16,
+                          marginLeft: 15,
+                          marginTop: 15,
+                          marginBottom: 15,
+                        }}>
+                        {'Delivery Options'}
+                      </Text>
+                    </View>
+
+                    <View style={{flexDirection: 'row'}}>
+                      <Button
+                        title="Pick-up"
+                        type={ButtonType.clear}
+                        imageIcon={require('../../../../assets/Images/shipping.png')}
+                        containerStyle={s.buttonContainer}
+                        titleStyle={s.buttonTitle}
+                        onPress={() => {
+                          optionsForDelivery('Pick-Up'),
+                            toggleCheckOptions('Pick-Up');
+                        }}
+                      />
+                      {checks == true ? (
+                        <Image
+                          style={{
+                            height: 15,
+                            width: 15,
+                            marginTop: 10,
+                            marginLeft: 10,
+                          }}
+                          source={check}
+                        />
+                      ) : null}
+                    </View>
+
+                    {show == true ? (
+                      <TouchableOpacity
+                        onPress={() => {
+                          setDeliveryOptions('Pick-Up'),
+                            toggleCheckOptions('Pick-Up');
+                        }}
+                        style={{marginVertical: 10}}>
+                        <View>
+                          <Text
+                            style={{
+                              borderWidth: 0.5,
+                              padding: 5,
+                              width: '70%',
+                              alignSelf: 'flex-start',
+                              marginLeft: 20,
+                              borderRadius: 5,
+                            }}>{`${bName}, ${rName}`}</Text>
+                        </View>
+                      </TouchableOpacity>
+                    ) : null}
+
+                    <View style={{flexDirection: 'row'}}>
+                      <TouchableOpacity
+                        activeOpacity={0.5}
+                        onPress={() => {
+                          optionsForDelivery1('Delivery'),
+                            toggleCheckOptions('Delivery');
+                          // showCheck1(),
+                          // setChecks(false);
+                        }}
+                        style={{marginLeft: 10, marginBottom: 10}}>
+                        <View style={{flexDirection: 'row', marginTop: 10}}>
+                          <Image
+                            style={{marginLeft: 10}}
+                            source={require('../../../../assets/Images/truck.png')}
+                          />
+                          <Text style={{marginLeft: 15}}>Delivery</Text>
+                        </View>
+                      </TouchableOpacity>
+                      {checks1 == true ? (
+                        <Image
+                          style={{
+                            height: 15,
+                            width: 15,
+                            marginTop: 10,
+                            marginLeft: 10,
+                          }}
+                          source={check}
+                        />
+                      ) : null}
+                    </View>
+                  </View>
+
+                  <View style={{marginTop: 10}}>
+                    {show1 == true ? (
                       <View
                         style={{
                           flexDirection: 'row',
-                          width: '50%',
-                          borderRadius: 5,
-                          // borderWidth: 0.5,
-                          backgroundColor: 'rgba(246, 246, 246, 0.7)',
-                          height: 45,
-                          marginRight: 5,
+                          justifyContent: 'space-between',
+                          margin: 10,
+                          marginLeft: 15,
                         }}>
-                        <TextInput
+                        <View
                           style={{
-                            backgroundColor: 'rgba(246, 246, 246, 0.7)',
+                            flexDirection: 'row',
+                            width: '50%',
                             borderRadius: 5,
-                          }}
-                          placeholder="12 ooma street Enugu"
-                          onChangeText={(text) => setMyAddress(text)}
-                          multiline={true}
-                        />
-                        <Image
-                          style={{
-                            // marginLeft: 5,
-                            height: 15,
-                            width: 15,
-                            top: 15,
-                            marginRight: 0,
-                          }}
-                          source={require('../../../../assets/Images/edit.png')}
-                          resizeMode="contain"
-                        />
-                      </View>
+                            // borderWidth: 0.5,
+                            backgroundColor: 'rgba(246, 246, 246, 0.7)',
+                            height: 45,
+                            marginRight: 5,
+                          }}>
+                          <TextInput
+                            style={{
+                              backgroundColor: 'rgba(246, 246, 246, 0.7)',
+                              borderRadius: 5,
+                            }}
+                            placeholder="enter address"
+                            onChangeText={(text) => setMyAddress(text)}
+                            multiline={true}
+                          />
+                          <Image
+                            style={{
+                              // marginLeft: 5,
+                              height: 15,
+                              width: 15,
+                              top: 15,
+                              marginRight: 0,
+                            }}
+                            source={require('../../../../assets/Images/edit.png')}
+                            resizeMode="contain"
+                          />
+                        </View>
 
-                      <View style={{width: '50%'}}>
-                        <DropDownPicker
-                          placeholder="Select location"
-                          // open={open}
-                          // value={value}
-                          items={items}
-                          // setOpen={setOpen}
-                          setValue={value}
-                          setItems={items}
-                          onChangeItem={(value) => {
-                            setDeliveryCharges(value.amount);
-                            setAddressId(value.id);
-                            // setMyAddress(value?.label);
-                            console.log(value, 'amountt');
-                          }}
-                        />
+                        <View style={{width: '50%'}}>
+                          <DropDownPicker
+                            placeholder="Select location"
+                            // open={open}
+                            // value={value}
+                            items={items}
+                            // setOpen={setOpen}
+                            setValue={value}
+                            setItems={items}
+                            onChangeItem={(value) => {
+                              setDeliveryCharges(value.amount);
+                              setPrice(+value?.amount + +prices);
+                              // setPrice1(+value?.amount + +prices);
+                              setAddressId(value.id);
+                              // setMyAddress(value?.label);
+                              console.log(value, 'amountt');
+                            }}
+                          />
+                        </View>
                       </View>
-                    </View>
-                  ) : null}
-                </View>
+                    ) : null}
+                  </View>
 
-                <View
+                  {/* <View
                   style={{
                     backgroundColor: 'rgba(246, 246, 246, 0.75)',
                     padding: 5,
@@ -974,9 +1012,9 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                       Select Time
                     </Text>
                   </TouchableHighlight>
-                </View>
+                </View> */}
 
-                {showTime == true ? (
+                  {/* {showTime == true ? ( */}
                   <View style={{marginTop: -50}}>
                     <Button
                       titleStyle={s.buttonTitle}
@@ -987,9 +1025,11 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                         setShowTime(false), setTime(planTime);
                       }}
                     />
-
+                    {/* <View style={{flexDirection: 'row', flex: 1}}> */}
+                    {/* <Image style={{height: 20, width: 20}} source={clock} /> */}
                     <DropDownPicker
-                      placeholder="Set times"
+                      zIndex={0.5}
+                      placeholder="Select time"
                       // open={open}
                       // value={value}
                       items={planTime}
@@ -999,173 +1039,185 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                       onChangeItem={(value) => {
                         setShowTime(false), setTime(value.label);
                         // setMyAddress(value?.label);
-                        console.log(value, 'amountt');
+                        // console.log(value, 'amountt');
                       }}
                     />
+                    {/* </View> */}
                   </View>
-                ) : null}
-              </ScrollView>
+                  {/* ) : null} */}
+                </ScrollView>
+              </View>
+            </Modal>
+          ) : null}
+
+          {menuPlan == 'menuPlan' ? (
+            <View
+              style={{
+                backgroundColor: '#FFFFFF',
+                marginTop: 10,
+                marginBottom: 10,
+              }}>
+              <TouchableHighlight>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginVertical: 10,
+                    justifyContent: 'space-between',
+                    marginRight: 15,
+                  }}>
+                  <Text
+                    style={{marginLeft: 15, fontWeight: 'bold', fontSize: 17}}>
+                    Order For a friend
+                  </Text>
+                  <ToggleSwitch
+                    isOn={switchs}
+                    onColor="#fff"
+                    offColor="rgba(196, 196, 196, 0.15);"
+                    trackOnStyle={{
+                      borderRadius: 50,
+                      backgroundColor: 'rgba(196, 196, 196, 0.15)',
+                    }}
+                    trackOffStyle={{borderRadius: 50}}
+                    thumbOnStyle={{borderRadius: 50, backgroundColor: 'green'}}
+                    thumbOffStyle={{
+                      borderRadius: 50,
+                      backgroundColor: 'grey',
+                    }}
+                    labelStyle={{color: 'black', fontWeight: '900'}}
+                    size="small"
+                    onToggle={(isOn: any) => {
+                      toggleFriend(), console.log('changed to : ', isOn);
+                    }}
+                  />
+                </View>
+              </TouchableHighlight>
+              {switchs == true ? (
+                <View style={{backgroundColor: 'white', marginBottom: 20}}>
+                  <TextInput
+                    style={{
+                      backgroundColor: 'rgba(196, 196, 196, 0.15);',
+                      width: '90%',
+                      alignSelf: 'center',
+                      marginTop: 20,
+                      borderRadius: 15,
+                      padding: 5,
+                    }}
+                    value={friendName}
+                    placeholder="Friend's Name"
+                    onChangeText={(text) => setFriendName(text)}
+                  />
+
+                  <TextInput
+                    style={{
+                      backgroundColor: 'rgba(196, 196, 196, 0.15);',
+                      width: '90%',
+                      alignSelf: 'center',
+                      marginTop: 20,
+                      borderRadius: 15,
+                      padding: 5,
+                    }}
+                    value={friendPhone}
+                    placeholder="Friend's Phone No"
+                    onChangeText={(text) => setFriendPhone(text)}
+                  />
+                </View>
+              ) : null}
             </View>
-          </Modal>
-        ) : null}
+          ) : null}
 
-        {menuPlan == 'menuPlan' ? (
-          <View
-            style={{
-              backgroundColor: '#FFFFFF',
-              marginTop: 10,
-              marginBottom: 10,
-            }}>
-            <TouchableHighlight>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  marginVertical: 10,
-                  justifyContent: 'space-between',
-                  marginRight: 15,
-                }}>
-                <Text
-                  style={{marginLeft: 15, fontWeight: 'bold', fontSize: 17}}>
-                  Order For a friend
-                </Text>
-                <ToggleSwitch
-                  isOn={switchs}
-                  onColor="#fff"
-                  offColor="rgba(196, 196, 196, 0.15);"
-                  trackOnStyle={{
-                    borderRadius: 50,
-                    backgroundColor: 'rgba(196, 196, 196, 0.15)',
-                  }}
-                  trackOffStyle={{borderRadius: 50}}
-                  thumbOnStyle={{borderRadius: 50, backgroundColor: 'green'}}
-                  thumbOffStyle={{
-                    borderRadius: 50,
-                    backgroundColor: 'grey',
-                  }}
-                  labelStyle={{color: 'black', fontWeight: '900'}}
-                  size="small"
-                  onToggle={(isOn: any) => {
-                    toggleFriend(), console.log('changed to : ', isOn);
-                  }}
-                />
-              </View>
-            </TouchableHighlight>
-            {switchs == true ? (
-              <View style={{backgroundColor: 'white', marginBottom: 20}}>
-                <TextInput
-                  style={{
-                    backgroundColor: 'rgba(196, 196, 196, 0.15);',
-                    width: '90%',
-                    alignSelf: 'center',
-                    marginTop: 20,
-                    borderRadius: 15,
-                    padding: 5,
-                  }}
-                  value={friendName}
-                  placeholder="Friend's Name"
-                  onChangeText={(text) => setFriendName(text)}
-                />
-
-                <TextInput
-                  style={{
-                    backgroundColor: 'rgba(196, 196, 196, 0.15);',
-                    width: '90%',
-                    alignSelf: 'center',
-                    marginTop: 20,
-                    borderRadius: 15,
-                    padding: 5,
-                  }}
-                  value={friendPhone}
-                  placeholder="Friend's Phone No"
-                  onChangeText={(text) => setFriendPhone(text)}
-                />
-              </View>
-            ) : null}
-          </View>
-        ) : null}
-
-        {cartId != undefined ? (
-          <View style={{marginBottom: 20}}>
-            <Button
-              title="Edit"
-              type={ButtonType.solid}
-              containerStyle={{width: '35%', alignSelf: 'center'}}
-              buttonStyle={{backgroundColor: '#303030', paddingVertical: 12}}
-              iconColor="#FFF"
-              iconName="cart-plus"
-              iconSize={18}
-              titleStyle={{color: 'white', marginHorizontal: 20}}
-              onPress={() => {
-                editCart();
-              }}
-            />
-          </View>
-        ) : menuPlan == 'menuPlan' ? (
-          <View style={{marginBottom: 20}}>
-            {loading ? (
-              <ActivityIndicator
-                color="green"
-                size="large"
-                animating={loading}
-              />
-            ) : (
+          {cartId != undefined ? (
+            <View style={{marginBottom: 20}}>
               <Button
-                title="Add To Basket"
+                title="Edit"
                 type={ButtonType.solid}
-                containerStyle={{alignSelf: 'center', height: 40}}
+                containerStyle={{width: '35%', alignSelf: 'center'}}
                 buttonStyle={{backgroundColor: '#303030', paddingVertical: 12}}
                 iconColor="#FFF"
                 iconName="cart-plus"
                 iconSize={18}
                 titleStyle={{color: 'white', marginHorizontal: 20}}
                 onPress={() => {
-                  setOpenModal(true);
+                  editCart();
                 }}
               />
-            )}
-          </View>
-        ) : (
-          <View>
-            {loading ? (
-              <ActivityIndicator
-                color="green"
-                size="large"
-                animating={loading}
-              />
-            ) : (
-              <View style={S.sdButtonBar}>
+            </View>
+          ) : menuPlan == 'menuPlan' ? (
+            <View style={{marginBottom: 20}}>
+              {loading ? (
+                <ActivityIndicator
+                  color="green"
+                  size="large"
+                  animating={loading}
+                />
+              ) : (
                 <Button
-                  title="Add to cart"
+                  title="Add To Basket"
                   type={ButtonType.solid}
-                  containerStyle={{width: '65%'}}
+                  containerStyle={{
+                    alignSelf: 'center',
+                    height: 35,
+                    width: 325,
+                  }}
                   buttonStyle={{
                     backgroundColor: '#303030',
-                    paddingVertical: 12,
+                    paddingVertical: 5,
                   }}
                   iconColor="#FFF"
                   iconName="cart-plus"
                   iconSize={18}
-                  titleStyle={{color: 'white', marginHorizontal: 20}}
+                  titleStyle={{
+                    color: 'white',
+                    marginHorizontal: 20,
+                  }}
                   onPress={() => {
-                    createCart('Add to cart');
+                    setOpenModal(true);
                   }}
                 />
-                <Button
-                  title="Buy now"
-                  type={ButtonType.solid}
-                  containerStyle={{width: '30%'}}
-                  buttonStyle={{backgroundColor: '#EEE'}}
-                  titleStyle={{color: 'black', fontWeight: 'bold'}}
-                  onPress={() => {
-                    createCart('Buy now');
-                  }}
+              )}
+            </View>
+          ) : (
+            <View>
+              {loading ? (
+                <ActivityIndicator
+                  color="green"
+                  size="large"
+                  animating={loading}
                 />
-              </View>
-            )}
-          </View>
-        )}
-      </ScrollView>
-    </View>
+              ) : (
+                <View style={S.sdButtonBar}>
+                  <Button
+                    title="Add to cart"
+                    type={ButtonType.solid}
+                    containerStyle={{width: '65%'}}
+                    buttonStyle={{
+                      backgroundColor: '#303030',
+                      paddingVertical: 12,
+                    }}
+                    iconColor="#FFF"
+                    iconName="cart-plus"
+                    iconSize={18}
+                    titleStyle={{color: 'white', marginHorizontal: 20}}
+                    onPress={() => {
+                      createCart('Add to cart');
+                    }}
+                  />
+                  <Button
+                    title="Buy now"
+                    type={ButtonType.solid}
+                    containerStyle={{width: '30%'}}
+                    buttonStyle={{backgroundColor: '#EEE'}}
+                    titleStyle={{color: 'black', fontWeight: 'bold'}}
+                    onPress={() => {
+                      createCart('Buy now');
+                    }}
+                  />
+                </View>
+              )}
+            </View>
+          )}
+        </ScrollView>
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 

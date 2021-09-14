@@ -65,14 +65,14 @@ export const MenuHistory = () => {
       const order = await getMenuPlanOrders(userId);
       // setOrders(order?.items);
       //  await dispatch(cartStates(menuICart?.items));
-      console.log(order, 'cart ===value');
-      console.log(
-        order?.items?.map((item: any) => item),
-        'cart ===valuesssss',
-      );
+      // console.log(order, 'cart ===value');
+      // console.log(
+      //   order?.items?.map((item: any) => item),
+      //   'cart ===valuesssss',
+      // );
 
       order?.items?.forEach((item: any) => {
-        console.log(item);
+        // console.log(item);
         groupByDate(item, basketData);
       });
 
@@ -83,7 +83,7 @@ export const MenuHistory = () => {
 
       setOrders(basketData);
       setLoader(false);
-      console.log('====baket items======= ', JSON.stringify(basketData));
+      // console.log('====baket items======= ', JSON.stringify(basketData));
       // setOrders(order?.items);
       //  await dispatch(cartStates(menuICart?.items));
       //  return item;
@@ -105,7 +105,7 @@ export const MenuHistory = () => {
         });
       } else {
         for (const planData of planTypeData) {
-          console.log('======hello world=====', planData);
+          // console.log('======hello world=====', planData);
           if (planData.planType == item.planType) {
             if (!checkIfPlanExist(item, planData.data)) {
               planData.data.push({itemData: item.itemData});
@@ -133,9 +133,9 @@ export const MenuHistory = () => {
   };
 
   const groupByDate = (itemData: any, basketItems: any) => {
-    console.log(basketItems, '=====panadetailsss=====');
+    // console.log(basketItems, '=====panadetailsss=====');
     for (const item of basketItems) {
-      console.log(item, '=====itemsssssss');
+      // console.log(item, '=====itemsssssss');
       if (itemData.orderInfo.orderName == item.planName) {
         item.data.push({
           planType: itemData.orderInfo.orderName,
@@ -259,7 +259,6 @@ export const MenuHistory = () => {
                 status={item?.planStatus}
                 time1={item?.planEnd}
                 planId={item?.planId}
-                // list={item?.menuplanorders?.MenuplanOrderDetails}
               />
             );
           }}

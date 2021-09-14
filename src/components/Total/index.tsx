@@ -6,7 +6,7 @@ import {currencyFormat} from '../../Utils';
 interface IProps {
   subTotal?: number;
   deliveryCharges?: any;
-  total?: number;
+  total?: any;
   totalTitle?: string;
   mainStyle?: object;
   randomTitle?: string;
@@ -14,6 +14,7 @@ interface IProps {
   randomStyle?: object;
   randomTitleStyle?: object;
   value: any;
+  checkout: any;
 }
 
 const Total = ({
@@ -27,14 +28,9 @@ const Total = ({
   randomStyle,
   randomTitleStyle,
   value,
+  checkout,
 }: IProps) => {
-  // console.log(
-  //   subTotal,
-  //   deliveryCharges,
-  //   total,
-
-  //   '=======listssss=====',
-  // );
+  console.log(total, typeof total, '=======listssss===ssss==');
   return (
     <View style={[S.main, mainStyle]}>
       {randomTitle && (
@@ -50,17 +46,19 @@ const Total = ({
           <Text style={S.textStyle}>{`\u20A6${currencyFormat(subTotal)}`}</Text>
         </View>
       )}
-      {/* {deliveryCharges != 1 ? (
+      {deliveryCharges !== undefined && typeof subTotal === 'number' ? (
         <View style={S.bodyStyle}>
           <Text style={S.textStyle}>Delivery Charges</Text>
           <Text style={S.textStyle}>{`\u20A6${currencyFormat(
             deliveryCharges,
           )}`}</Text>
-          <Text style={S.textStyle}># {deliveryCharges}</Text>
         </View>
-      ) : null} */}
+      ) : null}
       {total !== undefined && typeof total === 'number' && (
-        <View style={S.bodyStyleAmout}>
+        <View
+          style={
+            checkout === 'checkout' ? S.bodyStyleAmout1 : S.bodyStyleAmout
+          }>
           <Text style={totalTitle ? {} : S.textStyle1}>
             {totalTitle || `Total`}
           </Text>

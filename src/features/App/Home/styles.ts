@@ -51,7 +51,7 @@ export default StyleSheet.create({
     marginTop: 15,
     fontWeight: 'bold',
     marginStart: 10,
-    marginBottom: 15,
+    marginBottom: -25,
 
   },
   categorySubtitle: {
@@ -91,7 +91,7 @@ export default StyleSheet.create({
   },
   viewAllStyle: {
     textAlign: 'right',
-    padding: 10,
+    padding: 23,
     // paddingTop: -20,
     fontSize: 11,
     color: colors.blackGrey,
@@ -101,5 +101,26 @@ export default StyleSheet.create({
     marginVertical: 2,
     paddingBottom: 5,
     marginStart: 5
+  },
+    textStyle: {
+    fontWeight: 'normal',
+    marginLeft: 30,
+  },
+  activeTextStyle: {
+    fontWeight: 'bold',
+  },
+  containerStyle: {
+    backgroundColor: 'white',
+    borderWidth: 0,
+    borderRadius: 5
+  },
+  titleStyle: {
+    fontSize: 18,
+    padding: 15,
+    fontWeight: 'bold',
+  },
+  buttonStyle: {
+    width: '90%',
+    alignSelf: 'center',
   },
 });

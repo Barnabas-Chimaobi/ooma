@@ -24,6 +24,7 @@ interface IProps {
   onPressImg?: () => void;
   modes?: any;
   checkout: any;
+  // onPressImgcheckout?: () => void;
 }
 
 const HeaderBar = ({
@@ -65,10 +66,7 @@ const HeaderBar = ({
           <View style={s.location}>
             <View style={s.locationDetails}>
               {onPressImg ? (
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('Branch'), onPressImg();
-                  }}>
+                <TouchableOpacity onPress={() => showDatepicker()}>
                   <Image source={image1} style={s.locationImage} />
                 </TouchableOpacity>
               ) : (
@@ -101,16 +99,26 @@ const HeaderBar = ({
               </Text>
             </TouchableOpacity>
           </View>
-          {show && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={date || new Date()}
-              mode={'time'}
-              is24Hour={true}
-              display="default"
-              onChange={onChange}
-            />
-          )}
+          {show &&
+            (checkout === 'checkout' ? (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={date || new Date()}
+                mode={'date'}
+                is24Hour={true}
+                display="default"
+                onChange={onChange}
+              />
+            ) : (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={date || new Date()}
+                mode={'time'}
+                is24Hour={true}
+                display="default"
+                onChange={onChange}
+              />
+            ))}
         </View>
       ) : (
         <View>
@@ -122,7 +130,7 @@ const HeaderBar = ({
                 alignSelf: 'flex-start',
                 opacity: 0.5,
               }}>
-              Deliver to
+              Location
             </Text>
             <View style={S.locationDetails}>
               <Text style={{fontSize: 13}}>

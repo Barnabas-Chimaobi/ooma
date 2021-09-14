@@ -2,8 +2,8 @@ import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
   container: {
-    flex:1,
-    marginLeft: 7,
+    flex: 1,
+    margin: 5,
     borderRadius: 4,
     borderWidth: 2,
     borderColor: 'rgba(255, 255,255, 1.0)',
@@ -13,7 +13,7 @@ export default StyleSheet.create({
   menuImage: {
     height: 183,
     width: '100%',
-    borderRadius: 4,
+    borderRadius: 5,
   },
   title: {
     // width: 129,

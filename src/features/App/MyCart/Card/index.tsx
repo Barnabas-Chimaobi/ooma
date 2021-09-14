@@ -17,6 +17,7 @@ interface IProps {
   cartId: string;
   item: any;
   addons: any;
+  newMenu: (item: any) => void;
 }
 
 const Card: FC<IProps> = ({
@@ -31,6 +32,7 @@ const Card: FC<IProps> = ({
   cartId,
   item,
   addons,
+  newMenu,
 }) => {
   const [state, setState] = useState({toggle: false});
   const [qunt, setQunt] = useState(quantity);
@@ -44,6 +46,10 @@ const Card: FC<IProps> = ({
 
   const toggleView = () => {
     setState({...state, toggle: !state.toggle});
+  };
+
+  const getNew = (item: any) => {
+    newMenu(item);
   };
 
   return (
@@ -109,6 +115,7 @@ const Card: FC<IProps> = ({
             />
             {/* <MoreAction title="Add Quantity" iconName="signal" count /> */}
             <MoreAction
+              gottenNewCart={(item) => getNew(item)}
               cart={cartId}
               editItems={item}
               title="Delete"

@@ -9,6 +9,7 @@ import {
   FlatList,
   ImageBackground,
   TouchableOpacity,
+  BackHandler,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useSelector, useDispatch} from 'react-redux';
@@ -47,10 +48,13 @@ import Label from '../../../components/MenuCard/Label';
 import {PriceTag, RatingCount, Rating1, DishTypes} from '../../../components';
 import {getMenuPlansByBranch} from '../../../FetchData';
 import {getMenuItemsPlanForYou} from '../../../reducers/MenuPlansForYou';
+import {CheckBox, Divider, Overlay} from 'react-native-elements';
+import {SimpleHeader, CheckBox1} from '../../../components';
 
 const Home = () => {
   const navigation = useNavigation();
   const [switchs, setSwitchs] = useState(false);
+  const [check, setCheck] = useState('');
   const {menuPlanCategories} = useSelector(
     (state: RootState) => state.menuPlanCategories,
   );
@@ -82,14 +86,25 @@ const Home = () => {
     const branch = await AsyncStorage.getItem('branchId');
     const newbranch = JSON.parse(branch);
     const menuItem = await getMenuPlansByBranch(newbranch, 1);
-    console.log(menuItem, 'menuplanforyouuuuu');
+    // console.log(menuItem, 'menuplanforyouuuuu');
     dispatch(getMenuItemsPlanForYou(menuItem));
+  };
+
+  const backHandler = () => {
+    if (navigation.isFocused('Home')) {
+      BackHandler.exitApp();
+    } else {
+      navigation.goBack(null);
+    }
+    return true;
   };
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       getMenuPlansForYouCategory();
     });
+    BackHandler.addEventListener('hardwareBackPress', backHandler);
+
     // getMenuPlansForYouCategory();
   }, [0]);
   //  const {categories} = useSelector(
@@ -153,6 +168,9 @@ const Home = () => {
   // );
 
   // console.log(menuPlansMenuItem, 'plapalapllappalappapalpapp');
+  const handleCheck = (title: any) => {
+    setCheck(title);
+  };
 
   const renderItems = ({item}) => {
     return (
@@ -163,6 +181,7 @@ const Home = () => {
           onPress={() =>
             navigation.navigate('MenuPlanByCategory', {
               categoryId: item?.id,
+              eachCat: 'eachCat',
               // categoryName: categoryItems?.name
             })
           }>
@@ -398,8 +417,7 @@ const Home = () => {
         )}
 
         <View>
-          <TouchableWithoutFeedback
-            onPress={() => navigation.navigate('Explore')}>
+          <TouchableWithoutFeedback onPress={() => toggleFriend()}>
             <View
               style={{
                 // paddingVertical: 5,
@@ -427,35 +445,55 @@ const Home = () => {
           <Modal
             style={{
               backgroundColor: '#fff',
-              // marginTop: '10%',
-              marginBottom: '100%',
-              width: '50%',
+              marginTop: '80%',
+              marginBottom: '80%',
+              width: '80%',
               alignSelf: 'center',
               height: 80,
               // borderTopEndRadius: 25,
               // borderTopStartRadius: 25,
             }}
             onBackdropPress={() => setSwitchs(false)}
-            isVisible={false}>
+            isVisible={switchs}>
             <View>
-              <TouchableHighlight
+              <CheckBox
+                title={'Make instant order'}
+                checkedIcon={'circle'}
+                uncheckedIcon={'circle'}
+                checked={check == 'Make instant order' ? true : false}
+                textStyle={[
+                  S.textStyle,
+                  check === 'Make instant order' && S.activeTextStyle,
+                ]}
                 onPress={() => {
-                  navigation.navigate('Explore'), setSwitchs(false);
-                }}>
-                <View>
-                  <Text>Dish</Text>
-                </View>
-              </TouchableHighlight>
-              <TouchableHighlight>
-                <View>
-                  <Text
-                    onPress={() => {
-                      navigation.navigate('Menu'), setSwitchs(false);
-                    }}>
-                    Meal Plan
-                  </Text>
-                </View>
-              </TouchableHighlight>
+                  handleCheck('Make instant order');
+                  navigation.navigate('Explore'), toggleFriend();
+                  // setChecked({isChecked: title1});
+                  // setCheck('Make instant order');
+                }}
+                checkedColor="green"
+                containerStyle={S.containerStyle}
+              />
+
+              <CheckBox
+                title={'Create meal plan'}
+                checkedIcon={'circle'}
+                uncheckedIcon={'circle'}
+                checked={check === 'Create meal plan' ? true : false}
+                textStyle={[
+                  S.textStyle,
+                  check === 'Create meal plan' && S.activeTextStyle,
+                ]}
+                onPress={() => {
+                  handleCheck('Create meal plan');
+                  navigation.navigate('Menu');
+                  toggleFriend();
+                  // setChecked({isChecked: title2});
+                  // setCheck('Create meal plan');
+                }}
+                checkedColor="green"
+                containerStyle={S.containerStyle}
+              />
             </View>
           </Modal>
         ) : null}
@@ -570,9 +608,9 @@ const Home = () => {
                           bottom: !item?.caption ? -window.height * 1000 : 0,
                         }}
                       /> */}
-                        <TouchableOpacity>
+                        {/* <TouchableOpacity>
                           <Image source={hearts} style={s.likeImage} />
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                       </View>
                     </ImageBackground>
                     <View style={s.textBar}>
