@@ -21,7 +21,7 @@ const square = require('./Images/squares.png');
 const map = require('./Images/map.png');
 const arrow = require('./Images/arrow.png');
 const pin = require('./Images/Pin.png');
-const ooma = require('./Images/OOMA.png');
+// const ooma = require('./Images/OOMA.png');
 const check = require('./Images/check.png');
 const profilePics = require('./Images/oomaProfpics.png');
 const ellipse = require('./Images/oomaEllipse.png');
@@ -81,7 +81,6 @@ export {
     map,
     arrow,
     pin,
-    ooma,
     check,
     scroll,
 };
