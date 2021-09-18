@@ -122,7 +122,7 @@ export const MyPlans = ({findPlan}: Props) => {
       // console.log(newsum, 'cartttttt');
       const order = await getMenuPlanOrders(userId);
 
-      // console.log(order?.items, 'orderItemsss=======');
+      console.log(order?.items, 'orderItemsss=======');
 
       order?.items?.forEach((item: any) => {
         console.log(item);
@@ -135,7 +135,7 @@ export const MyPlans = ({findPlan}: Props) => {
       });
 
       setOrders(basketData);
-      // console.log('====baket items======= ', JSON.stringify(basketData));
+      console.log('====baket items======= ', JSON.stringify(basketData));
       // setOrders(order?.items);
       //  await dispatch(cartStates(menuICart?.items));
       setLoader(false);
@@ -144,7 +144,7 @@ export const MyPlans = ({findPlan}: Props) => {
       // setRefreshing(false);
     } catch (error) {
       setLoader(false);
-      // console.log(error, '====errorrsss====');
+      console.log(error, '====errorrsss====');
       // setRefreshing(false);
     }
   };
@@ -353,7 +353,7 @@ export const MyPlans = ({findPlan}: Props) => {
             style={styles.listStyle}
             renderItem={({item}) => {
               return ( */}
-          {planOrders?.length === 0 ? (
+          {loader === true ? (
             <ActivityIndicator
               color={'green'}
               size={'large'}

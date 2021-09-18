@@ -97,7 +97,14 @@ const MenuDetails: FC<IProps> = ({route}) => {
       planId,
       item,
     );
-    const getPlanTimes = morningorAfterOrEve?.map((item: any) => {
+
+    var uniq = {};
+    var arrFiltered = morningorAfterOrEve?.filter(
+      (obj) => !uniq[obj.MenuItem.id] && (uniq[obj.MenuItem.id] = true),
+    );
+    setMorning(arrFiltered);
+
+    const getPlanTimes = arrFiltered?.map((item: any) => {
       return {
         label: item?.deliveryTime,
         value: item?.deliveryTime,
@@ -107,11 +114,7 @@ const MenuDetails: FC<IProps> = ({route}) => {
     });
     setDeliveryTime(getPlanTimes);
     console.log(getPlanTimes, 'plantimesssss===========');
-    var uniq = {};
-    var arrFiltered = morningorAfterOrEve?.filter(
-      (obj) => !uniq[obj.MenuItem.id] && (uniq[obj.MenuItem.id] = true),
-    );
-    setMorning(arrFiltered);
+
     console.log('arrFiltered=================', arrFiltered);
     console.log(date, 'morningsssss');
   };
@@ -137,9 +140,7 @@ const MenuDetails: FC<IProps> = ({route}) => {
   const getMenuPlanDetails = async () => {
     const menuPlansDetail = await getMenuPlansById(planId);
     setMenuPlan(menuPlansDetail);
-    let d1 = new Date(menuPlansDetail?.startDate)
-      .toISOString()
-      .substring(0, 10);
+    let d1 = new Date().toISOString().substring(0, 10);
     let d2 = new Date(menuPlansDetail?.endDate).toISOString().substring(0, 10);
     var now = new Date(d2);
     var daysOfYear = [];

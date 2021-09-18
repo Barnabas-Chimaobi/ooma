@@ -103,7 +103,7 @@ const OrderDetails = () => {
           <View style={S.main}>
             <Total
               randomTitle="ORDER ID"
-              randomValue={item?.itemData?.orderInfo?.orderId}
+              randomValue={item?.itemData?.orderInfo?.orderRef}
               mainStyle={S.totalHeaderStyle}
               randomTitleStyle={S.totalHeadertitle}
             />

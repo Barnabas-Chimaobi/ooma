@@ -208,7 +208,7 @@ export default function App() {
             <MainStack.Screen name="Checkout" component={Checkout} />
             <MainStack.Screen name="Wallet" component={Wallet} />
 
-            <MainStack.Screen name="More" component={More} />
+            {/* <MainStack.Screen name="More" component={More} /> */}
             <MainStack.Screen name="RateUs" component={RateUs} />
             <MainStack.Screen name="Favourites" component={Favourites} />
             <MainStack.Screen name="WalletIntro" component={WalletIntro} />
