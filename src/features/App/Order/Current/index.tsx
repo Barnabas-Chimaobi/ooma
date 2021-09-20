@@ -34,7 +34,7 @@ const RenderItems = ({item}: any) => {
                 <>
                   <Total
                     randomTitle="ORDER ID"
-                    randomValue={item?.itemData?.id}
+                    randomValue={item?.itemData?.orderRef}
                     mainStyle={S.totalStyle}
                   />
                   {/* {item?.itemData?.menuitemorders?.MenuItemOrderDetails?.map(

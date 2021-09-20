@@ -227,7 +227,7 @@ const OrderDetails = () => {
             <Total
               randomTitle="ORDER ID"
               // value={newlist?.itemData?.id}
-              randomValue={newlist?.itemData?.id}
+              randomValue={newlist?.itemData?.orderRef}
               mainStyle={S.totalHeaderStyle}
               randomTitleStyle={S.totalHeadertitle}
             />
@@ -312,6 +312,7 @@ const OrderDetails = () => {
             <Total total={Number(newAmount)} mainStyle={S.totalHeaderStyle} />
           </View>
           <OrderCard
+            details={null}
             dateTitle="Collection Details"
             mainStyle={S.main}
             children={
@@ -336,6 +337,7 @@ const OrderDetails = () => {
             }
           />
           <OrderCard
+            details={null}
             dateTitle="Payment Details"
             mainStyle={S.main}
             children={

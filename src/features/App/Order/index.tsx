@@ -15,6 +15,9 @@ import OrderHistory from './History';
 import UpcomingOrder from './Upcoming';
 import OrderDetails from './OrderDetails';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import {SimpleHeader, CheckBox1} from '../../../components';
+import {colors} from '../../../colors';
+
 // import {getMenuitemCart} from '../../../FetchData';
 
 const Tab = createMaterialTopTabNavigator();
@@ -35,12 +38,18 @@ const OrderTab = () => {
 
   return (
     <>
-      <View style={{backgroundColor: '#303030'}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          backgroundColor: '#303030',
+          paddingLeft: 10,
+        }}>
+        <SimpleHeader color={colors.white} />
         <Text
           style={{
             color: 'white',
             padding: 20,
-            paddingLeft: 40,
+            paddingLeft: 20,
             fontWeight: 'bold',
             fontSize: 16,
           }}>

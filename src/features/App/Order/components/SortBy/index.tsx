@@ -14,8 +14,8 @@ const SortBy = () => {
 
   return (
     <View style={S.main}>
-      <Text style={{fontSize: 16, color: colors.blackFade}}>Sort by</Text>
-      <Button
+      {/* <Text style={{fontSize: 16, color: colors.blackFade}}>Sort by</Text> */}
+      {/* <Button
         title="Date Range"
         iconName="chevron-down"
         iconRight
@@ -25,14 +25,14 @@ const SortBy = () => {
         buttonStyle={{borderColor: colors.blackFade}}
         titleStyle={{paddingRight: 20, color: colors.blackFade}}
         onPress={toggleVisible}
-      />
+      /> */}
       <Button
         iconName="search"
         type={ButtonType.clear}
         iconColor={colors.blackFade}
         iconSize={16}
       />
-      <Overlay
+      {/* <Overlay
         isVisible={visible}
         onBackdropPress={toggleVisible}
         child={
@@ -51,7 +51,7 @@ const SortBy = () => {
             />
           </>
         }
-      />
+      /> */}
     </View>
   );
 };
