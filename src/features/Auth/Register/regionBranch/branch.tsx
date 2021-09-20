@@ -50,7 +50,7 @@ export default function Branch() {
     setLoader(true);
     await AsyncStorage.setItem('token', params?.token);
     await AsyncStorage.setItem('branchId', JSON.stringify(branchId));
-    navigation.navigate('BottomNavigator');
+    navigation.navigate('Home');
     setLoader(false);
   };
 

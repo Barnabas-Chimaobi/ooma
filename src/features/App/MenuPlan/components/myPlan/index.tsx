@@ -27,6 +27,9 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {BallIndicator} from 'react-native-indicators';
+import {useDispatch, useSelector} from 'react-redux';
+import {planStates} from '../../../../../reducers/planlist';
+import {AppDispatch, RootState} from '../../../../../store';
 
 const {width: windowWidth} = Dimensions.get('window');
 
@@ -57,6 +60,9 @@ interface Props {
 }
 
 export const MyPlans = ({findPlan}: Props) => {
+  const planItem = useSelector((state: RootState) => state.planState.payload);
+  const dispatch: AppDispatch = useDispatch();
+
   const navigation = useNavigation();
   const [isOpen, setOpen] = useState<boolean>(false);
   const [planOrders, setOrders] = useState([]);
@@ -121,10 +127,11 @@ export const MyPlans = ({findPlan}: Props) => {
     try {
       // console.log(newsum, 'cartttttt');
       const order = await getMenuPlanOrders(userId);
+      dispatch(planStates(order?.items));
 
       console.log(order?.items, 'orderItemsss=======');
 
-      order?.items?.forEach((item: any) => {
+      planItem?.forEach((item: any) => {
         console.log(item);
         groupByDate(item, basketData);
       });
@@ -338,7 +345,7 @@ export const MyPlans = ({findPlan}: Props) => {
 
   return (
     <>
-      <View style={{flex: 1, marginBottom: 30}}>
+      <View style={{flex: 1, marginBottom: 65, top: -25}}>
         <RefreshControl refreshing={loader} />
         {/* <Spinner
         visible={loader}
@@ -353,7 +360,7 @@ export const MyPlans = ({findPlan}: Props) => {
             style={styles.listStyle}
             renderItem={({item}) => {
               return ( */}
-          {loader === true ? (
+          {planItem?.length === undefined ? (
             <ActivityIndicator
               color={'green'}
               size={'large'}

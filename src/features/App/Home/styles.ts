@@ -123,4 +123,10 @@ export default StyleSheet.create({
     width: '90%',
     alignSelf: 'center',
   },
+    footer: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    // backgroundColor: '#ffffff',
+  },
 });

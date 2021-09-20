@@ -40,6 +40,8 @@ import {
   UIActivityIndicator,
   WaveIndicator,
 } from 'react-native-indicators';
+import Footer from '../../../../navigation/footer';
+import {StyleFoot} from '../../../../navigation/styles';
 
 interface selectedProps {
   route: any;
@@ -47,6 +49,7 @@ interface selectedProps {
 
 const SelectedCategory: FC<selectedProps> = ({route}) => {
   const {categoryId} = route.params;
+  const [explore, setExplore] = useState('explore');
   const [loader, setLoader] = useState(false);
   const [data, setData] = useState('');
   const [truth, setTruth] = useState(false);
@@ -84,64 +87,69 @@ const SelectedCategory: FC<selectedProps> = ({route}) => {
     getItemByCategoryId();
   };
   return (
-    <View style={S.exploreMain}>
-      <SimpleHeader gridView gridToggle={toggleGrid} />
-      <BaseInput
-        value=""
-        onfocus={() => navigation.navigate('SearchMenuitemandPlan')}
-        onChangeText={(text) => setInput(text)}
-        rightIcon={<Icon name="search" color={colors.blackGrey} size={18} />}
-        style={S.exploreInput}
-        inputStyle={{padding: 1, flex: 1}}
-      />
-      <FilterBar />
-      {/* {payload.length < 0 ? ( */}
-      {/* <Spinner
+    <View style={{flex: 1}}>
+      <View style={S.exploreMain}>
+        <SimpleHeader gridView gridToggle={toggleGrid} />
+        <BaseInput
+          value=""
+          onfocus={() => navigation.navigate('SearchMenuitemandPlan')}
+          onChangeText={(text) => setInput(text)}
+          rightIcon={<Icon name="search" color={colors.blackGrey} size={18} />}
+          style={S.exploreInput}
+          inputStyle={{padding: 1, flex: 1}}
+        />
+        <FilterBar />
+        {/* {payload.length < 0 ? ( */}
+        {/* <Spinner
         visible={loader}
         // textStyle={styles.spinnerTextStyle}
         overlayColor="rgba(66, 66, 66,0.6)"
         customIndicator={<BallIndicator color="white" />}
       /> */}
-      {/* ) : ( */}
-      <FlatList
-        refreshControl={
-          <RefreshControl refreshing={loader} onRefresh={refreshing} />
-        }
-        renderItem={({item}) => (
-          <CardItem
-            item={item}
-            onPress={() => navigation.navigate('Dish', {id: item?.id})}
-            gridView={gridView}
-          />
-        )}
-        data={payload}
-        keyExtractor={() => shortid.generate()}
-        ListEmptyComponent={
-          payload.length != 0 ? null : (
-            <EmptyList
-              image={emptyCart}
-              title="Find Meal"
-              message="Oops! Your Menu is empty"
-              // onPress={() => navigation.navigate('Explore')}
+        {/* ) : ( */}
+        <FlatList
+          refreshControl={
+            <RefreshControl refreshing={loader} onRefresh={refreshing} />
+          }
+          renderItem={({item}) => (
+            <CardItem
+              item={item}
+              onPress={() => navigation.navigate('Dish', {id: item?.id})}
+              gridView={gridView}
             />
-          )
-        }
-        ListFooterComponent={
-          <>
-            {truth == true && (
-              <Button
-                title="BACK TO TOP"
-                type={ButtonType.outline}
-                buttonStyle={S.backTopButtonStyle}
-                titleStyle={S.backtopTitleStyle}
-                onPress={() => {}}
+          )}
+          data={payload}
+          keyExtractor={() => shortid.generate()}
+          ListEmptyComponent={
+            payload.length != 0 ? null : (
+              <EmptyList
+                image={emptyCart}
+                title="Find Meal"
+                message="Oops! Your Menu is empty"
+                // onPress={() => navigation.navigate('Explore')}
               />
-            )}
-          </>
-        }
-      />
-      {/* )} */}
-      {/* </View> */}
+            )
+          }
+          ListFooterComponent={
+            <>
+              {truth == true && (
+                <Button
+                  title="BACK TO TOP"
+                  type={ButtonType.outline}
+                  buttonStyle={S.backTopButtonStyle}
+                  titleStyle={S.backtopTitleStyle}
+                  onPress={() => {}}
+                />
+              )}
+            </>
+          }
+        />
+        {/* )} */}
+        {/* </View> */}
+      </View>
+      <View style={StyleFoot.footer}>
+        <Footer navigation={navigation} explore={explore} />
+      </View>
     </View>
   );
 };

@@ -10,12 +10,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
 import {basketStates} from '../../../reducers/basket';
 import {AppDispatch, RootState} from '../../../store';
+import Footer from '../../../navigation/footer';
+import {StyleFoot} from '../../../navigation/styles';
 
 const App = () => {
   const [refreshing, setRefreshing] = useState(true);
   const [, setDataSource] = useState([]);
   const [tabState, setTabState] = useState(0);
   const [planCart, setPlanCart] = useState('');
+  const [meal, setMeal] = useState('meal');
   const tabRef = useRef(null);
 
   const navigation = useNavigation();
@@ -93,6 +96,10 @@ const App = () => {
           )}
         </View>
         <SearchTab ref={tabRef} getIndex={(index) => setTabState(+index)} />
+      </View>
+      <View style={StyleFoot.footer}>
+        {/* <View style={styles.seperator3} /> */}
+        <Footer navigation={navigation} meal={meal} />
       </View>
     </SafeAreaView>
   );

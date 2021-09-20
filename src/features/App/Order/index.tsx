@@ -17,6 +17,8 @@ import OrderDetails from './OrderDetails';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {SimpleHeader, CheckBox1} from '../../../components';
 import {colors} from '../../../colors';
+import Footer from '../../../navigation/footer';
+import {StyleFoot} from '../../../navigation/styles';
 
 // import {getMenuitemCart} from '../../../FetchData';
 
@@ -25,6 +27,8 @@ const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 
 const OrderTab = () => {
+  const navigation = useNavigation();
+  const [more, setMore] = useState('more');
   const route = useRoute();
   const {itemOrder} = route.params;
   useEffect(() => {
@@ -87,6 +91,9 @@ const OrderTab = () => {
         {/* <Tab.Screen name="Upcoming" component={Upcoming} /> */}
         <Tab.Screen name="History" component={History} />
       </Tab.Navigator>
+      {/* <View style={StyleFoot.footer}>
+        <Footer navigation={navigation} more={more} />
+      </View> */}
     </>
   );
 };

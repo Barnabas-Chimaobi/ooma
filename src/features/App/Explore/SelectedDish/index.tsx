@@ -55,6 +55,8 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import s from '../../../App/Checkout/DeliveryOptions/styles';
 import {colors} from '../../../../colors';
+import {StyleFoot} from '../../../../navigation/styles';
+import Footer from '../../../../navigation/footer';
 
 type ExploreNavigationProps = StackScreenProps<MainStackParamList, 'Explore'>;
 
@@ -77,6 +79,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   } = route.params;
 
   const navigation = useNavigation();
+  const [meal, setMeal] = useState('meal');
   const [value, setValue] = useState('');
   const [menuItem, setMenuItem] = useState(menu);
   const [prices, setPrice] = useState(menuItem?.amount);
@@ -103,10 +106,10 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   const [checks, setChecks] = useState(false);
   const [checks1, setChecks1] = useState(false);
   const [deliveryOption, setDeliveryOptions] = useState('');
-  const [time, setTime] = useState('');
+  const [time, setTime] = useState(null);
   const [items, setItems] = useState([]);
   const [addressId, setAddressId] = useState(null);
-  const [myAddress, setMyAddress] = useState('');
+  const [myAddress, setMyAddress] = useState(null);
   const [deliveryCharges, setDeliveryCharges] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState('');
   const [cartid, setCartId] = useState('');
@@ -323,19 +326,23 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     setLoading(true);
     // console.log(addsTotal, 'bodyyyquntyyss');
     // console.log(body, 'bodyyy');
-
+    console.log(myAddress, deliveryOption, time, addressId, 'idddddddssss====');
     try {
       if (
-        myAddress == '' &&
-        deliveryOption == 'Delivery' &&
-        time == '' &&
-        addressId === null
+        (time === null || myAddress === null || addressId === null) &&
+        deliveryOption === 'Delivery'
       ) {
-        setLoading(false);
         ShowMessage(
           type.INFO,
           'please check if you have selected a delivery location, time and enter your delivery address',
         ); // dispatch(cartStates(addedCart));
+        setLoading(false);
+      } else if (deliveryOption == 'Pick-Up' && time === null) {
+        ShowMessage(
+          type.INFO,
+          'please check if you have selected time of meal',
+        );
+        setLoading(false);
       } else {
         const cart = await api.post(`orders/basket`, {
           branchId: body.branchId,
@@ -370,7 +377,6 @@ const CardItem: FC<IProps> = ({route, menu}) => {
         }
         // console.log(addedCart, 'addedcaart');
       }
-      setOpenModal(false);
     } catch (err) {
       if (menuPlan == 'menuPlan' && err) {
         setLoading(false);
@@ -1116,6 +1122,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                       borderRadius: 15,
                       padding: 5,
                     }}
+                    keyboardType={'phone-pad'}
                     value={friendPhone}
                     placeholder="Friend's Phone No"
                     onChangeText={(text) => setFriendPhone(text)}
@@ -1216,6 +1223,9 @@ const CardItem: FC<IProps> = ({route, menu}) => {
             </View>
           )}
         </ScrollView>
+        {/* <View style={StyleFoot.footer}>
+          <Footer navigation={navigation} meal={meal} />
+        </View> */}
       </View>
     </KeyboardAvoidingView>
   );

@@ -27,8 +27,11 @@ import {
   UIActivityIndicator,
   WaveIndicator,
 } from 'react-native-indicators';
+import Footer from '../../../../navigation/footer';
+import {StyleFoot} from '../../../../navigation/styles';
 
 const Filter = () => {
+  const [explore, setExplore] = useState('explore');
   const [branchId, setBranchId] = useState('');
   const [sorts, setSorts] = useState('');
   const [categorys, setCategory] = useState('');
@@ -187,6 +190,9 @@ const Filter = () => {
           containerStyle={S.buttonStyle}
         />
       </ScrollView>
+      <View style={StyleFoot.footer}>
+        <Footer navigation={navigation} explore={explore} />
+      </View>
     </View>
   );
 };

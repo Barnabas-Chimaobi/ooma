@@ -91,7 +91,7 @@ export const styles = StyleSheet.create({
     position: 'relative',
     width: '100%',
     height: '100%',
-    bottom: 55,
+    bottom: 65,
     padding: 10,
     zIndex: 32,
     flex: 1,

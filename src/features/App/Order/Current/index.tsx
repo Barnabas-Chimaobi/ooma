@@ -79,6 +79,7 @@ const RenderItems = ({item}: any) => {
 };
 
 const Current = ({item}) => {
+  const navigation = useNavigation();
   const data = [
     {
       orderId: 'ZS214298',

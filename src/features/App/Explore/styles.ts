@@ -110,7 +110,7 @@ export default StyleSheet.create({
   exploreMain: {
     marginHorizontal: 10,
     marginVertical: 10,
-    marginBottom: 10,
+    // marginBottom: 10,
     flex:1
   },
   exploreInput: {

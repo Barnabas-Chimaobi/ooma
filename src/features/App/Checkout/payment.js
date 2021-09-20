@@ -66,8 +66,8 @@ export class State extends Component {
   verifyRef = async () => {
     const verify = await verifyPayment(this.state.refdata);
     if (verify?.data.status === 'success') {
-      // ShowMessage(type.DONE, 'Payment was Successful');
-      this.props.navigation.navigate('HomeNav');
+      ShowMessage(type.DONE, 'Order Placed Successfully');
+      this.props.navigation.navigate('Home');
     } else {
       ShowMessage(type.ERROR, 'Failed Transaction. please retry');
     }
@@ -110,7 +110,7 @@ export class State extends Component {
         </TouchableHighlight>
         {/* <View>{showStack === true ? paysts : null}</View> */}
         {/* <View>{showWave === true ? flutterwave : null}</View> */}
-        <TouchableHighlight underlayColor="" underlayColor="">
+        {/* <TouchableHighlight underlayColor="" underlayColor="">
           <View style={styles.container}>
             <View>
               <Image style={styles.image} source={flutter} />
@@ -127,7 +127,7 @@ export class State extends Component {
               />
             </View>
           </View>
-        </TouchableHighlight>
+        </TouchableHighlight> */}
 
         <Paystack
           paystackKey={this.state.pubkey}

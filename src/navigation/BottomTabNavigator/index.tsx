@@ -2,13 +2,16 @@ import * as React from 'react';
 import {Text, View, Image} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MenuNavigation from '../MenuNavigation';
+import Explore from '../ExploreNavigation';
 import Cart from '../MyCartNavigation';
+import More from '../MoreNavigation';
+// import Home from '../HomeNavigation';
 import {
   Home,
-  Explore,
+  // Explore,
   MenuPlanIntro as MenuPlan,
   CartIntro as MyCart,
-  More,
+  // More,
 } from '../../features/App';
 
 // import MyCart from '../MyCartNavigation';
@@ -48,6 +51,7 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   return (
     <Tab.Navigator
+      // backBehavior={'none'}
       initialRouteName="Home"
       tabBarOptions={{
         activeTintColor: '#26C867',

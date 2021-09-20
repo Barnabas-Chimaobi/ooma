@@ -19,7 +19,7 @@ const Splash = () => {
       console.log(userToken, 'userssssss');
 
       if (userToken != null) {
-        navigation.navigate('BottomNavigator');
+        navigation.navigate('Home');
       } else {
         navigation.navigate('Register');
       }

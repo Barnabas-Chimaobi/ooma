@@ -41,7 +41,7 @@ const Card: FC<IProps> = ({
   useEffect(() => {
     // console.log(price++, 'pricess');
     console.log(cartId, 'itemidddddddssss');
-    // console.log(title, 'itemidddddddssss');
+    console.log(addons, 'itemidddddddssss=====');
   });
 
   const toggleView = () => {
@@ -100,7 +100,29 @@ const Card: FC<IProps> = ({
       </TouchableOpacity>
       {state.toggle && (
         <View style={{marginTop: 10}}>
-          <Text style={{marginVertical: 10}}>{description}</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              maxWidth: '100%',
+              flexWrap: 'wrap',
+              bottom: 10,
+            }}>
+            {JSON.parse(addons)?.map((item: any) => {
+              console.log(item, 'item===addonssss=======');
+              return (
+                <Text
+                  style={{
+                    // marginVertical: 10,
+                    marginRight: 5,
+                  }}>
+                  {item?.name}
+                  {item?.quantity}x;
+                </Text>
+              );
+            })}
+          </View>
+
+          {/* <Text style={{marginVertical: 10}}>{description}</Text> */}
           <View
             style={{
               flexDirection: 'row',

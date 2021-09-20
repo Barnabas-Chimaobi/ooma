@@ -6,6 +6,7 @@ import shortid from 'shortid';
 import S from './styles';
 import {emptyCart} from '../../../../assets';
 import {colors} from '../../../../colors';
+import {useNavigation} from '@react-navigation/core';
 
 const RenderItems = ({item}: any) => {
   // console.log(
@@ -78,6 +79,7 @@ const RenderItems = ({item}: any) => {
 };
 
 const Current = ({item}) => {
+  const navigation = useNavigation();
   // console.log(item, 'consoleditemmm======');
   const data: any = [
     {

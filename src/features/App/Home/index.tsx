@@ -50,8 +50,11 @@ import {getMenuPlansByBranch} from '../../../FetchData';
 import {getMenuItemsPlanForYou} from '../../../reducers/MenuPlansForYou';
 import {CheckBox, Divider, Overlay} from 'react-native-elements';
 import {SimpleHeader, CheckBox1} from '../../../components';
+// import BottomNavigator from '../../../navigation/BottomTabNavigator';
+import Footer from '../../../navigation/footer';
 
 const Home = () => {
+  const [dashboard, setDashboard] = useState('dashboard');
   const navigation = useNavigation();
   const [switchs, setSwitchs] = useState(false);
   const [check, setCheck] = useState('');
@@ -689,7 +692,7 @@ const Home = () => {
             width: 70,
             alignSelf: 'flex-end',
             position: 'absolute',
-            bottom: 10,
+            bottom: 30,
             // right: 60,
             zIndex: 30,
             borderRadius: 70,
@@ -697,7 +700,13 @@ const Home = () => {
           source={scroll}
         />
       </View>
+
+      <View style={S.footer}>
+        {/* <View style={styles.seperator3} /> */}
+        <Footer navigation={navigation} dashboard={dashboard} />
+      </View>
       {/* <BottomNav /> */}
+      {/* <BottomNavigator /> */}
     </View>
   );
 };

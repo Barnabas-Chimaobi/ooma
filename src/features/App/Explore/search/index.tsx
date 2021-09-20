@@ -8,8 +8,11 @@ import S from '../styles';
 import {colors} from '../../../../colors';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Footer from '../../../../navigation/footer';
+import {StyleFoot} from '../../../../navigation/styles';
 
 const SearchMenuitemandPlan = () => {
+  const [explore, setExplore] = useState('explore');
   const navigation = useNavigation();
   const [input, setInput] = useState('');
   const [gottenSearch, setGottenSearch] = useState<any>([]);
@@ -63,7 +66,7 @@ const SearchMenuitemandPlan = () => {
   };
 
   return (
-    <View>
+    <View style={{flex: 1}}>
       <View
         style={{
           flexDirection: 'row',
@@ -124,6 +127,9 @@ const SearchMenuitemandPlan = () => {
           windowSize={10} // Reduce the window size
         />
       )}
+      <View style={StyleFoot.footer}>
+        <Footer navigation={navigation} explore={explore} />
+      </View>
     </View>
   );
 };

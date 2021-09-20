@@ -35,6 +35,8 @@ import {basketStates} from '../../../../reducers/basket';
 import {AppDispatch, RootState} from '../../../../store';
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import {NativeBaseProvider, Box} from 'native-base';
+import Footer from '../../../../navigation/footer';
+import {StyleFoot} from '../../../../navigation/styles';
 
 interface IProps {
   route?: {};
@@ -68,6 +70,7 @@ const MenuDetails: FC<IProps> = ({route}) => {
   );
 
   const navigation = useNavigation();
+  const [meal, setMeal] = useState('meal');
   const [index, setIndex] = useState(0);
   const [date, setDate] = useState();
   const [date1, setDate1] = useState();
@@ -378,12 +381,16 @@ const MenuDetails: FC<IProps> = ({route}) => {
               {/* <Text style={styles.date}>
           {moment(date).format('ddd, Do MMM, YYYY')}
         </Text> */}
-              <View style={{marginBottom: -30}}>
+              <View style={{}}>
                 <TabViewContent />
               </View>
             </View>
           </ScrollView>
         </View>
+      </View>
+      <View style={StyleFoot.footer}>
+        {/* <View style={styles.seperator3} /> */}
+        <Footer navigation={navigation} meal={meal} />
       </View>
     </>
   );

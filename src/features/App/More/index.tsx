@@ -21,6 +21,10 @@ import {AppDispatch} from '../../../store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ScrollView} from 'react-native-gesture-handler';
 import {getMenuItemOrders} from '../../../FetchData';
+import Footer from '../../../navigation/footer';
+import {StyleFoot} from '../../../navigation/styles';
+import {setUserDetails} from '../../../reducers';
+
 interface itemProp {
   name: string;
   icon: any | undefined;
@@ -97,7 +101,7 @@ interface Props {
 const rout = `'MyCartNavigation', { screen: 'Wallet' }`;
 const More: React.FC<Props> = ({navigation}) => {
   const dispatch: AppDispatch = useDispatch();
-
+  const [more, setMore] = useState('more');
   const [visible, setVisible] = useState(false);
   const [dish, setDish] = useState(false);
   const [menuPlan, setMenuPlan] = useState(false);
@@ -245,6 +249,7 @@ const More: React.FC<Props> = ({navigation}) => {
         break;
 
       case 'Logout':
+        dispatch(setUserDetails({}));
         await AsyncStorage.removeItem('intro');
         await AsyncStorage.removeItem('token');
         navigation.navigate('Splash');
@@ -257,55 +262,60 @@ const More: React.FC<Props> = ({navigation}) => {
     }
   };
   return (
-    <View style={{flex: 1, paddingHorizontal: 10}}>
-      <SimpleHeader hasBottomBorder />
-      {/* <RefreshControl refreshing={loading} /> */}
-      {/* <ActivityIndicator size={'large'} color={'green'} animating={loading} /> */}
-      <ScrollView
-        refreshControl={
-          <RefreshControl
-            onRefresh={onrefresh}
-            size={20}
-            refreshing={loading}
-          />
-        }>
-        {items?.map(({icon, name, borderBottom, routeTo}, idx) => (
-          <TouchableOpacity
-            onPress={() => handleNavigate(name)}
-            key={idx}
-            style={[S.items, borderBottom && S.borderStyle]}>
-            {icon ? icon : null}
-            <Text style={{marginLeft: 15}}>{name}</Text>
-          </TouchableOpacity>
-        ))}
+    <View style={{flex: 1}}>
+      <View style={{flex: 1, paddingHorizontal: 10}}>
+        <SimpleHeader hasBottomBorder />
+        {/* <RefreshControl refreshing={loading} /> */}
+        {/* <ActivityIndicator size={'large'} color={'green'} animating={loading} /> */}
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              onRefresh={onrefresh}
+              size={20}
+              refreshing={loading}
+            />
+          }>
+          {items?.map(({icon, name, borderBottom, routeTo}, idx) => (
+            <TouchableOpacity
+              onPress={() => handleNavigate(name)}
+              key={idx}
+              style={[S.items, borderBottom && S.borderStyle]}>
+              {icon ? icon : null}
+              <Text style={{marginLeft: 15}}>{name}</Text>
+            </TouchableOpacity>
+          ))}
 
-        <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
-          <View>
-            <CheckBox1
-              checked={dish}
-              circle
-              title="Make instant order"
-              containerStyle={{backgroundColor: 'transparent'}}
-              onPress={() => {
-                toggleOverlay();
-                navigation.navigate('Explore');
-                setDish(!dish);
-              }}
-            />
-            <CheckBox1
-              checked={menuPlan}
-              circle
-              title="Create meal Plan"
-              containerStyle={{backgroundColor: 'transparent'}}
-              onPress={() => {
-                toggleOverlay();
-                navigation.navigate('MenuNavigation', {Screen: 'Menu'});
-                setMenuPlan(!menuPlan);
-              }}
-            />
-          </View>
-        </Overlay>
-      </ScrollView>
+          <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
+            <View>
+              <CheckBox1
+                checked={dish}
+                circle
+                title="Make instant order"
+                containerStyle={{backgroundColor: 'transparent'}}
+                onPress={() => {
+                  toggleOverlay();
+                  navigation.navigate('Explore');
+                  setDish(!dish);
+                }}
+              />
+              <CheckBox1
+                checked={menuPlan}
+                circle
+                title="Create meal Plan"
+                containerStyle={{backgroundColor: 'transparent'}}
+                onPress={() => {
+                  toggleOverlay();
+                  navigation.navigate('MenuNavigation', {Screen: 'Menu'});
+                  setMenuPlan(!menuPlan);
+                }}
+              />
+            </View>
+          </Overlay>
+        </ScrollView>
+      </View>
+      <View style={StyleFoot.footer}>
+        <Footer navigation={navigation} more={more} />
+      </View>
     </View>
   );
 };

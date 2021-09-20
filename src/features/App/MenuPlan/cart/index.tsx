@@ -464,20 +464,7 @@ export const Cart = () => {
                 style={styles.listStyle}
                 renderItem={({item}) => {
                   // console.log(item, 'itemmm=====');
-                  return basketItem?.length === 0 ? (
-                    <EmptyList
-                      image={require('../../../../assets/Images/emptyCart.png')}
-                      title="FIND PLAN"
-                      message="Oops! Your basket is still empty"
-                      onPress={() => navigation.goBack()}
-                    />
-                  ) : (
-                    // <ListItems
-                    //   hour={eachTime}
-                    //   date={eachDate}
-                    //   list={route?.params?.cartItems}
-                    //   styles={styles}
-                    // />
+                  return (
                     <View>
                       {/* <List
                       plantime={item?.MenuPlan?.MenuplanDetail?.deliveryTime}
@@ -512,6 +499,13 @@ export const Cart = () => {
                           // count={item?.quantity}
                           // time={item?.MenuPlan?.MenuplanDetail?.plantype}
                           // basketId={item?.id}
+                        />
+                      ) : basketItem?.length === undefined ? (
+                        <EmptyList
+                          image={require('../../../../assets/Images/emptyCart.png')}
+                          title="FIND PLAN"
+                          message="Oops! Your basket is empty"
+                          onPress={() => navigation.goBack()}
                         />
                       ) : (
                         <List
@@ -629,7 +623,7 @@ export const Cart = () => {
                 </View>
               </Modal>
             ) : null}
-            {total != '' ? (
+            {basketItem?.length !== undefined || total !== undefined ? (
               <View style={styles.listFooter}>
                 <View style={styles.total}>
                   <Text style={styles.totalText}>Total:</Text>

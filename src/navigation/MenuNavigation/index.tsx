@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 // import {View, Text} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {
   Dish,
   Cart,
@@ -11,7 +12,7 @@ import {
 } from '../../features/App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const {Navigator, Screen} = createStackNavigator();
-
+// const MenuStack = createNativeStackNavigator();
 export default function index() {
   const [intro, setIntro] = useState('');
 
@@ -28,7 +29,8 @@ export default function index() {
   return (
     <Navigator
       headerMode="none"
-      initialRouteName={intro === 'disable' ? Menu : MenuPlanIntro}>
+      // initialRouteName={intro === 'disable' ? Menu : MenuPlanIntro}
+    >
       {/* {intro === 'disable' ? null : (
         <Screen name="Intro" component={MenuPlanIntro} />
       )} */}

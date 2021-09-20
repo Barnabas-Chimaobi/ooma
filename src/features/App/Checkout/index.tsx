@@ -174,7 +174,9 @@ const Checkout = () => {
       const cart = await createMenuItemOrder(body);
       // console.log(cart, 'cartttttt=====');
       if (cart?.statusCode === 201) {
-        ShowMessage(type.DONE, 'Order Placed successfully'); // dispatch(cartStates(addedCart));
+        if (payState !== 'CARD') {
+          ShowMessage(type.DONE, 'Order Placed successfully'); // dispatch(cartStates(addedCart));
+        }
         setLoading(false);
         if (payState === 'CARD') {
           navigation.navigate('Payment', {
@@ -217,7 +219,9 @@ const Checkout = () => {
     } else {
       if (cart?.statusCode === 201) {
         setLoading(false);
-        ShowMessage(type.DONE, 'Order Placed successfully'); // dispatch(cartStates(addedCart));
+        if (payState !== 'CARD') {
+          ShowMessage(type.DONE, 'Order Placed successfully'); // dispatch(cartStates(addedCart));
+        }
         if (payState === 'CARD') {
           navigation.navigate('Payment', {
             amount: totalAmount,
@@ -594,6 +598,7 @@ const Checkout = () => {
                     borderRadius: 15,
                     padding: 5,
                   }}
+                  keyboardType={'phone-pad'}
                   value={friendName}
                   placeholder="Friend's Name"
                   onChangeText={(text) => setFriendName(text)}

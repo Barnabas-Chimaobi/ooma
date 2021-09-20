@@ -42,5 +42,7 @@ export const colors = {
   nColor2: '#494949',
   start: '#05944F',
   mainbg: '#E5E5E5',
-  nColor3: '#909973'
+  nColor3: '#909973',
+  activeTintColor: '#26C867',
+  inactiveTintColor: '#C4C4C4',
 };
