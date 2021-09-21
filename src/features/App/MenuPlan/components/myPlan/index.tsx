@@ -13,7 +13,10 @@ import {
 import shortid from 'shortid';
 import {myPlanData} from './myPlanData';
 import {ProgressBar} from '../../../../../components/ProgressBar/index';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {
+  ScrollView,
+  TouchableWithoutFeedback,
+} from 'react-native-gesture-handler';
 import {BottomSheet} from '../../../../../components/BottomSheetModal';
 import {BottomSheetList} from './bottomSheetList';
 import {getMenuPlanOrders} from '../../../../../FetchData';
@@ -66,7 +69,7 @@ export const MyPlans = ({findPlan}: Props) => {
   const navigation = useNavigation();
   const [isOpen, setOpen] = useState<boolean>(false);
   const [planOrders, setOrders] = useState([]);
-  const [loader, setLoader] = useState(true);
+  const [loader, setLoader] = useState(false);
   const openDrawer = useCallback(() => {
     setOpen(true);
   }, []);
@@ -118,12 +121,13 @@ export const MyPlans = ({findPlan}: Props) => {
   // };
 
   const groupBasketItem = async (item: any) => {
-    let basketData: any = [];
-
+    getPlansfromRedux();
     const userId = await AsyncStorage.getItem('userId');
     console.log(userId, 'useriddd');
     // const gottenId = JSON.parse(userId);
-    // setLoader(true);
+    if (planItem?.length === 0) {
+      setLoader(true);
+    }
     try {
       // console.log(newsum, 'cartttttt');
       const order = await getMenuPlanOrders(userId);
@@ -131,17 +135,6 @@ export const MyPlans = ({findPlan}: Props) => {
 
       console.log(order?.items, 'orderItemsss=======');
 
-      planItem?.forEach((item: any) => {
-        console.log(item);
-        groupByDate(item, basketData);
-      });
-
-      basketData.forEach((item: any) => {
-        //replace the already exist data with the grouped plan data
-        item['data'] = groupByPlanTypeDate(item.data);
-      });
-
-      setOrders(basketData);
       console.log('====baket items======= ', JSON.stringify(basketData));
       // setOrders(order?.items);
       //  await dispatch(cartStates(menuICart?.items));
@@ -154,6 +147,24 @@ export const MyPlans = ({findPlan}: Props) => {
       console.log(error, '====errorrsss====');
       // setRefreshing(false);
     }
+  };
+
+  const getPlansfromRedux = () => {
+    let basketData: any = [];
+
+    planItem?.forEach((item: any) => {
+      console.log(item);
+      groupByDate(item, basketData);
+    });
+    basketData.forEach((item: any) => {
+      //replace the already exist data with the grouped plan data
+      item['data'] = groupByPlanTypeDate(item.data);
+    });
+
+    setOrders(basketData);
+    console.log('====baket items======= ', JSON.stringify(basketData));
+    // setOrders(order?.items);
+    //  await dispatch(cartStates(menuICart?.items));
   };
 
   const groupByPlanTypeDate = (basketItems: any) => {
@@ -255,6 +266,11 @@ export const MyPlans = ({findPlan}: Props) => {
     groupBasketItem();
   }, []);
 
+  const refresh = () => {
+    setLoader(true);
+    groupBasketItem();
+  };
+
   const Item = ({
     imageUrl,
     itemName,
@@ -346,7 +362,30 @@ export const MyPlans = ({findPlan}: Props) => {
   return (
     <>
       <View style={{flex: 1, marginBottom: 65, top: -25}}>
-        <RefreshControl refreshing={loader} />
+        <ScrollView
+          refreshControl={
+            <RefreshControl onRefresh={() => refresh()} refreshing={loader} />
+          }>
+          {planItem?.length === 0 && loader === true ? (
+            <View>
+              <ActivityIndicator
+                color={'green'}
+                size={'large'}
+                animating={loader}
+              />
+
+              <Text style={{textAlign: 'center', marginTop: 120}}>
+                Getting your plans ready...
+              </Text>
+            </View>
+          ) : (
+            <ListItem
+            // icon={item.icon}
+            // location={item.location}
+            // list={item.list}
+            />
+          )}
+        </ScrollView>
         {/* <Spinner
         visible={loader}
         // textStyle={styles.spinnerTextStyle}
@@ -360,19 +399,6 @@ export const MyPlans = ({findPlan}: Props) => {
             style={styles.listStyle}
             renderItem={({item}) => {
               return ( */}
-          {planItem?.length === undefined ? (
-            <ActivityIndicator
-              color={'green'}
-              size={'large'}
-              animating={loader}
-            />
-          ) : (
-            <ListItem
-            // icon={item.icon}
-            // location={item.location}
-            // list={item.list}
-            />
-          )}
 
           {/* );
             }}

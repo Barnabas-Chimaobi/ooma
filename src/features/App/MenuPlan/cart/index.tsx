@@ -76,7 +76,7 @@ export const Cart = () => {
   const [visible, setVisible] = useState(false);
   const [grouped, setgrouped] = useState([]);
   const [plantime, setPlantime] = useState([]);
-  const [refreshing, setRefreshing] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [delivery, setDelivery] = useState('');
 
   const toggleVisible = () => setVisible((prevstate) => !prevstate);
@@ -95,7 +95,7 @@ export const Cart = () => {
   };
 
   const groupBasketItem = () => {
-    setRefreshing(true);
+    // setRefreshing(true);
     let basketData: any = [];
 
     basketItem?.forEach((item: any) => {
@@ -113,7 +113,7 @@ export const Cart = () => {
     // console.log(newsum, 'newbasket======sss====');
     setgrouped(basketData);
     // console.log('====baket items======= ', JSON.stringify(basketData));
-    setRefreshing(false);
+    // setRefreshing(false);
     return basketData;
   };
 
@@ -382,10 +382,10 @@ export const Cart = () => {
   };
 
   const onRefresh = () => {
-    setRefreshing(true);
     if (route?.params?.plan !== 'plan') {
       groupBasketItem();
     } else {
+      setRefreshing(true);
       getMenuplanKart();
     }
   };

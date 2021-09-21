@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   RefreshControl,
   ActivityIndicator,
+  TouchableHighlight,
 } from 'react-native';
 import {Overlay} from 'react-native-elements';
 import {SimpleHeader, CheckBox1} from '../../../components';
@@ -24,7 +25,8 @@ import {getMenuItemOrders} from '../../../FetchData';
 import Footer from '../../../navigation/footer';
 import {StyleFoot} from '../../../navigation/styles';
 import {setUserDetails} from '../../../reducers';
-
+import Modal from 'react-native-modal';
+import {colors} from '../../../colors';
 interface itemProp {
   name: string;
   icon: any | undefined;
@@ -107,117 +109,36 @@ const More: React.FC<Props> = ({navigation}) => {
   const [menuPlan, setMenuPlan] = useState(false);
   const [order, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [number, setNumber] = useState(null);
 
   const toggleOverlay = () => {
     setVisible(!visible);
   };
 
-  const getOrders = async () => {
-    setLoading(true);
-    const userId = await AsyncStorage.getItem('userId');
-    console.log(userId, 'useriddd');
-    let basketData: any = [];
-    // const gottenId = JSON.parse(userId);
-
-    try {
-      // console.log(newsum, 'cartttttt');
-      const orders = await getMenuItemOrders(userId);
-
-      orders?.items?.forEach((item: any) => {
-        groupByDate(item, basketData);
-      });
-      basketData.forEach((item: any) => {
-        //replace the already exist data with the grouped plan data
-        item['data'] = groupByPlanTypeDate(item.data);
-      });
-
-      await setOrders(basketData);
-      //  await dispatch(cartStates(menuICart?.items));
-      // console.log(basketData, 'cart ===value');
-      // console.log(orders?.items, 'cart ===value');
-      setLoading(false);
-      return basketData;
-      // setRefreshing(false);
-    } catch (error) {
-      console.log(error, '====errorrsss====');
-      // setRefreshing(false);
-    }
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
   };
 
-  const groupByDate = (itemData: any, basketItems: any) => {
-    // console.log(basketItems, 'basketitems====');
-    for (const item of basketItems) {
-      // console.log(item, 'iiiiiiiiiitems====');
-      if (itemData?.menuitemorders?.deliveryTime == item?.deliveryTime) {
-        item.data.push({
-          planType: itemData?.menuitemorders?.deliveryTime,
-          itemData,
-        });
-
-        return;
-      }
-    }
-    // if the basket item date doesnt exist before
-    basketItems.push({
-      deliveryTime: itemData?.menuitemorders?.deliveryTime,
-      status: itemData?.menuitemorders?.status,
-      data: [{itemData}],
-    });
-  };
-
-  const groupByPlanTypeDate = (basketItems: any) => {
-    let planTypeData: any = [];
-    let planTypeArray: any = [];
-    for (const item of basketItems) {
-      if (planTypeData?.length == 0) {
-        planTypeData.push({
-          planType: item?.planType,
-          data: [{itemData: item?.itemData}],
-        });
-        planTypeArray.push(item?.planType);
-      } else {
-        for (const planData of planTypeData) {
-          if (planData.planType == item?.planType) {
-            if (!checkIfPlanExist(item, planData?.data)) {
-              planData.data.push({itemData: item?.itemData});
-            }
-            break;
-          }
-          //Ensure that unique plantype exist
-          if (!planTypeArray.includes(item?.planType)) {
-            planTypeData.push({
-              planType: item?.planType,
-              data: [{itemData: item?.itemData}],
-            });
-            planTypeArray.push(item?.planType);
-          }
-        }
-      }
-    }
-    return planTypeData;
-  };
-
-  const checkIfPlanExist = (item: any, plans: any) => {
-    for (const plan of plans) {
-      if (plan?.itemData?.id == item?.itemData?.id) {
-        return true;
-      }
-    }
-    return false;
+  const backAction = async () => {
+    navigation.navigate('Register', {route: 'login'});
+    // setLoading(true);
+    dispatch(reset());
+    dispatch(setUserDetails({number: number}));
+    await AsyncStorage.removeItem('intro');
+    await AsyncStorage.removeItem('token');
+    setModalVisible(!isModalVisible);
+    // setLoading(false);
   };
 
   useEffect(() => {
-    getOrders();
+    // getOrders();
   }, []);
 
-  const onrefresh = () => {
-    setLoading(true);
-    getOrders();
-  };
   const handleNavigate = async (name: string) => {
     switch (name) {
       case 'My Order':
-        navigation.navigate('Order', {screen: 'Order', itemOrder: order});
+        navigation.navigate('Order', {screen: 'Order'});
         break;
 
       case 'Order for a friend':
@@ -249,10 +170,7 @@ const More: React.FC<Props> = ({navigation}) => {
         break;
 
       case 'Logout':
-        dispatch(setUserDetails({}));
-        await AsyncStorage.removeItem('intro');
-        await AsyncStorage.removeItem('token');
-        navigation.navigate('Splash');
+        toggleModal();
         // dispatch(reset());
         // dispatch(signOut());
         break;
@@ -268,13 +186,14 @@ const More: React.FC<Props> = ({navigation}) => {
         {/* <RefreshControl refreshing={loading} /> */}
         {/* <ActivityIndicator size={'large'} color={'green'} animating={loading} /> */}
         <ScrollView
-          refreshControl={
-            <RefreshControl
-              onRefresh={onrefresh}
-              size={20}
-              refreshing={loading}
-            />
-          }>
+        // refreshControl={
+        //   <RefreshControl
+        //     onRefresh={onrefresh}
+        //     size={20}
+        //     refreshing={loading}
+        //   />
+        // }
+        >
           {items?.map(({icon, name, borderBottom, routeTo}, idx) => (
             <TouchableOpacity
               onPress={() => handleNavigate(name)}
@@ -284,6 +203,92 @@ const More: React.FC<Props> = ({navigation}) => {
               <Text style={{marginLeft: 15}}>{name}</Text>
             </TouchableOpacity>
           ))}
+
+          <Modal
+            style={{
+              maxHeight: '30%',
+              width: '80%',
+              alignSelf: 'center',
+              backgroundColor: colors.logout,
+              borderRadius: 12,
+              marginTop: '50%',
+            }}
+            // onBackdropPress={() => toggleModal()}
+            isVisible={isModalVisible}>
+            <View style={{flex: 1, height: '50%'}}>
+              <Text
+                style={{
+                  alignSelf: 'center',
+                  color: colors.white,
+                  marginTop: 15,
+                  fontFamily: 'Poppins-SemiBold',
+                }}>
+                Logout
+              </Text>
+              <Text
+                style={{
+                  alignSelf: 'center',
+                  color: colors.white,
+                  fontFamily: 'Poppins-SemiBold',
+                  fontSize: 11,
+                  marginTop: 30,
+                }}>
+                Are you sure? you will be required to
+              </Text>
+              <Text
+                style={{
+                  alignSelf: 'center',
+                  color: colors.white,
+                  fontFamily: 'Poppins-SemiBold',
+                  fontSize: 11,
+                }}>
+                sign in again
+              </Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}>
+                <TouchableHighlight
+                  style={{width: '15%', marginTop: 35, marginLeft: 35}}
+                  onPress={() => toggleModal()}>
+                  <Text
+                    style={{
+                      color: colors.white,
+                      borderBottomWidth: 1,
+                      borderBottomColor: colors.white,
+                      fontFamily: 'Poppins-SemiBold',
+                    }}>
+                    cancel
+                  </Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  style={{width: '20%', marginTop: 35, marginRight: 35}}
+                  onPress={() => {
+                    backAction();
+                  }}>
+                  <View
+                    style={{
+                      backgroundColor: colors.activeTintColor,
+                      borderRadius: 5,
+                      padding: 3,
+                      flexDirection: 'row',
+                    }}>
+                    <Text
+                      style={{
+                        color: colors.white,
+                        paddingLeft: 3,
+                        paddingRight: 3,
+                        fontFamily: 'Poppins-SemiBold',
+                        textAlign: 'center',
+                      }}>
+                      Logout
+                    </Text>
+                  </View>
+                </TouchableHighlight>
+              </View>
+            </View>
+          </Modal>
 
           <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
             <View>

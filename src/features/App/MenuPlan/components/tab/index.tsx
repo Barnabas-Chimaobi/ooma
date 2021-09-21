@@ -167,12 +167,12 @@ const MenuTab = () => {
   const FamilyRoute = (item, index) => {
     // console.log(item, '====itemsssss===');
     return (
-      <View>
+      <View style={{marginBottom: 40}}>
         <RefreshControl
           onRefresh={() => onRefresh()}
           refreshing={loader}
           enabled={loader}
-          style={{marginTop: 30}}
+          // style={{marginTop: 30}}
         />
         {/* <ActivityIndicator color={'green'} size={'large'} animating={true} /> */}
         {menuPlansMenuItem ? (

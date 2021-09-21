@@ -33,13 +33,16 @@ const MyCart = () => {
   let [reload, setReload] = useState(false);
   const navigation = useNavigation();
   const route = useRoute();
-  const [refreshing, setRefreshing] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   const dispatch: AppDispatch = useDispatch();
   const cartItem = useSelector((state: RootState) => state.addedCart.payload);
 
   const cart = async () => {
-    setRefreshing(true);
+    getCart();
+    {
+      cartItem?.length === 0 ? setRefreshing(true) : null;
+    }
     const branch = await AsyncStorage.getItem('branchId');
     const newbranch = JSON.parse(branch);
     const userId = await AsyncStorage.getItem('userId');
@@ -63,7 +66,6 @@ const MyCart = () => {
   const toggleReload = () => setReload((prevstate) => !prevstate);
 
   const getCart = async () => {
-    await cart();
     // setTimeout(() => {
     const sum = cartItem?.map((v) => v?.amount);
     console.log(sum, cartItem?.length, '====summm====');
@@ -89,15 +91,16 @@ const MyCart = () => {
 
   const onRefresh = () => {
     setRefreshing(true);
-    getCart();
+    cart();
   };
   useEffect(() => {
+    console.log(cartItem?.length, '=====length=====');
     const unsubscribe = navigation.addListener('focus', () => {
       // this.componentDidMount();
-      getCart();
+      cart();
     });
 
-    getCart();
+    cart();
     // getMenuplanKart();
 
     return unsubscribe;
@@ -121,6 +124,7 @@ const MyCart = () => {
                 onRefresh={() => onRefresh()}
               />
             }>
+            {/* {cartItem?.length !== undefined ? ( */}
             <FlatList
               data={cartItem}
               keyExtractor={() => shortid.generate()}
@@ -154,6 +158,9 @@ const MyCart = () => {
                 />
               }
             />
+            {/* ) : ( */}
+
+            {/* )} */}
           </ScrollView>
           {cartItem?.length >= 1 && (
             <View
@@ -204,6 +211,9 @@ const MyCart = () => {
             color={'green'}
             size={'large'}
           />
+          <Text style={{textAlign: 'center', top: 120}}>
+            Getting your cart items ready..
+          </Text>
         </View>
         // <View style={{marginTop: '20%'}}>
         //   <Skeleton />

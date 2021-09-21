@@ -33,6 +33,7 @@ import menuItemByCategorySlice, {
 import cartSlice, {cartStates} from './cart';
 import basketSlice, {basketStates} from './basket';
 import planSlice, {planStates} from './planlist';
+import itemOrderSlice, {itemOrderStates} from './menuItemOrder';
 
 export {
   authSlice,
@@ -83,4 +84,6 @@ export {
   basketStates,
   planSlice,
   planStates,
+  itemOrderSlice,
+  itemOrderStates,
 };

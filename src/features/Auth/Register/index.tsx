@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {View, ImageBackground, ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useSelector, useDispatch} from 'react-redux';
@@ -20,7 +20,7 @@ import {signIn} from '../../../reducers';
 import {AuthImage} from '../../../assets';
 import api from '../../../api';
 import {setUserDetails} from '../../../reducers';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 const registerStepList = [
   {
@@ -44,6 +44,7 @@ const entryStepList = [
 ];
 
 const Register = () => {
+  const newroute = useRoute();
   const navigation = useNavigation();
   const dispatch: AppDispatch = useDispatch();
   const {
@@ -84,6 +85,13 @@ const Register = () => {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    console.log(newroute?.params?.route, 'routeee=====sssss====');
+    if (newroute?.params?.route === 'login') {
+      setroute(null);
+    }
+  }, [newroute?.params?.route]);
 
   const verifyNumber = async () => {
     try {

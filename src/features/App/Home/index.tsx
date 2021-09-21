@@ -692,7 +692,7 @@ const Home = () => {
             width: 70,
             alignSelf: 'flex-end',
             position: 'absolute',
-            bottom: 30,
+            bottom: 50,
             // right: 60,
             zIndex: 30,
             borderRadius: 70,

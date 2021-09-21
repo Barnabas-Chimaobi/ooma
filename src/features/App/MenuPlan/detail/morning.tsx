@@ -83,14 +83,23 @@ const Morning = (morning: any, planIds: any, times: any) => {
     <View style={{flex: 1}}>
       {refreshing ? <ActivityIndicator /> : null}
       {morning.morning === '' ? (
-        // <ActivityIndicator
-        //   size={'large'}
-        //   color={'green'}
-        //   animating={refreshing}
-        //   style={{marginBottom: 30}}
-        // />
-        <Skeleton />
+        <View>
+          <ActivityIndicator
+            size={'large'}
+            color={'green'}
+            animating={refreshing}
+            // style={{marginBottom: 30}}
+          />
+          <EmptyList
+            style={{height: 80, width: 80, marginTop: -120}}
+            // image={require('../../../../assets/Images/emptyCart.png')}
+            // title="FIND PLAN"
+            message="Getting the meal ready in a moment.."
+            onPress={() => navigation.goBack()}
+          />
+        </View>
       ) : (
+        // <Skeleton />
         <FlatList
           data={morning.morning}
           numColumns={2}

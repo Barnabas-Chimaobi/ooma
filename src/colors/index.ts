@@ -45,4 +45,5 @@ export const colors = {
   nColor3: '#909973',
   activeTintColor: '#26C867',
   inactiveTintColor: '#C4C4C4',
+  logout: '#232222'
 };

@@ -456,6 +456,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   const getPreference = () => {};
 
   const getQuantity = (item: any) => {
+    console.log('=====quantity====', item);
     // console.log(item, 'itemss');
     setItemqty(item);
     // parseInt(total) * parseInt(item) + parseInt(addsTotal);
@@ -530,6 +531,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           break;
         }
       }
+      calculateItemSumTotalFromWithAddons();
       return;
     }
     if (previousItem) {
@@ -538,14 +540,24 @@ const CardItem: FC<IProps> = ({route, menu}) => {
         parseFloat(previousItem['totalPrice']) -
         parseFloat(previousItem.initialPrice);
     }
+    calculateItemSumTotalFromWithAddons();
+  };
+
+  const calculateItemSumTotalFromWithAddons = () => {
     const sum = adds?.map((v) => v?.totalPrice);
-    let newsum = sum.reduce(
-      (sum: any, current: any) => parseInt(sum) + parseInt(current),
-    );
-    // console.log(newsum, 'newsummmmmssssss');
-    setAddsTotal(newsum);
-    setPrice(parseInt(newsum) + parseInt(total));
-    setPrice1(parseInt(newsum) + parseInt(total));
+    console.log('====total sum===', sum);
+    if (sum.length > 0) {
+      let newsum = sum.reduce(
+        (sum: any, current: any) => parseInt(sum) + parseInt(current),
+      );
+      console.log(newsum, '===price total ===' + total);
+      setAddsTotal(newsum);
+      setPrice(parseInt(newsum) + parseInt(total));
+      setPrice1(parseInt(newsum) + parseInt(total));
+    } else {
+      setPrice(parseInt(total));
+      setPrice1(parseInt(total));
+    }
   };
 
   const buildInitialAddonObject = (addon: any) => {
