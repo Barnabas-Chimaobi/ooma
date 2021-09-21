@@ -11,6 +11,7 @@ import {
   FlatList,
   RefreshControl,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import CurrentOrder from './Current';
 import OrderHistory from './History';
@@ -49,7 +50,9 @@ const OrderTab = () => {
   const {itemOrder} = route.params;
 
   const getOrders = async () => {
-    // setLoading(true);
+    if (itemOrders?.length === 0) {
+      setLoading(true);
+    }
     getOrderFromRedux();
     const userId = await AsyncStorage.getItem('userId');
     console.log(userId, 'useriddd');
@@ -72,7 +75,7 @@ const OrderTab = () => {
       //  await dispatch(cartStates(menuICart?.items));
       // console.log(basketData, 'cart ===value');
       // console.log(orders?.items, 'cart ===value');
-      // setLoading(false);
+      setLoading(false);
       // return basketData;
       // setRefreshing(false);
     } catch (error) {
@@ -164,7 +167,7 @@ const OrderTab = () => {
   useEffect(() => {
     getOrders();
     console.log(itemOrder, 'itemorderssss======');
-  }, []);
+  }, [itemOrders?.length && loading === true]);
 
   const Current = () => <CurrentOrder item={order} />;
 
@@ -205,20 +208,32 @@ const OrderTab = () => {
             refreshing={loading}
           />
         }>
-        {itemOrders === undefined ? (
-          <EmptyList
-            image={emptyCart}
-            // title="Make Order"
-            message="Getting your order items ready in a moment..."
-            // onPress={() => navigation.navigate('Explore')}
-          />
-        ) : itemOrders?.length === 0 ? (
-          <EmptyList
-            image={emptyCart}
-            // title="Make Order"
-            message="oops, your order list is empty!"
-            // onPress={() => navigation.navigate('Explore')}
-          />
+        {itemOrders?.length === 0 ? (
+          <View style={{textAlign: 'center', marginTop: 60}}>
+            <ActivityIndicator
+              animating={true}
+              size={'large'}
+              color={'green'}
+            />
+            <Text style={{textAlign: 'center', marginTop: 120}}>
+              Getting your order items ready in a moment..
+            </Text>
+          </View>
+        ) : // <EmptyList
+        //   image={emptyCart}
+        //   // title="Make Order"
+        //   message="Getting your order items ready in a moment..."
+        //   // onPress={() => navigation.navigate('Explore')}
+        // />
+        itemOrders?.length === 0 ? (
+          <View>
+            <EmptyList
+              image={emptyCart}
+              // title="Make Order"
+              message="oops, your order list is empty!"
+              // onPress={() => navigation.navigate('Explore')}
+            />
+          </View>
         ) : (
           <Tab.Navigator
             tabBarOptions={{
