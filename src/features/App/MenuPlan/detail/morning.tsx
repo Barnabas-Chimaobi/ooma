@@ -108,6 +108,7 @@ const Morning = (morning: any, planIds: any, times: any) => {
           showsHorizontalScrollIndicator={false}
           keyExtractor={(_, index) => index.toString()}
           renderItem={({item}) => (
+            // console.log(item, 'itemmmmmmmmsss'),
             <DetailCard
               planId={morning.planIds}
               id={item?.MenuItem?.id}
@@ -115,7 +116,15 @@ const Morning = (morning: any, planIds: any, times: any) => {
               title={item?.MenuItem?.itemName}
               amount={item?.MenuItem?.amount}
               oldPrice={item?.oldPrice}
-              planTime={morning.times}
+              // planTime={morning.times}
+              planTime={[
+                {
+                  label: item.deliveryTime,
+                  value: item?.deliveryTime,
+                  amount: item?.deliveryTime,
+                  id: item.deliveryTime,
+                },
+              ]}
               plandate={item?.plandate}
             />
           )}

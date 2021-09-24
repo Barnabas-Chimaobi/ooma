@@ -49,6 +49,7 @@ import {
   Payment,
   OrderDetails1,
   Help,
+  Explore,
   MenuHistory,
 } from '../features/App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -65,7 +66,7 @@ import HomeNav from './HomeNavigation';
 import ExploreNavigation, {ExploreStackParamList} from './ExploreNavigation';
 import {NetworkManager, Loader} from '../components';
 // import Home from './HomeNavigation';
-import Explore from './ExploreNavigation';
+// import Explore from './ExploreNavigation';
 import MenuPlan from './MenuNavigation';
 import Splash from '../navigation/AuthNavigation/splash';
 // import {Stack} from 'native-base';
@@ -234,7 +235,7 @@ export default function App() {
             />
             <Stack.Screen name="MenuHistory" component={MenuHistory} />
             <Stack.Screen name="Home" component={Home} />
-            <Stack.Screen name="HomeNav" component={HomeNav} />
+            {/* <Stack.Screen name="HomeNav" component={HomeNav} /> */}
             {/* <Stack.Screen name="Explore" component={ExploreNavigation} /> */}
             {/* <Stack.Screen name="Details" component={Detail} /> */}
             {/* <Stack.Screen
@@ -242,7 +243,6 @@ export default function App() {
               component={MyCartNavigation}
             /> */}
             {/* <Stack.Screen name="MenuNavigation" component={MenuNavigation} /> */}
-
             {/* <Stack.Screen name="SignIn" component={SignInNavigator} /> */}
           </Stack.Navigator>
           {/* ) : ( */}

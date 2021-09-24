@@ -110,19 +110,21 @@ const Card: FC<IProps> = ({
             {JSON.parse(addons)?.map((item: any) => {
               console.log(item, 'item===addonssss=======');
               return (
-                <Text
-                  style={{
-                    // marginVertical: 10,
-                    marginRight: 5,
-                  }}>
-                  {item?.name}
-                  {item?.quantity}x;
-                </Text>
+                <View>
+                  <Text></Text>
+                  <Text
+                    style={{
+                      // marginVertical: 10,
+                      marginRight: 5,
+                    }}>
+                    {item?.name}({item?.quantity}x);
+                  </Text>
+                </View>
               );
             })}
           </View>
 
-          {/* <Text style={{marginVertical: 10}}>{description}</Text> */}
+          <Text style={{marginVertical: 10}}>{description}</Text>
           <View
             style={{
               flexDirection: 'row',

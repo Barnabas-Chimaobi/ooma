@@ -29,17 +29,23 @@ import {
 export default function Branch() {
   const [branch, setBranch] = useState();
   const [loader, setLoader] = useState(false);
+  const [newToken, setNewToken] = useState();
   const navigation = useNavigation();
   const route = useRoute();
   const params = route.params;
 
   const handleGetBranch = async () => {
     const regionId = await AsyncStorage.getItem('regionId');
+    const token = await AsyncStorage.getItem('token');
+    const parseToken = JSON.parse(token);
+    setNewToken(parseToken);
+    const parseId = JSON.parse(regionId);
     console.log(regionId, '=====regioniddd=====');
-    const allRegion = await getBranches(params?.id || regionId);
+    const allRegion = await getBranches(params?.id || parseId);
     if (allRegion) {
       setBranch(allRegion);
     }
+    console.log(allRegion, 'alllregions====');
   };
 
   useEffect(() => {
@@ -48,21 +54,22 @@ export default function Branch() {
 
   const gotoHome = async (branchId: any) => {
     setLoader(true);
-    await AsyncStorage.setItem('token', params?.token);
+
+    await AsyncStorage.setItem('token', params?.token || newToken);
     await AsyncStorage.setItem('branchId', JSON.stringify(branchId));
     navigation.navigate('Home');
     setLoader(false);
   };
 
   const renderItem = (item: any) => {
-    // console.log(item.item.name, 'itemssssss');
+    console.log(item.item.name, 'itemssssss');
     return (
       <View style={{marginLeft: 10, marginTop: 20}}>
         <TouchableHighlight
           activeOpacity={1}
           underlayColor="rgba(255, 255, 255, 0.3)"
           onPress={() => {
-            AsyncStorage.setItem('branchName', item?.item?.address),
+            AsyncStorage.setItem('branchName', item?.item?.name),
               gotoHome(item?.item?.id);
           }}>
           <View>
@@ -74,7 +81,7 @@ export default function Branch() {
                 <Image source={pin} style={{height: 20, width: 20}} />
               </View>
               <Text style={{fontSize: 14, color: '#000', marginLeft: 10}}>
-                {item?.item?.address}
+                {item?.item?.name}
               </Text>
             </View>
 

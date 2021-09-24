@@ -598,7 +598,6 @@ const Checkout = () => {
                     borderRadius: 15,
                     padding: 5,
                   }}
-                  keyboardType={'phone-pad'}
                   value={friendName}
                   placeholder="Friend's Name"
                   onChangeText={(text) => setFriendName(text)}
@@ -613,6 +612,7 @@ const Checkout = () => {
                     borderRadius: 15,
                     padding: 5,
                   }}
+                  keyboardType={'phone-pad'}
                   value={friendPhone}
                   placeholder="Friend's Phone No"
                   onChangeText={(text) => setFriendPhone(text)}

@@ -32,7 +32,12 @@ export default function region() {
   }, []);
 
   const getBranch = (regionId: any) => {
-    navigation.navigate('Branch', {id: regionId, token: params?.newToken});
+    AsyncStorage.setItem('regionId', JSON.stringify(regionId)),
+      AsyncStorage.setItem('token', JSON.stringify(params?.newToken));
+    navigation.navigate('Branch', {
+      id: regionId,
+      token: params?.newToken,
+    });
   };
 
   const renderItem = (item: any) => {
@@ -44,7 +49,7 @@ export default function region() {
           underlayColor="rgba(255, 255, 255, 0.3)"
           onPress={() => {
             AsyncStorage.setItem('regionName', item?.item?.city),
-              AsyncStorage.setItem('regionId', item?.item?.id),
+              AsyncStorage.setItem('regionId', JSON.stringify(item?.item?.id)),
               getBranch(item?.item?.id);
           }}>
           <View>
