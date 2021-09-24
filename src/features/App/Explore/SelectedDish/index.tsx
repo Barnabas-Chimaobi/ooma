@@ -545,7 +545,6 @@ const CardItem: FC<IProps> = ({route, menu}) => {
 
   const calculateItemSumTotalFromWithAddons = () => {
     const sum = adds?.map((v) => v?.totalPrice);
-    console.log('====total sum===', sum);
     if (sum.length > 0) {
       let newsum = sum.reduce(
         (sum: any, current: any) => parseInt(sum) + parseInt(current),
