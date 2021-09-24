@@ -66,7 +66,7 @@ const Card: FC<IProps> = ({
       {!gridView ? (
         <View style={{marginTop: 5}}>
           {diff !== 'plan' ? (
-            <View style={{alignSelf: 'flex-end'}}>
+            <View style={{alignSelf: 'flex-end', height: 30, width: 30}}>
               <TouchableHighlight
                 underlayColor=""
                 onPress={() =>
@@ -80,6 +80,7 @@ const Card: FC<IProps> = ({
                     fontSize: 11,
                     marginRight: -15,
                     top: 4,
+                    zIndex: 30,
                   }}>
                   View all
                 </Text>

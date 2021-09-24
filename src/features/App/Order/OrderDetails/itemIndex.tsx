@@ -44,18 +44,37 @@ const UnitOrders = ({
   style,
   addons,
 }: any) => {
-  let allAddons = JSON.parse(addons);
+  // let allAddons = JSON.parse(addons);
   // console.log(allAddons, 'addons======');
-
+  let allAdds = JSON.parse(addons);
+  let newadd = JSON.parse(allAdds);
+  let attachAddons = newadd?.map((item) => (
+    <View>
+      {/* <Text style={S.countStyle}>{`${item?.quantity}x`}</Text>
+          <View style={{width: '70%', flexWrap: 'wrap'}}> */}
+      <Text style={{fontWeight: 'bold'}}>{item?.name},</Text>
+      {/* <PriceTag price={item?.initialPrice} clear /> */}
+      {/* </View> */}
+      {/* <PriceTag price={item?.totalPrice} clear /> */}
+    </View>
+  ));
   return (
     <>
       <View style={[S.UnitOrdersmain, style]}>
         {count && <Text style={S.countStyle}>{`${count}x`}</Text>}
         <View style={{width: '70%', flexWrap: 'wrap'}}>
-          <Text style={S.descriptionStyle}>{description}</Text>
+          <Text style={S.descriptionStyle}>
+            {description}; {attachAddons}
+          </Text>
           {unitPrice && <PriceTag price={unitPrice} clear />}
         </View>
-        {price && <PriceTag mainPrice={'mainprice'} price={price} clear />}
+        {price && (
+          <PriceTag
+            mainPrice={'mainprice'}
+            price={Number(count) * Number(price)}
+            clear
+          />
+        )}
       </View>
     </>
   );

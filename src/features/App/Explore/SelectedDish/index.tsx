@@ -184,7 +184,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
 
   const getItemDetail = async () => {
     const item = await getMenuItemsById(route?.params?.id);
-    // console.log(item, 'itemssssss');
+    console.log(item, 'itemssssss');
     // console.log(menuItem?.menuItemPreferences, '======preferencessss=======');
     setTotal(item?.amount);
     setPrice(item?.amount);
@@ -200,11 +200,11 @@ const CardItem: FC<IProps> = ({route, menu}) => {
 
   useEffect(() => {
     userId();
-    // console.log(
-    //   route.params,
-    //   menuItem?.imageUrl,
-    //   '====eachitemmm ====andurllllll====',
-    // );
+    console.log(
+      route.params,
+      menuItem?.imageUrl,
+      '====eachitemmm ====andurllllll====',
+    );
     const handleData = async () => {
       const regionName = await AsyncStorage.getItem('regionName');
       const branchName = await AsyncStorage.getItem('branchName');
@@ -697,75 +697,78 @@ const CardItem: FC<IProps> = ({route, menu}) => {
             </Collapsible>
           </View>
 
-          <View style={{paddingHorizontal: 12, width: '100%'}}>
-            <Button
-              type={ButtonType.solid}
-              title={'Preferences'}
-              iconRight={true}
-              iconName={!visible1 ? 'plus' : 'minus'}
-              iconColor="rgba(48, 48, 48, 0.85)"
-              iconSize={16}
-              buttonStyle={ss.buttonStyle}
-              titleStyle={ss.titleStyle}
-              onPress={() => visibility1()}
-            />
-            <Collapsible collapsed={!visible1} style={{width: '100%'}}>
-              <>
-                {menuItem?.menuItemPreferences.map((preference: any) => (
-                  <TouchableWithoutFeedback
-                    onPress={() => {
-                      // console.log(
-                      //   preference?.Preference?.name,
-                      //   '====preefereeeenn====',
-                      // );
-                      // JSON.stringify(
-                      //   Preferences.push(preference?.Preference?.name),
-                      // );
-                    }}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
+          {menuItem?.menuItemPreferences?.length !== 0 && (
+            <View style={{paddingHorizontal: 12, width: '100%'}}>
+              <Button
+                type={ButtonType.solid}
+                title={'Preferences'}
+                iconRight={true}
+                iconName={!visible1 ? 'plus' : 'minus'}
+                iconColor="rgba(48, 48, 48, 0.85)"
+                iconSize={16}
+                buttonStyle={ss.buttonStyle}
+                titleStyle={ss.titleStyle}
+                onPress={() => visibility1()}
+              />
+              <Collapsible collapsed={!visible1} style={{width: '100%'}}>
+                <>
+                  {menuItem?.menuItemPreferences.map((preference: any) => (
+                    <TouchableWithoutFeedback
+                      onPress={() => {
+                        // console.log(
+                        //   preference?.Preference?.name,
+                        //   '====preefereeeenn====',
+                        // );
+                        // JSON.stringify(
+                        //   Preferences.push(preference?.Preference?.name),
+                        // );
                       }}>
-                      <CheckBox
-                        id={preference?.Preference?.id}
-                        value={preference?.Preference?.unitPrice}
-                        key={preference?.Preference?.id}
-                        title={preference?.Preference?.name}
-                        props1={(name: any, unitPrice: any, id: any) => {
-                          Preferences.push({name, unitPrice, id});
-                          const sum = Preferences?.map((v) => v?.unitPrice);
-                          if (unitPrice !== null) {
-                            let names = sum.reduce(
-                              (sum: any, current: any) => +sum + +current,
-                              // console.log(sum, current, 'consolessssssssssloggg'),
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                        }}>
+                        <CheckBox
+                          id={preference?.Preference?.id}
+                          value={preference?.Preference?.unitPrice}
+                          key={preference?.Preference?.id}
+                          title={preference?.Preference?.name}
+                          props1={(name: any, unitPrice: any, id: any) => {
+                            Preferences.push({name, unitPrice, id});
+                            const sum = Preferences?.map((v) => v?.unitPrice);
+                            if (unitPrice !== null) {
+                              let names = sum.reduce(
+                                (sum: any, current: any) => +sum + +current,
+                                // console.log(sum, current, 'consolessssssssssloggg'),
+                              );
+                              setPrefAmount(names);
+                              // console.log(names, '====nameeeesss====');
+                            }
+
+                            if (unitPrice !== null) {
+                              setPrice(+unitPrice + +prices);
+                              setPrice1(+unitPrice + +prices);
+                            }
+
+                            console.log(
+                              name,
+                              unitPrice,
+                              id,
+                              '====itemmmmsss====',
                             );
-                            setPrefAmount(names);
-                            // console.log(names, '====nameeeesss====');
-                          }
+                          }}
+                        />
+                        <Text style={{paddingTop: 20}}>
+                          {preference?.Preference?.unitPrice}
+                        </Text>
+                      </View>
+                    </TouchableWithoutFeedback>
+                  ))}
+                </>
+              </Collapsible>
+            </View>
+          )}
 
-                          if (unitPrice !== null) {
-                            setPrice(+unitPrice + +prices);
-                            setPrice1(+unitPrice + +prices);
-                          }
-
-                          console.log(
-                            name,
-                            unitPrice,
-                            id,
-                            '====itemmmmsss====',
-                          );
-                        }}
-                      />
-                      <Text style={{paddingTop: 20}}>
-                        {preference?.Preference?.unitPrice}
-                      </Text>
-                    </View>
-                  </TouchableWithoutFeedback>
-                ))}
-              </>
-            </Collapsible>
-          </View>
           {/* <CollapsibleView
           itemPreferences={menuItem?.menuItemPreferences}
           addOns={menuItem?.addons}

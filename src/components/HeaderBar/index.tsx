@@ -121,7 +121,7 @@ const HeaderBar = ({
             ))}
         </View>
       ) : (
-        <View>
+        <View style={{}}>
           <View style={S.location}>
             <Text
               style={{
@@ -129,6 +129,7 @@ const HeaderBar = ({
                 bottom: 10,
                 alignSelf: 'flex-start',
                 opacity: 0.5,
+                left: 5,
               }}>
               Location
             </Text>
@@ -162,7 +163,7 @@ const HeaderBar = ({
                 style={{
                   flexDirection: 'row',
                   top: 25,
-                  marginLeft: -50,
+                  // marginLeft: -20,
                   borderColor: '#F6F6F6',
                   borderWidth: 1,
                   padding: 5,

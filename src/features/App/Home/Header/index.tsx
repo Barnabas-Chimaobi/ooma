@@ -334,7 +334,7 @@ export default function Header() {
             navigation.navigate('Branch', {branch: 'changeBranch'})
           }
           image1={pointDown}
-          title={`${bName}, ${rName}`}
+          title={`${bName}`}
           image2={clock}
           otherTitle="Set Time"
         />

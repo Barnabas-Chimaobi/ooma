@@ -37,6 +37,7 @@ const MyCart = () => {
 
   const dispatch: AppDispatch = useDispatch();
   const cartItem = useSelector((state: RootState) => state.addedCart.payload);
+  console.log("=====cart length========",cartItem.length);
 
   const cart = async () => {
     getCart();

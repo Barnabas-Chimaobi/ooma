@@ -8,11 +8,13 @@ export default StyleSheet.create({
     // backgroundColor: '#F6F6F6',
     // width: '90%',
     padding: 9,
+    paddingLeft: 0,
     borderRadius: 20,
   },
   locationDetails: {
     flexDirection: 'row',
-    alignItems: 'center',
+    // alignItems: 'center',
+    marginLeft: -27,
   },
   locationImage: {
     marginRight: 2,
