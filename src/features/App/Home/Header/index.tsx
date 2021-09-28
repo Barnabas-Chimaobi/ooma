@@ -42,6 +42,7 @@ import {
   SearchMenuItemAndMenuPlan,
   GetAllMenuPlanCategory,
   getMenuPlansByBranch,
+  getMenuitemCart,
 } from '../../../../FetchData';
 import {getMenuItems} from '../../../../reducers/MenuItems';
 import {getSpecialOffer} from '../../../../reducers/SpecialOffer';
@@ -56,6 +57,7 @@ import {useMenuPlanCategory} from '../../../../reducers/MenuPlanCategory';
 import {getMenuItemsHistory} from '../../../../reducers/HistoryMenu';
 import {getMenuItemsPlanForYou} from '../../../../reducers/MenuPlansForYou';
 import {AppDispatch} from '../../../../store';
+import {cartStates} from '../../../../reducers/cart';
 interface Props {
   closeModal: () => void;
 }
@@ -99,7 +101,23 @@ export default function Header() {
     setBranch(newbranch);
   };
 
+  const cart = async () => {
+    const branch = await AsyncStorage.getItem('branchId');
+    const newbranch = JSON.parse(branch);
+    const userId = await AsyncStorage.getItem('userId');
+    console.log(userId, 'useriddd');
+    // const gottenId = JSON.parse(userId);
+
+    try {
+      // console.log(newsum, 'cartttttt');
+
+      const menuICart = await getMenuitemCart(newbranch, userId);
+      await dispatch(cartStates(menuICart?.items));
+    } catch (error) {}
+  };
+
   useEffect(() => {
+    cart();
     anyBranch();
     handleGetBranches();
     // const checkBranch = async () => {

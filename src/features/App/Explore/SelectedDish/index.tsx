@@ -39,6 +39,7 @@ import {
   createOrder,
   createmenuplanorderDetail,
   createMenuPlanOrder,
+  getMenuitemCart,
 } from '../../../../FetchData';
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState, AppDispatch} from '../../../../store';
@@ -57,6 +58,7 @@ import s from '../../../App/Checkout/DeliveryOptions/styles';
 import {colors} from '../../../../colors';
 import {StyleFoot} from '../../../../navigation/styles';
 import Footer from '../../../../navigation/footer';
+import {cartStates} from '../../../../reducers/cart';
 
 type ExploreNavigationProps = StackScreenProps<MainStackParamList, 'Explore'>;
 
@@ -77,7 +79,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     editParams,
     plandate,
   } = route.params;
-
+  const dispatch: AppDispatch = useDispatch();
   const navigation = useNavigation();
   const [meal, setMeal] = useState('meal');
   const [value, setValue] = useState('');
@@ -198,6 +200,21 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   //   '====eachitemmm ====andurllllll====',
   // );
 
+  const carts = async () => {
+    const branch = await AsyncStorage.getItem('branchId');
+    const newbranch = JSON.parse(branch);
+    const userId = await AsyncStorage.getItem('userId');
+    console.log(userId, 'useriddd');
+    // const gottenId = JSON.parse(userId);
+
+    try {
+      // console.log(newsum, 'cartttttt');
+
+      const menuICart = await getMenuitemCart(newbranch, userId);
+      await dispatch(cartStates(menuICart?.items));
+    } catch (error) {}
+  };
+
   useEffect(() => {
     userId();
     console.log(
@@ -268,6 +285,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     cartIds: cartid,
   };
   const createCart = async (item: any) => {
+    console.log(JSON.stringify(body.addons), 'addingonnn===');
     setLoading(true);
     // console.log(addsTotal, 'bodyyyquntyyss');
     // console.log(body, 'bodyyy');
@@ -302,6 +320,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           setCartId(addedCart?.id);
           // if (menuPlan != 'menuPlan') {
           navigation.goBack();
+          carts();
           // }
           // console.log(addedCart, 'addedcaart');
         } else {
@@ -464,30 +483,6 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     // console.log(newPrice, prices1, prices, 'newpricess');
     newPrice != 0 ? setPrice(newPrice) : null;
   };
-
-  // activated,
-  // addons,
-  // amount,
-  // available,
-  // branchId,
-  // caption,
-  // createdAt,
-  // createdBy,
-  // description,
-  // discount,
-  // discountPercent,
-  // id,
-  // imageUrl,
-  // inventories,
-  // itemName,
-  // menuItemCategories,
-  // menuItemPreferences,
-  // menuItemType,
-  // preference,
-  // rating,
-  // ratingCount,
-  // specialOffer,
-  // updatedAt,
 
   const submitProp = (item: any) => {
     // console.log(item, 'quantity');

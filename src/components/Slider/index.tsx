@@ -90,7 +90,7 @@ const SliderBar = ({
   const windowHeight = Dimensions.get('window').height;
   const left1 = ((state.value1 / 300) * windowHeight + 100) / 100 - 10;
   const left2 = ((state.value2 / 300) * windowHeight + 100) / 100 - 10;
-  const minimumValue = 500;
+  const minimumValue = 100;
   const maximumValue = 10000;
   const {value1, value2} = state;
   return (
@@ -100,7 +100,7 @@ const SliderBar = ({
       <Text style={{fontSize: 10, bottom: 3}}>Minimum</Text>
       <Slider
         style={S.sliderStyle}
-        step={500}
+        step={100}
         minimumValue={minimumValue}
         maximumValue={maximumValue}
         value={state.value2}
@@ -126,7 +126,7 @@ const SliderBar = ({
       <Text style={{fontSize: 10, left: 260}}>Maximum</Text>
       <Slider
         style={S.sliderStyle}
-        step={500}
+        step={100}
         minimumValue={minimumValue}
         maximumValue={maximumValue}
         value={state.value1}

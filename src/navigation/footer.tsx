@@ -36,6 +36,8 @@ import {
   newMore,
   newPlan,
 } from '../assets';
+import {AppDispatch, RootState} from '../store';
+import {useDispatch, useSelector} from 'react-redux';
 
 class Footer extends Component {
   state = {
@@ -55,7 +57,7 @@ class Footer extends Component {
   render() {
     const theme = this.props;
     // const notify = this.props.notify;
-    // console.log(, 'notifyprops');
+    console.log(theme, 'notifyprops');
     console.log(this.props.meal, 'schedullless');
     // console.log(this.props.dashboard, 'dashboard');
     // console.log(this.props.notifications, 'notifications');
@@ -200,6 +202,25 @@ class Footer extends Component {
             // style={this.props.message != undefined ? styles.bordertop : null}
             >
               <View style={{alignSelf: 'center'}}>
+                <View
+                  style={{
+                    backgroundColor: colors.red,
+                    borderRadius: 50,
+                    position: 'absolute',
+                    zIndex: 30,
+                    minWidth: 15,
+                    minHeight: 15,
+                    marginLeft: 20,
+                  }}>
+                  <Text
+                    style={{
+                      color: colors.white,
+                      textAlign: 'center',
+                      fontSize: 10,
+                    }}>
+                    {this?.props?.length}
+                  </Text>
+                </View>
                 {this.props.mycart != undefined ? (
                   <Image
                     style={
@@ -277,7 +298,17 @@ const newFooter = (props) => {
   const {colors} = useTheme();
   const navigation = useNavigation();
 
-  return <Footer {...props} theme={colors} navigation={navigation} />;
+  // const dispatch: AppDispatch = useDispatch();
+  const cartItem = useSelector((state: RootState) => state.addedCart.payload);
+
+  return (
+    <Footer
+      {...props}
+      length={cartItem?.length}
+      theme={colors}
+      navigation={navigation}
+    />
+  );
 };
 
 // const mapStateToProps = (state) => ({
