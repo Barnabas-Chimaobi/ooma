@@ -491,10 +491,10 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           <Collapsible collapsed={!visible} style={{width: '100%'}}>
             <>
               {console.log(
-                JSON.parse(addon).map((item) => item),
+                JSON.parse(addon)?.map((item) => item),
                 '===consolleedddd====',
               )}
-              {JSON.parse(addon).map((addons: any) => {
+              {JSON.parse(addon)?.map((addons: any) => {
                 return (
                   <TouchableWithoutFeedback
                     onPress={() => {
@@ -514,7 +514,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                             ? `Extra ${addons?.name} `
                             : addons?.name
                         }
-                        price={(addons?.totalPrice).toFixed(2)}
+                        price={Number(addons?.totalPrice).toFixed(2)}
                         titleStyle={ss.adjustTitleStyle}
                       />
                     </View>
@@ -539,7 +539,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           />
           <Collapsible collapsed={!visible1} style={{width: '100%'}}>
             <>
-              {menuItem?.menuItemPreferences.map((preference: any) => (
+              {menuItem?.menuItemPreferences?.map((preference: any) => (
                 <TouchableWithoutFeedback
                   onPress={() => {
                     console.log(preference?.Preference?.name, 'preefereeeenn');
