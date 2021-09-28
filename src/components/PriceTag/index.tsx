@@ -21,7 +21,7 @@ const PriceTag: FC<IProps> = ({price, clear, oldPrice, style, mainPrice}) => (
           textDecorationLine: 'line-through',
         }}>{`\u20A6${oldPrice}`}</Text>
     )} */}
-    {price && (
+    {price !== undefined ? (
       <Text
         style={
           !clear
@@ -31,7 +31,7 @@ const PriceTag: FC<IProps> = ({price, clear, oldPrice, style, mainPrice}) => (
                 style,
               ]
         }>{`\u20A6${price}`}</Text>
-    )}
+    ) : null}
   </View>
 );
 

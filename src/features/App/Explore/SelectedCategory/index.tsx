@@ -48,7 +48,7 @@ interface selectedProps {
 }
 
 const SelectedCategory: FC<selectedProps> = ({route}) => {
-  const {categoryId} = route.params;
+  const {categoryId} = route?.params;
   const [explore, setExplore] = useState('explore');
   const [loader, setLoader] = useState(false);
   const [data, setData] = useState('');
@@ -66,15 +66,18 @@ const SelectedCategory: FC<selectedProps> = ({route}) => {
       ? await SearchMenuItemByCategoryId(categoryId, 1)
       : [];
     setData(newData);
-    if (newData.length == 0) {
+    if (newData?.length == 0) {
       setTruth(true);
     }
-    dispatch(useMenuItemByCategory(newData.data.items));
+    dispatch(useMenuItemByCategory(newData?.data?.items));
     setLoader(false);
   };
 
   useEffect(() => {
-    getItemByCategoryId();
+    console.log(categoryId, route.params, 'iddcategoryyy====');
+    if (route?.params?.filter !== 'filter') {
+      getItemByCategoryId();
+    }
   }, [categoryId]);
 
   const navigation = useNavigation();
@@ -121,7 +124,7 @@ const SelectedCategory: FC<selectedProps> = ({route}) => {
           data={payload}
           keyExtractor={() => shortid.generate()}
           ListEmptyComponent={
-            payload.length != 0 ? null : (
+            payload?.length != 0 ? null : (
               <EmptyList
                 image={emptyCart}
                 title="Find Meal"
@@ -158,23 +161,23 @@ export default SelectedCategory;
 
 export const CardItem = ({item, onPress, gridView}: any) => {
   const navigation = useNavigation();
-  let Image_Http_URL = {uri: item.imageUrl};
-  const mainRating = item.rating / item.ratingCount;
+  let Image_Http_URL = {uri: item?.imageUrl};
+  const mainRating = item?.rating / item?.ratingCount;
   return (
     <Pressable onPress={onPress}>
       <Card
         diff={'plan'}
-        categories={item.MenuItemCategories}
+        categories={item?.MenuItemCategories}
         img={Image_Http_URL}
-        labelText={item.caption}
-        title={item.itemName}
+        labelText={item?.caption}
+        title={item?.itemName}
         rating={mainRating}
         dish1={'Vegan'}
         dish2={'Vegan'}
         dish3={'Vegan'}
-        price={item.amount}
+        price={item?.amount}
         ratingCount={mainRating}
-        dishType={item.menuItemType}
+        dishType={item?.menuItemType}
         gridView={gridView}
         cardStyle={cardStylse}
         onPress={() =>

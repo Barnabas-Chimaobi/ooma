@@ -23,6 +23,7 @@ import Skeleton from '../Home/skeleton';
 import {FunctionSelectItem} from 'native-base/lib/typescript/components/composites/Typeahead/useTypeahead/types';
 import {StyleFoot} from '../../../navigation/styles';
 import Footer from '../../../navigation/footer';
+import {colors} from '../../../colors';
 
 const MyCart = () => {
   const [mycart, setMyCart] = useState('cart');
@@ -126,39 +127,43 @@ const MyCart = () => {
               />
             }>
             {/* {cartItem?.length !== undefined ? ( */}
-            <FlatList
-              data={cartItem}
-              keyExtractor={() => shortid.generate()}
-              // style={styles.listStyle}
-              renderItem={({item}) => {
-                return (
-                  cartItem?.length >= 1 && (
-                    <Card
-                      newMenu={(item) => moreAction(item)}
-                      item={item}
-                      id={shortid.generate()}
-                      title={item?.MenuItem?.itemName}
-                      price={item?.amount}
-                      quantity={item?.quantity}
-                      image={item?.MenuItem?.imageUrl}
-                      description={item?.MenuItem?.description}
-                      itemId={item?.MenuItem?.id}
-                      cartId={item?.id}
-                      addons={JSON.parse(item?.addons)}
-                    />
-                  )
-                );
-              }}
-              ListFooterComponent={<></>}
-              ListEmptyComponent={
-                <EmptyList
-                  image={require('../../../assets/Images/emptyCart.png')}
-                  title="FIND MEAL"
-                  message="Oops! Your cart is empty"
-                  onPress={() => navigation.navigate('Explore')}
-                />
-              }
-            />
+            <View style={{flex: 1, marginBottom: 250}}>
+              <FlatList
+                data={cartItem}
+                keyExtractor={() => shortid.generate()}
+                // style={styles.listStyle}
+                renderItem={({item}) => {
+                  console.log(item, 'addonssss====stringgg');
+                  return (
+                    cartItem?.length >= 1 && (
+                      <Card
+                        newMenu={(item) => moreAction(item)}
+                        item={item}
+                        id={shortid.generate()}
+                        title={item?.MenuItem?.itemName}
+                        price={item?.amount}
+                        quantity={item?.quantity}
+                        image={item?.MenuItem?.imageUrl}
+                        description={item?.MenuItem?.description}
+                        itemId={item?.MenuItem?.id}
+                        cartId={item?.id}
+                        addons={JSON.parse(item?.addons)}
+                      />
+                    )
+                  );
+                }}
+                ListFooterComponent={<></>}
+                ListEmptyComponent={
+                  <EmptyList
+                    image={require('../../../assets/Images/emptyCart.png')}
+                    title="FIND MEAL"
+                    message="Oops! Your cart is empty"
+                    onPress={() => navigation.navigate('Explore')}
+                  />
+                }
+              />
+            </View>
+
             {/* ) : ( */}
 
             {/* )} */}
@@ -166,13 +171,14 @@ const MyCart = () => {
           {cartItem?.length >= 1 && (
             <View
               style={{
-                width: '90%',
+                width: '95%',
                 alignSelf: 'center',
                 // marginVertical: 20,
                 bottom: '7%',
                 // marginTop: '10%',
                 position: 'absolute',
                 // top: 0,
+                backgroundColor: colors.white,
               }}>
               <View
                 style={{

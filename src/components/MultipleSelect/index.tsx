@@ -96,6 +96,7 @@ const RadioSelect = ({
   const toggleSwitch = () => setSwitchs((previousState) => !previousState);
 
   const filterMenuItem = async () => {
+    console.log(categories, minPrice1, maxPrice1, 'categories====consolleeddd');
     const branch = await AsyncStorage.getItem('branchId');
     const newbranch = JSON.parse(branch);
     // setLoad(true);

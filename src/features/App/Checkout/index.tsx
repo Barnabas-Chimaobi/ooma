@@ -30,6 +30,7 @@ import {
   getDeliveryAddress,
   createMenuItemOrderDetail,
   createMenuPlanOrder,
+  getMenuitemCart,
 } from '../../../FetchData';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -37,8 +38,12 @@ import {parse, types} from '@babel/core';
 import ToggleSwitch from 'toggle-switch-react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import index from '../Settings/Profile/second';
+import {cartStates} from '../../../reducers/cart';
+import {useSelector, useDispatch} from 'react-redux';
+import {RootState, AppDispatch} from '../../../store';
 
 const Checkout = () => {
+  const dispatch: AppDispatch = useDispatch();
   const navigation = useNavigation();
   const route = useRoute();
   const params = route.params;
@@ -66,6 +71,21 @@ const Checkout = () => {
   const [branch, setBranch] = useState('');
   const [payState, setPayState] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const carts = async () => {
+    const branch = await AsyncStorage.getItem('branchId');
+    const newbranch = JSON.parse(branch);
+    const userId = await AsyncStorage.getItem('userId');
+    console.log(userId, 'useriddd');
+    // const gottenId = JSON.parse(userId);
+
+    try {
+      // console.log(newsum, 'cartttttt');
+
+      const menuICart = await getMenuitemCart(newbranch, userId);
+      await dispatch(cartStates(menuICart?.items));
+    } catch (error) {}
+  };
 
   const getAddress = async () => {
     const adress = await AsyncStorage.getItem('branchId');
@@ -172,6 +192,7 @@ const Checkout = () => {
       setLoading(false);
     } else {
       const cart = await createMenuItemOrder(body);
+      carts();
       // console.log(cart, 'cartttttt=====');
       if (cart?.statusCode === 201) {
         if (payState !== 'CARD') {
@@ -187,7 +208,7 @@ const Checkout = () => {
           });
         } else {
           setLoading(false);
-          navigation.navigate('HomeNav');
+          navigation.navigate('Home');
         }
       } else {
         setLoading(false);

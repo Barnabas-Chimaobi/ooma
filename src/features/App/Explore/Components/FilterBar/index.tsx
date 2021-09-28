@@ -75,6 +75,7 @@ const FilterBar = () => {
   });
 
   const filterMenuItem = async () => {
+    console.log('dhfjgkhjhgghjgkhlgjhfjgdfjgk');
     const branch = await AsyncStorage.getItem('branchId');
     const newbranch = JSON.parse(branch);
     const filteredItem = await filterMenuItems(
@@ -87,21 +88,29 @@ const FilterBar = () => {
       maxPrice,
       // combination1,
     );
+    console.log(
+      filteredItem,
+      category,
+      state,
+      minPrice,
+      maxPrice,
+      'filtered=======',
+    );
     dispatch(useMenuItemByCategory(filteredItem));
   };
 
   const setTitle = (title: any) => {
-    if (title == 'Both' || title == 'Single dishes' || title == 'Combo meals') {
+    if (title == 'Both' || title == 'Single Meal' || title == 'Combo dish') {
       setSorts(title);
     } else {
       null;
     }
 
     if (
-      title == 'Popular' ||
-      title == 'Special Offer' ||
-      title == 'Discount' ||
-      title == 'New'
+      title == 'POPULAR' ||
+      title == 'SPECIAL_OFFER' ||
+      title == 'DISCOUNT' ||
+      title == 'NEW'
     ) {
       setCategory(title);
     } else {
@@ -154,7 +163,7 @@ const FilterBar = () => {
     const newData = categoryId
       ? await SearchMenuItemByCategoryId(categoryId, 1)
       : [];
-    dispatch(useMenuItemByCategory(newData.data.items));
+    dispatch(useMenuItemByCategory(newData?.data?.items));
     setLoader(false);
   };
 
@@ -233,8 +242,8 @@ const FilterBar = () => {
             {value == 'sort' ? (
               <Radio
                 title1="Both"
-                title2="Single dishes"
-                title3="Combo meals"
+                title2="Single Meal"
+                title3="Combo dish"
                 type="combination"
                 showButton
                 overlay
@@ -244,10 +253,10 @@ const FilterBar = () => {
               />
             ) : value == 'category' ? (
               <Radio
-                title1="Popular"
-                title2="Special Offer"
-                title3="Discount"
-                title4="New"
+                title1="POPULAR"
+                title2="SPECIAL_OFFER"
+                title3="DISCOUNT"
+                title4="NEW"
                 type="category"
                 showButton
                 overlay

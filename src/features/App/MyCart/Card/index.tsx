@@ -58,6 +58,8 @@ const Card: FC<IProps> = ({
         width: '95%',
         marginVertical: 10,
         alignSelf: 'center',
+        flex: 1,
+        // bottom: 50,
       }}>
       <TouchableOpacity onPress={toggleView}>
         <View

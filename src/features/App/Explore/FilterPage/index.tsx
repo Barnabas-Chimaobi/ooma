@@ -78,8 +78,15 @@ const Filter = () => {
       combination1,
     );
     setLoader(false);
-    navigation.navigate('SelectedCategory', {filteredItem});
-    console.log(filteredItem.length, 'filteredItem');
+    navigation.navigate('SelectedCategory', {filteredItem, filter: 'filter'});
+    console.log(
+      filteredItem.length,
+      category1,
+      minPrice1,
+      maxPrice1,
+      combination1,
+      'filteredItem======',
+    );
     dispatch(useMenuItemByCategory(filteredItem));
   };
 
@@ -180,7 +187,6 @@ const Filter = () => {
             () => {
               filterMenuItem();
             }
-
             // {
             // console.log(combination1, category1)
             // dispatch(useCombination(combination1));
