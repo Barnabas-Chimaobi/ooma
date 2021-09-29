@@ -168,7 +168,23 @@ const CardItem: FC<IProps> = ({route, menu}) => {
 
   let eachItems = JSON.parse(eachItem?.addons);
   useEffect(() => {
-    // console.log(JSON.parse(addon), '====eachitemmm ====');
+    // const pushtoadds = () => {
+    //   JSON.parse(addon)?.map((item) =>
+    //     adds.push({
+    //       id: item?.id,
+    //       name: item?.name,
+    //       price: item?.price,
+    //       quantity: item?.quantity,
+    //       totalPrice: item?.totalPrice,
+    //       initialPrice: item?.price,
+    //       isExtra: item?.isExtra == true ? true : false,
+    //       originalQuantity: 1,
+    //     }),
+    //   );
+    // };
+
+    // pushtoadds();
+    // console.log(pushtoadds, '====pushhhhttooooaaadddssss ====');
     console.log(eachItem, eachItem, addon, '====eachitemmm ====');
     const handleData = async () => {
       const regionName = await AsyncStorage.getItem('regionName');
@@ -262,6 +278,8 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     let previousItem: any = getSelectedItemFromAddons(item.id);
     if (previousItem) {
       previousItem['quantity'] = parseInt(previousItem.quantity + 1);
+      console.log(previousItem.quantity + 1, 'itemmmprocessss====');
+
       previousItem['totalPrice'] =
         parseFloat(previousItem['totalPrice']) +
         parseFloat(previousItem.initialPrice);
@@ -284,9 +302,10 @@ const CardItem: FC<IProps> = ({route, menu}) => {
 
   //remove item from addons
   const removeAddon = (item: any) => {
+    console.log(item, 'itemaddons=======');
     let previousItem: any = getSelectedItemFromAddons(item.id);
     //remove item entirely from the array;
-    if (previousItem['quantity'] == 1) {
+    if (previousItem['quantity'] >= 1) {
       for (let i = 0; i < adds.length; i++) {
         if (adds[i].id == item.id) {
           adds.splice(i, 1);
@@ -323,6 +342,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   };
 
   const buildInitialAddonObject = (addon: any) => {
+    console.log(addon, 'initialllladdonss=======');
     return {
       id: addon?.id,
       name: addon?.Inventory?.itemName,

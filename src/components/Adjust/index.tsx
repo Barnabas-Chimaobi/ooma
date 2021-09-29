@@ -50,7 +50,7 @@ const Adjust = ({
   });
 
   const getQuantity = (item: any, str: any) => {
-    console.log(state, 'state');
+    console.log(state, item, 'stat========e');
     props(item);
     if (str == 'plus') {
       processAddons(itemAddon);
