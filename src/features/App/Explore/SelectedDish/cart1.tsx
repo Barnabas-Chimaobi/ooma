@@ -167,25 +167,25 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   };
 
   let eachItems = JSON.parse(eachItem?.addons);
-  useEffect(() => {
-    // const pushtoadds = () => {
-    //   JSON.parse(addon)?.map((item) =>
-    //     adds.push({
-    //       id: item?.id,
-    //       name: item?.name,
-    //       price: item?.price,
-    //       quantity: item?.quantity,
-    //       totalPrice: item?.totalPrice,
-    //       initialPrice: item?.price,
-    //       isExtra: item?.isExtra == true ? true : false,
-    //       originalQuantity: 1,
-    //     }),
-    //   );
-    // };
+  const buildAddonObjectForCartEdit = () => {
+    JSON.parse(addon)?.map((item) =>
+      adds.push({
+        id: item?.id,
+        name: item?.name,
+        price: item?.price,
+        quantity: item?.quantity,
+        totalPrice: item?.totalPrice,
+        initialPrice: item?.price,
+        isExtra: item?.isExtra == true ? true : false,
+        originalQuantity: 1,
+      }),
+    );
+  };
 
-    // pushtoadds();
-    // console.log(pushtoadds, '====pushhhhttooooaaadddssss ====');
-    console.log(eachItem, eachItem, addon, '====eachitemmm ====');
+  useEffect(() => {
+  
+    buildAddonObjectForCartEdit();
+    console.log('====new value ====', adds[0]);
     const handleData = async () => {
       const regionName = await AsyncStorage.getItem('regionName');
       const branchName = await AsyncStorage.getItem('branchName');
@@ -257,7 +257,6 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   const getPreference = () => {};
 
   const getQuantity = (item: any) => {
-    console.log('=====quantity====', item);
     // console.log(item, 'itemss');
     setItemqty(item);
     // parseInt(total) * parseInt(item) + parseInt(addsTotal);
@@ -274,15 +273,14 @@ const CardItem: FC<IProps> = ({route, menu}) => {
 
   //add item in addons
   const processAddons = (item: any) => {
-    console.log(item, 'itemmmprocessss====');
+  
     let previousItem: any = getSelectedItemFromAddons(item.id);
     if (previousItem) {
       previousItem['quantity'] = parseInt(previousItem.quantity + 1);
-      console.log(previousItem.quantity + 1, 'itemmmprocessss====');
-
       previousItem['totalPrice'] =
         parseFloat(previousItem['totalPrice']) +
         parseFloat(previousItem.initialPrice);
+        console.log("previous ====",previousItem );
     } else {
       let addonInitial = buildInitialAddonObject(item);
       adds.push(addonInitial);
@@ -296,16 +294,15 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     setAddsTotal(newsum);
     setPrice(parseInt(newsum) + parseInt(total));
     setPrice1(parseInt(newsum) + parseInt(total));
-    console.log(newsum, 'newsummmmmssssss');
     // console.log(prices, 'pricesss');
   };
 
   //remove item from addons
   const removeAddon = (item: any) => {
-    console.log(item, 'itemaddons=======');
     let previousItem: any = getSelectedItemFromAddons(item.id);
     //remove item entirely from the array;
-    if (previousItem['quantity'] >= 1) {
+    if (previousItem['quantity'] == 1) {
+     
       for (let i = 0; i < adds.length; i++) {
         if (adds[i].id == item.id) {
           adds.splice(i, 1);
@@ -320,18 +317,17 @@ const CardItem: FC<IProps> = ({route, menu}) => {
       previousItem['totalPrice'] =
         parseFloat(previousItem['totalPrice']) -
         parseFloat(previousItem.initialPrice);
+        console.log("less ====",previousItem );
     }
     calculateItemSumTotalFromWithAddons();
   };
 
   const calculateItemSumTotalFromWithAddons = () => {
     const sum = adds?.map((v) => v?.totalPrice);
-    console.log('====total sum===', sum);
     if (sum.length > 0) {
       let newsum = sum.reduce(
         (sum: any, current: any) => parseInt(sum) + parseInt(current),
       );
-      console.log(newsum, '===price total ===' + total);
       setAddsTotal(newsum);
       setPrice(parseInt(newsum) + parseInt(total));
       setPrice1(parseInt(newsum) + parseInt(total));
@@ -342,7 +338,6 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   };
 
   const buildInitialAddonObject = (addon: any) => {
-    console.log(addon, 'initialllladdonss=======');
     return {
       id: addon?.id,
       name: addon?.Inventory?.itemName,
@@ -426,16 +421,9 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           />
           <Collapsible collapsed={!visible} style={{width: '100%'}}>
             <>
-              {/* {console.log(
-                JSON.parse(itemQtyAddons)?.map((item) => item),
-                '===consolleedddd====',
-              )} */}
+             
               {JSON.parse(itemQtyAddons)?.map((addons: any) => {
-                console.log(
-                  JSON.parse(itemQtyAddons)?.map((item) => item),
-                  '===consolleedddd====',
-                );
-
+             
                 return (
                   <TouchableWithoutFeedback
                     onPress={() => {

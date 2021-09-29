@@ -12,6 +12,7 @@ import {
   RefreshControl,
   ScrollView,
   ActivityIndicator,
+  StatusBar
 } from 'react-native';
 import CurrentOrder from './Current';
 import OrderHistory from './History';
@@ -188,6 +189,8 @@ const OrderTab = () => {
           backgroundColor: '#303030',
           paddingLeft: 10,
         }}>
+            <StatusBar hidden={false} backgroundColor="#303030" barStyle={'dark-content'} />
+
         <SimpleHeader color={colors.white} />
         <Text
           style={{
