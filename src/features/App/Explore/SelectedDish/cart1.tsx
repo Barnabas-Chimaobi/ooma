@@ -221,7 +221,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
       quantity: body.quantity,
       amount: prices,
       addons: JSON.stringify(body.addons),
-      specialInstruction: body.specialInstruction.toString(),
+      specialInstruction: body.specialInstruction,
     };
     console.log(newbody, 'bodyyy====');
     try {
@@ -229,7 +229,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
       const addedCart = cart?.data?.data;
       ShowMessage(type.DONE, 'Item edited successfully'); // dispatch(cartStates(addedCart));
       setCartItem(addedCart);
-      // navigation.goBack();
+      navigation.goBack();
       console.log(cart, 'editedcartttt======');
     } catch (err) {
       console.log(err, 'cartError');
