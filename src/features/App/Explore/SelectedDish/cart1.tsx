@@ -261,7 +261,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     // console.log(item, 'itemss');
     setItemqty(item);
     // parseInt(total) * parseInt(item) + parseInt(addsTotal);
-    let newPrice = parseInt(item) * parseInt(prices1);
+    let newPrice = parseInt(item) * parseInt(eachItem?.amount);
     // console.log(newPrice, prices1, prices, 'newpricess');
     newPrice != 0 ? setPrice(newPrice) : null;
   };
