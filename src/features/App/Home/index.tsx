@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
   TouchableHighlight,
   FlatList,
   ImageBackground,
-  TouchableOpacity,
+  // TouchableOpacity,
   BackHandler,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -52,8 +52,10 @@ import {CheckBox, Divider, Overlay} from 'react-native-elements';
 import {SimpleHeader, CheckBox1} from '../../../components';
 // import BottomNavigator from '../../../navigation/BottomTabNavigator';
 import Footer from '../../../navigation/footer';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const Home = () => {
+  const scrollRef = useRef<ScrollView>();
   const [dashboard, setDashboard] = useState('dashboard');
   const navigation = useNavigation();
   const [switchs, setSwitchs] = useState(false);
@@ -100,6 +102,14 @@ const Home = () => {
       navigation.goBack(null);
     }
     return true;
+  };
+
+  const onFabPress = () => {
+    console.log('scroll');
+    scrollRef.current?.scrollTo({
+      y: 30,
+      animated: true,
+    });
   };
 
   useEffect(() => {
@@ -223,7 +233,7 @@ const Home = () => {
 
   return (
     <View style={S.main}>
-      <ScrollView>
+      <ScrollView ref={scrollRef}>
         <Header />
         <View style={{flex: 1}}>
           {/* <ScrollView
@@ -408,246 +418,247 @@ const Home = () => {
             windowSize={10} // Reduce the window size
           />
         </View>
-        {menuItemSpecialOffer?.length == 0 ? (
-          <Skeleton />
-        ) : (
-          <Categories
-            bool={menuItemSpecialOffer?.length == 0 ? true : false}
-            menuItem={menuItemSpecialOffer}
-            title="Exclusive meals for you"
-            // subtitle="Buy one, get one free. Bonuses ranging from free delivery services to extra meat."
-          />
-        )}
-
-        <View>
-          <TouchableWithoutFeedback onPress={() => toggleFriend()}>
-            <View
-              style={{
-                // paddingVertical: 5,
-                flexDirection: 'row',
-                backgroundColor: colors.nColor3,
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-              <Text
-                style={{
-                  color: colors.white,
-                  fontSize: 15,
-                  fontFamily: ROBOTO,
-                  marginLeft: 10,
-                  fontWeight: 'bold',
-                }}>
-                Order For a Friend
-              </Text>
-              <Icon color={colors.white} name="arrow-right" size={30} />
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-
-        {switchs == true ? (
-          <Modal
-            style={{
-              backgroundColor: '#fff',
-              marginTop: '80%',
-              marginBottom: '80%',
-              width: '80%',
-              alignSelf: 'center',
-              height: 80,
-              // borderTopEndRadius: 25,
-              // borderTopStartRadius: 25,
-            }}
-            onBackdropPress={() => setSwitchs(false)}
-            isVisible={switchs}>
-            <View>
-              <CheckBox
-                title={'Make instant order'}
-                checkedIcon={'circle'}
-                uncheckedIcon={'circle'}
-                checked={check == 'Make instant order' ? true : false}
-                textStyle={[
-                  S.textStyle,
-                  check === 'Make instant order' && S.activeTextStyle,
-                ]}
-                onPress={() => {
-                  handleCheck('Make instant order');
-                  navigation.navigate('Explore'), toggleFriend();
-                  // setChecked({isChecked: title1});
-                  // setCheck('Make instant order');
-                }}
-                checkedColor="green"
-                containerStyle={S.containerStyle}
-              />
-
-              <CheckBox
-                title={'Create meal plan'}
-                checkedIcon={'circle'}
-                uncheckedIcon={'circle'}
-                checked={check === 'Create meal plan' ? true : false}
-                textStyle={[
-                  S.textStyle,
-                  check === 'Create meal plan' && S.activeTextStyle,
-                ]}
-                onPress={() => {
-                  handleCheck('Create meal plan');
-                  navigation.navigate('Menu');
-                  toggleFriend();
-                  // setChecked({isChecked: title2});
-                  // setCheck('Create meal plan');
-                }}
-                checkedColor="green"
-                containerStyle={S.containerStyle}
-              />
-            </View>
-          </Modal>
-        ) : null}
-
-        {newMenuItem?.length == 0 ? (
-          <Skeleton />
-        ) : (
-          <Categories
-            bool={newMenuItem?.length == 0 ? true : false}
-            menuItem={newMenuItem}
-            title="New"
-            // subtitle="Fantastic items on the menu, for you."
-          />
-        )}
-
-        {popularMenuItem?.length == 0 ? (
-          <Skeleton />
-        ) : (
-          <Categories
-            bool={popularMenuItem?.length == 0 ? true : false}
-            menuItem={popularMenuItem}
-            title="Popular"
-            // subtitle="Based On searches. We Picked these for you"
-          />
-        )}
-
-        {glutenMenuItem?.length == 0 ? (
-          <Skeleton />
-        ) : (
-          <Categories
-            bool={glutenMenuItem?.length == 0 ? true : false}
-            menuItem={breakFastMenuItem}
-            title={secondCategory1[0]}
-            // subtitle={secondDescription1[0]}
-          />
-        )}
-
-        {drinksMenuItem?.length == 0 ? (
-          <Skeleton />
-        ) : (
-          <Categories
-            bool={drinksMenuItem?.length == 0 ? true : false}
-            menuItem={drinksMenuItem}
-            title={firstCategory1[0]}
-            // subtitle={firstDescription1[0]}
-          />
-        )}
-
-        {breakFastMenuItem?.length == 0 ? (
-          <Skeleton />
-        ) : (
-          <Categories
-            bool={breakFastMenuItem?.length == 0 ? true : false}
-            menuItem={glutenMenuItem}
-            title={thirdCategory1[0]}
-            // subtitle={thirdDescription1[0]}
-          />
-        )}
-
-        {menuItem?.length == 0 ? (
-          <Skeleton />
-        ) : (
-          // <Categories
-          //   text="also"
-          //   title="You may also like"
-          //   menuItem={menuItem}
-          //   bool={menuItem.length == 0 ? true : false}
-          //   />
+        <View style={{marginBottom: 80}}>
+          {menuItemSpecialOffer?.length == 0 ? (
+            <Skeleton />
+          ) : (
+            <Categories
+              bool={menuItemSpecialOffer?.length == 0 ? true : false}
+              menuItem={menuItemSpecialOffer}
+              title="Exclusive meals for you"
+              // subtitle="Buy one, get one free. Bonuses ranging from free delivery services to extra meat."
+            />
+          )}
 
           <View>
-            <Text
-              style={{
-                fontSize: 21,
-                fontWeight: 'bold',
-                backgroundColor: colors.white,
-                padding: '3%',
-              }}>
-              You may also like
-            </Text>
-            {menuItem?.map((item) => {
-              return (
-                <View
+            <TouchableWithoutFeedback onPress={() => toggleFriend()}>
+              <View
+                style={{
+                  // paddingVertical: 5,
+                  flexDirection: 'row',
+                  backgroundColor: colors.nColor3,
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}>
+                <Text
                   style={{
-                    width: '100%',
-                    alignSelf: 'center',
-                    backgroundColor: colors.white,
-                    borderBottomWidth: 3,
-                    borderBottomColor: colors.grey,
-                    paddingLeft: '3%',
-                    paddingRight: '3%',
-                    paddingTop: '3%',
-                    paddingBottom: '3%',
+                    color: colors.white,
+                    fontSize: 15,
+                    fontFamily: ROBOTO,
+                    marginLeft: 10,
+                    fontWeight: 'bold',
                   }}>
-                  {/* <Text>You may also like</Text> */}
-                  <TouchableOpacity
-                    onPress={() => {
-                      const imgs = {uri: item?.imageUrl};
-                      navigation.navigate('Dish', {
-                        id: item?.id,
-                        rating: item?.rating / item?.ratingCount,
-                        img: imgs,
-                      });
+                  Order For a Friend
+                </Text>
+                <Icon color={colors.white} name="arrow-right" size={30} />
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+
+          {switchs == true ? (
+            <Modal
+              style={{
+                backgroundColor: '#fff',
+                marginTop: '80%',
+                marginBottom: '80%',
+                width: '80%',
+                alignSelf: 'center',
+                height: 80,
+                // borderTopEndRadius: 25,
+                // borderTopStartRadius: 25,
+              }}
+              onBackdropPress={() => setSwitchs(false)}
+              isVisible={switchs}>
+              <View>
+                <CheckBox
+                  title={'Make instant order'}
+                  checkedIcon={'circle'}
+                  uncheckedIcon={'circle'}
+                  checked={check == 'Make instant order' ? true : false}
+                  textStyle={[
+                    S.textStyle,
+                    check === 'Make instant order' && S.activeTextStyle,
+                  ]}
+                  onPress={() => {
+                    handleCheck('Make instant order');
+                    navigation.navigate('Explore'), toggleFriend();
+                    // setChecked({isChecked: title1});
+                    // setCheck('Make instant order');
+                  }}
+                  checkedColor="green"
+                  containerStyle={S.containerStyle}
+                />
+
+                <CheckBox
+                  title={'Create meal plan'}
+                  checkedIcon={'circle'}
+                  uncheckedIcon={'circle'}
+                  checked={check === 'Create meal plan' ? true : false}
+                  textStyle={[
+                    S.textStyle,
+                    check === 'Create meal plan' && S.activeTextStyle,
+                  ]}
+                  onPress={() => {
+                    handleCheck('Create meal plan');
+                    navigation.navigate('Menu');
+                    toggleFriend();
+                    // setChecked({isChecked: title2});
+                    // setCheck('Create meal plan');
+                  }}
+                  checkedColor="green"
+                  containerStyle={S.containerStyle}
+                />
+              </View>
+            </Modal>
+          ) : null}
+
+          {newMenuItem?.length == 0 ? (
+            <Skeleton />
+          ) : (
+            <Categories
+              bool={newMenuItem?.length == 0 ? true : false}
+              menuItem={newMenuItem}
+              title="New"
+              // subtitle="Fantastic items on the menu, for you."
+            />
+          )}
+
+          {popularMenuItem?.length == 0 ? (
+            <Skeleton />
+          ) : (
+            <Categories
+              bool={popularMenuItem?.length == 0 ? true : false}
+              menuItem={popularMenuItem}
+              title="Popular"
+              // subtitle="Based On searches. We Picked these for you"
+            />
+          )}
+
+          {glutenMenuItem?.length == 0 ? (
+            <Skeleton />
+          ) : (
+            <Categories
+              bool={glutenMenuItem?.length == 0 ? true : false}
+              menuItem={breakFastMenuItem}
+              title={secondCategory1[0]}
+              // subtitle={secondDescription1[0]}
+            />
+          )}
+
+          {drinksMenuItem?.length == 0 ? (
+            <Skeleton />
+          ) : (
+            <Categories
+              bool={drinksMenuItem?.length == 0 ? true : false}
+              menuItem={drinksMenuItem}
+              title={firstCategory1[0]}
+              // subtitle={firstDescription1[0]}
+            />
+          )}
+
+          {breakFastMenuItem?.length == 0 ? (
+            <Skeleton />
+          ) : (
+            <Categories
+              bool={breakFastMenuItem?.length == 0 ? true : false}
+              menuItem={glutenMenuItem}
+              title={thirdCategory1[0]}
+              // subtitle={thirdDescription1[0]}
+            />
+          )}
+
+          {menuItem?.length == 0 ? (
+            <Skeleton />
+          ) : (
+            // <Categories
+            //   text="also"
+            //   title="You may also like"
+            //   menuItem={menuItem}
+            //   bool={menuItem.length == 0 ? true : false}
+            //   />
+
+            <View>
+              <Text
+                style={{
+                  fontSize: 21,
+                  fontWeight: 'bold',
+                  backgroundColor: colors.white,
+                  padding: '3%',
+                }}>
+                You may also like
+              </Text>
+              {menuItem?.map((item) => {
+                return (
+                  <View
+                    style={{
+                      width: '100%',
+                      alignSelf: 'center',
+                      backgroundColor: colors.white,
+                      borderBottomWidth: 3,
+                      borderBottomColor: colors.grey,
+                      paddingLeft: '3%',
+                      paddingRight: '3%',
+                      paddingTop: '3%',
+                      paddingBottom: '3%',
                     }}>
-                    <ImageBackground
-                      source={{uri: item?.imageUrl}}
-                      style={s.imageBackground3}>
-                      <View style={s.flex}>
-                        {/* <Label
+                    {/* <Text>You may also like</Text> */}
+                    <TouchableOpacity
+                      onPress={() => {
+                        const imgs = {uri: item?.imageUrl};
+                        navigation.navigate('Dish', {
+                          id: item?.id,
+                          rating: item?.rating / item?.ratingCount,
+                          img: imgs,
+                        });
+                      }}>
+                      <ImageBackground
+                        source={{uri: item?.imageUrl}}
+                        style={s.imageBackground3}>
+                        <View style={s.flex}>
+                          {/* <Label
                         labelText={item?.caption}
                         labelStyle={{
                           top: !item?.caption ? window.height * 1000 : 0,
                           bottom: !item?.caption ? -window.height * 1000 : 0,
                         }}
                       /> */}
-                        {/* <TouchableOpacity>
+                          {/* <TouchableOpacity>
                           <Image source={hearts} style={s.likeImage} />
                         </TouchableOpacity> */}
+                        </View>
+                      </ImageBackground>
+                      <View style={s.textBar}>
+                        <Text style={s.title}>{item?.itemName}</Text>
+                        {/* <PriceTag price={price} oldPrice={oldPrice} /> */}
+                        <View style={s.rating}>
+                          {/* <Rating1 /> */}
+                          {/* <RatingCount ratingCount={ratingCount} /> */}
+                          <DishTypes
+                            categories={item?.MenuItemCategories}
+                            // dish1={dish1}
+                            // dish2={dish2}
+                            // dish3={dish3}
+                          />
+                          <PriceTag
+                            price={
+                              item?.discount
+                                ? (item?.amount - item?.discount).toFixed(2)
+                                : item?.amount
+                            }
+                          />
+                        </View>
+                        <Text style={s.dishType}>
+                          {item?.menuItemType?.toUpperCase()}
+                        </Text>
                       </View>
-                    </ImageBackground>
-                    <View style={s.textBar}>
-                      <Text style={s.title}>{item?.itemName}</Text>
-                      {/* <PriceTag price={price} oldPrice={oldPrice} /> */}
-                      <View style={s.rating}>
-                        {/* <Rating1 /> */}
-                        {/* <RatingCount ratingCount={ratingCount} /> */}
-                        <DishTypes
-                          categories={item?.MenuItemCategories}
-                          // dish1={dish1}
-                          // dish2={dish2}
-                          // dish3={dish3}
-                        />
-                        <PriceTag
-                          price={
-                            item?.discount
-                              ? (item?.amount - item?.discount).toFixed(2)
-                              : item?.amount
-                          }
-                        />
-                      </View>
-                      <Text style={s.dishType}>
-                        {item?.menuItemType?.toUpperCase()}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              );
-            })}
-          </View>
-        )}
+                    </TouchableOpacity>
+                  </View>
+                );
+              })}
+            </View>
+          )}
 
-        {/* {historyMenuItems.length == 0 ? (
+          {/* {historyMenuItems.length == 0 ? (
           <Skeleton />
         ) : (
           <Categories
@@ -669,7 +680,7 @@ const Home = () => {
           />
         )} */}
 
-        <Button
+          {/* <Button
           title="BROWSE MORE MENU"
           type={ButtonType.outline}
           buttonStyle={S.browseButtonStyle}
@@ -682,23 +693,32 @@ const Home = () => {
           buttonStyle={S.backTopButtonStyle}
           titleStyle={S.backtopTitleStyle}
           onPress={() => {}}
-        />
+        /> */}
+        </View>
       </ScrollView>
 
-      <View>
-        <Image
-          style={{
-            height: 90,
-            width: 70,
-            alignSelf: 'flex-end',
-            position: 'absolute',
-            bottom: 50,
-            // right: 60,
-            zIndex: 30,
-            borderRadius: 70,
-          }}
-          source={scroll}
-        />
+      <View
+        style={{
+          zIndex: 1,
+          height: 90,
+          width: 70,
+          alignSelf: 'flex-end',
+          position: 'absolute',
+          bottom: 40,
+          right: 10,
+          // borderRadius: 70,
+        }}>
+        <TouchableOpacity onPressIn={onFabPress}>
+          <Image
+            style={{
+              height: 90,
+              width: 70,
+
+              borderRadius: 70,
+            }}
+            source={scroll}
+          />
+        </TouchableOpacity>
       </View>
 
       <View style={S.footer}>

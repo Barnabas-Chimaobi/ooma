@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text } from 'react-native';
 import PriceTag from '../PriceTag';
-import {Button} from '../Button';
+import { Button } from '../Button';
 import S from './styles';
 
 interface IProps {
@@ -46,11 +46,10 @@ const Adjust = ({
   const [prices, setPrice] = useState(price);
   // const {value} = state;
   useEffect(() => {
-    console.log(edit, quantity, '===edit====');
+
   });
 
   const getQuantity = (item: any, str: any) => {
-    console.log(state, 'state');
     props(item);
     if (str == 'plus') {
       processAddons(itemAddon);
@@ -61,9 +60,10 @@ const Adjust = ({
     } else {
       if (state >= 1) {
         removeAddon(itemAddon);
+       
         let newPrice = itemEdit
-          ? parseInt(item - 1) * parseInt(itemAddon?.initialprice)
-          : parseInt(item + 1) * parseInt(price);
+          ? parseInt(item - 1) * parseInt(itemAddon?.initialPrice)
+          : parseInt(item - 1) * parseInt(price);
         newPrice != 0 ? setPrice(newPrice) : null;
       }
     }
@@ -78,14 +78,14 @@ const Adjust = ({
     }
   };
 
-  const getAddons = () => {};
+  const getAddons = () => { };
 
   const onChange = (str: string, title: any) => {
     str == 'minus' && state >= (title == 'Adjust Quantity' ? 2 : 1)
       ? setState(state - 1)
       : str == 'plus'
-      ? setState(state + 1)
-      : 1;
+        ? setState(state + 1)
+        : 1;
 
     if (title == 'Adjust Quantity') {
       getQuantity1(state, str);
