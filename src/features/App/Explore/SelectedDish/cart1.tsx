@@ -183,7 +183,6 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   };
 
   useEffect(() => {
-  
     buildAddonObjectForCartEdit();
     console.log('====new value ====', adds[0]);
     const handleData = async () => {
@@ -273,14 +272,13 @@ const CardItem: FC<IProps> = ({route, menu}) => {
 
   //add item in addons
   const processAddons = (item: any) => {
-  
     let previousItem: any = getSelectedItemFromAddons(item.id);
     if (previousItem) {
       previousItem['quantity'] = parseInt(previousItem.quantity + 1);
       previousItem['totalPrice'] =
         parseFloat(previousItem['totalPrice']) +
         parseFloat(previousItem.initialPrice);
-        console.log("previous ====",previousItem );
+      console.log('previous ====', previousItem);
     } else {
       let addonInitial = buildInitialAddonObject(item);
       adds.push(addonInitial);
@@ -302,7 +300,6 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     let previousItem: any = getSelectedItemFromAddons(item.id);
     //remove item entirely from the array;
     if (previousItem['quantity'] == 1) {
-     
       for (let i = 0; i < adds.length; i++) {
         if (adds[i].id == item.id) {
           adds.splice(i, 1);
@@ -317,7 +314,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
       previousItem['totalPrice'] =
         parseFloat(previousItem['totalPrice']) -
         parseFloat(previousItem.initialPrice);
-        console.log("less ====",previousItem );
+      console.log('less ====', previousItem);
     }
     calculateItemSumTotalFromWithAddons();
   };
@@ -421,9 +418,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           />
           <Collapsible collapsed={!visible} style={{width: '100%'}}>
             <>
-             
               {JSON.parse(itemQtyAddons)?.map((addons: any) => {
-             
                 return (
                   <TouchableWithoutFeedback
                     onPress={() => {

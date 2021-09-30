@@ -120,6 +120,8 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   const [myId, setId] = useState('');
   const [loading, setLoading] = useState(false);
   const [branch, setBranch] = useState('');
+  let grandsum;
+  let [newgrand, setNewgrand] = useState('');
 
   const visibility = () => {
     setVisible((previousState) => !previousState);
@@ -474,14 +476,16 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   const getAddons = () => {};
   const getPreference = () => {};
 
+  let allPrice = total;
+
   const getQuantity = (item: any) => {
     console.log('=====quantity====', item);
     // console.log(item, 'itemss');
     setItemqty(item);
     // parseInt(total) * parseInt(item) + parseInt(addsTotal);
-    let newPrice = parseInt(item) * parseInt(prices1);
-    // console.log(newPrice, prices1, prices, 'newpricess');
-    newPrice != 0 ? setPrice(newPrice) : null;
+    // let newPrice = parseInt(item) * parseInt(prices1);
+    // newPrice != 0 ? setPrice(newPrice) : null;
+    calculateTotalAmount();
   };
 
   const submitProp = (item: any) => {
@@ -492,6 +496,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
 
   //add item in addons
   const processAddons = (item: any) => {
+    console.log(item, 'item=====ssss');
     let previousItem: any = getSelectedItemFromAddons(item.id);
     if (previousItem) {
       previousItem['quantity'] = parseInt(previousItem.quantity + 1);
@@ -503,20 +508,12 @@ const CardItem: FC<IProps> = ({route, menu}) => {
       adds.push(addonInitial);
     }
 
-    const sum = adds?.map((v) => v?.totalPrice);
-    let newsum = sum.reduce(
-      (sum: any, current: any) => parseInt(sum) + parseInt(current),
-    );
-
-    setAddsTotal(newsum);
-    setPrice(parseInt(newsum) + parseInt(total));
-    setPrice1(parseInt(newsum) + parseInt(total));
-    console.log(newsum, 'newsummmmmssssss');
-    // console.log(prices, 'pricesss');
+    calculateTotalAmount();
   };
 
-  //remove item from addons
   const removeAddon = (item: any) => {
+    //totalArraySubtract();
+    console.log(item, 'itemooo');
     let previousItem: any = getSelectedItemFromAddons(item.id);
     //remove item entirely from the array;
     if (previousItem['quantity'] == 1) {
@@ -526,7 +523,8 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           break;
         }
       }
-      calculateItemSumTotalFromWithAddons();
+      calculateTotalAmount();
+      // calculateItemSumTotalFromWithAddons();
       return;
     }
     if (previousItem) {
@@ -535,7 +533,15 @@ const CardItem: FC<IProps> = ({route, menu}) => {
         parseFloat(previousItem['totalPrice']) -
         parseFloat(previousItem.initialPrice);
     }
-    calculateItemSumTotalFromWithAddons();
+    calculateTotalAmount();
+
+    // calculateItemSumTotalFromWithAddons();
+  };
+
+  const calculateTotalAmount = () => {
+    const sum = adds.reduce((a, c) => a + c.initialPrice * c.quantity);
+    console.log(sum, 'summmmm======summ====');
+    setPrice((parseInt(sum) + parseInt(total)) * itemQty);
   };
 
   const calculateItemSumTotalFromWithAddons = () => {
@@ -546,8 +552,11 @@ const CardItem: FC<IProps> = ({route, menu}) => {
       );
       console.log(newsum, '===price total ===' + total);
       setAddsTotal(newsum);
-      setPrice(parseInt(newsum) + parseInt(total));
-      setPrice1(parseInt(newsum) + parseInt(total));
+      setPrice(parseInt(newsum));
+      setPrice1(parseInt(newsum));
+      // setPrice((parseInt(newsum) + parseInt(total)));
+      // setPrice1(parseInt(newsum) + parseInt(total));
+      console.log(prices, 'pricesssss======');
     } else {
       setPrice(parseInt(total));
       setPrice1(parseInt(total));
@@ -676,7 +685,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                               mainStyle={{paddingVertical: 10}}
                               title={
                                 addon?.isExtra == true
-                                  ? `Extra ${addon?.Inventory?.itemName} `
+                                  ? `Extra ${addon?.Inventory?.itemName}`
                                   : addon?.Inventory?.itemName
                               }
                               price={addon?.price}
