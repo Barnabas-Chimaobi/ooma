@@ -70,11 +70,11 @@ const Adjust = ({
   };
 
   const getQuantity1 = (item: any, str: any) => {
-    console.log(state, 'statess111');
+    
     if (str == 'plus') {
       props1(item + 1);
     } else {
-      props1(item - 1);
+      item>1 && props1(item - 1);
     }
   };
 
