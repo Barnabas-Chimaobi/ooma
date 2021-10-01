@@ -23,6 +23,8 @@ type Props = {
   planId: any;
   planTime: any;
   plandate: any;
+  allplanTime: any;
+
   // times: any;
 };
 
@@ -33,18 +35,41 @@ function percentageCalc(oldPrice: any, newPrice: any) {
 const DetailCard: React.FC<Props> = (props: Props) => {
   const navigation = useNavigation();
   const discount = percentageCalc(props.oldPrice, props.amount);
+  const afternoonTimes = async (id) => {
+    console.log(props.allplanTime, props?.id, 'plantimeeee==sss');
+    const findAllTime = await props?.allplanTime?.filter(
+      (a) => a?.MenuItem?.id == id,
+    );
+    const mapTime = findAllTime?.map(
+      (item) => item?.deliveryTime,
+      // console.log(
+      //   {label: item?.deliveryTime, name: item?.deliveryTime},
+      //   'deliveryTime===',
+      // );
+    );
+    const sortTime = await mapTime?.sort();
+    const mapSortTime = await sortTime?.map((item) => {
+      return {
+        label: item,
+        value: item,
+        amount: item,
+        id: item,
+      };
+    });
+    console.log(mapSortTime, 'time=======');
+
+    navigation.navigate('Dish', {
+      id: props.id,
+      menuPlan: 'menuPlan',
+      planId: props.planId,
+      planTime: mapSortTime,
+      plandate: props.plandate,
+      // rating: item?.item?.name,
+    });
+  };
+
   return (
-    <TouchableNativeFeedback
-      onPress={() =>
-        navigation.navigate('Dish', {
-          id: props.id,
-          menuPlan: 'menuPlan',
-          planId: props.planId,
-          planTime: props.planTime,
-          plandate: props.plandate,
-          // rating: item?.item?.name,
-        })
-      }>
+    <TouchableNativeFeedback onPress={() => afternoonTimes(props.id)}>
       <View style={styles.itemWrapper}>
         <View>
           {props.oldPrice && (
@@ -115,6 +140,7 @@ const Afternoon = (afternoon: any, planIds: any, times: any) => {
               oldPrice={item?.oldPrice}
               planTime={afternoon.times}
               plandate={item?.plandate}
+              allplanTime={afternoon.allTime}
             />
           )}
           ListEmptyComponent={

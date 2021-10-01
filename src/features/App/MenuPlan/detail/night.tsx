@@ -24,6 +24,7 @@ type Props = {
   planTime: any;
   plandate: any;
   times: any;
+  allplanTime: any;
 };
 
 function percentageCalc(oldPrice: any, newPrice: any) {
@@ -33,18 +34,40 @@ function percentageCalc(oldPrice: any, newPrice: any) {
 const DetailCard: React.FC<Props> = (props: Props) => {
   const navigation = useNavigation();
   const discount = percentageCalc(props.oldPrice, props.amount);
+  const nightTimes = async (id) => {
+    console.log(props.allplanTime, props?.id, 'plantimeeee==sss');
+    const findAllTime = await props?.allplanTime?.filter(
+      (a) => a?.MenuItem?.id == id,
+    );
+    const mapTime = findAllTime?.map(
+      (item) => item?.deliveryTime,
+      // console.log(
+      //   {label: item?.deliveryTime, name: item?.deliveryTime},
+      //   'deliveryTime===',
+      // );
+    );
+    const sortTime = await mapTime?.sort();
+    const mapSortTime = await sortTime?.map((item) => {
+      return {
+        label: item,
+        value: item,
+        amount: item,
+        id: item,
+      };
+    });
+    console.log(mapSortTime, 'time=======');
+
+    navigation.navigate('Dish', {
+      id: props.id,
+      menuPlan: 'menuPlan',
+      planId: props.planId,
+      planTime: mapSortTime,
+      plandate: props.plandate,
+      // rating: item?.item?.name,
+    });
+  };
   return (
-    <TouchableNativeFeedback
-      onPress={() =>
-        navigation.navigate('Dish', {
-          id: props.id,
-          menuPlan: 'menuPlan',
-          planId: props.planId,
-          planTime: props.planTime,
-          plandate: props.plandate,
-          // rating: item?.item?.name,
-        })
-      }>
+    <TouchableNativeFeedback onPress={() => nightTimes(props?.id)}>
       <View style={styles.itemWrapper}>
         <View>
           {props.oldPrice && (
@@ -114,6 +137,7 @@ const Night = (night: any, planIds: any, times: any) => {
               oldPrice={item?.oldPrice}
               planTime={night?.times}
               plandate={item?.plandate}
+              allplanTime={night.allTime}
             />
           )}
           ListEmptyComponent={

@@ -1,5 +1,5 @@
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {
   View,
@@ -22,7 +22,7 @@ type Props = {
   amount: Number;
   oldPrice?: Number;
   planId: any;
-  planTime: any;
+  allplanTime: any;
   plandate: any;
   // times: any;
 };
@@ -35,18 +35,48 @@ const DetailCard: React.FC<Props> = (props: Props) => {
   // console.log(props.planTime, '====plantimessss===========');
   const discount = percentageCalc(props.oldPrice, props.amount);
   const navigation = useNavigation();
+  const morningTimes = async (id) => {
+    console.log(props.allplanTime, props?.id, 'plantimeeee==sss');
+    const findAllTime = await props?.allplanTime?.filter(
+      (a) => a?.MenuItem?.id == id,
+    );
+    const mapTime = findAllTime?.map(
+      (item) => item?.deliveryTime,
+      // console.log(
+      //   {label: item?.deliveryTime, name: item?.deliveryTime},
+      //   'deliveryTime===',
+      // );
+    );
+    const sortTime = await mapTime?.sort();
+    const mapSortTime = await sortTime?.map((item) => {
+      return {
+        label: item,
+        value: item,
+        amount: item,
+        id: item,
+      };
+    });
+    console.log(mapSortTime, 'time=======');
+
+    navigation.navigate('Dish', {
+      id: props.id,
+      menuPlan: 'menuPlan',
+      planId: props.planId,
+      planTime: mapSortTime,
+      plandate: props.plandate,
+      // rating: item?.item?.name,
+    });
+  };
+
+  useEffect(() => {
+    // morningTimes();
+  }, []);
+
   return (
     <TouchableNativeFeedback
-      onPress={() =>
-        navigation.navigate('Dish', {
-          id: props.id,
-          menuPlan: 'menuPlan',
-          planId: props.planId,
-          planTime: props.planTime,
-          plandate: props.plandate,
-          // rating: item?.item?.name,
-        })
-      }>
+      onPress={() => {
+        morningTimes(props.id);
+      }}>
       <View style={styles.itemWrapper}>
         <View>
           {props.oldPrice && (
@@ -116,7 +146,7 @@ const Morning = (morning: any, planIds: any, times: any) => {
               title={item?.MenuItem?.itemName}
               amount={item?.MenuItem?.amount}
               oldPrice={item?.oldPrice}
-              // planTime={morning.times}
+              allplanTime={morning.allTime}
               planTime={[
                 {
                   label: item.deliveryTime,

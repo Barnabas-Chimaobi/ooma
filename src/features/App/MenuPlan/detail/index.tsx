@@ -53,19 +53,34 @@ const MenuDetails: FC<IProps> = ({route}) => {
 
   const MorningRoute = () => (
     <View style={styles.scene}>
-      <Morning times={deliveryTime} morning={morning} planIds={planId} />
+      <Morning
+        times={deliveryTime}
+        allTime={allTimeForEachMeal}
+        morning={morning}
+        planIds={planId}
+      />
     </View>
   );
 
   const AfternoonRoute = () => (
     <View style={styles.scene}>
-      <Afternoon times={deliveryTime} afternoon={morning} planIds={planId} />
+      <Afternoon
+        allTime={allTimeForEachMeal}
+        times={deliveryTime}
+        afternoon={morning}
+        planIds={planId}
+      />
     </View>
   );
 
   const NightRoute = () => (
     <View style={styles.scene}>
-      <Night times={deliveryTime} night={morning} planIds={planId} />
+      <Night
+        allTime={allTimeForEachMeal}
+        times={deliveryTime}
+        night={morning}
+        planIds={planId}
+      />
     </View>
   );
 
@@ -83,6 +98,7 @@ const MenuDetails: FC<IProps> = ({route}) => {
   const [marked, setMarked] = useState('');
   const [deliveryTime, setDeliveryTime] = useState('');
   const [refreshing, setRefreshing] = useState(true);
+  const [allTimeForEachMeal, setAllTimeForEachMeal] = useState(null);
 
   const [show, setShow] = useState(false);
 
@@ -106,7 +122,7 @@ const MenuDetails: FC<IProps> = ({route}) => {
       (obj) => !uniq[obj.MenuItem.id] && (uniq[obj.MenuItem.id] = true),
     );
     setMorning(arrFiltered);
-
+    setAllTimeForEachMeal(morningorAfterOrEve);
     const getPlanTimes = arrFiltered?.map((item: any) => {
       return {
         label: item?.deliveryTime,
@@ -119,7 +135,7 @@ const MenuDetails: FC<IProps> = ({route}) => {
     console.log(getPlanTimes, 'plantimesssss===========');
 
     console.log('arrFiltered=================', arrFiltered);
-    console.log(date, 'morningsssss');
+    console.log(morningorAfterOrEve, 'morningsssss');
   };
 
   const getMenuplanKart = async () => {
@@ -145,6 +161,7 @@ const MenuDetails: FC<IProps> = ({route}) => {
     setMenuPlan(menuPlansDetail);
     let d1 = new Date().toISOString().substring(0, 10);
     let d2 = new Date(menuPlansDetail?.endDate).toISOString().substring(0, 10);
+    setEndDates(d2);
     var now = new Date(d2);
     var daysOfYear = [];
     for (var d = new Date(d1); d <= now; d.setDate(d.getDate() + 1)) {
@@ -215,16 +232,22 @@ const MenuDetails: FC<IProps> = ({route}) => {
   console.log(planId);
 
   const onChanges = (e: any, selectedDate: any) => {
-    const newDate = e?.dateString;
-    // const newDate = JSON.stringify(e).substring(1, 11);
-    console.log(planType, '======plantype=====');
-    console.log(selectedDate, '======plandatesssss======');
-    const currentDate = newDate || date;
-    setDate1(e?.dateString || date1);
-    setDate(currentDate);
-    setShow(Platform.OS === 'ios');
+    let newToday = new Date().toISOString().substring(0, 10);
+    console.log(e, newToday, selectedDate, 'datesssssssssssconsolll=======');
+
     // setTimeout(() => {
-    getMorningAfternoonNight(planType, currentDate);
+
+    if (e?.dateString > newToday && e?.dateString <= endDate) {
+      const newDate = e?.dateString;
+      // const newDate = JSON.stringify(e).substring(1, 11);
+      console.log(planType, '======plantype=====');
+      console.log(selectedDate, '======plandatesssss======');
+      const currentDate = newDate || date;
+      setDate1(e?.dateString || date1);
+      setDate(currentDate);
+      setShow(Platform.OS === 'ios');
+      getMorningAfternoonNight(planType, currentDate);
+    }
     // }, 5000);
   };
 
