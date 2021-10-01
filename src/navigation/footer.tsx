@@ -58,7 +58,7 @@ class Footer extends Component {
     const theme = this.props;
     // const notify = this.props.notify;
     console.log(theme, 'notifyprops');
-    console.log(this.props.meal, 'schedullless');
+    console.log(this.props.length, 'schedullless');
     // console.log(this.props.dashboard, 'dashboard');
     // console.log(this.props.notifications, 'notifications');
     // console.log(this.props.message, 'messages');
@@ -202,8 +202,7 @@ class Footer extends Component {
             // style={this.props.message != undefined ? styles.bordertop : null}
             >
               <View style={{alignSelf: 'center'}}>
-                {this?.props?.length !== undefined ||
-                this?.props?.length !== 0 ? (
+                {this?.props?.length !== undefined ? (
                   <View
                     style={{
                       backgroundColor: colors.red,
