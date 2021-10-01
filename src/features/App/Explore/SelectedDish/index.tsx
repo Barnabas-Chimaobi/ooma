@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {
   View,
   ImageBackground,
@@ -26,13 +26,13 @@ import {
   type,
   CheckBox,
 } from '../../../../components';
-import { Icon, Divider } from 'react-native-elements';
+import {Icon, Divider} from 'react-native-elements';
 import CollapsibleView from '../Components/Collapsible';
 import S from '../styles';
-import { StackScreenProps } from '@react-navigation/stack';
-import { MainStackParamList } from '../../../../navigation';
-import { useNavigation } from '@react-navigation/native';
-import { SimpleHeader, CheckBox1 } from '../../../../components';
+import {StackScreenProps} from '@react-navigation/stack';
+import {MainStackParamList} from '../../../../navigation';
+import {useNavigation} from '@react-navigation/native';
+import {SimpleHeader, CheckBox1} from '../../../../components';
 import {
   getMenuItemsById,
   getDeliveryAddress,
@@ -41,24 +41,24 @@ import {
   createMenuPlanOrder,
   getMenuitemCart,
 } from '../../../../FetchData';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState, AppDispatch } from '../../../../store';
-import { Item } from 'react-native-paper/lib/typescript/components/Drawer/Drawer';
-import { number, object } from 'yup/lib/locale';
+import {useSelector, useDispatch} from 'react-redux';
+import {RootState, AppDispatch} from '../../../../store';
+import {Item} from 'react-native-paper/lib/typescript/components/Drawer/Drawer';
+import {number, object} from 'yup/lib/locale';
 import Message from '../../../../components/toaster/ShowMessage';
 import api from '../../../../api';
 import Collapsible from 'react-native-collapsible';
 import ss from '../Components/Collapsible/styles';
 import Modal from 'react-native-modal';
 import ToggleSwitch from 'toggle-switch-react-native';
-import { check, clock } from '../../../../assets';
+import {check, clock} from '../../../../assets';
 import DropDownPicker from 'react-native-dropdown-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import s from '../../../App/Checkout/DeliveryOptions/styles';
-import { colors } from '../../../../colors';
-import { StyleFoot } from '../../../../navigation/styles';
+import {colors} from '../../../../colors';
+import {StyleFoot} from '../../../../navigation/styles';
 import Footer from '../../../../navigation/footer';
-import { cartStates } from '../../../../reducers/cart';
+import {cartStates} from '../../../../reducers/cart';
 
 type ExploreNavigationProps = StackScreenProps<MainStackParamList, 'Explore'>;
 
@@ -68,7 +68,7 @@ interface IProps {
   menu: any;
 }
 
-const CardItem: FC<IProps> = ({ route, menu }) => {
+const CardItem: FC<IProps> = ({route, menu}) => {
   const {
     id,
     cartId,
@@ -194,7 +194,6 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
     setMenuItem(item);
   };
 
-
   const carts = async () => {
     const branch = await AsyncStorage.getItem('branchId');
     const newbranch = JSON.parse(branch);
@@ -207,7 +206,7 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
 
       const menuICart = await getMenuitemCart(newbranch, userId);
       await dispatch(cartStates(menuICart?.items));
-    } catch (error) { }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -237,9 +236,10 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
     branchId: menuItem?.branchId,
     menuitemid: menuItem?.id,
     quantity: itemQty,
-    amount:
-      (parseInt(total) + parseInt(prefAmount) + parseInt(addsTotal)) *
-      parseInt(itemQty),
+    // amount:
+    //   (parseInt(total) + parseInt(prefAmount) + parseInt(addsTotal)) *
+    //   parseInt(itemQty),
+    amount: prices,
     addons: JSON.stringify(adds),
     Preferences: JSON.stringify(Preferences),
     specialInstruction: value,
@@ -452,7 +452,7 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
   //   setCartItem(cartItem);
   // };
 
-  let Image_Http_URL = { uri: menuItem?.imageUrl };
+  let Image_Http_URL = {uri: menuItem?.imageUrl};
 
   const count = menuItem?.rating / menuItem?.ratingCount;
 
@@ -460,8 +460,6 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
     setQuantity(newValue);
     // console.log(quantity, 'quantity');
   };
-
-
 
   const getQuantity = (item: any) => {
     setItemqty(item);
@@ -518,14 +516,12 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
   const calculateTotalAmount = () => {
     let totalAddonSum = 0;
     adds.forEach((val: any) => {
-      totalAddonSum += (parseFloat(val.initialPrice) * parseFloat(val.quantity))
+      totalAddonSum += parseFloat(val.initialPrice) * parseFloat(val.quantity);
     });
     console.log(totalAddonSum, 'addons value');
     let totalItemAmount = (totalAddonSum + parseFloat(total)) * itemQty;
     !isNaN(totalItemAmount) && setPrice(totalItemAmount);
   };
-
- 
 
   const buildInitialAddonObject = (addon: any) => {
     return {
@@ -570,12 +566,12 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{ flex: 1 }}>
-      <View style={{ flex: 1 }}>
+      style={{flex: 1}}>
+      <View style={{flex: 1}}>
         <ImageBackground
           style={S.sdImage}
           source={route.params.img || Image_Http_URL}>
-          <View style={{ marginLeft: 10 }}>
+          <View style={{marginLeft: 10}}>
             <SimpleHeader color={colors.white} />
           </View>
         </ImageBackground>
@@ -606,8 +602,8 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
             title="Description"
             titleStyle={S.cdDescription}
             subTitle={menuItem?.description}
-            subStyle={{ paddingBottom: 13 }}
-            mainStyle={{ paddingHorizontal: 12 }}
+            subStyle={{paddingBottom: 13}}
+            mainStyle={{paddingHorizontal: 12}}
           />
           <Divider />
           {/* <CollapsibleView
@@ -617,7 +613,7 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
         /> */}
           <Divider />
 
-          <View style={{ paddingHorizontal: 12, width: '100%' }}>
+          <View style={{paddingHorizontal: 12, width: '100%'}}>
             <Button
               type={ButtonType.solid}
               title={'Add -Ons'}
@@ -629,44 +625,44 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
               titleStyle={ss.titleStyle}
               onPress={() => visibility()}
             />
-            <Collapsible collapsed={!visible} style={{ width: '100%' }}>
+            <Collapsible collapsed={!visible} style={{width: '100%'}}>
               <>
                 {menuItem?.addons
                   ? menuItem?.addons.map((addon: any) => {
-                    // console.log(addon, 'addonsss');
-                    return (
-                      <TouchableWithoutFeedback
-                        onPress={() => {
-                          // console.log('==do nothing==');
-                        }}>
-                        <View key={addon?.id}>
-                          <Adjust
-                            isAddon
-                            itemAddon={addon}
-                            processAddons={processAddons}
-                            removeAddon={removeAddon}
-                            props={(item: any) => submitProp(item)}
-                            mainStyle={{ paddingVertical: 10 }}
-                            title={
-                              addon?.isExtra == true
-                                ? `Extra ${addon?.Inventory?.itemName}`
-                                : addon?.Inventory?.itemName
-                            }
-                            price={addon?.price}
-                            titleStyle={ss.adjustTitleStyle}
-                          />
-                          {/* <AddOns /> */}
-                        </View>
-                      </TouchableWithoutFeedback>
-                    );
-                  })
+                      // console.log(addon, 'addonsss');
+                      return (
+                        <TouchableWithoutFeedback
+                          onPress={() => {
+                            // console.log('==do nothing==');
+                          }}>
+                          <View key={addon?.id}>
+                            <Adjust
+                              isAddon
+                              itemAddon={addon}
+                              processAddons={processAddons}
+                              removeAddon={removeAddon}
+                              props={(item: any) => submitProp(item)}
+                              mainStyle={{paddingVertical: 10}}
+                              title={
+                                addon?.isExtra == true
+                                  ? `Extra ${addon?.Inventory?.itemName}`
+                                  : addon?.Inventory?.itemName
+                              }
+                              price={addon?.price}
+                              titleStyle={ss.adjustTitleStyle}
+                            />
+                            {/* <AddOns /> */}
+                          </View>
+                        </TouchableWithoutFeedback>
+                      );
+                    })
                   : null}
               </>
             </Collapsible>
           </View>
 
           {menuItem?.menuItemPreferences?.length !== 0 && (
-            <View style={{ paddingHorizontal: 12, width: '100%' }}>
+            <View style={{paddingHorizontal: 12, width: '100%'}}>
               <Button
                 type={ButtonType.solid}
                 title={'Preferences'}
@@ -678,7 +674,7 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
                 titleStyle={ss.titleStyle}
                 onPress={() => visibility1()}
               />
-              <Collapsible collapsed={!visible1} style={{ width: '100%' }}>
+              <Collapsible collapsed={!visible1} style={{width: '100%'}}>
                 <>
                   {menuItem?.menuItemPreferences.map((preference: any) => (
                     <TouchableWithoutFeedback
@@ -702,7 +698,7 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
                           key={preference?.Preference?.id}
                           title={preference?.Preference?.name}
                           props1={(name: any, unitPrice: any, id: any) => {
-                            Preferences.push({ name, unitPrice, id });
+                            Preferences.push({name, unitPrice, id});
                             const sum = Preferences?.map((v) => v?.unitPrice);
                             if (unitPrice !== null) {
                               let names = sum.reduce(
@@ -717,11 +713,9 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
                               setPrice(+unitPrice + +prices);
                               setPrice1(+unitPrice + +prices);
                             }
-
-                    
                           }}
                         />
-                        <Text style={{ paddingTop: 20 }}>
+                        <Text style={{paddingTop: 20}}>
                           {preference?.Preference?.unitPrice}
                         </Text>
                       </View>
@@ -741,21 +735,21 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
           <Divider />
           <Adjust
             props1={(item: any) => getQuantity(item)}
-            mainStyle={{ paddingVertical: 20 }}
+            mainStyle={{paddingVertical: 20}}
             title="Adjust Quantity"
           />
           <Divider />
           <OmaCard
             title="Special Instructions"
-            titleStyle={{ fontSize: 15 }}
-            mainStyle={{ paddingHorizontal: 12 }}
+            titleStyle={{fontSize: 15}}
+            mainStyle={{paddingHorizontal: 12}}
             otherProps={
               <BaseInput
                 value={value}
                 onChangeText={(text) => setValue(text)}
                 multiline={true}
                 numberOfLines={5}
-                inputStyle={{ textAlignVertical: 'top' }}
+                inputStyle={{textAlignVertical: 'top'}}
                 style={{
                   borderRadius: 4,
                   borderColor: 'rgba(48, 48, 48, 0.85)',
@@ -795,7 +789,7 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
                       activeOpacity={1}
                       onPress={() => setOpenModal(false)}>
                       <Text
-                        style={{ fontSize: 16, color: 'rgba(31, 31, 31, 0.45)' }}>
+                        style={{fontSize: 16, color: 'rgba(31, 31, 31, 0.45)'}}>
                         Cancel
                       </Text>
                     </TouchableHighlight>
@@ -807,14 +801,14 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
                         animating={loading}
                       />
                     ) : (
-                        <TouchableHighlight
-                          underlayColor=""
-                          onPress={() => createBasket()}>
-                          <Text style={{ fontSize: 16, color: '#05944F' }}>
-                            Done
+                      <TouchableHighlight
+                        underlayColor=""
+                        onPress={() => createBasket()}>
+                        <Text style={{fontSize: 16, color: '#05944F'}}>
+                          Done
                         </Text>
-                        </TouchableHighlight>
-                      )}
+                      </TouchableHighlight>
+                    )}
                   </View>
 
                   <View
@@ -824,9 +818,9 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
                       marginTop: 15,
                     }}
                   />
-                  <View style={{ backgroundColor: '#FFFFFF' }}>
+                  <View style={{backgroundColor: '#FFFFFF'}}>
                     <View
-                      style={{ backgroundColor: 'rgba(246, 246, 246, 0.75)' }}>
+                      style={{backgroundColor: 'rgba(246, 246, 246, 0.75)'}}>
                       <Text
                         style={{
                           fontFamily: 'Poppins',
@@ -839,7 +833,7 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
                       </Text>
                     </View>
 
-                    <View style={{ flexDirection: 'row' }}>
+                    <View style={{flexDirection: 'row'}}>
                       <Button
                         title="Pick-up"
                         type={ButtonType.clear}
@@ -870,7 +864,7 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
                           setDeliveryOptions('Pick-Up'),
                             toggleCheckOptions('Pick-Up');
                         }}
-                        style={{ marginVertical: 10 }}>
+                        style={{marginVertical: 10}}>
                         <View>
                           <Text
                             style={{
@@ -885,7 +879,7 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
                       </TouchableOpacity>
                     ) : null}
 
-                    <View style={{ flexDirection: 'row' }}>
+                    <View style={{flexDirection: 'row'}}>
                       <TouchableOpacity
                         activeOpacity={0.5}
                         onPress={() => {
@@ -894,13 +888,13 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
                           // showCheck1(),
                           // setChecks(false);
                         }}
-                        style={{ marginLeft: 10, marginBottom: 10 }}>
-                        <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                        style={{marginLeft: 10, marginBottom: 10}}>
+                        <View style={{flexDirection: 'row', marginTop: 10}}>
                           <Image
-                            style={{ marginLeft: 10 }}
+                            style={{marginLeft: 10}}
                             source={require('../../../../assets/Images/truck.png')}
                           />
-                          <Text style={{ marginLeft: 15 }}>Delivery</Text>
+                          <Text style={{marginLeft: 15}}>Delivery</Text>
                         </View>
                       </TouchableOpacity>
                       {checks1 == true ? (
@@ -917,7 +911,7 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
                     </View>
                   </View>
 
-                  <View style={{ marginTop: 10 }}>
+                  <View style={{marginTop: 10}}>
                     {show1 == true ? (
                       <View
                         style={{
@@ -958,7 +952,7 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
                           />
                         </View>
 
-                        <View style={{ width: '50%' }}>
+                        <View style={{width: '50%'}}>
                           <DropDownPicker
                             placeholder="Select location"
                             // open={open}
@@ -998,12 +992,12 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
                 </View> */}
 
                   {/* {showTime == true ? ( */}
-                  <View style={{ marginTop: -50 }}>
+                  <View style={{marginTop: -50}}>
                     <Button
                       titleStyle={s.buttonTitle}
                       type={ButtonType.clear}
                       title={planTime}
-                      containerStyle={{ alignSelf: 'center' }}
+                      containerStyle={{alignSelf: 'center'}}
                       onPress={() => {
                         setShowTime(false), setTime(planTime);
                       }}
@@ -1049,7 +1043,7 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
                     marginRight: 15,
                   }}>
                   <Text
-                    style={{ marginLeft: 15, fontWeight: 'bold', fontSize: 17 }}>
+                    style={{marginLeft: 15, fontWeight: 'bold', fontSize: 17}}>
                     Order For a friend
                   </Text>
                   <ToggleSwitch
@@ -1060,13 +1054,13 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
                       borderRadius: 50,
                       backgroundColor: 'rgba(196, 196, 196, 0.15)',
                     }}
-                    trackOffStyle={{ borderRadius: 50 }}
-                    thumbOnStyle={{ borderRadius: 50, backgroundColor: 'green' }}
+                    trackOffStyle={{borderRadius: 50}}
+                    thumbOnStyle={{borderRadius: 50, backgroundColor: 'green'}}
                     thumbOffStyle={{
                       borderRadius: 50,
                       backgroundColor: 'grey',
                     }}
-                    labelStyle={{ color: 'black', fontWeight: '900' }}
+                    labelStyle={{color: 'black', fontWeight: '900'}}
                     size="small"
                     onToggle={(isOn: any) => {
                       toggleFriend(), console.log('changed to : ', isOn);
@@ -1075,7 +1069,7 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
                 </View>
               </TouchableHighlight>
               {switchs == true ? (
-                <View style={{ backgroundColor: 'white', marginBottom: 20 }}>
+                <View style={{backgroundColor: 'white', marginBottom: 20}}>
                   <TextInput
                     style={{
                       backgroundColor: 'rgba(196, 196, 196, 0.15);',
@@ -1110,23 +1104,23 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
           ) : null}
 
           {cartId != undefined ? (
-            <View style={{ marginBottom: 20 }}>
+            <View style={{marginBottom: 20}}>
               <Button
                 title="Edit"
                 type={ButtonType.solid}
-                containerStyle={{ width: '35%', alignSelf: 'center' }}
-                buttonStyle={{ backgroundColor: '#303030', paddingVertical: 12 }}
+                containerStyle={{width: '35%', alignSelf: 'center'}}
+                buttonStyle={{backgroundColor: '#303030', paddingVertical: 12}}
                 iconColor="#FFF"
                 iconName="cart-plus"
                 iconSize={18}
-                titleStyle={{ color: 'white', marginHorizontal: 20 }}
+                titleStyle={{color: 'white', marginHorizontal: 20}}
                 onPress={() => {
                   editCart();
                 }}
               />
             </View>
           ) : menuPlan == 'menuPlan' ? (
-            <View style={{ marginBottom: 20 }}>
+            <View style={{marginBottom: 20}}>
               {loading ? (
                 <ActivityIndicator
                   color="green"
@@ -1134,71 +1128,71 @@ const CardItem: FC<IProps> = ({ route, menu }) => {
                   animating={loading}
                 />
               ) : (
+                <Button
+                  title="Add To Basket"
+                  type={ButtonType.solid}
+                  containerStyle={{
+                    alignSelf: 'center',
+                    height: 35,
+                    width: 325,
+                  }}
+                  buttonStyle={{
+                    backgroundColor: '#303030',
+                    paddingVertical: 5,
+                  }}
+                  iconColor="#FFF"
+                  iconName="cart-plus"
+                  iconSize={18}
+                  titleStyle={{
+                    color: 'white',
+                    marginHorizontal: 20,
+                  }}
+                  onPress={() => {
+                    setOpenModal(true);
+                  }}
+                />
+              )}
+            </View>
+          ) : (
+            <View>
+              {loading ? (
+                <ActivityIndicator
+                  color="green"
+                  size="large"
+                  animating={loading}
+                />
+              ) : (
+                <View style={S.sdButtonBar}>
                   <Button
-                    title="Add To Basket"
+                    title="Add to cart"
                     type={ButtonType.solid}
-                    containerStyle={{
-                      alignSelf: 'center',
-                      height: 35,
-                      width: 325,
-                    }}
+                    containerStyle={{width: '65%'}}
                     buttonStyle={{
                       backgroundColor: '#303030',
-                      paddingVertical: 5,
+                      paddingVertical: 12,
                     }}
                     iconColor="#FFF"
                     iconName="cart-plus"
                     iconSize={18}
-                    titleStyle={{
-                      color: 'white',
-                      marginHorizontal: 20,
-                    }}
+                    titleStyle={{color: 'white', marginHorizontal: 20}}
                     onPress={() => {
-                      setOpenModal(true);
+                      createCart('Add to cart');
                     }}
                   />
-                )}
-            </View>
-          ) : (
-                <View>
-                  {loading ? (
-                    <ActivityIndicator
-                      color="green"
-                      size="large"
-                      animating={loading}
-                    />
-                  ) : (
-                      <View style={S.sdButtonBar}>
-                        <Button
-                          title="Add to cart"
-                          type={ButtonType.solid}
-                          containerStyle={{ width: '65%' }}
-                          buttonStyle={{
-                            backgroundColor: '#303030',
-                            paddingVertical: 12,
-                          }}
-                          iconColor="#FFF"
-                          iconName="cart-plus"
-                          iconSize={18}
-                          titleStyle={{ color: 'white', marginHorizontal: 20 }}
-                          onPress={() => {
-                            createCart('Add to cart');
-                          }}
-                        />
-                        <Button
-                          title="Buy now"
-                          type={ButtonType.solid}
-                          containerStyle={{ width: '30%' }}
-                          buttonStyle={{ backgroundColor: '#EEE' }}
-                          titleStyle={{ color: 'black', fontWeight: 'bold' }}
-                          onPress={() => {
-                            createCart('Buy now');
-                          }}
-                        />
-                      </View>
-                    )}
+                  <Button
+                    title="Buy now"
+                    type={ButtonType.solid}
+                    containerStyle={{width: '30%'}}
+                    buttonStyle={{backgroundColor: '#EEE'}}
+                    titleStyle={{color: 'black', fontWeight: 'bold'}}
+                    onPress={() => {
+                      createCart('Buy now');
+                    }}
+                  />
                 </View>
               )}
+            </View>
+          )}
         </ScrollView>
         {/* <View style={StyleFoot.footer}>
           <Footer navigation={navigation} meal={meal} />

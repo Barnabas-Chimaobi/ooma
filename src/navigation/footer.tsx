@@ -202,25 +202,29 @@ class Footer extends Component {
             // style={this.props.message != undefined ? styles.bordertop : null}
             >
               <View style={{alignSelf: 'center'}}>
-                <View
-                  style={{
-                    backgroundColor: colors.red,
-                    borderRadius: 50,
-                    position: 'absolute',
-                    zIndex: 30,
-                    minWidth: 15,
-                    minHeight: 15,
-                    marginLeft: 20,
-                  }}>
-                  <Text
+                {this?.props?.length !== undefined ||
+                this?.props?.length !== 0 ? (
+                  <View
                     style={{
-                      color: colors.white,
-                      textAlign: 'center',
-                      fontSize: 10,
+                      backgroundColor: colors.red,
+                      borderRadius: 50,
+                      position: 'absolute',
+                      zIndex: 30,
+                      minWidth: 15,
+                      minHeight: 15,
+                      marginLeft: 20,
                     }}>
-                    {this?.props?.length}
-                  </Text>
-                </View>
+                    <Text
+                      style={{
+                        color: colors.white,
+                        textAlign: 'center',
+                        fontSize: 10,
+                      }}>
+                      {this?.props?.length}
+                    </Text>
+                  </View>
+                ) : null}
+
                 {this.props.mycart != undefined ? (
                   <Image
                     style={
