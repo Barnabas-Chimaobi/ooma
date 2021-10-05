@@ -22,6 +22,7 @@ import {
   ShowMessage,
   type,
   CheckBox,
+  SimpleHeader,
 } from '../../../../components';
 import {Icon, Divider} from 'react-native-elements';
 import CollapsibleView from '../Components/Collapsible';
@@ -50,6 +51,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import s from '../../../App/Checkout/DeliveryOptions/styles';
 import {add} from 'react-native-reanimated';
+import {colors} from '../../../../colors';
 
 type ExploreNavigationProps = StackScreenProps<MainStackParamList, 'Explore'>;
 
@@ -72,7 +74,9 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   } = route.params;
 
   const navigation = useNavigation();
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState(
+    eachItem?.specialInstruction === '' ? null : eachItem?.specialInstruction,
+  );
   const [menuItem, setMenuItem] = useState(menu);
   const [prices, setPrice] = useState(eachItem?.amount);
   const [quantity, setQuantity] = useState(number);
@@ -197,7 +201,15 @@ const CardItem: FC<IProps> = ({route, menu}) => {
 
     handleData();
     getAddress();
-    console.log(id, cartId, planId, planTime, eachItem, 'paramssssmmm');
+    console.log(
+      id,
+      cartId,
+      planId,
+      planTime,
+      eachItem,
+      menuItem?.menuItemPreferences?.length,
+      'paramssssmmm',
+    );
     getItemDetail();
   }, []);
 
@@ -346,8 +358,11 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     <View style={{flex: 1}}>
       <ImageBackground
         style={S.sdImage}
-        source={route.params.img || Image_Http_URL}
-      />
+        source={route.params.img || Image_Http_URL}>
+        <View style={{marginLeft: 10}}>
+          <SimpleHeader color={colors.white} />
+        </View>
+      </ImageBackground>
       <View style={S.sdContainer}>
         <Text>{menuItem?.MenuItem.itemName}</Text>
         <PriceTag price={prices} />
@@ -356,12 +371,12 @@ const CardItem: FC<IProps> = ({route, menu}) => {
         <View style={S.sdHold}>
           <View style={S.sdRating}>
             <Rating rating={count} />
-            <Icon
+            {/* <Icon
               name="share-alt"
               type="font-awesome-5"
               color="#000"
               size={18}
-            />
+            /> */}
           </View>
           <DishTypes
             categories={menuItem?.menuItemCategories}
@@ -432,47 +447,53 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           </Collapsible>
         </View>
 
-        <View style={{paddingHorizontal: 12, width: '100%'}}>
-          <Button
-            type={ButtonType.solid}
-            title={'Preferences'}
-            iconRight={true}
-            iconName={!visible1 ? 'plus' : 'minus'}
-            iconColor="rgba(48, 48, 48, 0.85)"
-            iconSize={16}
-            buttonStyle={ss.buttonStyle}
-            titleStyle={ss.titleStyle}
-            onPress={() => visibility1()}
-          />
-          <Collapsible collapsed={!visible1} style={{width: '100%'}}>
-            <>
-              {menuItem?.menuItemPreferences?.map((preference: any) => (
-                <TouchableWithoutFeedback
-                  onPress={() => {
-                    console.log(preference?.Preference?.name, 'preefereeeenn');
-                    JSON.stringify(
-                      Preferences.push(preference?.Preference?.name),
-                    );
-                  }}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
+        {menuItem?.menuItemPreferences?.length !== undefined && (
+          <View style={{paddingHorizontal: 12, width: '100%'}}>
+            <Button
+              type={ButtonType.solid}
+              title={'Preferences'}
+              iconRight={true}
+              iconName={!visible1 ? 'plus' : 'minus'}
+              iconColor="rgba(48, 48, 48, 0.85)"
+              iconSize={16}
+              buttonStyle={ss.buttonStyle}
+              titleStyle={ss.titleStyle}
+              onPress={() => visibility1()}
+            />
+            <Collapsible collapsed={!visible1} style={{width: '100%'}}>
+              <>
+                {menuItem?.menuItemPreferences?.map((preference: any) => (
+                  <TouchableWithoutFeedback
+                    onPress={() => {
+                      console.log(
+                        preference?.Preference?.name,
+                        'preefereeeenn',
+                      );
+                      JSON.stringify(
+                        Preferences.push(preference?.Preference?.name),
+                      );
                     }}>
-                    <CheckBox
-                      key={preference?.Preference?.id}
-                      title={preference?.Preference?.name}
-                      props={(item: any) => Preferences.push(item)}
-                    />
-                    <Text style={{paddingTop: 20}}>
-                      {preference?.Preference?.unitPrice}
-                    </Text>
-                  </View>
-                </TouchableWithoutFeedback>
-              ))}
-            </>
-          </Collapsible>
-        </View>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <CheckBox
+                        key={preference?.Preference?.id}
+                        title={preference?.Preference?.name}
+                        props={(item: any) => Preferences.push(item)}
+                      />
+                      <Text style={{paddingTop: 20}}>
+                        {preference?.Preference?.unitPrice}
+                      </Text>
+                    </View>
+                  </TouchableWithoutFeedback>
+                ))}
+              </>
+            </Collapsible>
+          </View>
+        )}
+
         {/* <CollapsibleView
           itemPreferences={menuItem?.menuItemPreferences}
           addOns={menuItem?.addons}

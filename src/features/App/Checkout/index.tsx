@@ -252,7 +252,7 @@ const Checkout = () => {
           });
         } else {
           setLoading(false);
-          navigation.navigate('HomeNav');
+          navigation.navigate('Home');
         }
       } else {
         setLoading(false);
@@ -325,6 +325,10 @@ const Checkout = () => {
   const toggleCheckOptions = (item: any) => {
     if (item === 'Pick-Up') {
       setChecks(true);
+      setShow1(false);
+      setDeliveryCharges(0);
+      setAddressId(null);
+      setMyAddress('');
     } else {
       setChecks(false);
     }
@@ -510,21 +514,40 @@ const Checkout = () => {
         </View>
       )} */}
         <View style={{backgroundColor: '#FFFFFF', marginTop: 10}}>
-          <RadioSelect
-            amount={
-              parseInt(deliveryCharges) +
-              parseInt(
-                params?.subTotal || params?.amount || params?.params?.amount,
-              )
-            }
-            orderId={cartId}
-            branchId={branch}
-            title="Payment Method"
-            title1="CARD"
-            title2="CASH"
-            type="Payment Method"
-            props={(item: any) => radio2(item)}
-          />
+          {params?.planOrder && (
+            <RadioSelect
+              amount={
+                parseInt(deliveryCharges) +
+                parseInt(
+                  params?.subTotal || params?.amount || params?.params?.amount,
+                )
+              }
+              orderId={cartId}
+              branchId={branch}
+              title="Payment Method"
+              title1="CARD"
+              type="Payment Method"
+              props={(item: any) => radio2(item)}
+            />
+          )}
+
+          {!params?.planOrder && (
+            <RadioSelect
+              amount={
+                parseInt(deliveryCharges) +
+                parseInt(
+                  params?.subTotal || params?.amount || params?.params?.amount,
+                )
+              }
+              orderId={cartId}
+              branchId={branch}
+              title="Payment Method"
+              title1="CARD"
+              title2="CASH"
+              type="Payment Method"
+              props={(item: any) => radio2(item)}
+            />
+          )}
         </View>
 
         {/* <View style={{backgroundColor: '#FFFFFF', marginTop: 10}}>

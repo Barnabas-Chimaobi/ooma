@@ -9,7 +9,7 @@ export default StyleSheet.create({
     flex: 1,
     height: 300,
     width: '100%',
-    marginTop: 20,
+    marginTop: 5,
     // width: Dimensions.get('window').width / 1,
 
     borderRadius: 10,
@@ -32,7 +32,8 @@ export default StyleSheet.create({
     flex: 1,
     height: 250,
     // width: 300,
-    width: Dimensions.get('window').width / 1.07,
+    width: '100%',
+    // width: Dimensions.get('window').width / 1.07,
 
     borderRadius: 10,
     overflow: 'hidden',
@@ -100,6 +101,7 @@ export default StyleSheet.create({
     width: '100%',
     borderRadius: 15,
     elevation: 10,
+    flex: 1,
   },
   rowMain1: {
     flexDirection: 'row',

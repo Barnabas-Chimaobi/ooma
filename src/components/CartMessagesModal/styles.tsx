@@ -38,6 +38,9 @@ export const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
+    fontSize: 18,
+    fontWeight: '500',
+    fontFamily: 'Sans-Opens',
   },
   modalText: {
     marginBottom: 15,

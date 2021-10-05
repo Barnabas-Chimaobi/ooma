@@ -13,6 +13,7 @@ import Label from './Label';
 import {PriceTag, RatingCount, Rating1, DishTypes} from '../../components';
 import {hearts} from '../../assets';
 import {useNavigation} from '@react-navigation/native';
+import {colors} from '../../colors';
 
 const window = Dimensions.get('window');
 interface IProps {
@@ -64,7 +65,10 @@ const Card: FC<IProps> = ({
   return (
     <View style={[S.main, cardStyle, gridView && S.mainRow]}>
       {!gridView ? (
-        <View style={{marginTop: 5}}>
+        <View
+          style={{
+            marginTop: 5,
+          }}>
           {diff !== 'plan' ? (
             <View style={{alignSelf: 'flex-end', height: 30, width: 30}}>
               <TouchableHighlight

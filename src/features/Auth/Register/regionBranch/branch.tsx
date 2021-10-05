@@ -37,8 +37,8 @@ export default function Branch() {
   const handleGetBranch = async () => {
     const regionId = await AsyncStorage.getItem('regionId');
     const token = await AsyncStorage.getItem('token');
-    const parseToken = JSON.parse(token);
-    setNewToken(parseToken);
+    // const parseToken = JSON.parse(token);
+    setNewToken(token);
     const parseId = JSON.parse(regionId);
     console.log(regionId, '=====regioniddd=====');
     const allRegion = await getBranches(params?.id || parseId);

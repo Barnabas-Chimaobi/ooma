@@ -310,7 +310,7 @@ const More: React.FC<Props> = ({navigation}) => {
                 containerStyle={{backgroundColor: 'transparent'}}
                 onPress={() => {
                   toggleOverlay();
-                  navigation.navigate('MenuNavigation', {Screen: 'Menu'});
+                  navigation.navigate('Menu');
                   setMenuPlan(!menuPlan);
                 }}
               />

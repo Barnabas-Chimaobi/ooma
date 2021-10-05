@@ -42,6 +42,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {basketStates} from '../../../../reducers/basket';
 import {AppDispatch, RootState} from '../../../../store';
 import {getMenuitemCart, getOrderById} from '../../../../FetchData';
+import {plus} from '../../../../assets';
 
 const {width: windowWidth} = Dimensions.get('window');
 
@@ -78,6 +79,7 @@ export const Cart = () => {
   const [plantime, setPlantime] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [delivery, setDelivery] = useState('');
+  const [loadplan, setLoadPlan] = useState(false);
 
   const toggleVisible = () => setVisible((prevstate) => !prevstate);
 
@@ -118,6 +120,7 @@ export const Cart = () => {
   };
 
   const getMenuplanKart = async () => {
+    setLoadPlan(true);
     let basketData: any = [];
     const menuplanscart = await getOrderById(route?.params?.id);
     // setPlanCart(menuplanscart?.items);
@@ -131,6 +134,7 @@ export const Cart = () => {
       item['data'] = groupByPlanTypeDate1(item?.data);
     });
     setgrouped(basketData);
+    setLoadPlan(false);
 
     if (basketData !== undefined) {
       const all = basketData?.map((item: any) =>
@@ -148,9 +152,7 @@ export const Cart = () => {
       setTotal(newsum);
     }
 
-    // console.log('====baket itemsssssssss======= ', JSON.stringify(basketData));
     setRefreshing(false);
-    // console.log(menuplanscart?.data, '=======planscartttttttssssss=========');
     return basketData;
   };
 
@@ -450,7 +452,10 @@ export const Cart = () => {
           <View style={styles.root}>
             <ScrollView
               refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                <RefreshControl
+                  refreshing={refreshing || loadplan}
+                  onRefresh={onRefresh}
+                />
               }>
               {/* {grouped.length === 0 ? (
               <ActivityIndicator
@@ -465,7 +470,7 @@ export const Cart = () => {
                 renderItem={({item}) => {
                   // console.log(item, 'itemmm=====');
                   return (
-                    <View>
+                    <View style={{padding: 10}}>
                       {/* <List
                       plantime={item?.MenuPlan?.MenuplanDetail?.deliveryTime}
                       date={item?.MenuPlan?.MenuplanDetail?.plandate}
@@ -538,12 +543,15 @@ export const Cart = () => {
                 // {...flatListOptimizationProps}
                 keyExtractor={() => shortid.generate()}
                 ListEmptyComponent={
-                  <EmptyList
-                    image={require('../../../../assets/Images/emptyCart.png')}
-                    title="FIND PLAN"
-                    message="Oops! Your basket is still empty"
-                    onPress={() => navigation.goBack()}
-                  />
+                  basketItem?.length === undefined &&
+                  route?.params?.plan !== 'plan' ? (
+                    <EmptyList
+                      image={require('../../../../assets/Images/emptyCart.png')}
+                      title="FIND PLAN"
+                      message="Oops! Your basket is still empty"
+                      onPress={() => navigation.goBack()}
+                    />
+                  ) : null
                 }
               />
             </ScrollView>
@@ -625,17 +633,58 @@ export const Cart = () => {
             ) : null}
             {basketItem?.length !== undefined || total !== undefined ? (
               <View style={styles.listFooter}>
-                <View style={styles.total}>
-                  <Text style={styles.totalText}>Total:</Text>
-                  <Text style={styles.totalPrice}>{total} NGN</Text>
-                </View>
+                {!loadplan ? (
+                  <View style={styles.total}>
+                    <Text style={styles.totalText}>Total:</Text>
+                    <Text style={styles.totalPrice}>{total} NGN</Text>
+                  </View>
+                ) : null}
+
+                {route?.params?.plan === 'plan' ? null : (
+                  <TouchableHighlight
+                    underlayColor=""
+                    onPress={() => navigation.navigate('Menu')}>
+                    <View
+                      style={{
+                        // flexDirection: 'row',
+                        alignSelf: 'center',
+                        backgroundColor: colors.a,
+                        width: '95%',
+                        height: 50,
+                        borderRadius: 5,
+                        alignContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      <View
+                        style={{
+                          // alignSelf: 'center',
+                          alignItems: 'center',
+                          // alignContent: 'center',
+                          flex: 1,
+                          flexDirection: 'row',
+                        }}>
+                        <Image
+                          source={plus}
+                          style={{width: 15, height: 15, left: -10}}
+                        />
+                        <Text
+                          style={{
+                            fontSize: 17,
+                            fontWeight: '100',
+                          }}>
+                          Add More
+                        </Text>
+                      </View>
+                    </View>
+                  </TouchableHighlight>
+                )}
                 {route?.params?.plan === 'plan' ? null : (
                   <ModalMessage
                     onpress={() => toggleVisible()}
                     total={total}
                     cartParams={route?.params?.cartItems}
                     route="Cart"
-                    openButtonTitle="PROCEED"
+                    openButtonTitle="Create Plan"
                     closeButtonTitle="SUBSCRIBE NOW"
                     otherCardViewStyle={styles.cardView}
                     btnClose={styles.btnClose}

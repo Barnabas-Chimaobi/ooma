@@ -1,5 +1,6 @@
 import {WSnackBar, WModal} from 'react-native-smart-tip';
 import {Alert} from 'react-native';
+import { Text } from 'native-base';
 
 const types: any = {
   ERROR: {
@@ -15,6 +16,11 @@ const types: any = {
     actionText: null,
     actionTextColor: '#bf0002',
     position: WSnackBar.position.TOP,
+    borderRadius: 5,
+    width: '95%',
+    alignSelf: 'center',
+    TextAlign: 'center',
+    alignItems: 'center'
   },
   ALERT: {
     textColor: '#000',

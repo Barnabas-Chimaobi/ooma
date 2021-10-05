@@ -46,6 +46,7 @@ import {
   WaveIndicator,
 } from 'react-native-indicators';
 import {latest} from 'immer/dist/internal';
+import {colors} from '../../../../../colors';
 
 const initialLayout = {width: Dimensions.get('window').width};
 
@@ -226,7 +227,8 @@ const MenuTab = () => {
           }}
           defaultIndex={params?.categoryId - 1 || routes1[0]?.id}
           containerStyle={{flex: 1}}
-          headerBackgroundColor={'white'}
+          headerBackgroundColor={colors.white}
+          headerUnderlayColor={colors.white}
           // headerUnderlayColor={'blue'}
         />
         {/* <View

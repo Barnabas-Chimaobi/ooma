@@ -206,6 +206,7 @@ const Home = () => {
               borderRadius: 10,
               height: 80,
               width: 88,
+              elevation: 10,
             }}>
             <Image
               style={{
@@ -343,39 +344,41 @@ const Home = () => {
           {menuPlansMenuItem?.length == 0 ? (
             <Skeleton />
           ) : (
-            <View
-              style={{
-                backgroundColor: colors.white,
-                marginBottom: 15,
-                elevation: 5,
-                // width: '98%',
-                borderRadius: 10,
-                // alignSelf: 'center',
-              }}>
+            <View>
               <View>
                 <Text
                   style={{
                     fontWeight: 'bold',
                     fontSize: 17,
                     marginLeft: 10,
-                    marginBottom: 20,
-                    marginTop: 10,
+                    marginBottom: 10,
+                    marginTop: 15,
                     zIndex: 20,
                   }}>
                   Customize your meal plan
                 </Text>
               </View>
+              <View
+                style={
+                  {
+                    // backgroundColor: colors.white,
+                    // marginBottom: 15,
+                    // elevation: 5,
+                    // // width: '98%',
+                    // borderRadius: 10,
+                    // alignSelf: 'center',
+                  }
+                }>
+                <Categories
+                  text="text"
+                  bool={menuPlansMenuItem?.length == 0 ? true : false}
+                  menuItem={menuPlansMenuItem}
+                  // title="Menu Plans For You"
+                  // subtitle="Various Menu plans for pre-order on display."
+                  keys="plan"
+                />
 
-              <Categories
-                text="text"
-                bool={menuPlansMenuItem?.length == 0 ? true : false}
-                menuItem={menuPlansMenuItem}
-                // title="Menu Plans For You"
-                // subtitle="Various Menu plans for pre-order on display."
-                keys="plan"
-              />
-
-              {/* <TouchableHighlight>
+                {/* <TouchableHighlight>
                 <Text
                   style={{
                     backgroundColor: colors.start,
@@ -391,13 +394,14 @@ const Home = () => {
                   Subscribe now
                 </Text>
               </TouchableHighlight> */}
+              </View>
             </View>
           )}
         </View>
 
-        <View style={{backgroundColor: colors.mainbg, marginLeft: 10}}>
+        <View style={{backgroundColor: colors.white, marginLeft: 10}}>
           <View>
-            <Text style={{marginBottom: 8, fontWeight: 'bold'}}>
+            <Text style={{marginBottom: 12, fontWeight: 'bold'}}>
               Discover More
             </Text>
           </View>
@@ -515,56 +519,91 @@ const Home = () => {
           {newMenuItem?.length == 0 ? (
             <Skeleton />
           ) : (
-            <Categories
-              bool={newMenuItem?.length == 0 ? true : false}
-              menuItem={newMenuItem}
-              title="New"
-              // subtitle="Fantastic items on the menu, for you."
-            />
+            <View>
+              <Categories
+                bool={newMenuItem?.length == 0 ? true : false}
+                menuItem={newMenuItem}
+                title="New"
+                // subtitle="Fantastic items on the menu, for you."
+              />
+              <View
+                style={{
+                  borderBottomWidth: 3,
+                  borderBottomColor: colors.grey,
+                }}></View>
+            </View>
           )}
 
           {popularMenuItem?.length == 0 ? (
             <Skeleton />
           ) : (
-            <Categories
-              bool={popularMenuItem?.length == 0 ? true : false}
-              menuItem={popularMenuItem}
-              title="Popular"
-              // subtitle="Based On searches. We Picked these for you"
-            />
+            <View>
+              <Categories
+                bool={popularMenuItem?.length == 0 ? true : false}
+                menuItem={popularMenuItem}
+                title="Popular"
+                // subtitle="Based On searches. We Picked these for you"
+              />
+              <View
+                style={{
+                  borderBottomWidth: 3,
+                  borderBottomColor: colors.grey,
+                }}></View>
+            </View>
           )}
 
           {glutenMenuItem?.length == 0 ? (
             <Skeleton />
           ) : (
-            <Categories
-              bool={glutenMenuItem?.length == 0 ? true : false}
-              menuItem={breakFastMenuItem}
-              title={secondCategory1[0]}
-              // subtitle={secondDescription1[0]}
-            />
+            <View>
+              <Categories
+                bool={glutenMenuItem?.length == 0 ? true : false}
+                menuItem={breakFastMenuItem}
+                title={secondCategory1[0]}
+                // subtitle={secondDescription1[0]}
+              />
+              <View
+                style={{
+                  borderBottomWidth: 3,
+                  borderBottomColor: colors.grey,
+                }}></View>
+            </View>
           )}
 
           {drinksMenuItem?.length == 0 ? (
             <Skeleton />
           ) : (
-            <Categories
-              bool={drinksMenuItem?.length == 0 ? true : false}
-              menuItem={drinksMenuItem}
-              title={firstCategory1[0]}
-              // subtitle={firstDescription1[0]}
-            />
+            <View>
+              <Categories
+                bool={drinksMenuItem?.length == 0 ? true : false}
+                menuItem={drinksMenuItem}
+                title={firstCategory1[0]}
+                // subtitle={firstDescription1[0]}
+              />
+              <View
+                style={{
+                  borderBottomWidth: 3,
+                  borderBottomColor: colors.grey,
+                }}></View>
+            </View>
           )}
 
           {breakFastMenuItem?.length == 0 ? (
             <Skeleton />
           ) : (
-            <Categories
-              bool={breakFastMenuItem?.length == 0 ? true : false}
-              menuItem={glutenMenuItem}
-              title={thirdCategory1[0]}
-              // subtitle={thirdDescription1[0]}
-            />
+            <View>
+              <Categories
+                bool={breakFastMenuItem?.length == 0 ? true : false}
+                menuItem={glutenMenuItem}
+                title={thirdCategory1[0]}
+                // subtitle={thirdDescription1[0]}
+              />
+              <View
+                style={{
+                  borderBottomWidth: 3,
+                  borderBottomColor: colors.grey,
+                }}></View>
+            </View>
           )}
 
           {menuItem?.length == 0 ? (
@@ -645,6 +684,7 @@ const Home = () => {
                                 ? (item?.amount - item?.discount).toFixed(2)
                                 : item?.amount
                             }
+                            oldPrice={item?.discount ? item?.amount : null}
                           />
                         </View>
                         <Text style={s.dishType}>

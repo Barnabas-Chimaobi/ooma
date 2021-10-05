@@ -96,7 +96,9 @@ const Card: FC<IProps> = ({
               }}>
               {`(${qunt}x)`}
             </Text>
-            <PriceTag price={price} clear={true} />
+            <View style={{marginRight: '65%'}}>
+              <PriceTag price={price} clear={true} />
+            </View>
           </View>
         </View>
       </TouchableOpacity>
@@ -126,7 +128,7 @@ const Card: FC<IProps> = ({
             })}
           </View>
 
-          <Text style={{marginVertical: 10}}>{description}</Text>
+          {/* <Text style={{marginVertical: 10}}>{description}</Text> */}
           <View
             style={{
               flexDirection: 'row',

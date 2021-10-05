@@ -2,8 +2,8 @@ import {StyleSheet, Dimensions} from 'react-native';
 
 export default StyleSheet.create({
   container: {
-    flex:1,
-    marginLeft: 4,
+    // flex:1,
+    marginLeft: -6,
     borderRadius: 4,
     borderWidth: 2,
     borderColor: 'rgba(255, 255,255, 1.0)',
@@ -12,7 +12,7 @@ export default StyleSheet.create({
   },
   menuImage: {
     height: 300,
-    width: '100%',
+    width: Dimensions.get('window').width / 1.18,
     borderRadius: 8,
     overflow: 'hidden',
         // width: Dimensions.get('window').width/1.15,

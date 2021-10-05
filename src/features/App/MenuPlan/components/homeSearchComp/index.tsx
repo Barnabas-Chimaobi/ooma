@@ -55,6 +55,7 @@ const SearchTab = forwardRef(({getIndex}: Props, ref) => {
           )}
         />
       )}
+      swipeEnabled={false}
       navigationState={{index, routes}}
       renderScene={renderScene}
       onIndexChange={setIndex}

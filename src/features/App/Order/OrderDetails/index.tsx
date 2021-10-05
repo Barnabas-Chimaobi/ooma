@@ -149,6 +149,7 @@ const OrderDetails = () => {
             />
           </View>
           <OrderCard
+            details={null}
             dateTitle="Collection Details"
             mainStyle={S.main}
             children={
@@ -169,6 +170,7 @@ const OrderDetails = () => {
             }
           />
           <OrderCard
+            details={null}
             dateTitle="Payment Details"
             mainStyle={S.main}
             children={

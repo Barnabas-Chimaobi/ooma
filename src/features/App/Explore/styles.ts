@@ -124,5 +124,6 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignContent: 'space-around',
+    paddingBottom: 50
   },
 });

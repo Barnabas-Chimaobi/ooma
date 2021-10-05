@@ -11,9 +11,10 @@ export default StyleSheet.create({
     marginBottom: 10,
   },
   menuImage: {
-    height: 183,
-    width: '100%',
+    height: 324,
+    width: '95%',
     borderRadius: 5,
+    alignSelf: 'center',
   },
   title: {
     // width: 129,
@@ -35,6 +36,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     width: '95%',
     marginBottom: 10,
+    left: 2,
   },
 
   ratingContainer: {

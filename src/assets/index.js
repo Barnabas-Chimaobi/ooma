@@ -40,8 +40,12 @@ const paystack = require('./Images/paystack.png');
 const flutter = require('./Images/flutterwave.png');
 const forward = require('./Images/forwardArrow.png');
 const oomaNew = require('./Images/ooma.jpeg');
+const basket = require('./Images/basket.png');
+const plus = require('./Images/plus.png');
 
 export {
+    plus,
+    basket,
     oomaNew,
     forward,
     paystack,

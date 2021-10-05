@@ -9,7 +9,9 @@ import {
   TouchableOpacity,
   ScrollView,
   RefreshControl,
-  StatusBar
+  StatusBar,
+  TouchableHighlight,
+  ImageBackground,
 } from 'react-native';
 import { styles } from './styles';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
@@ -37,7 +39,13 @@ import { AppDispatch, RootState } from '../../../../store';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import { NativeBaseProvider, Box } from 'native-base';
 import Footer from '../../../../navigation/footer';
+<<<<<<< HEAD
 import { StyleFoot } from '../../../../navigation/styles';
+=======
+import {StyleFoot} from '../../../../navigation/styles';
+import {colors} from '../../../../colors';
+import {basket} from '../../../../assets';
+>>>>>>> 133ac688ec9b089552ea088d5ee5836ff1ad70b4
 
 interface IProps {
   route?: {};
@@ -327,6 +335,7 @@ const MenuDetails: FC<IProps> = ({ route }) => {
         style={{ position: 'absolute', top: 0, zIndex: 555, paddingLeft: 10 }}
         icon={<AntDesign color="white" name="arrowleft" size={28} />}
       />
+<<<<<<< HEAD
       <View style={styles.header}>
         <Text style={styles.headerText}>
           {menuPlan?.description || 'Loading...'}
@@ -337,8 +346,45 @@ const MenuDetails: FC<IProps> = ({ route }) => {
           source={{ uri: menuPlan?.imageurl }}
         />
       </View>
+=======
+      {show && (
+        <View style={{zIndex: 1, position: 'relative', height: 400}}>
+          <Text
+            style={{
+              alignSelf: 'center',
+              fontSize: 22,
+              fontFamily: 'Poppins',
+            }}>
+            Select a Date
+          </Text>
+          <Calendar
+            // markingType={'period'}
+            // markingType="multi-period"
+            // markingType={'multi-dot'}
+            markedDates={marked}
+            onDayPress={(day) => {
+              onChanges(day), setShow(false);
+            }}
+            disabledByDefault={true}
+          />
+        </View>
+      )}
+      {!show && (
+        <View style={styles.header}>
+          <Text style={styles.headerText}>
+            {menuPlan?.description || 'Loading...'}
+          </Text>
+          <View style={styles.dark} />
+          <Image
+            style={{width: '100%', height: 300, zIndex: 10}}
+            source={{uri: menuPlan?.imageurl}}
+          />
+        </View>
+      )}
+
+>>>>>>> 133ac688ec9b089552ea088d5ee5836ff1ad70b4
       <View style={styles.list}>
-        <Basket
+        {/* <Basket
           counts={basketItem?.length}
           onBasketPress={() =>
             navigation.navigate('Cart', {
@@ -347,7 +393,7 @@ const MenuDetails: FC<IProps> = ({ route }) => {
               cartItems: planCart,
             })
           }
-        />
+        /> */}
         <View style={styles.line} />
         <View style={{ flex: 1 }}>
           <ScrollView
@@ -358,6 +404,7 @@ const MenuDetails: FC<IProps> = ({ route }) => {
                 onRefresh={onRefresh}
               />
             }>
+<<<<<<< HEAD
             <View style={{ flex: 1 }}>
               <TouchableOpacity
                 style={styles.calendar}
@@ -397,11 +444,26 @@ const MenuDetails: FC<IProps> = ({ route }) => {
                 //   display="default"
                 //   onChange={onChanges}
                 // />
+=======
+            <View style={{flex: 1, paddingBottom: 100}}>
+              {!show && (
+                <View>
+                  <TouchableOpacity
+                    style={styles.calendar}
+                    onPress={() => showDatepicker()}>
+                    <Image source={require('../assets/calendar3.png')} />
+                    <Text>{DateFormatter.date2(date) || 'Select a Date'}</Text>
+
+                    {/* <Text>{moment(date).format('D-MM-YYYY')}</Text> */}
+                  </TouchableOpacity>
+
+                  <Text style={styles.date}>
+                    {DateFormatter.date2(date) || new Date().toDateString()}
+                  </Text>
+                </View>
+>>>>>>> 133ac688ec9b089552ea088d5ee5836ff1ad70b4
               )}
 
-              <Text style={styles.date}>
-                {DateFormatter.date2(date) || new Date().toLocaleDateString()}
-              </Text>
               {/* <Text style={styles.date}>
           {moment(date).format('ddd, Do MMM, YYYY')}
         </Text> */}
@@ -411,11 +473,72 @@ const MenuDetails: FC<IProps> = ({ route }) => {
             </View>
           </ScrollView>
         </View>
+        <View
+          style={{
+            height: 60,
+            width: '98%',
+            backgroundColor: colors.green,
+            position: 'absolute',
+            bottom: 30,
+            alignSelf: 'center',
+            // flexDirection: 'row',
+            alignItems: 'center',
+            borderRadius: 5,
+          }}>
+          <TouchableHighlight
+            underlayColor=""
+            onPress={() =>
+              navigation.navigate('Cart', {
+                menu: routes,
+                routeIndex: index,
+                cartItems: planCart,
+              })
+            }>
+            <View
+              style={{
+                alignItems: 'center',
+                flexDirection: 'row',
+                // left: '20%',
+                flex: 1,
+                justifyContent: 'space-between',
+                // alignContent: 'center',
+
+                // right: '10%',
+              }}>
+              <Image
+                style={{height: 28, width: 28, right: 11}}
+                source={basket}
+              />
+              <Text
+                style={{
+                  color: colors.white,
+                  fontSize: 24,
+                  fontFamily: 'Open-Sans',
+                  fontWeight: '800',
+                  right: 5,
+                }}>
+                View Basket
+              </Text>
+              <Text
+                style={{
+                  fontWeight: 'bold',
+                  color: colors.white,
+                }}>
+                {'\u2B24'}
+              </Text>
+              {basketItem?.length !== 0 && basketItem?.length !== undefined ? (
+                <Text style={{color: colors.white, fontSize: 20, left: 5}}>
+                  ({basketItem?.length})
+                </Text>
+              ) : null}
+            </View>
+          </TouchableHighlight>
+        </View>
       </View>
-      <View style={StyleFoot.footer}>
-        {/* <View style={styles.seperator3} /> */}
+
+      {/* <View style={StyleFoot.footer}>
         <Footer navigation={navigation} meal={meal} />
-      </View>
+      </View> */}
     </>
   );
 };

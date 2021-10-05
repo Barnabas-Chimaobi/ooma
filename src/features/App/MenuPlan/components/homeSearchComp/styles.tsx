@@ -9,6 +9,9 @@ export const styles = StyleSheet.create({
   indicatorStyle: {
     backgroundColor: 'black',
     height: 7,
+    borderRadius: 5,
+    width: 80,
+    marginLeft: 40,
   },
   tabBar: {
     // display: "flex",
