@@ -39,13 +39,9 @@ import { AppDispatch, RootState } from '../../../../store';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import { NativeBaseProvider, Box } from 'native-base';
 import Footer from '../../../../navigation/footer';
-<<<<<<< HEAD
-import { StyleFoot } from '../../../../navigation/styles';
-=======
 import {StyleFoot} from '../../../../navigation/styles';
 import {colors} from '../../../../colors';
 import {basket} from '../../../../assets';
->>>>>>> 133ac688ec9b089552ea088d5ee5836ff1ad70b4
 
 interface IProps {
   route?: {};
@@ -335,18 +331,6 @@ const MenuDetails: FC<IProps> = ({ route }) => {
         style={{ position: 'absolute', top: 0, zIndex: 555, paddingLeft: 10 }}
         icon={<AntDesign color="white" name="arrowleft" size={28} />}
       />
-<<<<<<< HEAD
-      <View style={styles.header}>
-        <Text style={styles.headerText}>
-          {menuPlan?.description || 'Loading...'}
-        </Text>
-        <View style={styles.dark} />
-        <Image
-          style={{ width: '100%', height: 300 }}
-          source={{ uri: menuPlan?.imageurl }}
-        />
-      </View>
-=======
       {show && (
         <View style={{zIndex: 1, position: 'relative', height: 400}}>
           <Text
@@ -382,7 +366,6 @@ const MenuDetails: FC<IProps> = ({ route }) => {
         </View>
       )}
 
->>>>>>> 133ac688ec9b089552ea088d5ee5836ff1ad70b4
       <View style={styles.list}>
         {/* <Basket
           counts={basketItem?.length}
@@ -404,47 +387,6 @@ const MenuDetails: FC<IProps> = ({ route }) => {
                 onRefresh={onRefresh}
               />
             }>
-<<<<<<< HEAD
-            <View style={{ flex: 1 }}>
-              <TouchableOpacity
-                style={styles.calendar}
-                onPress={() => showDatepicker()}>
-                <Image source={require('../assets/calendar3.png')} />
-                <Text>{DateFormatter.date2(date) || 'Sort by Date'}</Text>
-
-                {/* <Text>{moment(date).format('D-MM-YYYY')}</Text> */}
-              </TouchableOpacity>
-
-              {show && (
-                // <DateTimePicker
-                //   // testID="dateTimePicker"
-                //   value={date || new Date()}
-                //   mode="date"
-                //   // is24Hour={true}
-                //   display="default"
-                //   onChange={(e: any) => onChanges(e)}
-                // />
-
-                <Calendar
-                  // markingType={'period'}
-                  // markingType="multi-period"
-                  // markingType={'multi-dot'}
-                  markedDates={marked}
-                  onDayPress={(day) => {
-                    onChanges(day), setShow(false);
-                  }}
-                  disabledByDefault={true}
-                />
-
-                // <DateTimePicker
-                //   testID="dateTimePicker"
-                //   value={date1 || new Date()}
-                //   mode={'date'}
-                //   is24Hour={true}
-                //   display="default"
-                //   onChange={onChanges}
-                // />
-=======
             <View style={{flex: 1, paddingBottom: 100}}>
               {!show && (
                 <View>
@@ -461,7 +403,6 @@ const MenuDetails: FC<IProps> = ({ route }) => {
                     {DateFormatter.date2(date) || new Date().toDateString()}
                   </Text>
                 </View>
->>>>>>> 133ac688ec9b089552ea088d5ee5836ff1ad70b4
               )}
 
               {/* <Text style={styles.date}>
