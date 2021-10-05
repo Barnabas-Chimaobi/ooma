@@ -7,6 +7,7 @@ import {
   RefreshControl,
   ActivityIndicator,
   TouchableHighlight,
+  BackHandler,
 } from 'react-native';
 import {Overlay} from 'react-native-elements';
 import {SimpleHeader, CheckBox1} from '../../../components';
@@ -128,6 +129,7 @@ const More: React.FC<Props> = ({navigation}) => {
     await AsyncStorage.removeItem('intro');
     await AsyncStorage.removeItem('token');
     setModalVisible(!isModalVisible);
+
     // setLoading(false);
   };
 
