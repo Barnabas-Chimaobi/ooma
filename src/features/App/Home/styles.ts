@@ -5,13 +5,13 @@ export default StyleSheet.create({
   main: {
     flex: 1,
     marginTop: -10,
-    backgroundColor: colors.mainbg
+    backgroundColor: colors.white
   },
   header: {
     backgroundColor: colors.white,
-    borderBottomWidth: 2,
-    borderBottomColor: colors.lightGrey,
-    paddingBottom: 12,
+    // borderBottomWidth: 2,
+    // borderBottomColor: colors.lightGrey,
+    // paddingBottom: 12,
   },
   logoBar: {
     flexDirection: 'row',
@@ -31,6 +31,12 @@ export default StyleSheet.create({
     right: 10,
     zIndex: 10,
   },
+   activeFilter: {
+    position: 'relative',
+    bottom: -6,
+    left: 15,
+    zIndex: 10,
+  },
   locationBar: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -39,11 +45,14 @@ export default StyleSheet.create({
     marginTop: 5,
     backgroundColor: '#fff',
     borderRadius: 5,
-    height: 120,
+    // height: 120,
     borderColor: '#F6F6F6',
-    borderWidth: 1,
-    paddingTop: 5,
-    paddingBottom: 15
+    // borderWidth: 1,
+    paddingTop: 10,
+    elevation: 5,
+    marginBottom: 5
+    
+    // paddingBottom: 15
   },
   categoryTitle: {
     fontFamily: 'Montserrat',

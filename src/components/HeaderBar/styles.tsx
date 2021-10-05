@@ -13,8 +13,9 @@ export default StyleSheet.create({
   },
   locationDetails: {
     flexDirection: 'row',
+    paddingLeft: 5,
     // alignItems: 'center',
-    marginLeft: -27,
+    // marginLeft: -27,
   },
   locationImage: {
     marginRight: 2,

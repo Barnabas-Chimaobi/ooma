@@ -563,3 +563,16 @@ export const verifyPayment = async (key: any) => {
     return error;
   }
 };
+
+export const getProfile = async (id: any) => {
+  console.log(body, '====detailllsssss');
+  try {
+    const user = await api.get(`user?user_id=${id}`);
+    const userDetail = user.data;
+    // console.log(generated, 'categoryidddss==');
+    return userDetail;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};

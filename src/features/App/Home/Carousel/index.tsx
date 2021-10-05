@@ -9,6 +9,7 @@ import {
   ImageBackground,
   Dimensions,
   TouchableHighlight,
+  SafeAreaView,
 } from 'react-native';
 import {Card} from '../../../../components';
 import Card1 from '../../MenuPlan/components/menuCards/card';
@@ -82,7 +83,17 @@ const MyCarousel: FC<CarouselProps> = ({menuItem, page = 1, keyProp}) => {
       //   // compType={'menuPlanDetail'}
       // />
 
-      <View style={{}}>
+      <View
+        style={{
+          backgroundColor: colors.white,
+          marginBottom: 15,
+          elevation: 5,
+          // width: '98%',
+          borderRadius: 10,
+          padding: 10,
+          paddingLeft: -5,
+          // marginLeft: 2,
+        }}>
         <View>
           <TouchableOpacity
             onPress={() => {
@@ -131,7 +142,7 @@ const MyCarousel: FC<CarouselProps> = ({menuItem, page = 1, keyProp}) => {
                 width: 126,
                 padding: 8,
                 borderRadius: 5,
-                marginLeft: 12,
+                // marginLeft: 12,
                 // paddingBottom: 10,
                 // marginBottom: 10,
               }}>
@@ -166,17 +177,21 @@ const MyCarousel: FC<CarouselProps> = ({menuItem, page = 1, keyProp}) => {
   };
 
   return (
-    <Carousel
-      loop={true}
-      // ref={(c) => {
-      //       carousel = c;
-      //     }}
-      data={menuItem}
-      renderItem={_renderItem}
-      sliderWidth={350}
-      itemWidth={315}
-      activeSlideAlignment="start"
-    />
+    <SafeAreaView style={{flex: 1}}>
+      <Carousel
+        loop={true}
+        // ref={(c) => {
+        //       carousel = c;
+        //     }}
+        data={menuItem}
+        renderItem={_renderItem}
+        // sliderWidth={Dimensions.get('window').width}
+        sliderWidth={Dimensions.get('window').width}
+        itemWidth={Dimensions.get('window').width / 1.12}
+        activeSlideAlignment="start"
+        slideStyle={{zIndex: 10, flex: 1}}
+      />
+    </SafeAreaView>
   );
 };
 

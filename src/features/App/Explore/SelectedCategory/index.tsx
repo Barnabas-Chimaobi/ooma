@@ -110,43 +110,46 @@ const SelectedCategory: FC<selectedProps> = ({route}) => {
         customIndicator={<BallIndicator color="white" />}
       /> */}
         {/* ) : ( */}
-        <FlatList
-          refreshControl={
-            <RefreshControl refreshing={loader} onRefresh={refreshing} />
-          }
-          renderItem={({item}) => (
-            <CardItem
-              item={item}
-              onPress={() => navigation.navigate('Dish', {id: item?.id})}
-              gridView={gridView}
-            />
-          )}
-          data={payload}
-          keyExtractor={() => shortid.generate()}
-          ListEmptyComponent={
-            payload?.length != 0 ? null : (
-              <EmptyList
-                image={emptyCart}
-                title="Find Meal"
-                message="Oops! Your Menu is empty"
-                // onPress={() => navigation.navigate('Explore')}
+        <View style={{paddingBottom: 200}}>
+          <FlatList
+            refreshControl={
+              <RefreshControl refreshing={loader} onRefresh={refreshing} />
+            }
+            renderItem={({item}) => (
+              <CardItem
+                item={item}
+                onPress={() => navigation.navigate('Dish', {id: item?.id})}
+                gridView={gridView}
               />
-            )
-          }
-          ListFooterComponent={
-            <>
-              {truth == true && (
-                <Button
-                  title="BACK TO TOP"
-                  type={ButtonType.outline}
-                  buttonStyle={S.backTopButtonStyle}
-                  titleStyle={S.backtopTitleStyle}
-                  onPress={() => {}}
+            )}
+            data={payload}
+            keyExtractor={() => shortid.generate()}
+            ListEmptyComponent={
+              payload?.length !== undefined && (
+                <EmptyList
+                  image={emptyCart}
+                  title="Find Meal"
+                  message="Oops! Your Menu is empty"
+                  // onPress={() => navigation.navigate('Explore')}
                 />
-              )}
-            </>
-          }
-        />
+              )
+            }
+            ListFooterComponent={
+              <>
+                {truth == true && (
+                  <Button
+                    title="BACK TO TOP"
+                    type={ButtonType.outline}
+                    buttonStyle={S.backTopButtonStyle}
+                    titleStyle={S.backtopTitleStyle}
+                    onPress={() => {}}
+                  />
+                )}
+              </>
+            }
+          />
+        </View>
+
         {/* )} */}
         {/* </View> */}
       </View>
@@ -160,12 +163,18 @@ const SelectedCategory: FC<selectedProps> = ({route}) => {
 export default SelectedCategory;
 
 export const CardItem = ({item, onPress, gridView}: any) => {
+  const discount = item?.discount;
+  const currentAmount = discount
+    ? (item?.amount - discount).toFixed(2)
+    : item?.amount;
+
   const navigation = useNavigation();
   let Image_Http_URL = {uri: item?.imageUrl};
   const mainRating = item?.rating / item?.ratingCount;
   return (
     <Pressable onPress={onPress}>
       <Card
+        oldPrice={discount ? item?.amount : null}
         diff={'plan'}
         categories={item?.MenuItemCategories}
         img={Image_Http_URL}
@@ -175,7 +184,7 @@ export const CardItem = ({item, onPress, gridView}: any) => {
         dish1={'Vegan'}
         dish2={'Vegan'}
         dish3={'Vegan'}
-        price={item?.amount}
+        price={currentAmount}
         ratingCount={mainRating}
         dishType={item?.menuItemType}
         gridView={gridView}

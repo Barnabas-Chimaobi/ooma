@@ -64,7 +64,7 @@ export const styles = StyleSheet.create({
   btn: {
     height: 40,
     width: 150,
-    backgroundColor: '#303030',
+    // backgroundColor: '#303030',
     marginTop: 20,
     borderRadius: 5,
     justifyContent: 'center',
@@ -83,5 +83,10 @@ export const styles = StyleSheet.create({
   },
   headerText: {
     color: 'black',
+    backgroundColor: colors.grey,
+    padding: 5,
+    // paddingLeft: 10,
+    // paddingRight: 10,
+    borderRadius: 50,
   },
 });

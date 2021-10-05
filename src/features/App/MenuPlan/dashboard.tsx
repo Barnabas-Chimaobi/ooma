@@ -98,7 +98,6 @@ const App = () => {
         <SearchTab ref={tabRef} getIndex={(index) => setTabState(+index)} />
       </View>
       <View style={StyleFoot.footer}>
-        {/* <View style={styles.seperator3} /> */}
         <Footer navigation={navigation} meal={meal} />
       </View>
     </SafeAreaView>

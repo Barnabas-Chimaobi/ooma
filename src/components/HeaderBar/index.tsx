@@ -76,8 +76,8 @@ const HeaderBar = ({
             </View>
             <TouchableOpacity
               onPress={() => {
-                (otherTitle == 'Set Time' || title == 'Set Time') &&
-                  showDatepicker();
+                // (otherTitle == 'Set Time' || title == 'Set Time') &&
+                showDatepicker();
               }}
               style={[s.timerBar, rejig && {width: '50%', padding: 0}]}>
               {rejig ? (
@@ -93,9 +93,14 @@ const HeaderBar = ({
               <Text
                 style={
                   (rejig && {padding: 6}) ||
-                  (date && {paddingHorizontal: 5, width: 90, fontSize: 10})
+                  (date && {
+                    paddingHorizontal: 5,
+                    // width: 90,
+                    fontSize: 10,
+                    paddingRight: 20,
+                  })
                 }>
-                {DateFormatter.date2(date) || new Date().toLocaleDateString()}
+                {date ? DateFormatter.formatAMPM(date) : 'now'}
               </Text>
             </TouchableOpacity>
           </View>
@@ -104,7 +109,7 @@ const HeaderBar = ({
               <DateTimePicker
                 testID="dateTimePicker"
                 value={date || new Date()}
-                mode={'date'}
+                mode={'time'}
                 is24Hour={true}
                 display="default"
                 onChange={onChange}
@@ -158,7 +163,7 @@ const HeaderBar = ({
               )}
             </View>
 
-            <TouchableOpacity onPress={() => showDatepicker()}>
+            {/* <TouchableOpacity onPress={() => showDatepicker()}>
               <View
                 style={{
                   flexDirection: 'row',
@@ -176,7 +181,7 @@ const HeaderBar = ({
                   Schedule Order
                 </Text>
               </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             {/* <TouchableOpacity
           onPress={() => {
             (otherTitle == 'Set Time' || title == 'Set Time') &&

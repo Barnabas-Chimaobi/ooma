@@ -12,16 +12,17 @@ interface IProps {
 }
 
 const PriceTag: FC<IProps> = ({price, clear, oldPrice, style, mainPrice}) => (
-  <View style={{flexDirection: 'row', alignItems: 'center'}}>
-    {/* {oldPrice && (
+  <View style={{flexDirection: 'column', alignItems: 'center'}}>
+    {oldPrice !== undefined && oldPrice !== null ? (
       <Text
         style={{
+          marginTop: -20,
           marginRight: 20,
           color: 'black',
           textDecorationLine: 'line-through',
         }}>{`\u20A6${oldPrice}`}</Text>
-    )} */}
-    {price !== undefined ? (
+    ) : null}
+    {price !== undefined && !isNaN(price) ? (
       <Text
         style={
           !clear

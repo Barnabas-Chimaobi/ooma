@@ -188,9 +188,13 @@ const CardItem: FC<IProps> = ({route, menu}) => {
 
   const getItemDetail = async () => {
     const item = await getMenuItemsById(route?.params?.id);
-    setTotal(item?.amount);
-    setPrice(item?.amount);
-    setPrice1(item?.amount);
+    const discount = item?.discount;
+    const currentAmount = discount
+      ? (item?.amount - discount).toFixed(2)
+      : item?.amount;
+    setTotal(currentAmount);
+    setPrice(currentAmount);
+    setPrice1(currentAmount);
     setMenuItem(item);
   };
 
@@ -357,7 +361,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           branchId: body.branchId,
           menuitemid: body.menuitemid,
           quantity: body.quantity,
-          amount: body.amount,
+          amount: parseInt(body.amount) + parseInt(deliveryCharges),
           addons: JSON.stringify(body.addons),
           preferences: body.Preferences,
           specialInstruction: body.specialInstruction,
@@ -551,6 +555,9 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     if (item === 'Pick-Up') {
       setChecks(true);
       setShow1(false);
+      setDeliveryCharges(0);
+      setAddressId(null);
+      setMyAddress('');
     } else {
       setChecks(false);
     }
@@ -577,7 +584,9 @@ const CardItem: FC<IProps> = ({route, menu}) => {
         </ImageBackground>
         <View style={S.sdContainer}>
           <Text>{menuItem?.itemName}</Text>
-          <PriceTag price={prices} />
+          <PriceTag
+            price={parseInt(Number(prices)) + parseInt(Number(deliveryCharges))}
+          />
         </View>
         <ScrollView style={S.sdMain}>
           <View style={S.sdHold}>
@@ -787,7 +796,9 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                     <TouchableHighlight
                       underlayColor=""
                       activeOpacity={1}
-                      onPress={() => setOpenModal(false)}>
+                      onPress={() => {
+                        setDeliveryCharges(0), setOpenModal(false);
+                      }}>
                       <Text
                         style={{fontSize: 16, color: 'rgba(31, 31, 31, 0.45)'}}>
                         Cancel
@@ -843,6 +854,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                         onPress={() => {
                           optionsForDelivery('Pick-Up'),
                             toggleCheckOptions('Pick-Up');
+                          // showCheck()
                         }}
                       />
                       {checks == true ? (
@@ -963,7 +975,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                             setItems={items}
                             onChangeItem={(value) => {
                               setDeliveryCharges(value.amount);
-                              setPrice(+value?.amount + +prices);
+                              // setPrice(+value?.amount + +prices);
                               // setPrice1(+value?.amount + +prices);
                               setAddressId(value.id);
                               // setMyAddress(value?.label);

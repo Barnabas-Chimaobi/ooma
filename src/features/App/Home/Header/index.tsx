@@ -332,8 +332,8 @@ export default function Header() {
       <View style={S.logoBar}>
         <Logo logoStyle={{width: 35, height: 35, marginLeft: 8}} />
         <View style={S.notificationBar}>
-          <Image source={oomaNotify} style={{height: 20, width: 20}} />
-          <Image source={active} style={S.activenotifications} />
+          {/* <Image source={oomaNotify} style={{height: 20, width: 20}} /> */}
+          {/* <Image source={active} style={S.activenotifications} /> */}
           <TouchableOpacity
             style={{marginLeft: 10}}
             onPress={() => navigation.navigate('Profile')}>
@@ -361,6 +361,7 @@ export default function Header() {
           onPress={() => navigation.navigate('Filter')}>
           <View
             style={{width: 60, height: 60, marginRight: -20, marginTop: 10}}>
+            <Image source={active} style={S.activeFilter} />
             <Image source={filter} style={{height: 20, width: 20}} />
           </View>
         </TouchableHighlight>

@@ -3,7 +3,7 @@ import moment from 'moment';
 export default class DateFormatter {
   static date1 = (date: any) => moment(date).format('YYYY-MM-DD');
 
-  static date2 = (date: any) => date && moment(date).format('ll');
+  static date2 = (date: any) => date && new Date(date).toDateString();
 
   static date3 = (date: any) => moment(date).format('YYYY/MM/DD');
 
@@ -18,7 +18,7 @@ export default class DateFormatter {
     return moment(date).format('DD/MM/YYYY');
   };
 
-  static UTCStringDate = () => new Date().toUTCString();
+  static UTCStringDate = () => new Date().toDateString();
 
   static date7 = (date: any) => moment(date).format('YYYY-MM-DD HH:mm:ss');
 

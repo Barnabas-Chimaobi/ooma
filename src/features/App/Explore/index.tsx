@@ -1,10 +1,12 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   ScrollView,
   RefreshControl,
   Text,
   TouchableHighlight,
+  TouchableOpacity,
+  Image,
 } from 'react-native';
 import {BaseInput} from '../../../components';
 import S from './styles';
@@ -32,8 +34,10 @@ import {useMenuItemCategory} from '../../../reducers/ItemCategory';
 import {useMenuPlanCategory} from '../../../reducers/MenuPlanCategory';
 import Footer from '../../../navigation/footer';
 import {StyleFoot} from '../../../navigation/styles';
+import {scroll} from '../../../assets';
 
 const Explore = () => {
+  const scrollRef = useRef<ScrollView>();
   const [explore, setExplore] = useState('explore');
   const [branchId, setBranchId] = useState('');
   const [allMenuOtherCategory, setAllMenuCategory] = useState();
@@ -86,6 +90,14 @@ const Explore = () => {
     // console.log(getSearch, 'searchresultsssss');
   };
 
+  const onFabPress = () => {
+    console.log('scroll');
+    scrollRef.current?.scrollTo({
+      y: 30,
+      animated: true,
+    });
+  };
+
   const debouncefunc = debounce(500, () => {
     search();
   });
@@ -120,6 +132,7 @@ const Explore = () => {
         </View>
 
         <ScrollView
+          ref={scrollRef}
           contentContainerStyle={{}}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -136,14 +149,37 @@ const Explore = () => {
             />
             <Card title="Others" categories={shuffleArray(categories)} />
           </View>
-          <Button
+          {/* <Button
             title="BACK TO TOP"
             type={ButtonType.outline}
             buttonStyle={S.backTopButtonStyle}
             titleStyle={S.backtopTitleStyle}
             onPress={() => {}}
-          />
+          /> */}
         </ScrollView>
+        <View
+          style={{
+            zIndex: 1,
+            height: 90,
+            width: 70,
+            alignSelf: 'flex-end',
+            position: 'absolute',
+            bottom: 40,
+            right: 10,
+            // borderRadius: 70,
+          }}>
+          <TouchableOpacity onPressIn={onFabPress}>
+            <Image
+              style={{
+                height: 90,
+                width: 70,
+
+                borderRadius: 70,
+              }}
+              source={scroll}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
       <View style={StyleFoot.footer}>
         <Footer navigation={navigation} explore={explore} />
