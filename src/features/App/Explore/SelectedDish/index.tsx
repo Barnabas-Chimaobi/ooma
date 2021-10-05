@@ -341,10 +341,19 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     // console.log(body, 'bodyyy');
     console.log(myAddress, deliveryOption, time, addressId, 'idddddddssss====');
     try {
-      if (
-        (time === null || myAddress === null || addressId === null) &&
-        deliveryOption === 'Delivery'
-      ) {
+      if (addressId === null && deliveryOption === 'Delivery') {
+        ShowMessage(
+          type.INFO,
+          'please check if you have selected a delivery location, time and enter your delivery address',
+        ); // dispatch(cartStates(addedCart));
+        setLoading(false);
+      } else if (time === null && deliveryOption === 'Delivery') {
+        ShowMessage(
+          type.INFO,
+          'please check if you have selected a delivery location, time and enter your delivery address',
+        ); // dispatch(cartStates(addedCart));
+        setLoading(false);
+      } else if (myAddress === null && deliveryOption === 'Delivery') {
         ShowMessage(
           type.INFO,
           'please check if you have selected a delivery location, time and enter your delivery address',
@@ -557,7 +566,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
       setShow1(false);
       setDeliveryCharges(0);
       setAddressId(null);
-      setMyAddress('');
+      setMyAddress(null);
     } else {
       setChecks(false);
     }

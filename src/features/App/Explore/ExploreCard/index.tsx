@@ -70,7 +70,7 @@ const Card: FC<IProps> = ({title, categories, compType, titleStyle}) => {
                   ? index < 4 && (
                       <ItemCard categoryItems={item} compType={compType} />
                     )
-                  : index < 6 && (
+                  : index < 2 && (
                       <ItemCard categoryItems={item} compType={compType} />
                     ),
               )}

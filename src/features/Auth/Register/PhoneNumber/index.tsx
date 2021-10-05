@@ -106,7 +106,11 @@ const Phone = () => {
                   keyboardType={BaseKeyBoardType.phonePad}
                   onChangeText={(text) => setnumber(text)}
                   autoFocus={true}
-                  inputStyle={{backgroundColor: colors.white, elevation: 5,borderRadius:5}}
+                  inputStyle={{
+                    backgroundColor: colors.white,
+                    elevation: 5,
+                    borderRadius: 5,
+                  }}
                 />
                 {/* <Button title="Proceed" onPress={handleSubmit} /> */}
               </>

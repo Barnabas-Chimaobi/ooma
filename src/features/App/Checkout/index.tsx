@@ -48,7 +48,7 @@ const Checkout = () => {
   const route = useRoute();
   const params = route.params;
   const [deliveryOption, setDeliveryOptions] = useState('');
-  const [myAddress, setMyAddress] = useState('');
+  const [myAddress, setMyAddress] = useState(null);
   const [open, setOpen] = useState(true);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([]);
@@ -173,12 +173,14 @@ const Checkout = () => {
 
   const orderNow = async () => {
     setLoading(true);
-    console.log(body, 'idddddddd');
-    if (
-      myAddress === '' &&
-      deliveryOption === 'Delivery' &&
-      addressId === null
-    ) {
+    console.log(myAddress, addressId, '===idddddddd');
+    if (deliveryOption === 'Delivery' && !addressId) {
+      ShowMessage(
+        type.INFO,
+        'please select a pick-up location and enter your delivery address',
+      ); // dispatch(cartStates(addedCart));
+      setLoading(false);
+    } else if (deliveryOption === 'Delivery' && !myAddress) {
       ShowMessage(
         type.INFO,
         'please select a pick-up location and enter your delivery address',
@@ -328,7 +330,7 @@ const Checkout = () => {
       setShow1(false);
       setDeliveryCharges(0);
       setAddressId(null);
-      setMyAddress('');
+      setMyAddress(null);
     } else {
       setChecks(false);
     }

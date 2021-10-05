@@ -1,5 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {View, ImageBackground, ActivityIndicator} from 'react-native';
+import {
+  View,
+  ImageBackground,
+  ActivityIndicator,
+  BackHandler,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useSelector, useDispatch} from 'react-redux';
 import Wizard from 'react-native-wizard';
@@ -86,7 +91,14 @@ const Register = () => {
     }
   };
 
+  // const backHandler = () => {
+  //   if (newroute?.params?.route === 'login') {
+  //     BackHandler.exitApp();
+  //   }
+  // };
+
   useEffect(() => {
+    // BackHandler.addEventListener('hardwareBackPress', () => backHandler());
     console.log(newroute?.params?.route, 'routeee=====sssss====');
     if (newroute?.params?.route === 'login') {
       setroute(null);
