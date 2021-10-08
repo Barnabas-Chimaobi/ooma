@@ -31,6 +31,7 @@ import {
   createMenuItemOrderDetail,
   createMenuPlanOrder,
   getMenuitemCart,
+  getProfile,
 } from '../../../FetchData';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -89,9 +90,11 @@ const Checkout = () => {
 
   const getAddress = async () => {
     const adress = await AsyncStorage.getItem('branchId');
+    const userId = await AsyncStorage.getItem('userId');
     const parseAddress = JSON.parse(adress);
     // console.log(parseAddress);
     const allAdress = await getDeliveryAddress(parseAddress);
+    const user = await getProfile(userId);
     const mapping = allAdress?.data?.data?.rows?.map((item: any) =>
       items.push({
         label: item?.address,
@@ -100,6 +103,9 @@ const Checkout = () => {
         id: item?.id,
       }),
     );
+    setMyAddress(user?.data?.address);
+    console.log(user, 'uerrrrr=======');
+
     // setItems(mapping);
     // items.push(mapping);
     console.log(allAdress?.data?.data?.rows, 'alladress');
@@ -462,6 +468,7 @@ const Checkout = () => {
                   marginRight: 5,
                 }}>
                 <TextInput
+                  value={myAddress}
                   style={{
                     backgroundColor: '#fff',
                     borderRadius: 5,

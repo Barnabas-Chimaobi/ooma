@@ -19,58 +19,60 @@ const RenderItems = ({item}: any) => {
       <Text>{item?.deliveryTime}</Text>
       {item?.data?.map((items) =>
         items?.data?.map((item) => {
-          // console.log(
-          //   item?.itemData?.menuitemorders?.MenuItemOrderDetails,
-          //   '===========orderlenght=====',
-          // ),
-          //   console.log(item, 'item===========');
+          console.log(
+            item?.itemData?.menuitemorders?.MenuItemOrderDetails,
+            '===========orderlenght=====',
+          ),
+            console.log(item, 'item===========');
           return (
-            <OrderCard
-              total={item?.itemData?.menuitemorders?.total}
-              details={item}
-              dateTitle={item?.deliveryTime}
-              titlePosition="right"
-              children={
-                <>
-                  <Total
-                    randomTitle="ORDER ID"
-                    randomValue={item?.itemData?.id}
-                    mainStyle={S.totalStyle}
-                  />
-                  {/* {item?.itemData?.menuitemorders?.MenuItemOrderDetails?.map(
+            item?.itemData?.menuitemorders?.status === 'Delivered' && (
+              <OrderCard
+                total={item?.itemData?.menuitemorders?.total}
+                details={item}
+                dateTitle={item?.deliveryTime}
+                titlePosition="right"
+                children={
+                  <>
+                    <Total
+                      randomTitle="ORDER ID"
+                      randomValue={item?.itemData?.id}
+                      mainStyle={S.totalStyle}
+                    />
+                    {/* {item?.itemData?.menuitemorders?.MenuItemOrderDetails?.map(
                     (items, index) => ( */}
-                  <Total
-                    randomTitle={'ITEM'}
-                    randomValue={
-                      item?.itemData?.menuitemorders?.MenuItemOrderDetails
-                        ?.length
-                    }
-                    mainStyle={S.totalStyle}
-                  />
-                  {/* ),
+                    <Total
+                      randomTitle={'ITEM'}
+                      randomValue={
+                        item?.itemData?.menuitemorders?.MenuItemOrderDetails
+                          ?.length
+                      }
+                      mainStyle={S.totalStyle}
+                    />
+                    {/* ),
                   )} */}
 
-                  <Total
-                    total={Number(item?.itemData?.menuitemorders?.total)}
-                    totalTitle="PRICE"
-                    mainStyle={S.totalStyle}
-                  />
-                  <Total
-                    randomTitle="STATUS"
-                    randomValue={item?.itemData?.menuitemorders?.status}
-                    mainStyle={S.totalStyle}
-                    randomStyle={{
-                      color: colors.start,
-                      // item?.paymentStatus == 'Cancelled'
-                      //   ? colors.red
-                      //   : item?.paymentStatus == 'NOT-PAID'
-                      //   ? colors.primary
-                      //   : colors.black,
-                    }}
-                  />
-                </>
-              }
-            />
+                    <Total
+                      total={Number(item?.itemData?.menuitemorders?.total)}
+                      totalTitle="PRICE"
+                      mainStyle={S.totalStyle}
+                    />
+                    <Total
+                      randomTitle="STATUS"
+                      randomValue={item?.itemData?.menuitemorders?.status}
+                      mainStyle={S.totalStyle}
+                      randomStyle={{
+                        color: colors.start,
+                        // item?.paymentStatus == 'Cancelled'
+                        //   ? colors.red
+                        //   : item?.paymentStatus == 'NOT-PAID'
+                        //   ? colors.primary
+                        //   : colors.black,
+                      }}
+                    />
+                  </>
+                }
+              />
+            )
           );
         }),
       )}
@@ -92,7 +94,7 @@ const Current = ({item}) => {
 
   return (
     <View style={S.main}>
-      {item?.includes('completed') === false ? (
+      {item?.length === 0 ? (
         <EmptyList
           image={require('../../../../assets/Images/emptyCart.png')}
           title="FIND MEAL"

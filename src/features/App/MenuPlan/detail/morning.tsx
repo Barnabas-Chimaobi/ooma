@@ -9,7 +9,10 @@ import {
   RefreshControl,
   ActivityIndicator,
 } from 'react-native';
-import {TouchableNativeFeedback} from 'react-native-gesture-handler';
+import {
+  ScrollView,
+  TouchableNativeFeedback,
+} from 'react-native-gesture-handler';
 import {cardDetails} from '../components/menuCards/cardInfo';
 import {styles} from './styles';
 import {EmptyList} from '../../../../components';
@@ -113,21 +116,34 @@ const Morning = (morning: any, planIds: any, times: any) => {
     <View style={{flex: 1}}>
       {refreshing ? <ActivityIndicator /> : null}
       {morning.morning === '' ? (
-        <View>
-          <ActivityIndicator
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              tintColor={'green'}
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }>
+          <View>
+            {/* <ActivityIndicator
             size={'large'}
             color={'green'}
             animating={refreshing}
             // style={{marginBottom: 30}}
-          />
-          <EmptyList
-            style={{height: 80, width: 80, marginTop: -120}}
-            // image={require('../../../../assets/Images/emptyCart.png')}
-            // title="FIND PLAN"
-            message="Getting the meal ready in a moment.."
-            onPress={() => navigation.goBack()}
-          />
-        </View>
+          /> */}
+
+            <Text style={{height: 150, top: 70, alignSelf: 'center'}}>
+              Getting the meals ready in a moment
+            </Text>
+            {/* <EmptyList
+              style={{height: 80, width: 80, marginTop: -120}}
+              // image={require('../../../../assets/Images/emptyCart.png')}
+              // title="FIND PLAN"
+              message="Getting the meal ready in a moment.."
+              onPress={() => navigation.goBack()}
+            /> */}
+          </View>
+        </ScrollView>
       ) : (
         // <Skeleton />
         <FlatList

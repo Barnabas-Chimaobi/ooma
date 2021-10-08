@@ -96,6 +96,10 @@ const RadioSelect = ({
   const toggleSwitch = () => setSwitchs((previousState) => !previousState);
 
   const filterMenuItem = async () => {
+    const price = await AsyncStorage.getItem('price');
+    const parsePrice = JSON.parse(price);
+    const price1 = await AsyncStorage.getItem('price1');
+    const parsePrice1 = JSON.parse(price1);
     console.log(categories, minPrice1, maxPrice1, 'categories====consolleeddd');
     const branch = await AsyncStorage.getItem('branchId');
     const newbranch = JSON.parse(branch);
@@ -107,9 +111,9 @@ const RadioSelect = ({
       // category1,
       // category,
       categories,
-      minPrice1,
-      maxPrice1,
-      // combine,
+      parsePrice ? parsePrice : 0,
+      parsePrice1 ? parsePrice1 : 0,
+      combine,
       // combination1,
     );
     console.log(filteredItem, 'filteredItem');
@@ -122,6 +126,7 @@ const RadioSelect = ({
     if (type === 'category') {
       setCategory(value);
       setCheckedValue(value);
+      AsyncStorage.setItem('category', value);
       // dispatch(useCategory(value));
       console.log(type, value, 'fffffff');
       return;
@@ -132,8 +137,9 @@ const RadioSelect = ({
       return;
     } else if (type === 'combination') {
       // setCombine(value);
-      setCategory(value);
+      setCombine(value);
       setCheckedValue(value);
+      AsyncStorage.setItem('menuType', value);
       // dispatch(useCombination(value));
       console.log(type, value);
       return;

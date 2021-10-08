@@ -11,7 +11,11 @@ import {
   SearchMenuItemByCategoryId,
   filterMenuItems,
 } from '../../../../../FetchData';
-import {useMenuItemByCategory} from '../../../../../reducers';
+import {
+  useMenuItemByCategory,
+  useMinPricing,
+  useMaxPricing,
+} from '../../../../../reducers';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {RootState, AppDispatch} from '../../../../../store';
@@ -75,7 +79,7 @@ const FilterBar = () => {
   });
 
   const filterMenuItem = async () => {
-    console.log('dhfjgkhjhgghjgkhlgjhfjgdfjgk');
+    console.log('dhfjgkhjhgghjgkhlgjhfjgdfjgk==========');
     const branch = await AsyncStorage.getItem('branchId');
     const newbranch = JSON.parse(branch);
     const filteredItem = await filterMenuItems(
@@ -83,9 +87,9 @@ const FilterBar = () => {
       1,
       // category1,
       category,
-      state,
       minPrice,
       maxPrice,
+      sorts,
       // combination1,
     );
     console.log(
@@ -137,16 +141,18 @@ const FilterBar = () => {
     setSorts('');
     setCategory('');
     setMinprice('');
-    setMinprice('');
+    setMaxprice('');
   };
 
   const pricing = (item: any) => {
     setMinprice(item);
+    // dispatch(useMinPricing(item));
     console.log(item, 'itemssss');
   };
 
   const pricing1 = (item: any) => {
     setMaxprice(item);
+    // dispatch(useMaxPricing(item));
     console.log(item, 'itemssss');
   };
   const loading = (item: any, item1: any) => {

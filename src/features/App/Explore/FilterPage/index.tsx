@@ -92,7 +92,7 @@ const Filter = () => {
 
   const setTitle = (title: any) => {
     console.log(title, 'titttllll');
-    if (title == 'Both' || title == 'Single dishes' || title == 'Combo meals') {
+    if (title == 'Both' || title == 'Single Meal' || title == 'Combo dish') {
       setSorts(title);
     } else {
       null;
@@ -175,8 +175,8 @@ const Filter = () => {
         <Radio
           title="Combination"
           title1="Both"
-          title2="Single dishes"
-          title3="Combo meals"
+          title2="Single Meal"
+          title3="Combo dish"
           type="combination"
           props={(title: any) => setTitle(title)}
           props1={(title: any) => setLoad(title)}
