@@ -25,52 +25,54 @@ const RenderItems = ({item}: any) => {
           // ),
           //   console.log(item, 'item===========');
           return (
-            <OrderCard
-              total={item?.itemData?.menuitemorders?.total}
-              details={item}
-              dateTitle={item?.deliveryTime}
-              titlePosition="right"
-              children={
-                <>
-                  <Total
-                    randomTitle="ORDER ID"
-                    randomValue={item?.itemData?.orderRef}
-                    mainStyle={S.totalStyle}
-                  />
-                  {/* {item?.itemData?.menuitemorders?.MenuItemOrderDetails?.map(
+            item?.itemData?.menuitemorders?.status !== 'Delivered' && (
+              <OrderCard
+                total={item?.itemData?.menuitemorders?.total}
+                details={item}
+                dateTitle={item?.deliveryTime}
+                titlePosition="right"
+                children={
+                  <>
+                    <Total
+                      randomTitle="ORDER ID"
+                      randomValue={item?.itemData?.orderRef}
+                      mainStyle={S.totalStyle}
+                    />
+                    {/* {item?.itemData?.menuitemorders?.MenuItemOrderDetails?.map(
                     (items, index) => ( */}
-                  <Total
-                    randomTitle={'ITEM'}
-                    randomValue={
-                      item?.itemData?.menuitemorders?.MenuItemOrderDetails
-                        ?.length
-                    }
-                    mainStyle={S.totalStyle}
-                  />
-                  {/* ),
+                    <Total
+                      randomTitle={'ITEM'}
+                      randomValue={
+                        item?.itemData?.menuitemorders?.MenuItemOrderDetails
+                          ?.length
+                      }
+                      mainStyle={S.totalStyle}
+                    />
+                    {/* ),
                   )} */}
 
-                  <Total
-                    total={Number(item?.itemData?.menuitemorders?.total)}
-                    totalTitle="PRICE"
-                    mainStyle={S.totalStyle}
-                  />
-                  <Total
-                    randomTitle="STATUS"
-                    randomValue={item?.itemData?.menuitemorders?.status}
-                    mainStyle={S.totalStyle}
-                    randomStyle={{
-                      color: colors.start,
-                      // item?.paymentStatus == 'Cancelled'
-                      //   ? colors.red
-                      //   : item?.paymentStatus == 'NOT-PAID'
-                      //   ? colors.primary
-                      //   : colors.black,
-                    }}
-                  />
-                </>
-              }
-            />
+                    <Total
+                      total={Number(item?.itemData?.menuitemorders?.total)}
+                      totalTitle="PRICE"
+                      mainStyle={S.totalStyle}
+                    />
+                    <Total
+                      randomTitle="STATUS"
+                      randomValue={item?.itemData?.menuitemorders?.status}
+                      mainStyle={S.totalStyle}
+                      randomStyle={{
+                        color: colors.start,
+                        // item?.paymentStatus == 'Cancelled'
+                        //   ? colors.red
+                        //   : item?.paymentStatus == 'NOT-PAID'
+                        //   ? colors.primary
+                        //   : colors.black,
+                      }}
+                    />
+                  </>
+                }
+              />
+            )
           );
         }),
       )}

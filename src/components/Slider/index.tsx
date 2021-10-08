@@ -55,25 +55,30 @@ const SliderBar = ({
 
   const pricing = (item1: any) => {
     parameters(item1);
+    AsyncStorage.setItem('price', JSON.stringify(item1));
   };
   const pricing1 = (item1: any) => {
     parameters1(item1);
+    AsyncStorage.setItem('price1', JSON.stringify(item1));
+    console.log(item1, 'itemmmmmssss');
   };
   const loading = (item1: any, item2: any) => {
     parameters2(item1, item2);
   };
 
   const filterMenuItem = async () => {
+    const getCategory = await AsyncStorage.getItem('category');
+    const getMenuType = await AsyncStorage.getItem('menuType');
     const branch = await AsyncStorage.getItem('branchId');
     const newbranch = JSON.parse(branch);
     loading(true, false);
     const filteredItem = await filterMenuItems(
       newbranch,
       1,
-      category1,
+      getCategory,
       minPrice1,
       maxPrice1,
-      combination1,
+      getMenuType,
     );
     console.log(filteredItem, 'filteredItem');
     dispatch(useMenuItemByCategory(filteredItem));

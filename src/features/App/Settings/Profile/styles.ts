@@ -9,27 +9,32 @@ export const S = StyleSheet.create({
     // alignItems: 'center',
   },
   first: {
-    flex: 1.3, 
+    flex: 0.5,
+    
     // backgroundColor: 'pink',
     width: '100%',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginBottom: 10
   },
   containerStyle: {
-    marginTop: -10,
-    height: 34,
+    // marginTop: -10,
+    // height: 34,
      width: '50%', 
-     borderColor: "#303030"
+    borderColor: "#303030",
+    //  marginBottom: -150,
     },
     second: {
-      flex: 1.3,
+      flex: 0.3,
       justifyContent: 'space-around', 
-      marginVertical: 5
+      marginVertical: 5,
+      top: -50
     },
     top: {
       width: '90%',
       flexDirection: 'row',
       justifyContent: 'space-between',
+      // bottom: -20
     },
     addressView: {
       fontWeight: 'bold', 

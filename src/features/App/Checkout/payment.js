@@ -1,5 +1,12 @@
 import React, {useState, useEffect, useRef, Component} from 'react';
-import {View, Text, Image, StyleSheet, TouchableHighlight} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableHighlight,
+  BackHandler,
+} from 'react-native';
 import {color, colors} from '../../../colors';
 import {paystack, flutter, forward, arrow} from '../../../assets';
 import {PayWithFlutterwave} from 'flutterwave-react-native';
@@ -18,6 +25,7 @@ import {
   ShowMessage,
   type,
 } from '../../../components';
+import Modal from 'react-native-modal';
 
 // const navigation = useNavigation();
 // const route = useRoute();
@@ -31,6 +39,7 @@ export class State extends Component {
       branch: this.props.route.params?.branchId,
       order: this.props.route.params?.orderId,
       paymentMethod: this.props.route.params?.paymentMethod,
+      modalVisible: false,
     };
     this.paystackWebViewRef = React.createRef(null);
   }
@@ -75,8 +84,24 @@ export class State extends Component {
   };
 
   componentDidMount() {
+    // BackHandler.addEventListener('hardwareBackPress', this.backAction());
     console.log(this.props.route.params, 'params=========');
   }
+
+  toggleModal = () => {
+    this.setState({
+      modalVisible: false,
+    });
+  };
+
+  // backAction = async () => {
+  //   this.navigation.navigate('Home');
+  //   // setLoading(true);
+  //   this.setState({
+  //     modalVisible: true,
+  //   });
+
+  // };
 
   render() {
     return (
@@ -129,6 +154,92 @@ export class State extends Component {
           </View>
         </TouchableHighlight> */}
 
+        <Modal
+          style={{
+            maxHeight: '30%',
+            width: '80%',
+            alignSelf: 'center',
+            backgroundColor: colors.logout,
+            borderRadius: 12,
+            marginTop: '50%',
+          }}
+          // onBackdropPress={() => toggleModal()}
+          isVisible={this.state.modalVisible}>
+          <View style={{flex: 1, height: '50%'}}>
+            <Text
+              style={{
+                alignSelf: 'center',
+                color: colors.white,
+                marginTop: 15,
+                fontFamily: 'Poppins-SemiBold',
+              }}>
+              Cancel Order
+            </Text>
+            <Text
+              style={{
+                alignSelf: 'center',
+                color: colors.white,
+                fontFamily: 'Poppins-SemiBold',
+                fontSize: 11,
+                marginTop: 30,
+              }}>
+              Are you sure you want to cancel this order?
+            </Text>
+            <Text
+              style={{
+                alignSelf: 'center',
+                color: colors.white,
+                fontFamily: 'Poppins-SemiBold',
+                fontSize: 11,
+              }}>
+              Note that this action cannot be reversed
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <TouchableHighlight
+                style={{width: '15%', marginTop: 35, marginLeft: 35}}
+                onPress={() => this.toggleModal()}>
+                <Text
+                  style={{
+                    color: colors.white,
+                    borderBottomWidth: 1,
+                    borderBottomColor: colors.white,
+                    fontFamily: 'Poppins-SemiBold',
+                  }}>
+                  No
+                </Text>
+              </TouchableHighlight>
+              <TouchableHighlight
+                style={{width: '20%', marginTop: 35, marginRight: 35}}
+                onPress={() => {
+                  this.backAction();
+                }}>
+                <View
+                  style={{
+                    backgroundColor: colors.activeTintColor,
+                    borderRadius: 5,
+                    padding: 3,
+                    flexDirection: 'row',
+                  }}>
+                  <Text
+                    style={{
+                      color: colors.white,
+                      paddingLeft: 3,
+                      paddingRight: 3,
+                      fontFamily: 'Poppins-SemiBold',
+                      textAlign: 'center',
+                    }}>
+                    Yes
+                  </Text>
+                </View>
+              </TouchableHighlight>
+            </View>
+          </View>
+        </Modal>
+
         <Paystack
           paystackKey={this.state.pubkey}
           billingEmail="help.ooma@gmail.com"
@@ -149,10 +260,6 @@ export class State extends Component {
           ref={this.paystackWebViewRef}
           refNumber={this.state.refdata}
         />
-        {/* <TouchableHighlight
-        onPress={() => paystackWebViewRef.current.startTransaction()}>
-        <Text>Pay Now</Text>
-      </TouchableHighlight> */}
       </View>
     );
   }

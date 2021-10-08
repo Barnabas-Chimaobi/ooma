@@ -40,6 +40,7 @@ import {
   createmenuplanorderDetail,
   createMenuPlanOrder,
   getMenuitemCart,
+  getProfile,
 } from '../../../../FetchData';
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState, AppDispatch} from '../../../../store';
@@ -120,6 +121,8 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   const [myId, setId] = useState('');
   const [loading, setLoading] = useState(false);
   const [branch, setBranch] = useState('');
+  const [editPre, setEditPref] = useState([]);
+  const [profile, setProfile] = useState('');
   let grandsum;
   let [newgrand, setNewgrand] = useState('');
 
@@ -187,7 +190,9 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   };
 
   const getItemDetail = async () => {
+    const userId = await AsyncStorage.getItem('userId');
     const item = await getMenuItemsById(route?.params?.id);
+    const user = await getProfile(userId);
     const discount = item?.discount;
     const currentAmount = discount
       ? (item?.amount - discount).toFixed(2)
@@ -196,6 +201,11 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     setPrice(currentAmount);
     setPrice1(currentAmount);
     setMenuItem(item);
+    console.log(userId, 'useriddd');
+
+    console.log(user, 'uerrrrr=======');
+    setProfile(user?.data);
+    setMyAddress(user?.data?.address);
   };
 
   const carts = async () => {
@@ -245,7 +255,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     //   parseInt(itemQty),
     amount: prices,
     addons: JSON.stringify(adds),
-    Preferences: JSON.stringify(Preferences),
+    Preferences: JSON.stringify(editPre),
     specialInstruction: value,
     menuplanid: planId,
     createdBy: myId,
@@ -503,7 +513,6 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   };
 
   const removeAddon = (item: any) => {
-    //totalArraySubtract();
     console.log(item, 'itemooo');
     let previousItem: any = getSelectedItemFromAddons(item.id);
     //remove item entirely from the array;
@@ -527,12 +536,19 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   };
 
   const calculateTotalAmount = () => {
+    let totalPrefSum = 0;
+    editPre.forEach((val: any) => {
+      totalPrefSum += parseFloat(val.price);
+    });
+
     let totalAddonSum = 0;
     adds.forEach((val: any) => {
       totalAddonSum += parseFloat(val.initialPrice) * parseFloat(val.quantity);
     });
+
     console.log(totalAddonSum, 'addons value');
-    let totalItemAmount = (totalAddonSum + parseFloat(total)) * itemQty;
+    let totalItemAmount =
+      (totalAddonSum + parseFloat(total) + parseFloat(totalPrefSum)) * itemQty;
     !isNaN(totalItemAmount) && setPrice(totalItemAmount);
   };
 
@@ -556,6 +572,47 @@ const CardItem: FC<IProps> = ({route, menu}) => {
       }
     }
     return null;
+  };
+
+  const buildInitialPreference = (pref: any) => {
+    return {
+      id: pref?.id,
+      name: pref?.name,
+      price: pref?.unitPrice,
+    };
+  };
+
+  const processPreference = (item: any) => {
+    if (editPre?.length !== 0) {
+      for (let i = 0; i < editPre.length; i++) {
+        console.log(editPre[i], item, 'editedprffffcomparerrrr====');
+
+        if (editPre[i]?.id !== item?.id) {
+          let addonInitial = buildInitialPreference(item);
+          editPre.push(addonInitial);
+          console.log(editPre, 'editedprffffsss==hhhjg==');
+          break;
+        }
+      }
+    } else {
+      let addonInitial = buildInitialPreference(item);
+      editPre.push(addonInitial);
+      console.log(editPre, 'editedprffffsss====');
+    }
+    calculateTotalAmount();
+  };
+
+  const removePreference = (item: any) => {
+    for (let i = 0; i < editPre.length; i++) {
+      console.log(editPre[i], item, 'editedprffffcomparerrrr====');
+
+      if (editPre[i]?.id === item?.id) {
+        editPre.splice(i, 1);
+        console.log(editPre, item, 'editedprffffssminussss====');
+        // break;
+      }
+    }
+    calculateTotalAmount();
   };
 
   const deliveryTime = () => setShowTime((prev) => !prev);
@@ -711,27 +768,21 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                           justifyContent: 'space-between',
                         }}>
                         <CheckBox
+                          // onPress={() => processPreference()}
+                          prefCheck={'pref'}
                           id={preference?.Preference?.id}
                           value={preference?.Preference?.unitPrice}
                           key={preference?.Preference?.id}
                           title={preference?.Preference?.name}
-                          props1={(name: any, unitPrice: any, id: any) => {
-                            Preferences.push({name, unitPrice, id});
-                            const sum = Preferences?.map((v) => v?.unitPrice);
-                            if (unitPrice !== null) {
-                              let names = sum.reduce(
-                                (sum: any, current: any) => +sum + +current,
-                                // console.log(sum, current, 'consolessssssssssloggg'),
-                              );
-                              setPrefAmount(names);
-                              // console.log(names, '====nameeeesss====');
-                            }
-
-                            if (unitPrice !== null) {
-                              setPrice(+unitPrice + +prices);
-                              setPrice1(+unitPrice + +prices);
-                            }
-                          }}
+                          // props1={(name: any, unitPrice: any, id: any) => {
+                          //   processPreference(preference);
+                          // }}
+                          preferencAdd={() =>
+                            processPreference(preference?.Preference)
+                          }
+                          prefRemove={() =>
+                            removePreference(preference?.Preference)
+                          }
                         />
                         <Text style={{paddingTop: 20}}>
                           {preference?.Preference?.unitPrice}
@@ -952,6 +1003,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                             marginRight: 5,
                           }}>
                           <TextInput
+                            value={myAddress}
                             style={{
                               backgroundColor: 'rgba(246, 246, 246, 0.7)',
                               borderRadius: 5,

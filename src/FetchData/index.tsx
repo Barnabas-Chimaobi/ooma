@@ -218,6 +218,7 @@ export const filterMenuItems = async (
   menuItemType?: string,
 ) => {
   try {
+    console.log(menuItemType, maxPrice, minPrice, 'combine them=======');
     //82059935-89dc-4daf-aff3-adcf997d6859
 
     const MenuItemData = await api.get(
@@ -567,10 +568,28 @@ export const verifyPayment = async (key: any) => {
 export const getProfile = async (id: any) => {
   console.log(body, '====detailllsssss');
   try {
-    const user = await api.get(`user?user_id=${id}`);
+    const user = await api.get(`users?user_id=${id}`);
     const userDetail = user.data;
     // console.log(generated, 'categoryidddss==');
     return userDetail;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
+export const updateProfile = async (body: any) => {
+  console.log(body, '====detailllsssss');
+  try {
+    const profile = await api.put(`/users`, {
+      id: body.id,
+      firstName: body.firstName,
+      lastName: body.lastName,
+      address: body.address,
+    });
+    const updated = profile.data;
+    // console.log(generated, 'categoryidddss==');
+    return updated;
   } catch (error) {
     console.log(error);
     return error;

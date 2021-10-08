@@ -111,6 +111,10 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   const [showTime, setShowTime] = useState(false);
   const [newItem, setNewItem] = useState([]);
   const [branch, setBranch] = useState('');
+  const [preference, setPreferences] = useState(
+    JSON.parse(eachItem?.preferences),
+  );
+  const [editPre, setEditPref] = useState([]);
 
   const visibility = () => {
     setVisible((previousState) => !previousState);
@@ -184,8 +188,19 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     );
   };
 
+  const buildInitialPreferenceObject = () => {
+    preference?.map((item) => {
+      editPre.push({
+        id: item?.id,
+        name: item?.name,
+        price: item?.price,
+      });
+    });
+  };
+
   useEffect(() => {
     buildAddonObjectForCartEdit();
+    buildInitialPreferenceObject();
     setItemqty(eachItem?.quantity);
     const handleData = async () => {
       const regionName = await AsyncStorage.getItem('regionName');
@@ -220,7 +235,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     amount: prices,
     // amount: parseInt(total) * parseInt(itemQty) + parseInt(addsTotal),
     addons: JSON.stringify(adds),
-    Preferences: JSON.stringify(Preferences),
+    Preferences: JSON.stringify(editPre),
     specialInstruction: value,
     menuplanid: planId,
   };
@@ -316,12 +331,21 @@ const CardItem: FC<IProps> = ({route, menu}) => {
 
   const calculateTotalAmount = () => {
     try {
+      let totalPrefSum = 0;
+      editPre.forEach((val: any) => {
+        totalPrefSum += parseFloat(val.price);
+      });
+
       let totalAddonSum = 0;
       adds.forEach((val: any) => {
         totalAddonSum +=
           parseFloat(val.initialPrice) * parseFloat(val.quantity);
       });
-      let totalItemAmount = (totalAddonSum + parseFloat(total)) * itemQty;
+
+      console.log(totalAddonSum, 'addons value');
+      let totalItemAmount =
+        (totalAddonSum + parseFloat(total) + parseFloat(totalPrefSum)) *
+        itemQty;
       !isNaN(totalItemAmount) && setPrice(totalItemAmount);
     } catch (error) {
       console.log('====error====', error);
@@ -339,6 +363,49 @@ const CardItem: FC<IProps> = ({route, menu}) => {
       isExtra: addon?.isExtra == true ? true : false,
       originalQuantity: 1,
     };
+  };
+
+  const buildInitialPreference = (pref: any) => {
+    return {
+      id: pref?.id,
+      name: pref?.name,
+      price: pref?.price,
+    };
+  };
+
+  const processPreference = (item: any) => {
+    if (editPre?.length !== 0) {
+      for (let i = 0; i < editPre.length; i++) {
+        console.log(editPre[i], item, 'editedprffffcomparerrrr====');
+
+        if (editPre[i]?.id !== item?.id) {
+          let addonInitial = buildInitialPreference(item);
+          editPre.push(addonInitial);
+          console.log(editPre, 'editedprffffsss==hhhjg==');
+          calculateTotalAmount();
+
+          break;
+        }
+      }
+    } else {
+      let addonInitial = buildInitialPreference(item);
+      editPre.push(addonInitial);
+      console.log(editPre, 'editedprffffsss====');
+    }
+    calculateTotalAmount();
+  };
+
+  const removePreference = (item: any) => {
+    for (let i = 0; i < editPre.length; i++) {
+      console.log(editPre[i], item, 'editedprffffcomparerrrr====');
+
+      if (editPre[i]?.id === item?.id) {
+        editPre.splice(i, 1);
+        console.log(editPre, item, 'editedprffffssminussss====');
+        // break;
+      }
+    }
+    calculateTotalAmount();
   };
 
   const getSelectedItemFromAddons = (id: any) => {
@@ -447,7 +514,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           </Collapsible>
         </View>
 
-        {menuItem?.menuItemPreferences?.length !== undefined && (
+        {eachItem?.preferences?.length !== undefined && (
           <View style={{paddingHorizontal: 12, width: '100%'}}>
             <Button
               type={ButtonType.solid}
@@ -462,16 +529,10 @@ const CardItem: FC<IProps> = ({route, menu}) => {
             />
             <Collapsible collapsed={!visible1} style={{width: '100%'}}>
               <>
-                {menuItem?.menuItemPreferences?.map((preference: any) => (
+                {preference?.map((preference: any) => (
                   <TouchableWithoutFeedback
                     onPress={() => {
-                      console.log(
-                        preference?.Preference?.name,
-                        'preefereeeenn',
-                      );
-                      JSON.stringify(
-                        Preferences.push(preference?.Preference?.name),
-                      );
+                      // processPreference(preference);
                     }}>
                     <View
                       style={{
@@ -479,13 +540,15 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                         justifyContent: 'space-between',
                       }}>
                       <CheckBox
+                        edit={'edit'}
+                        prefCheck={'pref'}
                         key={preference?.Preference?.id}
-                        title={preference?.Preference?.name}
-                        props={(item: any) => Preferences.push(item)}
+                        title={preference?.name}
+                        // onPress={() => processPreference(preference)}
+                        preferencAdd={() => processPreference(preference)}
+                        prefRemove={() => removePreference(preference)}
                       />
-                      <Text style={{paddingTop: 20}}>
-                        {preference?.Preference?.unitPrice}
-                      </Text>
+                      <Text style={{paddingTop: 20}}>{preference?.price}</Text>
                     </View>
                   </TouchableWithoutFeedback>
                 ))}
