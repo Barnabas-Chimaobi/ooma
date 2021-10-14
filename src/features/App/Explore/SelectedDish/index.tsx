@@ -356,28 +356,35 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     console.log(myAddress, deliveryOption, time, addressId, 'idddddddssss====');
     try {
       if (addressId === null && deliveryOption === 'Delivery') {
-        ShowMessage(
-          type.INFO,
-          'please check if you have selected a delivery location, time and enter your delivery address',
-        ); // dispatch(cartStates(addedCart));
+        ShowMessage('Hello', 'completed processing', 'successs');
+        // ShowMessage(
+        //   type.INFO,
+        //   'please check if you have selected a delivery location, time and enter your delivery address',
+        // ); // dispatch(cartStates(addedCart));
         setLoading(false);
       } else if (time === null && deliveryOption === 'Delivery') {
-        ShowMessage(
-          type.INFO,
-          'please check if you have selected a delivery location, time and enter your delivery address',
-        ); // dispatch(cartStates(addedCart));
+        ShowMessage('Hello', 'completed processing', 'successs');
+
+        // ShowMessage(
+        //   type.INFO,
+        //   'please check if you have selected a delivery location, time and enter your delivery address',
+        // ); // dispatch(cartStates(addedCart));
         setLoading(false);
       } else if (myAddress === null && deliveryOption === 'Delivery') {
-        ShowMessage(
-          type.INFO,
-          'please check if you have selected a delivery location, time and enter your delivery address',
-        ); // dispatch(cartStates(addedCart));
+        ShowMessage('Hello', 'completed processing', 'successs');
+
+        // ShowMessage(
+        //   type.INFO,
+        //   'please check if you have selected a delivery location, time and enter your delivery address',
+        // ); // dispatch(cartStates(addedCart));
         setLoading(false);
       } else if (deliveryOption == 'Pick-Up' && time === null) {
-        ShowMessage(
-          type.INFO,
-          'please check if you have selected time of meal',
-        );
+        ShowMessage('Hello', 'completed processing', 'successs');
+
+        // ShowMessage(
+        //   type.INFO,
+        //   'please check if you have selected time of meal',
+        // );
         setLoading(false);
       } else {
         const cart = await api.post(`orders/basket`, {

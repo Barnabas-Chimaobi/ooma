@@ -40,7 +40,7 @@ import {NativeBaseProvider, Box} from 'native-base';
 import Footer from '../../../../navigation/footer';
 import {StyleFoot} from '../../../../navigation/styles';
 import {colors} from '../../../../colors';
-import {basket} from '../../../../assets';
+import {basket, loader} from '../../../../assets';
 
 interface IProps {
   route?: {};
