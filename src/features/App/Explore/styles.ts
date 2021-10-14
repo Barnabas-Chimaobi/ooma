@@ -14,7 +14,7 @@ export default StyleSheet.create({
   },
   imageBackground: {
     // width: 160,
-    width: Dimensions.get('window').width/2.3,
+    width: Dimensions.get('window').width/2.4,
     height: 200,
     margin: 5,
     borderRadius: 5,
@@ -23,7 +23,7 @@ export default StyleSheet.create({
   },
     imageBackground1: {
     // width: 160,
-    width: Dimensions.get('window').width/1,
+    width: Dimensions.get('window').width/1.1,
     height: 250,
     margin: 5,
     borderRadius: 5,
@@ -54,7 +54,7 @@ export default StyleSheet.create({
     color: colors.primary,
   },
   sdImage: {
-    height: 323,
+    height: 250,
     width: '100%',
   },
   sdMain: {
@@ -68,7 +68,7 @@ export default StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 20,
     borderBottomColor: '#E8E4E4',
-    borderBottomWidth: 1,
+    // borderBottomWidth: 2,
   },
   sdContainer: {
     flexDirection: 'row',
@@ -103,15 +103,18 @@ export default StyleSheet.create({
   },
   cdDescription: {
     fontFamily: 'Montserrat',
-    fontWeight: 'bold',
+    fontWeight: '900',
     fontSize: 15,
     paddingVertical: 16,
   },
   exploreMain: {
-    marginHorizontal: 10,
-    marginVertical: 10,
+    // marginHorizontal: 10,
+    // marginVertical: 10,
+    // paddingHorizontal: 10,
+    paddingVertical:10,
     // marginBottom: 10,
-    flex:1
+    flex: 1,
+    backgroundColor: colors.white
   },
   exploreInput: {
     backgroundColor: 'white',
@@ -124,6 +127,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignContent: 'space-around',
-    paddingBottom: 50
+    paddingBottom: 50,
+    backgroundColor: colors.white
   },
 });

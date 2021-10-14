@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, Image, TouchableHighlight} from 'react-native';
+import {View, Text, Image, TouchableHighlight, Dimensions} from 'react-native';
 import PriceTag from '../../../../components/PriceTag/index';
 import shortid from 'shortid';
 import MoreAction from '../../MyCart/MoreAction/index';
 import basket from '../../../../reducers/basket';
-
+import {useNavigation, useRoute} from '@react-navigation/native';
 interface ListDataProps {
   styles: any;
   imageUrl: any;
@@ -42,6 +42,7 @@ const VeryInnerList = ({
   showDelete,
   getNewbasket,
 }: ListDataProps) => {
+  const navigation = useNavigation();
   const [toggle, setToggle] = useState(false);
   const toggleView = () => {
     setToggle(!toggle);
@@ -63,10 +64,20 @@ const VeryInnerList = ({
           style={{zIndex: 200}}
           underlayColor=""
           // key={item?.itemData?.id}
-          onPress={toggleView}>
+          onPress={() =>
+            diffParams
+              ? toggleView()
+              : navigation.navigate('OrderDetails', {
+                  itemDetails: details,
+                })
+          }>
           <View style={styles.itemStyle}>
             <Image
-              style={{height: 105, width: 105, borderRadius: 10}}
+              style={{
+                height: Dimensions.get('window').height / 6.8,
+                width: Dimensions.get('window').width / 3.4,
+                borderRadius: 10,
+              }}
               source={{
                 uri: imageUrl,
               }}
@@ -109,12 +120,15 @@ const VeryInnerList = ({
             }}>
             {/* <MoreAction title="Edit Order" iconName="pen" /> */}
             {/* <MoreAction title="Add Quantity" iconName="signal" count /> */}
-            <MoreAction
-              basket={diffParams}
-              details={details}
-              params={'details'}
-              title="View Details"
-            />
+            {!showDelete && (
+              <MoreAction
+                basket={diffParams}
+                details={details}
+                params={'details'}
+                title="View Details"
+              />
+            )}
+
             {!showDelete && (
               <MoreAction
                 gottenNewCart={(item) => getNewbasket(item)}

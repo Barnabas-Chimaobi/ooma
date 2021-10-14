@@ -42,7 +42,7 @@ const OrderCard = ({
         <Text style={titlePosition == 'right' ? S.right : S.left}>
           {dateTitle}
         </Text>
-        <Divider style={{marginBottom: 10}} />
+        <Divider style={{marginBottom: 10, marginLeft: -10}} />
         {children}
       </View>
     </TouchableHighlight>

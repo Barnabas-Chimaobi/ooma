@@ -95,7 +95,7 @@ const SearchMenuitemandPlan = () => {
   };
 
   return (
-    <View style={{flex: 1, alignSelf: 'center'}}>
+    <View style={{flex: 1, alignSelf: 'center', width: '100%'}}>
       <View
         style={{
           flexDirection: 'row',
@@ -117,7 +117,7 @@ const SearchMenuitemandPlan = () => {
             animating={true}
           /> */}
           <BaseInput
-            inputStyle={{paddingBottom: -2}}
+            inputStyle={{padding: 3}}
             value={input}
             placeholder="search menu"
             onChangeText={(text) => {
@@ -140,7 +140,7 @@ const SearchMenuitemandPlan = () => {
               marginTop: 25,
               color: '#000',
             }}>
-            No Results found for your search inputs yet
+            Your search results will appear here...
           </Text>
         </View>
       ) : (

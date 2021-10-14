@@ -58,6 +58,7 @@ import {getMenuItemsHistory} from '../../../../reducers/HistoryMenu';
 import {getMenuItemsPlanForYou} from '../../../../reducers/MenuPlansForYou';
 import {AppDispatch} from '../../../../store';
 import {cartStates} from '../../../../reducers/cart';
+import {getFindPlan} from '../../../../reducers/findPlan';
 interface Props {
   closeModal: () => void;
 }
@@ -212,6 +213,7 @@ export default function Header() {
     const menuItem = await getMenuPlansByBranch(branchID, page);
     console.log(menuItem, 'menuplanforyouuuuu');
     dispatch(getMenuItemsPlanForYou(menuItem));
+    dispatch(getFindPlan(menuItem));
   };
 
   const getMenuItem = async (branchID: string, page: number) => {

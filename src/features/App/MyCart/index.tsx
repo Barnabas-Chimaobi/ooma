@@ -8,7 +8,13 @@ import {
   RefreshControl,
   ActivityIndicator,
 } from 'react-native';
-import {Button, ButtonType, PriceTag, EmptyList} from '../../../components';
+import {
+  Button,
+  ButtonType,
+  PriceTag,
+  EmptyList,
+  SimpleHeader,
+} from '../../../components';
 import Card from './Card';
 import shortid from 'shortid';
 import MessageModal from '../../../components/CartMessagesModal';
@@ -116,6 +122,9 @@ const MyCart = () => {
 
   return (
     <View style={{flex: 1}}>
+      <View style={{marginLeft: 10}}>
+        <SimpleHeader />
+      </View>
       {refreshing !== true ? (
         <View style={{flex: 1}}>
           <ScrollView

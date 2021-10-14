@@ -9,7 +9,7 @@ export default StyleSheet.create({
   bodyStyle: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '100%',
+    // width: '100%',
     paddingBottom: 10,
   },
   bodyStyleAmout1: {
@@ -20,9 +20,9 @@ export default StyleSheet.create({
   },
   bodyStyleAmout: {
     flexDirection: 'row',
-    width: '100%',
+    width: '85%',
     paddingBottom: 15,
-    // justifyContent: 'space-between',
+    justifyContent: 'space-between',
   },
   textStyle: {
     fontSize: 12,

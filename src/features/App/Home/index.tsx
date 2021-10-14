@@ -354,6 +354,7 @@ const Home = () => {
                     marginBottom: 10,
                     marginTop: 15,
                     zIndex: 20,
+                    fontFamily: 'Montserrat',
                   }}>
                   Customize your meal plan
                 </Text>
@@ -401,7 +402,12 @@ const Home = () => {
 
         <View style={{backgroundColor: colors.white, marginLeft: 10}}>
           <View>
-            <Text style={{marginBottom: 12, fontWeight: 'bold'}}>
+            <Text
+              style={{
+                marginBottom: 12,
+                fontWeight: 'bold',
+                fontFamily: 'Montserrat',
+              }}>
               Discover More
             </Text>
           </View>

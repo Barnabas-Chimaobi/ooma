@@ -37,7 +37,7 @@ const UnitOrders = ({price, count, description, unitPrice, style}: any) => {
   return (
     <>
       <View style={[S.UnitOrdersmain, style]}>
-        {count && <Text style={S.countStyle}>{`${count}x`}</Text>}
+        {count && <Text style={S.countStyle}>({`${count}x`})</Text>}
         <View style={{width: '70%', flexWrap: 'wrap'}}>
           <Text style={S.descriptionStyle}>{description}</Text>
           {unitPrice && <PriceTag price={unitPrice} clear style={{}} />}
@@ -58,10 +58,12 @@ const Adds = ({price, count, description, unitPrice, style, addons}: any) => {
     <>
       {newadd?.map((item) => (
         <View style={[S.UnitOrdersmainadds, style]}>
-          <Text style={S.countStyle}>{`${item?.quantity}x`}</Text>
+          <Text style={S.countStyle}>({`${item?.quantity}x`})</Text>
           <View style={{width: '70%', flexWrap: 'wrap'}}>
             <Text style={S.AddonsdescriptionStyle}>{item?.name}</Text>
-            <PriceTag price={item?.initialPrice} clear />
+            <View style={{marginLeft: '-70%'}}>
+              <PriceTag addsPrice={'price'} price={item?.initialPrice} clear />
+            </View>
           </View>
           <PriceTag price={item?.totalPrice} clear />
         </View>
@@ -82,7 +84,7 @@ const OrderDetails = () => {
   let item = route.params?.itemDetails;
 
   return (
-    <View style={{marginBottom: 50}}>
+    <View style={{marginBottom: 50, backgroundColor: colors.white}}>
       {/* <FlatList
         data={route.params?.itemDetails}
         numColumns={2}
@@ -95,7 +97,8 @@ const OrderDetails = () => {
         //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         // }
       /> */}
-      <View style={{marginLeft: 10}}>
+      <View
+        style={{paddingLeft: 10, backgroundColor: colors.white, elevation: 10}}>
         <SimpleHeader />
       </View>
       {route.params?.basket !== 'basket' ? (
@@ -121,6 +124,7 @@ const OrderDetails = () => {
                 //   : colors.black,
               }}
             />
+
             <Total
               randomTitle="Requested at:"
               randomValue={new Date(
@@ -130,71 +134,112 @@ const OrderDetails = () => {
             />
           </View>
           {/* <View style={S.main}> */}
-          <OrderStack
-            headerCount={item?.itemData?.orderInfo?.quantity}
-            headerDescription={
-              item?.itemData?.orderInfo?.MenuPlanDetail?.MenuItem?.itemName
-            }
-            headerPrice={
-              item?.itemData?.orderInfo?.MenuPlanDetail?.MenuItem?.amount
-            }
-            children={<Adds addons={item?.itemData?.orderInfo?.addons} />}
-            // style={{position: 'relative', bottom: -25, zIndex: 10}}
-          />
-          {/* </View> */}
-          <View style={S.main}>
-            <Total
-              total={Number(item?.itemData?.orderInfo?.amount)}
-              mainStyle={S.totalHeaderStyle}
+
+          <View
+            style={{
+              backgroundColor: colors.white,
+              elevation: 10,
+              width: '95%',
+              alignSelf: 'center',
+              borderRadius: 10,
+              marginBottom: 10,
+            }}>
+            <View
+              style={{
+                backgroundColor: '#fff',
+                elevation: 10,
+                width: '95%',
+                alignSelf: 'center',
+                borderRadius: 10,
+                top: 10,
+              }}>
+              <OrderStack
+                headerCount={item?.itemData?.orderInfo?.quantity}
+                headerDescription={
+                  item?.itemData?.orderInfo?.MenuPlanDetail?.MenuItem?.itemName
+                }
+                headerPrice={
+                  item?.itemData?.orderInfo?.MenuPlanDetail?.MenuItem?.amount
+                }
+                children={<Adds addons={item?.itemData?.orderInfo?.addons} />}
+                // style={{position: 'relative', bottom: -25, zIndex: 10}}
+              />
+            </View>
+
+            {/* </View> */}
+
+            <View style={{marginTop: 20}}>
+              <View style={S.main}>
+                <Total
+                  totalTitle="delivery Charge"
+                  orderTotal={Number(item?.itemData?.orderInfo?.deliveryCharge)}
+                  // total={Number(item?.itemData?.orderInfo?.amount)}
+                  mainStyle={S.totalHeaderStyle}
+                />
+              </View>
+            </View>
+
+            <View style={{marginTop: 20}}>
+              <View style={S.main}>
+                <Total
+                  orderTotal={Number(item?.itemData?.orderInfo?.amount)}
+                  // total={Number(item?.itemData?.orderInfo?.amount)}
+                  mainStyle={S.totalHeaderStyle}
+                />
+              </View>
+            </View>
+            <OrderCard
+              details={null}
+              dateTitle="Delivery Details"
+              // mainStyle={S.main}
+              children={
+                <>
+                  <Total
+                    randomTitle="Collection"
+                    randomValue={item?.itemData?.orderInfo?.deliveryOption}
+                  />
+                  <Total
+                    randomTitle="Time of collection"
+                    randomValue={item?.itemData?.orderInfo?.deliveryTime}
+                  />
+                  <Total
+                    randomTitle="Location"
+                    randomValue={item?.itemData?.orderInfo?.deliveryAddress}
+                  />
+                </>
+              }
             />
+
+            <View style={{marginTop: -25}}>
+              <OrderCard
+                details={null}
+                dateTitle="Payment Details"
+                // mainStyle={S.main}
+                children={
+                  <>
+                    {/* <Total
+                    randomTitle="style"
+                    randomValue={item?.itemData?.orderInfo?.paymentType}
+                  /> */}
+                    <Total
+                      randomTitle="Method"
+                      randomValue={item?.itemData?.orderInfo?.paymentMethod}
+                    />
+                    <Total
+                      randomTitle="Status"
+                      randomValue={item?.itemData?.orderInfo?.paymentStatus}
+                    />
+                  </>
+                }
+              />
+            </View>
           </View>
-          <OrderCard
-            details={null}
-            dateTitle="Collection Details"
-            mainStyle={S.main}
-            children={
-              <>
-                <Total
-                  randomTitle="Collection"
-                  randomValue={item?.itemData?.orderInfo?.deliveryOption}
-                />
-                <Total
-                  randomTitle="Time of collection"
-                  randomValue={item?.itemData?.orderInfo?.deliveryTime}
-                />
-                <Total
-                  randomTitle="Location"
-                  randomValue={item?.itemData?.orderInfo?.deliveryAddress}
-                />
-              </>
-            }
-          />
-          <OrderCard
-            details={null}
-            dateTitle="Payment Details"
-            mainStyle={S.main}
-            children={
-              <>
-                <Total
-                  randomTitle="style"
-                  randomValue={item?.itemData?.orderInfo?.paymentType}
-                />
-                <Total
-                  randomTitle="Method"
-                  randomValue={item?.itemData?.orderInfo?.paymentMethod}
-                />
-                <Total
-                  randomTitle="Status"
-                  randomValue={item?.itemData?.orderInfo?.paymentStatus}
-                />
-              </>
-            }
-          />
         </ScrollView>
       ) : (
         <ScrollView>
           <View style={S.main}>
             <Total
+              orderefId="id"
               randomTitle="ORDER ID"
               randomValue={item?.itemData?.id}
               mainStyle={S.totalHeaderStyle}
@@ -218,44 +263,77 @@ const OrderDetails = () => {
             />
           </View>
           {/* <View style={S.main}> */}
-          <OrderStack
-            headerCount={item?.itemData?.quantity}
-            headerDescription={
-              item?.itemData?.MenuPlan?.MenuplanDetail?.MenuItem?.itemName
-            }
-            headerPrice={item?.itemData?.amount}
-            children={<Adds addons={item?.itemData?.addons} />}
-            // style={{position: 'relative', bottom: -25, zIndex: 10}}
-          />
-          {/* </View> */}
-          <View style={S.main}>
-            <Total
-              total={Number(
-                item?.itemData?.MenuPlan?.MenuplanDetail?.MenuItem?.amount,
-              )}
-              mainStyle={S.totalHeaderStyle}
+
+          <View
+            style={{
+              backgroundColor: colors.white,
+              elevation: 10,
+              width: '95%',
+              alignSelf: 'center',
+              borderRadius: 10,
+              marginBottom: 10,
+            }}>
+            <View
+              style={{
+                backgroundColor: '#fff',
+                elevation: 10,
+                width: '95%',
+                alignSelf: 'center',
+                borderRadius: 10,
+                top: 10,
+              }}>
+              <OrderStack
+                headerCount={item?.itemData?.quantity}
+                headerDescription={
+                  item?.itemData?.MenuPlan?.MenuplanDetail?.MenuItem?.itemName
+                }
+                headerPrice={item?.itemData?.amount}
+                children={<Adds addons={item?.itemData?.addons} />}
+                // style={{position: 'relative', bottom: -25, zIndex: 10}}
+              />
+            </View>
+            {/* </View> */}
+            <View style={{marginTop: 20}}>
+              <View style={S.main}>
+                <Total
+                  totalTitle="delivery Charge"
+                  orderTotal={Number(item?.itemData?.deliveryCharge)}
+                  // total={Number(item?.itemData?.orderInfo?.amount)}
+                  mainStyle={S.totalHeaderStyle}
+                />
+              </View>
+            </View>
+
+            <View style={{marginTop: 20}}>
+              <View style={S.main}>
+                <Total
+                  total={Number(item?.itemData?.amount)}
+                  mainStyle={S.totalHeaderStyle}
+                />
+              </View>
+            </View>
+            <OrderCard
+              details={null}
+              dateTitle="Delivery Details"
+              // mainStyle={S.main}
+              children={
+                <>
+                  <Total
+                    randomTitle="Collection"
+                    randomValue={item?.itemData?.deliveryOption}
+                  />
+                  <Total
+                    randomTitle="Time of collection"
+                    randomValue={item?.itemData?.deliveryTime}
+                  />
+                  <Total
+                    randomTitle="Location"
+                    randomValue={item?.itemData?.deliveryAddress}
+                  />
+                </>
+              }
             />
           </View>
-          <OrderCard
-            dateTitle="Collection Details"
-            mainStyle={S.main}
-            children={
-              <>
-                <Total
-                  randomTitle="Collection"
-                  randomValue={item?.itemData?.deliveryOption}
-                />
-                <Total
-                  randomTitle="Time of collection"
-                  randomValue={item?.itemData?.deliveryTime}
-                />
-                <Total
-                  randomTitle="Location"
-                  randomValue={item?.itemData?.deliveryAddress}
-                />
-              </>
-            }
-          />
           {/* <OrderCard
             dateTitle="Payment Details"
             mainStyle={S.main}

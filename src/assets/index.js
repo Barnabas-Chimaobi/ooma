@@ -42,8 +42,14 @@ const forward = require('./Images/forwardArrow.png');
 const oomaNew = require('./Images/ooma.jpeg');
 const basket = require('./Images/basket.png');
 const plus = require('./Images/plus.png');
+const instantSuccess = require('./Images/instant.png');
+const mealSuccess = require('./Images/mealPlan.png');
+const loader = require('./Images/oomaLoad.gif');
 
 export {
+    loader,
+    instantSuccess,
+    mealSuccess,
     plus,
     basket,
     oomaNew,

@@ -241,9 +241,9 @@ export const MenuHistory = () => {
       planOrders?.length === 0 ? (
         <EmptyList
           image={require('../../../../../assets/Images/emptyCart.png')}
-          title="FIND MEAL"
+          // title="FIND MEAL"
           message="Oops! You don't have any completed plan"
-          onPress={() => navigation.goBack()}
+          // onPress={() => navigation.goBack()}
         />
       ) : (
         <FlatList

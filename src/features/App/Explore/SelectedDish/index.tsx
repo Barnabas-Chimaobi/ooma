@@ -60,6 +60,7 @@ import {colors} from '../../../../colors';
 import {StyleFoot} from '../../../../navigation/styles';
 import Footer from '../../../../navigation/footer';
 import {cartStates} from '../../../../reducers/cart';
+import Toast from 'react-native-toast-message';
 
 type ExploreNavigationProps = StackScreenProps<MainStackParamList, 'Explore'>;
 
@@ -224,6 +225,9 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   };
 
   useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      getItemDetail();
+    });
     userId();
     const handleData = async () => {
       const regionName = await AsyncStorage.getItem('regionName');
@@ -636,6 +640,9 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     }
   };
 
+  const editProfile = () => {
+    navigation.navigate('Profile'), setOpenModal(false);
+  };
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -649,7 +656,9 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           </View>
         </ImageBackground>
         <View style={S.sdContainer}>
-          <Text>{menuItem?.itemName}</Text>
+          <Text style={{fontSize: 16, fontWeight: 'bold', maxWidth: '70%'}}>
+            {menuItem?.itemName}
+          </Text>
           <PriceTag
             price={parseInt(Number(prices)) + parseInt(Number(deliveryCharges))}
           />
@@ -673,6 +682,8 @@ const CardItem: FC<IProps> = ({route, menu}) => {
             />
             {/* <Text style={S.sdDelivery}>Delivery fee applies</Text> */}
           </View>
+          <View style={{borderWidth: 1.5, borderColor: colors.t}} />
+
           <OmaCard
             title="Description"
             titleStyle={S.cdDescription}
@@ -680,13 +691,16 @@ const CardItem: FC<IProps> = ({route, menu}) => {
             subStyle={{paddingBottom: 13}}
             mainStyle={{paddingHorizontal: 12}}
           />
-          <Divider />
+          {/* <Divider /> */}
+          {/* <View style={{borderWidth: 1, borderColor: colors.t}} /> */}
+
           {/* <CollapsibleView
           itemPreferences={menuItem?.menuItemPreferences}
           addOns={menuItem?.addons}
           title="Add-Ons"
         /> */}
-          <Divider />
+          {/* <Divider /> */}
+          <View style={{borderWidth: 1.5, borderColor: colors.t}} />
 
           <View style={{paddingHorizontal: 12, width: '100%'}}>
             <Button
@@ -735,6 +749,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
               </>
             </Collapsible>
           </View>
+          <View style={{borderWidth: 1.5, borderColor: colors.t}} />
 
           {menuItem?.menuItemPreferences?.length !== 0 && (
             <View style={{paddingHorizontal: 12, width: '100%'}}>
@@ -801,16 +816,19 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           title="Preference"
         /> */}
 
-          <Divider />
+          {/* <Divider /> */}
+          <View style={{borderWidth: 1.5, borderColor: colors.t}} />
           <Adjust
             props1={(item: any) => getQuantity(item)}
             mainStyle={{paddingVertical: 20}}
             title="Adjust Quantity"
           />
           <Divider />
+          <View style={{borderWidth: 1.5, borderColor: colors.t}} />
+
           <OmaCard
             title="Special Instructions"
-            titleStyle={{fontSize: 15}}
+            titleStyle={{fontSize: 15, fontFamily: 'Montserrat'}}
             mainStyle={{paddingHorizontal: 12}}
             otherProps={
               <BaseInput
@@ -821,8 +839,9 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                 inputStyle={{textAlignVertical: 'top'}}
                 style={{
                   borderRadius: 4,
-                  borderColor: 'rgba(48, 48, 48, 0.85)',
-                  borderWidth: 1,
+                  borderColor: colors.greyShade,
+                  borderWidth: 1.5,
+                  top: 15,
                 }}
               />
             }
@@ -1003,6 +1022,9 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                             marginRight: 5,
                           }}>
                           <TextInput
+                            onFocus={() =>
+                              myAddress === null ? editProfile() : null
+                            }
                             value={myAddress}
                             style={{
                               backgroundColor: 'rgba(246, 246, 246, 0.7)',

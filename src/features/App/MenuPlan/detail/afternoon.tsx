@@ -116,7 +116,7 @@ const Afternoon = (afternoon: any, planIds: any, times: any) => {
             style={{height: 80, width: 80, marginTop: -120}}
             // image={require('../../../../assets/Images/emptyCart.png')}
             // title="FIND PLAN"
-            message="Getting the meal ready in a moment.."
+            message="Getting available meals.."
             onPress={() => navigation.goBack()}
           />
         </View>

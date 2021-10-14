@@ -6,9 +6,17 @@ import {
   StyleSheet,
   TouchableHighlight,
   BackHandler,
+  ImageBackground,
 } from 'react-native';
 import {color, colors} from '../../../colors';
-import {paystack, flutter, forward, arrow} from '../../../assets';
+import {
+  paystack,
+  flutter,
+  forward,
+  arrow,
+  instantSuccess,
+  mealSuccess,
+} from '../../../assets';
 import {PayWithFlutterwave} from 'flutterwave-react-native';
 // import Paystack from 'react-native-paystack-webview';
 import {Paystack, paystackProps} from 'react-native-paystack-webview';
@@ -40,8 +48,10 @@ export class State extends Component {
       order: this.props.route.params?.orderId,
       paymentMethod: this.props.route.params?.paymentMethod,
       modalVisible: false,
+      success: false,
     };
     this.paystackWebViewRef = React.createRef(null);
+    this.backAction = this.backAction.bind(this);
   }
   genrateRef = async (method, openStack) => {
     // const {amount, branchId, orderId, paymentMethod} = this.props.route.params;
@@ -75,8 +85,11 @@ export class State extends Component {
   verifyRef = async () => {
     const verify = await verifyPayment(this.state.refdata);
     if (verify?.data.status === 'success') {
-      ShowMessage(type.DONE, 'Order Placed Successfully');
-      this.props.navigation.navigate('Home');
+      this.setState({
+        success: true,
+      });
+      // ShowMessage(type.DONE, 'Order Placed Successfully');
+      // this.props.navigation.navigate('Home');
     } else {
       ShowMessage(type.ERROR, 'Failed Transaction. please retry');
     }
@@ -84,7 +97,7 @@ export class State extends Component {
   };
 
   componentDidMount() {
-    // BackHandler.addEventListener('hardwareBackPress', this.backAction());
+    BackHandler.addEventListener('hardwareBackPress', this.backAction);
     console.log(this.props.route.params, 'params=========');
   }
 
@@ -94,17 +107,42 @@ export class State extends Component {
     });
   };
 
-  // backAction = async () => {
-  //   this.navigation.navigate('Home');
-  //   // setLoading(true);
-  //   this.setState({
-  //     modalVisible: true,
-  //   });
+  backAction = async () => {
+    // setLoading(true);
+    this.setState({
+      modalVisible: true,
+    });
+  };
 
-  // };
+  backToHome = () => {
+    this.props.navigation.navigate('Home');
+  };
 
   render() {
-    return (
+    return this.state.success ? (
+      <ImageBackground
+        style={{width: '100%', height: '100%'}}
+        source={mealSuccess}>
+        <View
+          style={{
+            // backgroundColor: colors.white,
+            top: '92%',
+            height: 40,
+            width: '40%',
+            alignSelf: 'center',
+            zIndex: 5,
+          }}>
+          <TouchableHighlight
+            underlayColor=""
+            onPress={() => {
+              this.setState({success: false}),
+                this.props.navigation.navigate('Home');
+            }}>
+            <Text></Text>
+          </TouchableHighlight>
+        </View>
+      </ImageBackground>
+    ) : (
       <View style={styles.mainContainer}>
         <TouchableHighlight
           onPress={() => this.props.navigation.goBack()}
@@ -156,10 +194,10 @@ export class State extends Component {
 
         <Modal
           style={{
-            maxHeight: '30%',
+            maxHeight: '25%',
             width: '80%',
             alignSelf: 'center',
-            backgroundColor: colors.logout,
+            backgroundColor: colors.white,
             borderRadius: 12,
             marginTop: '50%',
           }}
@@ -169,28 +207,31 @@ export class State extends Component {
             <Text
               style={{
                 alignSelf: 'center',
-                color: colors.white,
+                color: colors.black,
                 marginTop: 15,
-                fontFamily: 'Poppins-SemiBold',
+                fontFamily: 'Montserrat',
+                fontWeight: 'bold',
               }}>
               Cancel Order
             </Text>
             <Text
               style={{
                 alignSelf: 'center',
-                color: colors.white,
-                fontFamily: 'Poppins-SemiBold',
+                color: colors.black,
+                fontFamily: 'Montserrat',
                 fontSize: 11,
                 marginTop: 30,
+                fontWeight: '900',
               }}>
               Are you sure you want to cancel this order?
             </Text>
             <Text
               style={{
                 alignSelf: 'center',
-                color: colors.white,
-                fontFamily: 'Poppins-SemiBold',
+                color: colors.black,
+                fontFamily: 'Montserrat',
                 fontSize: 11,
+                fontWeight: '900',
               }}>
               Note that this action cannot be reversed
             </Text>
@@ -198,35 +239,39 @@ export class State extends Component {
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
+                width: '60%',
+                alignSelf: 'flex-end',
               }}>
               <TouchableHighlight
+                underlayColor=""
                 style={{width: '15%', marginTop: 35, marginLeft: 35}}
                 onPress={() => this.toggleModal()}>
                 <Text
                   style={{
-                    color: colors.white,
-                    borderBottomWidth: 1,
-                    borderBottomColor: colors.white,
+                    color: colors.black,
+                    // borderBottomWidth: 1,
+                    // borderBottomColor: colors.black,
                     fontFamily: 'Poppins-SemiBold',
                   }}>
                   No
                 </Text>
               </TouchableHighlight>
               <TouchableHighlight
+                underlayColor=""
                 style={{width: '20%', marginTop: 35, marginRight: 35}}
                 onPress={() => {
-                  this.backAction();
+                  this.backToHome();
                 }}>
                 <View
                   style={{
-                    backgroundColor: colors.activeTintColor,
+                    // backgroundColor: colors.activeTintColor,
                     borderRadius: 5,
-                    padding: 3,
+                    // padding: 3,
                     flexDirection: 'row',
                   }}>
                   <Text
                     style={{
-                      color: colors.white,
+                      color: colors.black,
                       paddingLeft: 3,
                       paddingRight: 3,
                       fontFamily: 'Poppins-SemiBold',

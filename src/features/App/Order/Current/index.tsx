@@ -52,7 +52,7 @@ const RenderItems = ({item}: any) => {
                   )} */}
 
                     <Total
-                      total={Number(item?.itemData?.menuitemorders?.total)}
+                      orderTotal={Number(item?.itemData?.menuitemorders?.total)}
                       totalTitle="PRICE"
                       mainStyle={S.totalStyle}
                     />

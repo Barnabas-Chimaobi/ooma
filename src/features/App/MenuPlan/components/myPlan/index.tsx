@@ -291,7 +291,11 @@ export const MyPlans = ({findPlan}: Props) => {
         }
         style={styles.innerListItemStyle}>
         <Image
-          style={{height: 100, width: 100, borderRadius: 10}}
+          style={{
+            height: Dimensions.get('window').height / 6.8,
+            width: Dimensions.get('window').width / 3.4,
+            borderRadius: 10,
+          }}
           source={{uri: imageUrl}}
         />
         <View style={styles.itemTextArea}>
@@ -307,7 +311,7 @@ export const MyPlans = ({findPlan}: Props) => {
           </View>
           <View>
             <Text style={styles.statusStyle}>{status}</Text>
-            <ProgressBar progressValue={pecentage} />
+            {/* <ProgressBar progressValue={pecentage} /> */}
           </View>
         </View>
       </TouchableWithoutFeedback>

@@ -22,6 +22,8 @@ import {
   basketStates,
   planSlice,
   itemOrderSlice,
+  findPlanSlice,
+  getFindPlan,
 } from './reducers';
 import thunkMiddleware from 'redux-thunk';
 
@@ -48,6 +50,7 @@ export const store = configureStore({
     basketState: basketSlice,
     planState: planSlice,
     itemOrderState: itemOrderSlice,
+    findPlanState: findPlanSlice,
   },
   middleware: [
     ...getDefaultMiddleware({serializableCheck: false, immutableCheck: false}),

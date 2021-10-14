@@ -2,7 +2,7 @@ import React, {useState, FC} from 'react';
 import {View, FlatList, ActivityIndicator, RefreshControl} from 'react-native';
 import Card from '../menuCards/card';
 import {cardDetails} from '../menuCards/cardInfo';
-
+import {EmptyList} from '../../../../../components';
 interface AllFamilyMenuPlanProps {
   allFamilyMenuPlans?: [];
 }
@@ -17,7 +17,7 @@ const AllFamilyMenu: FC<AllFamilyMenuPlanProps> = ({allFamilyMenuPlans}) => {
     //Call the Service to get the latest data, thats the api call method
   };
   return (
-    <View style={{marginBottom: 250}}>
+    <View style={{paddingBottom: 250, flex: 1}}>
       {refreshing ? <ActivityIndicator /> : null}
       <FlatList
         data={allFamilyMenuPlans}
@@ -38,6 +38,16 @@ const AllFamilyMenu: FC<AllFamilyMenuPlanProps> = ({allFamilyMenuPlans}) => {
             refreshing={refreshing}
             onRefresh={onRefresh}
           />
+        }
+        ListEmptyComponent={
+          <View style={{marginTop: '-10%', flex: 1}}>
+            <EmptyList
+              image={require('../../../../../assets/Images/emptyCart.png')}
+              // title="FIND MEAL"
+              message="Oops! No meal plan for this category"
+              // onPress={() => navigation.goBack()}
+            />
+          </View>
         }
         // keyExtractor={item => item.id}
       />

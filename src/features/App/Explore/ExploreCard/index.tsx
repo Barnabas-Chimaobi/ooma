@@ -38,6 +38,7 @@ const Card: FC<IProps> = ({title, categories, compType, titleStyle}) => {
                 flexDirection: 'row',
                 alignContent: 'center',
                 justifyContent: 'center',
+                backgroundColor: colors.white,
                 // marginLeft: '1%',
               }}>
               {categories &&
@@ -54,7 +55,7 @@ const Card: FC<IProps> = ({title, categories, compType, titleStyle}) => {
           </ScrollView>
         </View>
       ) : title === 'Top Meal Plans' ? (
-        <View>
+        <View style={{backgroundColor: colors.white}}>
           <Text style={[S.title, titleStyle]}>{title}</Text>
           <View
             style={{
@@ -86,6 +87,8 @@ const Card: FC<IProps> = ({title, categories, compType, titleStyle}) => {
                 flexDirection: 'column',
                 alignContent: 'center',
                 justifyContent: 'center',
+                backgroundColor: colors.white,
+
                 // marginLeft: '1%',
               }}>
               {categories &&
@@ -126,31 +129,39 @@ export const ItemCard: FC<IProps> = ({categoryItems, compType}) => {
               categoryId: categoryItems?.id,
             });
       }}>
-      <ImageBackground source={{uri: image_Url}} style={S.imageBackground}>
-        {/* <View style={S.imageMaskBackground}> */}
-        <LinearGradient
-          colors={[
-            'rgba(100, 100, 100, 0.4) 100%',
-            'rgba(100, 100, 100, 0.4)',
-            'rgba(100, 100, 100, 0.4) 46.88%',
-          ]}
-          style={{height: '100%'}}>
-          <Text
-            style={{
-              color: colors.white,
-              flexWrap: 'wrap',
-              fontWeight: 'bold',
-              alignSelf: 'center',
-              fontSize: 16,
-              textTransform: 'capitalize',
-              marginTop: '95%',
-            }}>
-            {categoryItems?.name}
-          </Text>
-        </LinearGradient>
+      <View
+        style={{
+          backgroundColor: colors.white,
+          margin: 5,
+          borderRadius: 10,
+          elevation: 10,
+        }}>
+        <ImageBackground source={{uri: image_Url}} style={S.imageBackground}>
+          {/* <View style={S.imageMaskBackground}> */}
+          <LinearGradient
+            colors={[
+              'rgba(100, 100, 100, 0.4) 100%',
+              'rgba(100, 100, 100, 0.4)',
+              'rgba(100, 100, 100, 0.4) 46.88%',
+            ]}
+            style={{height: '100%'}}>
+            <Text
+              style={{
+                color: colors.white,
+                flexWrap: 'wrap',
+                fontWeight: 'bold',
+                alignSelf: 'center',
+                fontSize: 16,
+                textTransform: 'capitalize',
+                marginTop: '95%',
+              }}>
+              {categoryItems?.name}
+            </Text>
+          </LinearGradient>
 
-        {/* </View> */}
-      </ImageBackground>
+          {/* </View> */}
+        </ImageBackground>
+      </View>
     </TouchableOpacity>
   );
 };
@@ -174,30 +185,38 @@ export const ItemCard1: FC<IProps> = ({categoryItems, compType}) => {
               categoryId: categoryItems?.id,
             });
       }}>
-      <ImageBackground source={{uri: image_Url}} style={S.imageBackground}>
-        {/* <View style={S.imageMaskBackground}> */}
-        <LinearGradient
-          colors={[
-            'rgba(100, 100, 100, 0.4) 100%',
-            'rgba(100, 100, 100, 0.4)',
-            'rgba(100, 100, 100, 0.4) 46.88%',
-          ]}
-          style={{height: '100%'}}>
-          <Text
-            style={{
-              color: colors.white,
-              flexWrap: 'wrap',
-              fontWeight: 'bold',
-              alignSelf: 'center',
-              fontSize: 16,
-              textTransform: 'capitalize',
-              marginTop: '95%',
-            }}>
-            {categoryItems?.name}
-          </Text>
-        </LinearGradient>
-        {/* </View> */}
-      </ImageBackground>
+      <View
+        style={{
+          backgroundColor: colors.white,
+          margin: 5,
+          borderRadius: 10,
+          elevation: 5,
+        }}>
+        <ImageBackground source={{uri: image_Url}} style={S.imageBackground}>
+          {/* <View style={S.imageMaskBackground}> */}
+          <LinearGradient
+            colors={[
+              'rgba(100, 100, 100, 0.4) 100%',
+              'rgba(100, 100, 100, 0.4)',
+              'rgba(100, 100, 100, 0.4) 46.88%',
+            ]}
+            style={{height: '100%'}}>
+            <Text
+              style={{
+                color: colors.white,
+                flexWrap: 'wrap',
+                fontWeight: 'bold',
+                alignSelf: 'center',
+                fontSize: 16,
+                textTransform: 'capitalize',
+                marginTop: '95%',
+              }}>
+              {categoryItems?.name}
+            </Text>
+          </LinearGradient>
+          {/* </View> */}
+        </ImageBackground>
+      </View>
     </TouchableOpacity>
   );
 };
@@ -221,30 +240,38 @@ export const ItemCard2: FC<IProps> = ({categoryItems, compType}) => {
               categoryId: categoryItems?.id,
             });
       }}>
-      <ImageBackground source={{uri: image_Url}} style={S.imageBackground1}>
-        {/* <View style={S.imageMaskBackground}> */}
-        <LinearGradient
-          colors={[
-            'rgba(100, 100, 100, 0.4) 100%',
-            'rgba(100, 100, 100, 0.4)',
-            'rgba(100, 100, 100, 0.4) 46.88%',
-          ]}
-          style={{height: '100%'}}>
-          <Text
-            style={{
-              color: colors.white,
-              flexWrap: 'wrap',
-              fontWeight: 'bold',
-              alignSelf: 'center',
-              fontSize: 16,
-              textTransform: 'capitalize',
-              marginTop: '30%',
-            }}>
-            {categoryItems?.name}
-          </Text>
-        </LinearGradient>
-        {/* </View> */}
-      </ImageBackground>
+      <View
+        style={{
+          backgroundColor: colors.white,
+          marginBottom: 5,
+          borderRadius: 10,
+          elevation: 5,
+        }}>
+        <ImageBackground source={{uri: image_Url}} style={S.imageBackground1}>
+          {/* <View style={S.imageMaskBackground}> */}
+          <LinearGradient
+            colors={[
+              'rgba(100, 100, 100, 0.4) 100%',
+              'rgba(100, 100, 100, 0.4)',
+              'rgba(100, 100, 100, 0.4) 46.88%',
+            ]}
+            style={{height: '100%'}}>
+            <Text
+              style={{
+                color: colors.white,
+                flexWrap: 'wrap',
+                fontWeight: 'bold',
+                alignSelf: 'center',
+                fontSize: 16,
+                textTransform: 'capitalize',
+                marginTop: '30%',
+              }}>
+              {categoryItems?.name}
+            </Text>
+          </LinearGradient>
+          {/* </View> */}
+        </ImageBackground>
+      </View>
     </TouchableOpacity>
   );
 };

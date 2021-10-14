@@ -7,6 +7,7 @@ import {
   Image,
   TouchableHighlight,
   ActivityIndicator,
+  ImageBackground,
 } from 'react-native';
 import {
   HeaderBar,
@@ -42,6 +43,9 @@ import index from '../Settings/Profile/second';
 import {cartStates} from '../../../reducers/cart';
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState, AppDispatch} from '../../../store';
+import {instantSuccess, mealSuccess} from '../../../assets';
+import {colors} from '../../../colors';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 const Checkout = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -72,6 +76,7 @@ const Checkout = () => {
   const [branch, setBranch] = useState('');
   const [payState, setPayState] = useState('');
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const carts = async () => {
     const branch = await AsyncStorage.getItem('branchId');
@@ -179,7 +184,7 @@ const Checkout = () => {
 
   const orderNow = async () => {
     setLoading(true);
-    console.log(myAddress, addressId, '===idddddddd');
+    console.log(body, '===idddddddd');
     if (deliveryOption === 'Delivery' && !addressId) {
       ShowMessage(
         type.INFO,
@@ -203,9 +208,9 @@ const Checkout = () => {
       carts();
       // console.log(cart, 'cartttttt=====');
       if (cart?.statusCode === 201) {
-        if (payState !== 'CARD') {
-          ShowMessage(type.DONE, 'Order Placed successfully'); // dispatch(cartStates(addedCart));
-        }
+        // if (payState !== 'CARD') {
+        //   ShowMessage(type.DONE, 'Order Placed successfully'); // dispatch(cartStates(addedCart));
+        // }
         setLoading(false);
         if (payState === 'CARD') {
           navigation.navigate('Payment', {
@@ -216,7 +221,8 @@ const Checkout = () => {
           });
         } else {
           setLoading(false);
-          navigation.navigate('Home');
+          setSuccess(true);
+          // navigation.navigate('Home');
         }
       } else {
         setLoading(false);
@@ -248,9 +254,9 @@ const Checkout = () => {
     } else {
       if (cart?.statusCode === 201) {
         setLoading(false);
-        if (payState !== 'CARD') {
-          ShowMessage(type.DONE, 'Order Placed successfully'); // dispatch(cartStates(addedCart));
-        }
+        // if (payState !== 'CARD') {
+        //   ShowMessage(type.DONE, 'Order Placed successfully'); // dispatch(cartStates(addedCart));
+        // }
         if (payState === 'CARD') {
           navigation.navigate('Payment', {
             amount: totalAmount,
@@ -260,7 +266,8 @@ const Checkout = () => {
           });
         } else {
           setLoading(false);
-          navigation.navigate('Home');
+          setSuccess(true);
+          // navigation.navigate('Home');
         }
       } else {
         setLoading(false);
@@ -348,8 +355,34 @@ const Checkout = () => {
       setChecks1(false);
     }
   };
-  return (
-    <View style={{flex: 1}}>
+  const editProfile = () => {
+    navigation.navigate('Profile');
+  };
+
+  return success ? (
+    <ImageBackground
+      style={{width: '100%', height: '100%'}}
+      source={instantSuccess}>
+      <View
+        style={{
+          // backgroundColor: colors.white,
+          top: '92%',
+          height: 40,
+          width: '40%',
+          alignSelf: 'center',
+          zIndex: 1,
+        }}>
+        <TouchableHighlight
+          underlayColor=""
+          onPress={() => {
+            setSuccess(false), navigation.navigate('Home');
+          }}>
+          <Text></Text>
+        </TouchableHighlight>
+      </View>
+    </ImageBackground>
+  ) : (
+    <View style={{flex: 1, backgroundColor: colors.white}}>
       <ScrollView style={S.main}>
         {!params?.planOrder && (
           <View style={S.header}>
@@ -468,6 +501,7 @@ const Checkout = () => {
                   marginRight: 5,
                 }}>
                 <TextInput
+                  onFocus={() => (myAddress === null ? editProfile() : null)}
                   value={myAddress}
                   style={{
                     backgroundColor: '#fff',
@@ -541,63 +575,28 @@ const Checkout = () => {
           )}
 
           {!params?.planOrder && (
-            <RadioSelect
-              amount={
-                parseInt(deliveryCharges) +
-                parseInt(
-                  params?.subTotal || params?.amount || params?.params?.amount,
-                )
-              }
-              orderId={cartId}
-              branchId={branch}
-              title="Payment Method"
-              title1="CARD"
-              title2="CASH"
-              type="Payment Method"
-              props={(item: any) => radio2(item)}
-            />
+            <View>
+              <View style={{borderWidth: 1.5, borderColor: colors.t}} />
+              <RadioSelect
+                amount={
+                  parseInt(deliveryCharges) +
+                  parseInt(
+                    params?.subTotal ||
+                      params?.amount ||
+                      params?.params?.amount,
+                  )
+                }
+                orderId={cartId}
+                branchId={branch}
+                title="Payment Method"
+                title1="CARD"
+                title2="CASH"
+                type="Payment Method"
+                props={(item: any) => radio2(item)}
+              />
+            </View>
           )}
         </View>
-
-        {/* <View style={{backgroundColor: '#FFFFFF', marginTop: 10}}>
-        <RadioSelect
-          title="Order Channel"
-          title1="POS"
-          title2="MOBILE"
-          type="Order Channel"
-          props={(item: any) => radio3(item)}
-        />
-      </View> */}
-
-        {/* {!params?.planOrder && (
-        <View
-          style={{
-            // flexDirection: 'row',
-            marginVertical: 10,
-            // justifyContent: 'space-between',
-            // marginRight: 15,
-            backgroundColor: '#FFFFFF',
-            marginTop: 10,
-          }}>
-          <Text style={{marginLeft: 15, fontWeight: 'bold', fontSize: 17}}>
-            Order Name
-          </Text>
-          <TextInput
-            style={{
-              backgroundColor: 'rgba(196, 196, 196, 0.15);',
-              width: '90%',
-              alignSelf: 'center',
-              marginTop: 20,
-              borderRadius: 15,
-              padding: 5,
-              marginBottom: 10,
-            }}
-            value={orderName}
-            placeholder="Give your order a name"
-            onChangeText={(text) => setOrderName(text)}
-          />
-        </View>
-      )} */}
 
         {!params?.planOrder ? (
           <View
@@ -606,6 +605,7 @@ const Checkout = () => {
               marginTop: 10,
               marginBottom: 10,
             }}>
+            <View style={{borderWidth: 1.5, borderColor: colors.t}} />
             <TouchableHighlight>
               <View
                 style={{
@@ -640,6 +640,7 @@ const Checkout = () => {
                 />
               </View>
             </TouchableHighlight>
+
             {switchs == true ? (
               <View style={{backgroundColor: 'white', marginBottom: 20}}>
                 <TextInput
@@ -675,28 +676,26 @@ const Checkout = () => {
           </View>
         ) : null}
 
-        <Total
-          checkout={'checkout'}
-          subTotal={Number(
-            params?.subTotal || params?.amount || params?.params?.amount,
-          )}
-          deliveryCharges={
-            !params?.planOrder ? Number(deliveryCharges) : undefined
-          }
-          total={Number(
-            parseInt(deliveryCharges) +
-              parseInt(
-                params?.subTotal || params?.amount || params?.params?.amount,
-              ),
-          )}
-          mainStyle={S.totalStyle}
-        />
-        {/* <ModalMessage
-        route="Wallet"
-        message="Oops! You do not have sufficient funds for this transaction."
-        openButtonTitle="ORDER NOW"
-        closeButtonTitle="Fund Wallet"
-      /> */}
+        <View style={{}}>
+          <View style={{borderWidth: 1.5, borderColor: colors.t}} />
+
+          <Total
+            checkout={'checkout'}
+            subTotal={Number(
+              params?.subTotal || params?.amount || params?.params?.amount,
+            )}
+            deliveryCharges={
+              !params?.planOrder ? Number(deliveryCharges) : undefined
+            }
+            total={Number(
+              parseInt(deliveryCharges) +
+                parseInt(
+                  params?.subTotal || params?.amount || params?.params?.amount,
+                ),
+            )}
+            mainStyle={S.totalStyle}
+          />
+        </View>
       </ScrollView>
       {params?.planOrder ? (
         <View style={S.footerStyle}>

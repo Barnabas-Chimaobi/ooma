@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Image, Text, View, FlatList} from 'react-native';
+import {Image, Text, View, FlatList, Dimensions} from 'react-native';
 import {
   TouchableHighlight,
   TouchableOpacity,
@@ -10,6 +10,7 @@ import {useNavigation} from '@react-navigation/native';
 import PriceTag from '../../../../components/PriceTag/index';
 import shortid from 'shortid';
 import InnerList from './veryInnerList';
+import {colors} from '../../../../colors';
 
 interface ListDataProps {
   styles: any;
@@ -119,7 +120,11 @@ export const List = ({
             onPress={toggleView}>
             <View style={styles.itemStyle}>
               <Image
-                style={{height: 105, width: 105, borderRadius: 10}}
+                style={{
+                  height: Dimensions.get('window').height / 6.8,
+                  width: Dimensions.get('window').width / 3.8,
+                  borderRadius: 10,
+                }}
                 source={{
                   uri:
                     item?.itemData?.MenuPlan?.MenuplanDetail?.MenuItem
@@ -194,7 +199,8 @@ export const List = ({
   let basket = 'basket';
   return (
     <View>
-      <View style={{borderBottomWidth: 1}}>
+      <View
+        style={{borderBottomWidth: 1, borderColor: colors.inactiveTintColor}}>
         <Text style={{fontSize: 15, marginBottom: 5}}>
           {new Date(date).toString().substring(0, 15)}
         </Text>

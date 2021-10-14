@@ -171,6 +171,7 @@ const Filter = () => {
           parameters1={(item: any) => pricing1(item)}
           parameters2={(item: any, item1: any) => loading(item, item1)}
         />
+
         <Divider />
         <Radio
           title="Combination"

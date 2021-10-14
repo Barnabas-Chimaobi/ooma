@@ -43,13 +43,13 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     marginHorizontal: 15,
     marginTop: 5,
-    backgroundColor: '#fff',
+    backgroundColor: '#F6F6F6',
     borderRadius: 5,
     // height: 120,
     borderColor: '#F6F6F6',
     // borderWidth: 1,
     paddingTop: 10,
-    elevation: 5,
+    elevation: 10,
     marginBottom: 5
     
     // paddingBottom: 15
@@ -64,7 +64,7 @@ export default StyleSheet.create({
 
   },
   categorySubtitle: {
-    fontFamily: 'Roboto',
+    fontFamily: 'Montserrat',
     fontSize: 12,
     top: 7,
     marginBottom: 7,

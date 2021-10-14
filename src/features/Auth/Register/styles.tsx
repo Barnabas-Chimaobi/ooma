@@ -3,13 +3,14 @@ import {colors} from '../../../colors';
 
 export default StyleSheet.create({
   omaTitle: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
     margin: 10,
+    fontFamily: 'Montserrat',
   },
   omaSubTitle: {
     fontSize: 12,
-    fontFamily: 'openSans',
+    fontFamily: 'Montserrat',
     margin: 10,
   },
   omaMainStyle: {
@@ -61,6 +62,7 @@ export default StyleSheet.create({
   overStyle: {
     fontSize: 12,
     margin: 10,
+    fontFamily: 'Montserrat',
   },
   backButtonStyle: {
     backgroundColor: 'transparent',

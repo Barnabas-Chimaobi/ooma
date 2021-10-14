@@ -15,6 +15,8 @@ interface IProps {
   randomTitleStyle?: object;
   value: any;
   checkout: any;
+  orderTotal: any;
+  orderefId: any;
 }
 
 const Total = ({
@@ -29,6 +31,8 @@ const Total = ({
   randomTitleStyle,
   value,
   checkout,
+  orderTotal,
+  orderefId,
 }: IProps) => {
   console.log(total, typeof total, '=======listssss===ssss==');
   return (
@@ -36,7 +40,9 @@ const Total = ({
       {randomTitle && (
         <View style={S.bodyStyle}>
           <Text style={[S.textStyle, randomTitleStyle]}>{randomTitle}</Text>
-          <Text style={[S.textStyle, randomStyle]}>{randomValue}</Text>
+          <View style={{marginLeft: orderefId ? 20 : '45%'}}>
+            <Text style={[S.textStyle, randomStyle]}>{randomValue}</Text>
+          </View>
           <Text></Text>
         </View>
       )}
@@ -65,6 +71,22 @@ const Total = ({
           <View style={{marginLeft: '35%'}}>
             <Text style={totalTitle ? {} : S.textStyle2}>
               {`\u20A6${currencyFormat(total)}`}
+            </Text>
+          </View>
+        </View>
+      )}
+
+      {orderTotal !== undefined && typeof orderTotal === 'number' && (
+        <View
+          style={
+            checkout === 'checkout' ? S.bodyStyleAmout1 : S.bodyStyleAmout
+          }>
+          <Text style={totalTitle ? {} : S.textStyle1}>
+            {totalTitle || `Total`}
+          </Text>
+          <View style={{}}>
+            <Text style={totalTitle ? {} : S.textStyle2}>
+              {`\u20A6${currencyFormat(orderTotal)}`}
             </Text>
           </View>
         </View>

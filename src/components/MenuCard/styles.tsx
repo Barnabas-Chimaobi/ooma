@@ -40,13 +40,15 @@ export default StyleSheet.create({
   },
   labelMain: {
     height: 30,
-    // width: '40%',
+    minWidth: '20%',
     borderBottomRightRadius: 8,
     borderTopRightRadius: 8,
     backgroundColor: '#05944F',
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
+    paddingRight: 20,
+    paddingLeft: 5,
   },
   labelText: {
     color: 'white',

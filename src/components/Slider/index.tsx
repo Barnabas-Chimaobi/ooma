@@ -102,58 +102,64 @@ const SliderBar = ({
     <View style={S.mainStyle}>
       {title && <Text style={S.titleStyle}>{title}</Text>}
 
-      <Text style={{fontSize: 10, bottom: 3}}>Minimum</Text>
-      <Slider
-        style={S.sliderStyle}
-        step={100}
-        minimumValue={minimumValue}
-        maximumValue={maximumValue}
-        value={state.value2}
-        maximumTrackTintColor={colors.greyShade}
-        minimumTrackTintColor={colors.primary}
-        onValueChange={(value2: any) => {
-          pricing(value2);
-          setMinprice(value2);
-          setState({...state, value2});
-          // setState({...state, value2});
-          // !type
-          //   ? dispatch(useMinPricing(`${value2}`)) &&
-          //     setState({...state, value2})
-          //   : setState({...state, value2});
-        }}
-      />
-      <Text style={[S.textStyle, {left: left2}]}>
-        {state.value2 == maximumValue
-          ? `Above \u20A6${currencyFormat(state.value2)}`
-          : `\u20A6${currencyFormat(state.value2)}`}
-      </Text>
+      <View style={{marginLeft: 15}}>
+        <Text style={{fontSize: 10, bottom: 3}}>Minimum</Text>
+        <Slider
+          style={S.sliderStyle}
+          step={100}
+          minimumValue={minimumValue}
+          maximumValue={maximumValue}
+          value={state.value2}
+          maximumTrackTintColor={colors.greyShade}
+          minimumTrackTintColor={colors.primary}
+          onValueChange={(value2: any) => {
+            pricing(value2);
+            setMinprice(value2);
+            setState({...state, value2});
+            // setState({...state, value2});
+            // !type
+            //   ? dispatch(useMinPricing(`${value2}`)) &&
+            //     setState({...state, value2})
+            //   : setState({...state, value2});
+          }}
+        />
 
-      <Text style={{fontSize: 10, left: 260}}>Maximum</Text>
-      <Slider
-        style={S.sliderStyle}
-        step={100}
-        minimumValue={minimumValue}
-        maximumValue={maximumValue}
-        value={state.value1}
-        maximumTrackTintColor={colors.greyShade}
-        minimumTrackTintColor={colors.primary}
-        onValueChange={(value1: any) => {
-          // console.log(value1, 'valuee');
-          setMaxprice(value1);
-          pricing1(value1);
-          setState({...state, value1});
-          // !type
-          //   ? // ? dispatch(useMaxPricing(`${value1}`)) &&
-          //     dispatch(useMaxPricing(`${value1}`)) &&
-          //     setState({...state, value1})
-          //   : setState({...state, value1});
-        }}
-      />
-      <Text style={[S.textStyle, {left: left1}]}>
-        {state.value1 == maximumValue
-          ? `Above \u20A6${currencyFormat(state.value1)}`
-          : `\u20A6${currencyFormat(state.value1)}`}
-      </Text>
+        <Text style={[S.textStyle, {left: left2}]}>
+          {state.value2 == maximumValue
+            ? `Above \u20A6${currencyFormat(state.value2)}`
+            : `\u20A6${currencyFormat(state.value2)}`}
+        </Text>
+      </View>
+
+      <View style={{marginLeft: 15}}>
+        <Text style={{fontSize: 10, left: 260}}>Maximum</Text>
+        <Slider
+          style={S.sliderStyle}
+          step={100}
+          minimumValue={minimumValue}
+          maximumValue={maximumValue}
+          value={state.value1}
+          maximumTrackTintColor={colors.greyShade}
+          minimumTrackTintColor={colors.primary}
+          onValueChange={(value1: any) => {
+            // console.log(value1, 'valuee');
+            setMaxprice(value1);
+            pricing1(value1);
+            setState({...state, value1});
+            // !type
+            //   ? // ? dispatch(useMaxPricing(`${value1}`)) &&
+            //     dispatch(useMaxPricing(`${value1}`)) &&
+            //     setState({...state, value1})
+            //   : setState({...state, value1});
+          }}
+        />
+        <Text style={[S.textStyle, {left: left1}]}>
+          {state.value1 == maximumValue
+            ? `Above \u20A6${currencyFormat(state.value1)}`
+            : `\u20A6${currencyFormat(state.value1)}`}
+        </Text>
+      </View>
+
       {type && (
         <Button
           title="APPLY"

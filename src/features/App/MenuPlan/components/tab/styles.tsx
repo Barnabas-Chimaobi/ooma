@@ -76,10 +76,9 @@ export const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   noData: {
-    justifyContent: 'center',
     width: '100%',
     alignItems: 'center',
-    flexDirection: 'column',
+    flex: 1,
   },
   headerText: {
     color: 'black',

@@ -47,12 +47,12 @@ const items: itemProp[] = [
     borderBottom: false,
     routeTo: 'Explore',
   },
-  // {
-  //   name: 'Favourites',
-  //   icon: <FontAwesome name="heart-o" size={18} />,
-  //   borderBottom: true,
-  //   routeTo: 'Order',
-  // },
+  {
+    name: 'Profile',
+    icon: <FontAwesome name="user" size={18} />,
+    borderBottom: true,
+    routeTo: 'Profile',
+  },
   // {
   //   name: 'Promotions/rewards',
   //   icon: <Octicons name="tag" size={18} />,
@@ -167,6 +167,10 @@ const More: React.FC<Props> = ({navigation}) => {
         navigation.navigate('RateUs');
         break;
 
+      case 'Profile':
+        navigation.navigate('Profile');
+        break;
+
       case 'Help':
         navigation.navigate('Help', {screen: 'Help'});
         break;
@@ -208,17 +212,19 @@ const More: React.FC<Props> = ({navigation}) => {
 
           <Modal
             style={{
-              maxHeight: '30%',
+              maxHeight: '20%',
               width: '80%',
               alignSelf: 'center',
-              backgroundColor: colors.logout,
+              backgroundColor: colors.white,
               borderRadius: 12,
               marginTop: '50%',
+              borderWidth: 2,
+              borderColor: colors.grey,
             }}
             // onBackdropPress={() => toggleModal()}
             isVisible={isModalVisible}>
             <View style={{flex: 1, height: '50%'}}>
-              <Text
+              {/* <Text
                 style={{
                   alignSelf: 'center',
                   color: colors.white,
@@ -226,18 +232,19 @@ const More: React.FC<Props> = ({navigation}) => {
                   fontFamily: 'Poppins-SemiBold',
                 }}>
                 Logout
-              </Text>
+              </Text> */}
               <Text
                 style={{
                   alignSelf: 'center',
-                  color: colors.white,
-                  fontFamily: 'Poppins-SemiBold',
-                  fontSize: 11,
+                  color: colors.black,
+                  fontFamily: 'Montserrat',
+                  fontSize: 15,
                   marginTop: 30,
+                  minWidth: '80%',
                 }}>
-                Are you sure? you will be required to
+                Are you sure you want to logout?
               </Text>
-              <Text
+              {/* <Text
                 style={{
                   alignSelf: 'center',
                   color: colors.white,
@@ -245,46 +252,52 @@ const More: React.FC<Props> = ({navigation}) => {
                   fontSize: 11,
                 }}>
                 sign in again
-              </Text>
+              </Text> */}
               <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
+                  width: '60%',
+                  alignSelf: 'flex-end',
                 }}>
                 <TouchableHighlight
+                  underlayColor=""
                   style={{width: '15%', marginTop: 35, marginLeft: 35}}
-                  onPress={() => toggleModal()}>
+                  onPress={() => backAction()}>
                   <Text
                     style={{
-                      color: colors.white,
-                      borderBottomWidth: 1,
+                      color: colors.black,
+                      // borderBottomWidth: 1,
                       borderBottomColor: colors.white,
-                      fontFamily: 'Poppins-SemiBold',
+                      fontWeight: 'bold',
+                      fontFamily: 'Montserrat',
                     }}>
-                    cancel
+                    Yes
                   </Text>
                 </TouchableHighlight>
                 <TouchableHighlight
+                  underlayColor=""
                   style={{width: '20%', marginTop: 35, marginRight: 35}}
                   onPress={() => {
-                    backAction();
+                    toggleModal();
                   }}>
                   <View
                     style={{
-                      backgroundColor: colors.activeTintColor,
+                      // backgroundColor: colors.activeTintColor,
                       borderRadius: 5,
                       padding: 3,
                       flexDirection: 'row',
                     }}>
                     <Text
                       style={{
-                        color: colors.white,
+                        color: colors.black,
                         paddingLeft: 3,
                         paddingRight: 3,
-                        fontFamily: 'Poppins-SemiBold',
                         textAlign: 'center',
+                        fontWeight: 'bold',
+                        fontFamily: 'Montserrat',
                       }}>
-                      Logout
+                      No
                     </Text>
                   </View>
                 </TouchableHighlight>

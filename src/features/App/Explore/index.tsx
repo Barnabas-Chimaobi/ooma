@@ -103,7 +103,7 @@ const Explore = () => {
   });
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, backgroundColor: colors.white}}>
       <View style={S.exploreMain}>
         {/* <BaseInput
         value={input}

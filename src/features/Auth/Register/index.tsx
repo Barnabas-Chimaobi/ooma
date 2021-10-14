@@ -271,6 +271,12 @@ const Register = () => {
               width: '90%',
               alignSelf: 'center',
               borderRadius: 5,
+              zIndex: 5,
+            }}
+            titleStyle={{
+              fontSize: 22,
+              fontFamily: 'Montserrat',
+              fontWeight: 'bold',
             }}
           />
         )}

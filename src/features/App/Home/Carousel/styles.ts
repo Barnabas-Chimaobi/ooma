@@ -36,6 +36,8 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     width: '95%',
     marginBottom: 10,
+    top: 5,
+    left: -5
   },
 
   ratingContainer: {
@@ -53,9 +55,12 @@ export default StyleSheet.create({
   description: {
     // textAlign: 'left',
     padding: 4,
-    // marginBottom: 13,
-    marginTop: -7,
+    paddingBottom: 0,
+    // marginTop: -5,
     fontSize: 12,
-    marginLeft: 5
+    marginLeft: -2,
+    fontFamily: 'Montserrat',
+    fontWeight: '900'
+
   },
 });

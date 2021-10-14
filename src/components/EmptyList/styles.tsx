@@ -11,7 +11,7 @@ export default StyleSheet.create({
   },
   buttonStyle: {
     marginVertical: 50,
-    backgroundColor: '#303030',
+    backgroundColor: '#fff',
   },
   titleStyle: {
     color: 'white',

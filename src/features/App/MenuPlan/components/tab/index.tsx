@@ -33,6 +33,7 @@ import {Item} from 'react-native-paper/lib/typescript/components/List/List';
 import {NativeBaseProvider, Box} from 'native-base';
 import DynamicTabView from 'react-native-dynamic-tab-view';
 import {getMenuItemsPlanForYou} from '../../../../../reducers/MenuPlansForYou';
+import {getFindPlan} from '../../../../../reducers';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {
   BallIndicator,
@@ -47,6 +48,7 @@ import {
 } from 'react-native-indicators';
 import {latest} from 'immer/dist/internal';
 import {colors} from '../../../../../colors';
+import {EmptyList} from '../../../../../components';
 
 const initialLayout = {width: Dimensions.get('window').width};
 
@@ -70,6 +72,9 @@ const MenuTab = () => {
   );
   const menuPlansMenuItem = useSelector(
     (state: RootState) => state.menuItemPlanForYou.payload,
+  );
+  const findPlansItem = useSelector(
+    (state: RootState) => state.findPlanState.payload,
   );
   const dispatch: AppDispatch = useDispatch();
   const basketItem = useSelector(
@@ -112,7 +117,8 @@ const MenuTab = () => {
     const menuplanscart = await getPlanCatId(newbranch, id);
     console.log(newbranch, 'useriddd');
     // setPlanCart(menuplanscart?.items);
-    dispatch(getMenuItemsPlanForYou(menuplanscart));
+    // dispatch(getMenuItemsPlanForYou(menuplanscart));
+    dispatch(getFindPlan(menuplanscart));
     // setLoader(false);
     // console.log(menuplanscart, '=======planscategoryyyyyyyyy=========');
     setLoader(false);
@@ -168,25 +174,20 @@ const MenuTab = () => {
   const FamilyRoute = (item, index) => {
     // console.log(item, '====itemsssss===');
     return (
-      <View style={{marginBottom: 40}}>
-        <RefreshControl
-          onRefresh={() => onRefresh()}
-          refreshing={loader}
-          enabled={loader}
-          // style={{marginTop: 30}}
-        />
+      <View style={{paddingBottom: 40}}>
         {/* <ActivityIndicator color={'green'} size={'large'} animating={true} /> */}
-        {menuPlansMenuItem ? (
+        {!loader ? (
           <View key={item?.id} style={styles.scene}>
-            <FamilyMenu allFamilyMenuPlans={menuPlansMenuItem} />
+            <FamilyMenu allFamilyMenuPlans={findPlansItem} />
           </View>
         ) : (
+          // <EmptyList />
           <View style={styles.noData}>
             <Image
               style={{marginTop: 20}}
               source={require('../../assets/no-data.png')}
             />
-            <Text style={styles.btnText}>No meal plan available.</Text>
+            <Text style={styles.btnText}>Getting available meal plans.</Text>
 
             <View style={styles.btn}>
               <Text style={{color: 'white', fontWeight: 'bold', fontSize: 14}}>

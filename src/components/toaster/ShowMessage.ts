@@ -1,6 +1,7 @@
 import {WSnackBar, WModal} from 'react-native-smart-tip';
 import {Alert} from 'react-native';
 import { Text } from 'native-base';
+import Toast from 'react-native-toast-message';
 
 const types: any = {
   ERROR: {

@@ -3,12 +3,16 @@ import {StyleSheet} from 'react-native';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    margin: 5,
-    borderRadius: 4,
-    borderWidth: 2,
-    borderColor: 'rgba(255, 255,255, 1.0)',
+    margin: 8,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255,255, 0.2)',
     backgroundColor: 'white',
-    marginBottom: 10,
+    // marginBottom: 10,
+    padding: 5,
+    paddingLeft: 0,
+    paddingRight: 0,
+    elevation: 5,
   },
   menuImage: {
     height: 324,

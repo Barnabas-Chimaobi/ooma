@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {OmaCard, InputPrimary, KeyboardType} from '../../../../components';
 import S from '../styles';
-import {Text} from 'react-native';
+import {Text, View} from 'react-native';
 import {setUserDetails} from '../../../../reducers';
 import {useDispatch} from 'react-redux';
 import {AppDispatch} from '../../../../store';
@@ -28,17 +28,20 @@ const LoginPassword = () => {
       mainStyle={[S.omaMainStyle, {paddingTop: 15}]}
       otherProps={
         <>
-          <InputPrimary
-            leftLabel="password"
-            placeholderTextColor="rgba(255, 255, 255, 0.9)"
-            secureTextEntry
-            inputContainerStyles={{paddingLeft: 13}}
-            containerStyles={S.passwordInputContainerStyle}
-            onChangeText={(text) => setpassword(text)}
-          />
-          <Text style={{textAlign: 'right', marginTop: 10}}>
+          <View style={{marginTop: 10, width: '95%', alignSelf: 'center'}}>
+            <InputPrimary
+              leftLabel="password"
+              placeholderTextColor="rgba(255, 255, 255, 0.9)"
+              secureTextEntry
+              inputContainerStyles={{paddingLeft: 13}}
+              containerStyles={S.passwordInputContainerStyle}
+              onChangeText={(text) => setpassword(text)}
+            />
+          </View>
+
+          {/* <Text style={{textAlign: 'right', marginTop: 10}}>
             Forgot Password?
-          </Text>
+          </Text> */}
         </>
       }
     />

@@ -127,7 +127,7 @@ const MyCarousel: FC<CarouselProps> = ({menuItem, page = 1, keyProp}) => {
           </TouchableOpacity>
         </View>
 
-        <View style={{marginTop: 10}}>
+        <View style={{marginTop: 7}}>
           <TouchableHighlight
             underlayColor=""
             onPress={() =>
@@ -142,9 +142,9 @@ const MyCarousel: FC<CarouselProps> = ({menuItem, page = 1, keyProp}) => {
                 width: 126,
                 padding: 8,
                 borderRadius: 5,
-                // marginLeft: 12,
-                // paddingBottom: 10,
-                // marginBottom: 10,
+                marginLeft: -4,
+                // paddingBottom: 5,
+                marginBottom: 5,
               }}>
               CREATE PLAN
             </Text>

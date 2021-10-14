@@ -68,6 +68,7 @@ const Card: FC<IProps> = ({
         <View
           style={{
             marginTop: 5,
+            width: '100%',
           }}>
           {diff !== 'plan' ? (
             <View style={{alignSelf: 'flex-end', height: 30, width: 30}}>

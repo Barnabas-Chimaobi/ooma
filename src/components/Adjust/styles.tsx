@@ -19,8 +19,9 @@ export default StyleSheet.create({
     backgroundColor: 'rgba(196, 196, 196, 0.5)',
   },
   titleStyle: {
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     fontSize: 15,
+    fontFamily: 'Montserrat',
   },
   valueStyle: {
     paddingHorizontal: 15,

@@ -9,9 +9,17 @@ interface IProps {
   style?: object;
   oldPrice?: any;
   mainPrice?: any;
+  addsPrice: any;
 }
 
-const PriceTag: FC<IProps> = ({price, clear, oldPrice, style, mainPrice}) => (
+const PriceTag: FC<IProps> = ({
+  price,
+  clear,
+  oldPrice,
+  style,
+  mainPrice,
+  addsPrice,
+}) => (
   <View style={{flexDirection: 'column', alignItems: 'center'}}>
     {oldPrice !== undefined && oldPrice !== null ? (
       <Text
@@ -20,13 +28,14 @@ const PriceTag: FC<IProps> = ({price, clear, oldPrice, style, mainPrice}) => (
           marginRight: 20,
           color: 'black',
           textDecorationLine: 'line-through',
+          opacity: 0.4,
         }}>{`\u20A6${oldPrice}`}</Text>
     ) : null}
     {price !== undefined && !isNaN(price) ? (
       <Text
         style={
           !clear
-            ? [S.price, style]
+            ? [addsPrice === 'price' ? S.addsPrice : S.price, style]
             : [
                 {color: mainPrice === 'mainprice' ? colors.start : 'black'},
                 style,

@@ -385,8 +385,6 @@ export const createMenuItemOrder = async (body: any) => {
       paymentMethod: body.paymentMethod,
       paymentType: body.paymentType,
       deliveryCharge: body.deliveryCharge,
-      // orderName: body.orderName,
-      // orderChannel: 'POS',
       paymentStatus: 'Not Paid',
       cartIds: body.cartIds,
       orderForFriend: body.orderForFriend,

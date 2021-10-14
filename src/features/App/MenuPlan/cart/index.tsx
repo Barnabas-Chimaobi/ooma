@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState, useRef} from 'react';
 import {
   View,
   Text,
@@ -42,7 +42,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {basketStates} from '../../../../reducers/basket';
 import {AppDispatch, RootState} from '../../../../store';
 import {getMenuitemCart, getOrderById} from '../../../../FetchData';
-import {plus} from '../../../../assets';
+import {plus, scroll} from '../../../../assets';
 
 const {width: windowWidth} = Dimensions.get('window');
 
@@ -63,7 +63,7 @@ export const Cart = () => {
     (state: RootState) => state.basketState.payload,
   );
   const dispatch = useDispatch();
-
+  const scrollRef = useRef<ScrollView>();
   const navigation = useNavigation();
   const route = useRoute();
   const [date, setDate] = useState(new Date());
@@ -430,12 +430,20 @@ export const Cart = () => {
     // console.log(item, 'newbasket======sss====');
   };
 
+  const onFabPress = () => {
+    console.log('scroll');
+    scrollRef.current?.scrollTo({
+      y: 30,
+      animated: true,
+    });
+  };
+
   return (
     <>
       <KeyboardAvoidingView
         keyboardVerticalOffset={-305}
         behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
-        style={{flex: 1}}>
+        style={{flex: 1, backgroundColor: colors.white}}>
         <SimpleHeader style={{paddingLeft: 10}} />
         {route?.params?.plan === 'plan' ? (
           <Text
@@ -451,6 +459,7 @@ export const Cart = () => {
         {refreshing !== true ? (
           <View style={styles.root}>
             <ScrollView
+              ref={scrollRef}
               refreshControl={
                 <RefreshControl
                   refreshing={refreshing || loadplan}
@@ -556,6 +565,29 @@ export const Cart = () => {
               />
             </ScrollView>
 
+            <View
+              style={{
+                zIndex: 1,
+                height: 90,
+                width: 70,
+                alignSelf: 'flex-end',
+                position: 'absolute',
+                bottom: '30%',
+                right: 10,
+                // borderRadius: 70,
+              }}>
+              <TouchableOpacity onPressIn={onFabPress}>
+                <Image
+                  style={{
+                    height: 90,
+                    width: 70,
+
+                    borderRadius: 70,
+                  }}
+                  source={scroll}
+                />
+              </TouchableOpacity>
+            </View>
             {/* <ListItems list={route?.params?.cartItems} styles={styles} /> */}
             {visible == true ? (
               <Modal
@@ -631,6 +663,7 @@ export const Cart = () => {
                 </View>
               </Modal>
             ) : null}
+
             {basketItem?.length !== undefined || total !== undefined ? (
               <View style={styles.listFooter}>
                 {!loadplan ? (
@@ -678,6 +711,7 @@ export const Cart = () => {
                     </View>
                   </TouchableHighlight>
                 )}
+
                 {route?.params?.plan === 'plan' ? null : (
                   <ModalMessage
                     onpress={() => toggleVisible()}

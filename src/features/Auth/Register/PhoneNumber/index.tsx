@@ -41,6 +41,7 @@ import {colors} from '../../../../colors';
 import {setUserDetails} from '../../../../reducers';
 import {useDispatch} from 'react-redux';
 import {AppDispatch} from '../../../../store';
+import {View} from 'react-native';
 
 const validationSchema = yup.object().shape({
   number: yup.string().min(11).required().label('Phone number'),
@@ -100,18 +101,21 @@ const Phone = () => {
             mainStyle={S.omaMainStyle}
             otherProps={
               <>
-                <BaseInput
-                  placeholder="Your phone number"
-                  value={number}
-                  keyboardType={BaseKeyBoardType.phonePad}
-                  onChangeText={(text) => setnumber(text)}
-                  autoFocus={true}
-                  inputStyle={{
-                    backgroundColor: colors.white,
-                    elevation: 5,
-                    borderRadius: 5,
-                  }}
-                />
+                <View style={{marginLeft: 10, top: 15}}>
+                  <BaseInput
+                    placeholder="Your phone number"
+                    value={number}
+                    keyboardType={BaseKeyBoardType.phonePad}
+                    onChangeText={(text) => setnumber(text)}
+                    autoFocus={true}
+                    inputStyle={{
+                      backgroundColor: colors.white,
+                      elevation: 5,
+                      borderRadius: 5,
+                    }}
+                  />
+                </View>
+
                 {/* <Button title="Proceed" onPress={handleSubmit} /> */}
               </>
             }

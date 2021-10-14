@@ -90,18 +90,25 @@ const SelectedCategory: FC<selectedProps> = ({route}) => {
     getItemByCategoryId();
   };
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, width: '100%'}}>
       <View style={S.exploreMain}>
-        <SimpleHeader gridView gridToggle={toggleGrid} />
-        <BaseInput
-          value=""
-          onfocus={() => navigation.navigate('SearchMenuitemandPlan')}
-          onChangeText={(text) => setInput(text)}
-          rightIcon={<Icon name="search" color={colors.blackGrey} size={18} />}
-          style={S.exploreInput}
-          inputStyle={{padding: 1, flex: 1}}
-        />
-        <FilterBar />
+        <View style={{marginLeft: 10, marginRight: 10}}>
+          <SimpleHeader gridView gridToggle={toggleGrid} />
+
+          <BaseInput
+            value=""
+            onfocus={() => navigation.navigate('SearchMenuitemandPlan')}
+            onChangeText={(text) => setInput(text)}
+            rightIcon={
+              <Icon name="search" color={colors.blackGrey} size={18} />
+            }
+            style={S.exploreInput}
+            inputStyle={{padding: 1, flex: 1}}
+          />
+        </View>
+        <View style={{marginLeft: 5, marginRight: 5}}>
+          <FilterBar />
+        </View>
         {/* {payload.length < 0 ? ( */}
         {/* <Spinner
         visible={loader}
@@ -116,11 +123,26 @@ const SelectedCategory: FC<selectedProps> = ({route}) => {
               <RefreshControl refreshing={loader} onRefresh={refreshing} />
             }
             renderItem={({item}) => (
-              <CardItem
-                item={item}
-                onPress={() => navigation.navigate('Dish', {id: item?.id})}
-                gridView={gridView}
-              />
+              <View>
+                <View style={{paddingHorizontal: 10}}>
+                  <CardItem
+                    item={item}
+                    onPress={() => navigation.navigate('Dish', {id: item?.id})}
+                    gridView={gridView}
+                  />
+                </View>
+
+                <View
+                  style={{
+                    borderWidth: 2,
+                    borderColor: colors.t,
+                    marginTop: 10,
+                    marginBottom: 10,
+                    width: '100%',
+                    marginRight: -10,
+                  }}
+                />
+              </View>
             )}
             data={payload}
             keyExtractor={() => shortid.generate()}

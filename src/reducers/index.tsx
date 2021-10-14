@@ -33,6 +33,7 @@ import menuItemByCategorySlice, {
 import cartSlice, {cartStates} from './cart';
 import basketSlice, {basketStates} from './basket';
 import planSlice, {planStates} from './planlist';
+import findPlanSlice, {getFindPlan} from './findPlan';
 import itemOrderSlice, {itemOrderStates} from './menuItemOrder';
 
 export {
@@ -86,4 +87,6 @@ export {
   planStates,
   itemOrderSlice,
   itemOrderStates,
+  findPlanSlice,
+  getFindPlan,
 };

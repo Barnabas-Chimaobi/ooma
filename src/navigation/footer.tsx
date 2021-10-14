@@ -110,7 +110,14 @@ class Footer extends Component {
                 )}
               </View>
 
-              <Text style={{alignSelf: 'center'}}>Home</Text>
+              <Text
+                style={{
+                  alignSelf: 'center',
+                  fontFamily: 'Montserrat',
+                  fontSize: 12,
+                }}>
+                Home
+              </Text>
             </View>
           </TouchableWithoutFeedback>
           <TouchableWithoutFeedback
@@ -149,7 +156,14 @@ class Footer extends Component {
                 )}
               </View>
 
-              <Text style={{alignSelf: 'center'}}>Meal Plan</Text>
+              <Text
+                style={{
+                  alignSelf: 'center',
+                  fontFamily: 'Montserrat',
+                  fontSize: 12,
+                }}>
+                Meal Plan
+              </Text>
             </View>
           </TouchableWithoutFeedback>
           <TouchableWithoutFeedback
@@ -190,7 +204,14 @@ class Footer extends Component {
                 )}
               </View>
 
-              <Text style={{alignSelf: 'center'}}>Explore</Text>
+              <Text
+                style={{
+                  alignSelf: 'center',
+                  fontFamily: 'Montserrat',
+                  fontSize: 12,
+                }}>
+                Explore
+              </Text>
             </View>
           </TouchableWithoutFeedback>
           <TouchableWithoutFeedback
@@ -249,7 +270,14 @@ class Footer extends Component {
                 )}
               </View>
 
-              <Text style={{alignSelf: 'center'}}>My Cart</Text>
+              <Text
+                style={{
+                  alignSelf: 'center',
+                  fontFamily: 'Montserrat',
+                  fontSize: 12,
+                }}>
+                My Cart
+              </Text>
             </View>
           </TouchableWithoutFeedback>
           <TouchableWithoutFeedback
@@ -288,7 +316,14 @@ class Footer extends Component {
                 )}
               </View>
 
-              <Text style={{alignSelf: 'center'}}>More</Text>
+              <Text
+                style={{
+                  alignSelf: 'center',
+                  fontFamily: 'Montserrat',
+                  fontSize: 12,
+                }}>
+                More
+              </Text>
             </View>
           </TouchableWithoutFeedback>
         </View>

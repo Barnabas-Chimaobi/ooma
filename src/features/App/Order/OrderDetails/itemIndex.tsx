@@ -61,10 +61,11 @@ const UnitOrders = ({
   return (
     <>
       <View style={[S.UnitOrdersmain, style]}>
-        {count && <Text style={S.countStyle}>{`${count}x`}</Text>}
+        {count && <Text style={S.countStyle}>({`${count}x`})</Text>}
         <View style={{width: '70%', flexWrap: 'wrap'}}>
           <Text style={S.descriptionStyle}>
-            {description}; {attachAddons}
+            {description}
+            {/* {attachAddons} */}
           </Text>
           {unitPrice && <PriceTag price={unitPrice} clear />}
         </View>
@@ -88,10 +89,12 @@ const Adds = ({price, count, description, unitPrice, style, addons}: any) => {
     <>
       {newadd?.map((item) => (
         <View style={[S.UnitOrdersmainadds, style]}>
-          <Text style={S.countStyle}>{`${item?.quantity}x`}</Text>
+          <Text style={S.countStyle}>({`${item?.quantity}x`})</Text>
           <View style={{width: '70%', flexWrap: 'wrap'}}>
             <Text style={S.AddonsdescriptionStyle}>{item?.name}</Text>
-            <PriceTag price={item?.initialPrice} clear />
+            <View style={{marginLeft: '-70%'}}>
+              <PriceTag price={item?.initialPrice} clear />
+            </View>
           </View>
           <PriceTag price={item?.totalPrice} clear />
         </View>
@@ -237,11 +240,12 @@ const OrderDetails = () => {
         //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         // }
       /> */}
-      <View style={{marginLeft: 10}}>
+      <View
+        style={{paddingLeft: 10, backgroundColor: colors.white, elevation: 10}}>
         <SimpleHeader />
       </View>
       <ScrollView>
-        <View>
+        <View style={{backgroundColor: colors.white}}>
           <View style={S.main}>
             <Total
               randomTitle="ORDER ID"
@@ -270,48 +274,59 @@ const OrderDetails = () => {
               mainStyle={S.totalHeaderStyle}
             />
           </View>
-          <View style={S.main}>
-            {newlist?.itemData?.menuitemorders?.MenuItemOrderDetails?.map(
-              (item) => {
-                // console.log(item, 'itemsss=====');
-                let allAdds = JSON.parse(item?.Cart?.addons);
-                let newadd = JSON.parse(allAdds);
-                let mapped = newadd?.map((item) => {
+          <View
+            style={{
+              backgroundColor: colors.white,
+              elevation: 10,
+              marginBottom: 30,
+              marginLeft: 10,
+              marginRight: 10,
+              borderRadius: 10,
+              // width: '95%',
+              // alignSelf: 'center',
+            }}>
+            <View style={S.main}>
+              {newlist?.itemData?.menuitemorders?.MenuItemOrderDetails?.map(
+                (item) => {
+                  // console.log(item, 'itemsss=====');
+                  let allAdds = JSON.parse(item?.Cart?.addons);
+                  let newadd = JSON.parse(allAdds);
+                  let mapped = newadd?.map((item) => {
+                    return (
+                      <UnitOrders
+                        price={item?.totalPrice}
+                        count={item?.quantity}
+                        description={item?.name}
+                        // addons={item?.Cart?.addons}
+                        unitPrice={item?.price}
+                      />
+                    );
+                  });
+                  // console.log(mapped, 'typeffffff===========');
+                  // console.log(
+                  //   newadd?.map((item) => item.name),
+                  //   'itemsssalllllll=====',
+                  // );
                   return (
-                    <UnitOrders
-                      price={item?.totalPrice}
-                      count={item?.quantity}
-                      description={item?.name}
-                      // addons={item?.Cart?.addons}
-                      unitPrice={item?.price}
-                    />
-                  );
-                });
-                // console.log(mapped, 'typeffffff===========');
-                // console.log(
-                //   newadd?.map((item) => item.name),
-                //   'itemsssalllllll=====',
-                // );
-                return (
-                  <View>
-                    <OrderStack
-                      headerCount={item?.Cart?.quantity}
-                      headerDescription={item?.Cart?.MenuItem?.itemName}
-                      headerPrice={item?.Cart?.MenuItem?.amount}
-                      addons={item?.Cart?.addons}
-                      children={
-                        // <UnitOrders
-                        //   price={item?.totalPrice}
-                        //   count={item?.quantity}
-                        //   description={item?.name}
-                        //   // addons={item?.Cart?.addons}
-                        //   unitPrice={item?.price}
-                        // />
-                        <Adds addons={item?.Cart?.addons} />
-                      }
-                      style={{position: 'relative', bottom: -25, zIndex: 10}}
-                    />
-                    {/* {allAdds?.map((item) => {
+                    <View>
+                      <OrderStack
+                        headerCount={item?.Cart?.quantity}
+                        headerDescription={item?.Cart?.MenuItem?.itemName}
+                        headerPrice={item?.Cart?.MenuItem?.amount}
+                        addons={item?.Cart?.addons}
+                        children={
+                          // <UnitOrders
+                          //   price={item?.totalPrice}
+                          //   count={item?.quantity}
+                          //   description={item?.name}
+                          //   // addons={item?.Cart?.addons}
+                          //   unitPrice={item?.price}
+                          // />
+                          <Adds addons={item?.Cart?.addons} />
+                        }
+                        style={{position: 'relative', bottom: -25, zIndex: 10}}
+                      />
+                      {/* {allAdds?.map((item) => {
                       return (
                         <UnitOrders
                           price={item?.totalPrice}
@@ -322,60 +337,65 @@ const OrderDetails = () => {
                         />
                       );
                     })} */}
-                  </View>
-                );
-              },
-            )}
-          </View>
-          <View style={S.main}>
-            <Total total={Number(newAmount)} mainStyle={S.totalHeaderStyle} />
-          </View>
-          <OrderCard
-            details={null}
-            dateTitle="Collection Details"
-            mainStyle={S.main}
-            children={
-              <>
-                <Total
-                  randomTitle="Collection"
-                  randomValue={
-                    newlist?.itemData?.menuitemorders?.deliveryOption
-                  }
-                />
-                <Total
-                  randomTitle="Time of collection"
-                  randomValue={newlist?.itemData?.menuitemorders?.deliveryTime}
-                />
-                <Total
-                  randomTitle="Location"
-                  randomValue={
-                    newlist?.itemData?.menuitemorders?.deliveryAddress
-                  }
-                />
-              </>
-            }
-          />
-          <OrderCard
-            details={null}
-            dateTitle="Payment Details"
-            mainStyle={S.main}
-            children={
-              <>
-                <Total
+                    </View>
+                  );
+                },
+              )}
+            </View>
+            <View style={S.main}>
+              <Total total={Number(newAmount)} mainStyle={S.totalHeaderStyle} />
+            </View>
+            <OrderCard
+              details={null}
+              dateTitle="Delivery Details"
+              // mainStyle={S.main}
+              children={
+                <>
+                  <Total
+                    randomTitle="Collection"
+                    randomValue={
+                      newlist?.itemData?.menuitemorders?.deliveryOption
+                    }
+                  />
+                  <Total
+                    randomTitle="Time of collection"
+                    randomValue={
+                      newlist?.itemData?.menuitemorders?.deliveryTime
+                    }
+                  />
+                  <Total
+                    randomTitle="Location"
+                    randomValue={
+                      newlist?.itemData?.menuitemorders?.deliveryAddress
+                    }
+                  />
+                </>
+              }
+            />
+            <OrderCard
+              details={null}
+              dateTitle="Payment Details"
+              // mainStyle={S.main}
+              children={
+                <>
+                  {/* <Total
                   randomTitle="style"
                   randomValue={newlist?.itemData?.menuitemorders?.paymentType}
-                />
-                <Total
-                  randomTitle="Method"
-                  randomValue={newlist?.itemData?.menuitemorders?.paymentMethod}
-                />
-                <Total
-                  randomTitle="Status"
-                  randomValue={newlist?.itemData?.paymentStatus}
-                />
-              </>
-            }
-          />
+                /> */}
+                  <Total
+                    randomTitle="Method"
+                    randomValue={
+                      newlist?.itemData?.menuitemorders?.paymentMethod
+                    }
+                  />
+                  <Total
+                    randomTitle="Status"
+                    randomValue={newlist?.itemData?.paymentStatus}
+                  />
+                </>
+              }
+            />
+          </View>
         </View>
       </ScrollView>
     </View>

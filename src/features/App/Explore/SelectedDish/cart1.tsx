@@ -431,7 +431,15 @@ const CardItem: FC<IProps> = ({route, menu}) => {
         </View>
       </ImageBackground>
       <View style={S.sdContainer}>
-        <Text>{menuItem?.MenuItem.itemName}</Text>
+        <Text
+          style={{
+            fontSize: 16,
+            fontWeight: 'bold',
+            maxWidth: '70%',
+            fontFamily: 'Montserrat',
+          }}>
+          {menuItem?.MenuItem.itemName}
+        </Text>
         <PriceTag price={prices} />
       </View>
       <ScrollView style={S.sdMain}>
@@ -453,6 +461,8 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           />
           <Text style={S.sdDelivery}>Delivery fee applies</Text>
         </View>
+        <View style={{borderWidth: 1.5, borderColor: colors.t}} />
+
         <OmaCard
           title="Description"
           titleStyle={S.cdDescription}
@@ -460,13 +470,13 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           subStyle={{paddingBottom: 13}}
           mainStyle={{paddingHorizontal: 12}}
         />
-        <Divider />
+        {/* <View style={{borderWidth: 1.5, borderColor: colors.t}} /> */}
         {/* <CollapsibleView
           itemPreferences={menuItem?.menuItemPreferences}
           addOns={menuItem?.addons}
           title="Add-Ons"
         /> */}
-        <Divider />
+        <View style={{borderWidth: 1.5, borderColor: colors.t}} />
 
         <View style={{paddingHorizontal: 12, width: '100%'}}>
           <Button
@@ -513,6 +523,8 @@ const CardItem: FC<IProps> = ({route, menu}) => {
             </>
           </Collapsible>
         </View>
+
+        <View style={{borderWidth: 1.5, borderColor: colors.t}} />
 
         {eachItem?.preferences?.length !== undefined && (
           <View style={{paddingHorizontal: 12, width: '100%'}}>
@@ -563,7 +575,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           title="Preference"
         /> */}
 
-        <Divider />
+        <View style={{borderWidth: 1.5, borderColor: colors.t}} />
         <Adjust
           itemEdit
           edit={eachItem?.quantity}
@@ -571,10 +583,10 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           mainStyle={{paddingVertical: 20}}
           title="Adjust Quantity"
         />
-        <Divider />
+        <View style={{borderWidth: 1.5, borderColor: colors.t}} />
         <OmaCard
           title="Special Instructions"
-          titleStyle={{fontSize: 15}}
+          titleStyle={{fontSize: 15, fontFamily: 'Montserrat'}}
           mainStyle={{paddingHorizontal: 12}}
           otherProps={
             <BaseInput
@@ -585,8 +597,9 @@ const CardItem: FC<IProps> = ({route, menu}) => {
               inputStyle={{textAlignVertical: 'top'}}
               style={{
                 borderRadius: 4,
-                borderColor: 'rgba(48, 48, 48, 0.85)',
-                borderWidth: 1,
+                borderColor: colors.greyShade,
+                borderWidth: 1.5,
+                top: 15,
               }}
             />
           }

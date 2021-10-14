@@ -1,5 +1,5 @@
 import React, {FC, useState, useEffect} from 'react';
-import {View, Image, Text, TouchableOpacity} from 'react-native';
+import {View, Image, Text, TouchableOpacity, Dimensions} from 'react-native';
 import {PriceTag} from '../../../../components';
 import MoreAction from '../MoreAction';
 import {useNavigation} from '@react-navigation/native';
@@ -72,10 +72,10 @@ const Card: FC<IProps> = ({
           }}>
           <Image
             style={{
-              height: 63,
-              width: 74,
+              height: Dimensions.get('window').height / 6.8,
+              width: Dimensions.get('window').width / 3.8,
               backgroundColor: 'transparent',
-              borderRadius: 2,
+              borderRadius: 5,
               borderColor: 'transparent',
             }}
             source={{uri: image}}
@@ -110,6 +110,7 @@ const Card: FC<IProps> = ({
               maxWidth: '100%',
               flexWrap: 'wrap',
               bottom: 10,
+              left: 10,
             }}>
             {JSON.parse(addons)?.map((item: any) => {
               console.log(item, 'item===addonssss=======');
@@ -118,7 +119,7 @@ const Card: FC<IProps> = ({
                   <Text></Text>
                   <Text
                     style={{
-                      // marginVertical: 10,
+                      fontFamily: 'Roboto',
                       marginRight: 5,
                     }}>
                     {item?.name}({item?.quantity}x);

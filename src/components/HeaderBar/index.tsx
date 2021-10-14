@@ -96,11 +96,11 @@ const HeaderBar = ({
                   (date && {
                     paddingHorizontal: 5,
                     // width: 90,
-                    fontSize: 10,
+                    fontSize: 12,
                     paddingRight: 20,
                   })
                 }>
-                {date ? DateFormatter.formatAMPM(date) : 'now'}
+                {date ? DateFormatter.formatAMPM(date) : 'Now'}
               </Text>
             </TouchableOpacity>
           </View>
