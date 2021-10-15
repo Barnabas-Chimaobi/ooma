@@ -82,6 +82,10 @@ const Register = () => {
       if (token != false) {
         navigation.navigate('Region', {newToken: token});
         await AsyncStorage.setItem('userId', id);
+        await AsyncStorage.setItem(
+          'userDetails',
+          JSON.stringify(loginUser?.data?.data),
+        );
         setLoading(false);
         // dispatch(signIn());
       }
