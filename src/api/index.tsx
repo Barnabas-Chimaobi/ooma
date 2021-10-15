@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { Logo, Button, ButtonType, ShowMessage, type } from './../components';
-import { axiosFilter } from './filter'
+import { axiosFilter ,baseUrl} from './filter'
 
 const request = axios.create({
   timeout: 60000,

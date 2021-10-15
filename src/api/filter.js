@@ -1,16 +1,22 @@
 import axios from 'axios';
-import {Promise} from 'es6-promise';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useNavigation} from '@react-navigation/core';
-
+import { useNavigation } from '@react-navigation/core';
+const axiosInstance = axios.create({
+  timeout: 60000,
+  timeoutErrorMessage:
+    'Either your internet connect is not strong or you have no internet connectiom',
+  baseURL: 'https://api.staging.ooma.kitchen/api/v1',
+  // baseURL: 'https://api.ooma.kitchen/api/v1',
+});
 const axiosFilter = (instance, token) => {
+//this navigation too.
+  // const navigation = useNavigation();
   instance.interceptors.request.use(
     function (config) {
       config.headers['Authorization'] = `Bearer ${token}`;
       return config;
     },
     function (error) {
-      global.dd('=======error occured before making request=====', {error});
       return Promise.reject(error);
     },
   );
@@ -52,57 +58,71 @@ const axiosFilter = (instance, token) => {
       return Promise.reject(error);
     },
   );
-};
 
-const getLoggedInUserFromReducer = async () => {
-  const user = await AsyncStorage.getItem('userDetails');
-  const gottenUser = await JSON.parse(user);
-  console.log(gottenUser, 'console=====ddd===user');
-};
 
-const getNewToken = async () => {
-  const navigation = useNavigation();
+  const getLoggedInUserFromReducer = async () => {
+    const user = await AsyncStorage.getItem('userDetails');
+    const gottenUser = await JSON.parse(user);
 
-  //get user info;
-  let user = getLoggedInUserFromReducer();
-  return new Promise((resolve, reject) => {
-    let data = {
-      userId: user?.data?.data?.id,
-      refreshToken: user?.data?.data?.refreshToken,
-    };
-    //
-    if (!user?.data?.data?.refreshToken) {
-      navigation.navigate('Register');
-      //navigate to login page using reset stack
-      return;
+    return gottenUser;
+  };
+
+  const getNewToken = async () => {
+
+
+
+    //get user info;
+    const user = await getLoggedInUserFromReducer();
+   
+    return new Promise((resolve, reject) => {
+      const data = {
+        userId: user?.id,
+        refreshToken: user?.refreshToken
+      };
+      //
+      //make this navigation to be working...
+      // if (!user?.refreshToken) {
+      //   navigation.navigate('Register');
+      //   //navigate to login page using reset stack
+      //   return;
+      // }
+  
+      axiosInstance.post(`/users/refreshToken`, data)
+        .then((res) => {
+          
+          let userData = res.data.data;
+          //login action ..save to async and other places
+          AsyncStorage.setItem('userId', userData?.id);
+          userData['refreshToken'] = userData?.newrefreshToken;
+          delete userData['newrefreshToken'];
+          AsyncStorage.setItem('userDetails', JSON.stringify(userData));
+          resolve(userData?.token);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  };
+
+  const checkIfUrlIsExemptedAuthErrorAction = (url) => {
+    const array = [
+      'users/create',
+      'users/verifyOtp',
+      'users/exist',
+      'users/login',
+    ];
+    for (let x = 0; x < array.length; x++) {
+      if (url.includes(array[x])) {
+        return true;
+      }
     }
-    axios
-      .post(`/users/refreshToken`, data)
-      .then((res) => {
-        //login action ..save to async and other places
-        AsyncStorage.setItem('userId', res.data.data?.id);
-        AsyncStorage.setItem('userDetails', JSON.stringify(res.data.data));
-        resolve(res.data.data.accessToken);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+    return false;
+  };
 };
+export const baseUrl=()=>{
+  return "https://api.staging.ooma.kitchen/api/v1";
+}
 
-const checkIfUrlIsExemptedAuthErrorAction = (url) => {
-  const array = [
-    'users/create',
-    'users/verifyOtp',
-    'users/exist',
-    'users/login',
-  ];
-  for (let x = 0; x < array.length; x++) {
-    if (url.includes(array[x])) {
-      return true;
-    }
-  }
-  return false;
-};
+export { axiosFilter };
 
-export {axiosFilter};
+
