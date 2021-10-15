@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import {Logo, Button, ButtonType, ShowMessage, type} from './../components';
+import { Logo, Button, ButtonType, ShowMessage, type } from './../components';
+import { axiosFilter ,baseUrl} from './filter'
 
 const request = axios.create({
   timeout: 60000,
@@ -9,7 +10,19 @@ const request = axios.create({
   baseURL: 'https://api.staging.ooma.kitchen/api/v1',
   // baseURL: 'https://api.ooma.kitchen/api/v1',
 });
+
+
+
 class Api {
+
+  constructor() {
+    AsyncStorage.getItem('token').then(token => {
+      console.log("======getting application token======",token);
+      axiosFilter(request, token);
+    })
+
+  }
+
   post = async (URL: any, data?: any) => {
     try {
       let token: any = await AsyncStorage.getItem('token');
@@ -21,7 +34,7 @@ class Api {
         },
       });
       // console.log(res, 'res');
-      return {errorStatus: false, ...res};
+      return { errorStatus: false, ...res };
     } catch (err) {
       console.log(err.response.data.message, 'post');
       ShowMessage(type.ERROR, err.response.data.message);
@@ -41,7 +54,7 @@ class Api {
         },
         data: datas,
       });
-      return {errorStatus: false, ...res};
+      return { errorStatus: false, ...res };
     } catch (err) {
       console.log(err.response.data, 'delete');
       return err;
@@ -58,7 +71,7 @@ class Api {
         },
       });
       console.log(res.data, 'get');
-      return {errorStatus: false, ...res};
+      return { errorStatus: false, ...res };
     } catch (err) {
       console.log(err.response.data, 'get');
       console.log(err.message, 'get');
@@ -75,7 +88,7 @@ class Api {
           Authorization: `Bearer ${token}`,
         },
       });
-      return {errorStatus: false, ...res};
+      return { errorStatus: false, ...res };
     } catch (err) {
       return err;
     }
