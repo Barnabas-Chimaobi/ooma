@@ -232,6 +232,74 @@ const Home = () => {
     );
   };
 
+  const renderItems2 = ({item, index}) => {
+    return (
+      <View
+        style={{
+          width: '100%',
+          alignSelf: 'center',
+          backgroundColor: colors.white,
+          borderBottomWidth: 3,
+          borderBottomColor: colors.grey,
+          paddingLeft: '3%',
+          paddingRight: '3%',
+          paddingTop: '3%',
+          paddingBottom: '3%',
+        }}>
+        {/* <Text>You may also like</Text> */}
+        <TouchableOpacity
+          onPress={() => {
+            const imgs = {uri: item?.imageUrl};
+            navigation.navigate('Dish', {
+              id: item?.id,
+              rating: item?.rating / item?.ratingCount,
+              img: imgs,
+            });
+          }}>
+          <ImageBackground
+            source={{uri: item?.imageUrl}}
+            style={s.imageBackground3}>
+            <View style={s.flex}>
+              {/* <Label
+                        labelText={item?.caption}
+                        labelStyle={{
+                          top: !item?.caption ? window.height * 1000 : 0,
+                          bottom: !item?.caption ? -window.height * 1000 : 0,
+                        }}
+                      /> */}
+              {/* <TouchableOpacity>
+                          <Image source={hearts} style={s.likeImage} />
+                        </TouchableOpacity> */}
+            </View>
+          </ImageBackground>
+          <View style={s.textBar}>
+            <Text style={s.title}>{item?.itemName}</Text>
+            {/* <PriceTag price={price} oldPrice={oldPrice} /> */}
+            <View style={s.rating}>
+              {/* <Rating1 /> */}
+              {/* <RatingCount ratingCount={ratingCount} /> */}
+              <DishTypes
+                categories={item?.MenuItemCategories}
+                // dish1={dish1}
+                // dish2={dish2}
+                // dish3={dish3}
+              />
+              <PriceTag
+                price={
+                  item?.discount
+                    ? (item?.amount - item?.discount).toFixed(2)
+                    : item?.amount
+                }
+                oldPrice={item?.discount ? item?.amount : null}
+              />
+            </View>
+            <Text style={s.dishType}>{item?.menuItemType?.toUpperCase()}</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   return (
     <View style={S.main}>
       <ScrollView ref={scrollRef}>
@@ -612,16 +680,9 @@ const Home = () => {
             </View>
           )}
 
-          {menuItem?.length == 0 ? (
+          {/* {menuItem?.length == 0 ? (
             <Skeleton />
           ) : (
-            // <Categories
-            //   text="also"
-            //   title="You may also like"
-            //   menuItem={menuItem}
-            //   bool={menuItem.length == 0 ? true : false}
-            //   />
-
             <View>
               <Text
                 style={{
@@ -632,114 +693,23 @@ const Home = () => {
                 }}>
                 You may also like
               </Text>
-              {menuItem?.map((item) => {
-                return (
-                  <View
-                    style={{
-                      width: '100%',
-                      alignSelf: 'center',
-                      backgroundColor: colors.white,
-                      borderBottomWidth: 3,
-                      borderBottomColor: colors.grey,
-                      paddingLeft: '3%',
-                      paddingRight: '3%',
-                      paddingTop: '3%',
-                      paddingBottom: '3%',
-                    }}>
-                    {/* <Text>You may also like</Text> */}
-                    <TouchableOpacity
-                      onPress={() => {
-                        const imgs = {uri: item?.imageUrl};
-                        navigation.navigate('Dish', {
-                          id: item?.id,
-                          rating: item?.rating / item?.ratingCount,
-                          img: imgs,
-                        });
-                      }}>
-                      <ImageBackground
-                        source={{uri: item?.imageUrl}}
-                        style={s.imageBackground3}>
-                        <View style={s.flex}>
-                          {/* <Label
-                        labelText={item?.caption}
-                        labelStyle={{
-                          top: !item?.caption ? window.height * 1000 : 0,
-                          bottom: !item?.caption ? -window.height * 1000 : 0,
-                        }}
-                      /> */}
-                          {/* <TouchableOpacity>
-                          <Image source={hearts} style={s.likeImage} />
-                        </TouchableOpacity> */}
-                        </View>
-                      </ImageBackground>
-                      <View style={s.textBar}>
-                        <Text style={s.title}>{item?.itemName}</Text>
-                        {/* <PriceTag price={price} oldPrice={oldPrice} /> */}
-                        <View style={s.rating}>
-                          {/* <Rating1 /> */}
-                          {/* <RatingCount ratingCount={ratingCount} /> */}
-                          <DishTypes
-                            categories={item?.MenuItemCategories}
-                            // dish1={dish1}
-                            // dish2={dish2}
-                            // dish3={dish3}
-                          />
-                          <PriceTag
-                            price={
-                              item?.discount
-                                ? (item?.amount - item?.discount).toFixed(2)
-                                : item?.amount
-                            }
-                            oldPrice={item?.discount ? item?.amount : null}
-                          />
-                        </View>
-                        <Text style={s.dishType}>
-                          {item?.menuItemType?.toUpperCase()}
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-                );
-              })}
+              <FlatList
+                // horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                data={menuItem}
+                keyExtractor={(item, index) => {
+                  // console.log(item.eventId.toString(), 'index');
+                  return index.toString();
+                }}
+                renderItem={renderItems2}
+                removeClippedSubviews={true} // Unmount components when outside of window
+                initialNumToRender={2} // Reduce initial render amount
+                maxToRenderPerBatch={2} // Reduce number in each render batch
+                updateCellsBatchingPeriod={20000} // Increase time between renders
+                windowSize={10} // Reduce the window size
+              />
             </View>
-          )}
-
-          {/* {historyMenuItems.length == 0 ? (
-          <Skeleton />
-        ) : (
-          <Categories
-            bool={historyMenuItems.length == 0 ? true : false}
-            title="Healthy"
-            subtitle="Keep a health lifestyle"
-            menuItem={historyMenuItems}
-          />
-        )}
-
-        {menuItemsForYou.length == 0 ? (
-          <Skeleton />
-        ) : (
-          <Categories
-            bool={menuItemsForYou.length == 0 ? true : false}
-            menuItem={menuItemsForYou}
-            title="More for you"
-            subtitle="Explore many other dishes on the menu."
-          />
-        )} */}
-
-          {/* <Button
-          title="BROWSE MORE MENU"
-          type={ButtonType.outline}
-          buttonStyle={S.browseButtonStyle}
-          titleStyle={S.browseTitleStyle}
-          onPress={() => {}}
-        />
-        <Button
-          title="BACK TO TOP"
-          type={ButtonType.outline}
-          buttonStyle={S.backTopButtonStyle}
-          titleStyle={S.backtopTitleStyle}
-          onPress={() => {}}
-        /> */}
+          )} */}
         </View>
       </ScrollView>
 

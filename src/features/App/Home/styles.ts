@@ -42,7 +42,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginHorizontal: 15,
-    marginTop: 5,
+    marginTop: 15,
     backgroundColor: '#F6F6F6',
     borderRadius: 5,
     // height: 120,

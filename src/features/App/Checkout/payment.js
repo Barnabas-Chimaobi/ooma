@@ -49,6 +49,7 @@ export class State extends Component {
       paymentMethod: this.props.route.params?.paymentMethod,
       modalVisible: false,
       success: false,
+      planState: this.props.route.params?.planOrderState,
     };
     this.paystackWebViewRef = React.createRef(null);
     this.backAction = this.backAction.bind(this);
@@ -109,9 +110,13 @@ export class State extends Component {
 
   backAction = async () => {
     // setLoading(true);
-    this.setState({
-      modalVisible: true,
-    });
+    if (!this.state.success) {
+      this.setState({
+        modalVisible: true,
+      });
+    } else {
+      this.props.navigation.navigate('Home');
+    }
   };
 
   backToHome = () => {
@@ -122,7 +127,7 @@ export class State extends Component {
     return this.state.success ? (
       <ImageBackground
         style={{width: '100%', height: '100%'}}
-        source={mealSuccess}>
+        source={this.state.planState ? mealSuccess : instantSuccess}>
         <View
           style={{
             // backgroundColor: colors.white,

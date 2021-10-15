@@ -210,7 +210,7 @@ const OrderDetails = () => {
               }
             />
 
-            <View style={{marginTop: -25}}>
+            <View style={{}}>
               <OrderCard
                 details={null}
                 dateTitle="Payment Details"

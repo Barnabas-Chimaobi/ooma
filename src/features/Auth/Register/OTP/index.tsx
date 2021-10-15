@@ -23,7 +23,7 @@ const OTP = () => {
   return (
     <OmaCard
       title="Enter OTP"
-      titleStyle={[S.omaTitle, {fontSize: 16,margin:10}]}
+      titleStyle={[S.omaTitle, {fontSize: 16, margin: 10}]}
       subTitle="A message has been sent to your number. Please enter the six digits sent to you."
       subStyle={S.omaSubTitle}
       mainStyle={S.omaMainStyle}
@@ -31,7 +31,7 @@ const OTP = () => {
         <CodeInput
           inputPosition="full-width"
           codeLength={6}
-          size={45}
+          size={38}
           space={1}
           secureTextEntry
           keyboardType="number-pad"

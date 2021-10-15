@@ -17,6 +17,7 @@ interface IProps {
   checkout: any;
   orderTotal: any;
   orderefId: any;
+  itemorder: any;
 }
 
 const Total = ({
@@ -33,12 +34,13 @@ const Total = ({
   checkout,
   orderTotal,
   orderefId,
+  itemorder,
 }: IProps) => {
   console.log(total, typeof total, '=======listssss===ssss==');
   return (
     <View style={[S.main, mainStyle]}>
       {randomTitle && (
-        <View style={S.bodyStyle}>
+        <View style={!itemorder ? S.bodyStyle : S.bodyStyle1}>
           <Text style={[S.textStyle, randomTitleStyle]}>{randomTitle}</Text>
           <View style={{marginLeft: orderefId ? 20 : '45%'}}>
             <Text style={[S.textStyle, randomStyle]}>{randomValue}</Text>

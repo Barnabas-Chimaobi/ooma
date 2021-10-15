@@ -10,7 +10,7 @@ import {useNavigation} from '@react-navigation/core';
 
 const RenderItems = ({item}: any) => {
   // console.log(
-  let ones = item?.data?.map((item) => item?.data?.map((item) => item));
+  // let ones = item?.data?.map((item) => item?.data?.map((item) => item));
   // console.log(ones, 'ones=======');
   //   'item',
   // );
@@ -25,7 +25,7 @@ const RenderItems = ({item}: any) => {
           ),
             console.log(item, 'item===========');
           return (
-            item?.itemData?.menuitemorders?.status === 'Delivered' && (
+            item?.itemData?.menuitemorders?.status !== 'Delivered' && (
               <OrderCard
                 total={item?.itemData?.menuitemorders?.total}
                 details={item}
@@ -35,8 +35,13 @@ const RenderItems = ({item}: any) => {
                   <>
                     <Total
                       randomTitle="ORDER ID"
-                      randomValue={item?.itemData?.id}
+                      randomValue={item?.itemData?.orderRef}
                       mainStyle={S.totalStyle}
+                      randomStyle={{
+                        color: colors.black,
+                        fontWeight: 'bold',
+                        fontSize: 14,
+                      }}
                     />
                     {/* {item?.itemData?.menuitemorders?.MenuItemOrderDetails?.map(
                     (items, index) => ( */}
@@ -46,6 +51,11 @@ const RenderItems = ({item}: any) => {
                         item?.itemData?.menuitemorders?.MenuItemOrderDetails
                           ?.length
                       }
+                      randomStyle={{
+                        color: colors.black,
+                        fontWeight: 'bold',
+                        fontSize: 14,
+                      }}
                       mainStyle={S.totalStyle}
                     />
                     {/* ),
@@ -55,6 +65,11 @@ const RenderItems = ({item}: any) => {
                       total={Number(item?.itemData?.menuitemorders?.total)}
                       totalTitle="PRICE"
                       mainStyle={S.totalStyle}
+                      randomStyle={{
+                        color: colors.black,
+                        fontWeight: 'bold',
+                        fontSize: 14,
+                      }}
                     />
                     <Total
                       randomTitle="STATUS"

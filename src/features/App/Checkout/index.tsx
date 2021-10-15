@@ -18,6 +18,7 @@ import {
   Button,
   ShowMessage,
   type,
+  Alert,
 } from '../../../components';
 import {check} from '../../../assets';
 import S from './styles';
@@ -118,6 +119,10 @@ const Checkout = () => {
   let a = 50;
   let b = 60;
   useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      getAddress();
+    });
+
     console.log(params, a + b, 'paramssss');
     console.log(params?.paramsBuynow?.amount, a + b, 'paramssss');
 
@@ -167,7 +172,7 @@ const Checkout = () => {
         : !params?.planOrder
         ? params?.params?.map((item: any) => item.cartId)?.toString()
         : params?.params?.map((item: any) => item.id)?.toString(),
-    deliveryTime: date?.toLocaleDateString(),
+    deliveryTime: date,
     deliveryAddress: myAddress,
     deliveryOption: deliveryOption,
     orderForFriend: switchs,
@@ -186,22 +191,25 @@ const Checkout = () => {
     setLoading(true);
     console.log(body, '===idddddddd');
     if (deliveryOption === 'Delivery' && !addressId) {
-      ShowMessage(
-        type.INFO,
-        'please select a pick-up location and enter your delivery address',
-      ); // dispatch(cartStates(addedCart));
+      Alert('please select a pick-up location and enter your delivery address');
+      // ShowMessage(
+      //   type.INFO,
+      //   'please select a pick-up location and enter your delivery address',
+      // ); // dispatch(cartStates(addedCart));
       setLoading(false);
     } else if (deliveryOption === 'Delivery' && !myAddress) {
-      ShowMessage(
-        type.INFO,
-        'please select a pick-up location and enter your delivery address',
-      ); // dispatch(cartStates(addedCart));
+      Alert('please select a pick-up location and enter your delivery address');
+      // ShowMessage(
+      //   type.INFO,
+      //   'please select a pick-up location and enter your delivery address',
+      // ); // dispatch(cartStates(addedCart));
       setLoading(false);
     } else if (paymentMethod === '') {
-      ShowMessage(
-        type.INFO,
-        'please select a payment method to proceed with your order',
-      ); // dispatch(cartStates(addedCart));
+      Alert('please select a payment method to proceed with your order');
+      // ShowMessage(
+      //   type.INFO,
+      //   'please select a payment method to proceed with your order',
+      // ); // dispatch(cartStates(addedCart));
       setLoading(false);
     } else {
       const cart = await createMenuItemOrder(body);
@@ -214,6 +222,7 @@ const Checkout = () => {
         setLoading(false);
         if (payState === 'CARD') {
           navigation.navigate('Payment', {
+            planOrderState: params?.planOrder,
             amount: totalAmount,
             branchId: branch,
             orderId: cart?.data?.data?.id,
@@ -226,10 +235,11 @@ const Checkout = () => {
         }
       } else {
         setLoading(false);
-        ShowMessage(
-          type.ERROR,
-          'An error occured while placing your orders. Please try again',
-        ); // dispatch(cartStates(addedCart));
+        Alert('An error occured while placing your orders. Please try again');
+        // ShowMessage(
+        //   type.ERROR,
+        //   'An error occured while placing your orders. Please try again',
+        // ); // dispatch(cartStates(addedCart));
       }
     }
   };
@@ -246,10 +256,11 @@ const Checkout = () => {
     const cart = await createMenuPlanOrder(body);
     // const orderNow = await createMenuItemOrderDetail(body, cart?.id);
     if (paymentMethod === '') {
-      ShowMessage(
-        type.INFO,
-        'please select a payment method to proceed with your order',
-      ); // dispatch(cartStates(addedCart));
+      Alert('please select a payment method to proceed with your order');
+      // ShowMessage(
+      //   type.INFO,
+      //   'please select a payment method to proceed with your order',
+      // ); // dispatch(cartStates(addedCart));
       setLoading(false);
     } else {
       if (cart?.statusCode === 201) {
@@ -259,6 +270,7 @@ const Checkout = () => {
         // }
         if (payState === 'CARD') {
           navigation.navigate('Payment', {
+            planOrderState: params?.planOrder,
             amount: totalAmount,
             branchId: branch,
             orderId: cart?.data?.data?.id,
@@ -271,10 +283,11 @@ const Checkout = () => {
         }
       } else {
         setLoading(false);
-        ShowMessage(
-          type.ERROR,
-          'An error occured while placing your orders. Please try again',
-        ); // dispatch(cartStates(addedCart));
+        Alert('An error occured while placing your orders. Please try again');
+        // ShowMessage(
+        //   type.ERROR,
+        //   'An error occured while placing your orders. Please try again',
+        // ); // dispatch(cartStates(addedCart));
       }
     }
 
@@ -327,7 +340,7 @@ const Checkout = () => {
 
   const text = (item: any) => {
     setDate(item);
-    console.log(item?.toDateString(), 'datedsssss');
+    console.log(item, 'datedsssss');
   };
 
   const showCheck = () => {
@@ -362,10 +375,9 @@ const Checkout = () => {
   return success ? (
     <ImageBackground
       style={{width: '100%', height: '100%'}}
-      source={instantSuccess}>
+      source={params?.planOrder ? mealSuccess : instantSuccess}>
       <View
         style={{
-          // backgroundColor: colors.white,
           top: '92%',
           height: 40,
           width: '40%',

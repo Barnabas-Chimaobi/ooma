@@ -37,11 +37,13 @@ export default StyleSheet.create({
     fontSize: 30,
     elevation: 1,
     backgroundColor: 'white',
+    borderRadius: 5,
   },
   codeInputContainerStyle: {
     alignItems: 'center',
     margin: 10,
     marginBottom: 40,
+    marginTop: -30,
   },
   passwordInputContainerStyle: {
     backgroundColor: 'rgba(48, 48, 48, 0.3)',

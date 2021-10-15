@@ -29,10 +29,7 @@ export default StyleSheet.create({
   timerBar: {
     backgroundColor: 'white',
     borderRadius: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
     padding: 6,
-    width: '30%',
   },
 });

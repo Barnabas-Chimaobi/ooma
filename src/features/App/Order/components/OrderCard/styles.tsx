@@ -6,9 +6,12 @@ export default StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: 10,
     // elevation: 2,
-    marginTop: 18,
+    marginTop: 8,
     marginBottom: 15,
+    elevation: 10,
     marginLeft: 10,
+    marginRight: 10,
+    // marginLeft: 10,
   },
   right: {
     fontSize: 11,

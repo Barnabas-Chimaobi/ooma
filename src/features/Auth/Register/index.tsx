@@ -9,7 +9,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useSelector, useDispatch} from 'react-redux';
 import Wizard from 'react-native-wizard';
 import Terms from '../components/Terms';
-import {Logo, Button, ButtonType, ShowMessage, type} from '../../../components';
+import {
+  Logo,
+  Button,
+  ButtonType,
+  ShowMessage,
+  type,
+  Alert,
+} from '../../../components';
 import S from './styles';
 import {factoryStyles as IS} from './styles';
 import Name from './Name';
@@ -86,8 +93,9 @@ const Register = () => {
         // dispatch(signIn());
       }
     } catch (err) {
+      Alert('Incorrect password');
       setLoading(false);
-      console.log(err);
+      console.log(err, 'sdhjghkljhgfhds');
     }
   };
 
@@ -125,11 +133,13 @@ const Register = () => {
       } else {
         setLoading(false);
         console.log(number, 'number');
-        ShowMessage(type.INFO, 'Phone number must be at least 11 characters');
+        Alert('Phone number must be at least 11 characters');
+        // ShowMessage(type.INFO, 'Phone number must be at least 11 characters');
       }
     } catch (err) {
       setLoading(false);
-      ShowMessage(type.ERROR, err);
+      Alert(err);
+      // ShowMessage(type.ERROR, err);
     }
   };
 
@@ -200,7 +210,8 @@ const Register = () => {
       }
     } else {
       setLoading(false);
-      ShowMessage(type.ERROR, 'please confirm password');
+      Alert('please confirm password');
+      // ShowMessage(type.ERROR, 'please confirm password');
       console.log('please confirm password');
     }
   };

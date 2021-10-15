@@ -1,4 +1,5 @@
 import React from 'react';
+import {View} from 'react-native';
 import {OmaCard, BaseInput, BaseKeyBoardType} from '../../../../components';
 import S from '../styles';
 import {colors} from '../../../../colors';
@@ -13,19 +14,33 @@ const ConfirmPhone = () => {
   return (
     <OmaCard
       title="Is this your phone number?"
-      titleStyle={S.omaTitle}
+      titleStyle={{
+        fontSize: 18,
+        fontWeight: 'bold',
+        margin: 10,
+        fontFamily: 'Montserrat',
+      }}
       subTitle="Verify your phone number. A message will be sent to you."
       subStyle={S.omaSubTitle}
       mainStyle={S.omaMainStyle}
       otherProps={
         <>
-          <BaseInput
-            value={number}
-            keyboardType={BaseKeyBoardType.phonePad}
-            autoFocus={true}
-            inputStyle={{backgroundColor: colors.white, color: colors.black}}
-            editable={false}
-          />
+          <View style={{marginBottom: -30}}>
+            <BaseInput
+              value={number}
+              keyboardType={BaseKeyBoardType.phonePad}
+              autoFocus={true}
+              inputStyle={{
+                backgroundColor: colors.t,
+                color: colors.black,
+                width: '95%',
+                alignSelf: 'center',
+                marginLeft: 8,
+                borderRadius: 10,
+              }}
+              editable={false}
+            />
+          </View>
         </>
       }
     />

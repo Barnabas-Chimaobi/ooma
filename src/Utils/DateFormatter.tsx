@@ -86,8 +86,12 @@ export default class DateFormatter {
   static yesterday = moment().subtract(1, 'days');
 
   static formatAMPM = (date: any) => {
-    date = new Date(new Date(date).getTime() - 60 * 60000);
+    // date = new Date(new Date(date).getTime() - 60 * 60000);
+    date = new Date(date);
+
     var hours = date.getHours();
+
+    console.log(hours, date, 'hoursss===');
     var minutes = date.getMinutes();
     var ampm = hours >= 12 ? 'PM' : 'AM';
     hours = hours % 12;

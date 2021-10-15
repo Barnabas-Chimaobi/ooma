@@ -25,6 +25,7 @@ import {
   ShowMessage,
   type,
   CheckBox,
+  Alert,
 } from '../../../../components';
 import {Icon, Divider} from 'react-native-elements';
 import CollapsibleView from '../Components/Collapsible';
@@ -311,7 +312,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
       });
       const addedCart = await cart?.data?.data;
       if (body?.amount === 'NaN') {
-        ShowMessage(type.INFO, 'Please wait as the item details load ');
+        Alert('Please wait as the item details load');
       } else {
         if (item == 'Buy now' && addedCart?.amount !== undefined) {
           setLoading(false);
@@ -323,7 +324,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           });
         } else if (addedCart?.amount !== undefined) {
           setLoading(false);
-          ShowMessage(type.DONE, 'Item added to cart successfully'); // dispatch(cartStates(addedCart));
+          Alert('Item added to cart successfully');
           setCartItem(addedCart);
           setCartId(addedCart?.id);
           // if (menuPlan != 'menuPlan') {
@@ -333,18 +334,13 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           // console.log(addedCart, 'addedcaart');
         } else {
           setLoading(false);
-          ShowMessage(
-            type.ERROR,
-            'Sorry we could not process your order at this time',
-          );
+          Alert('Sorry we could not process your order at this time');
         }
       }
     } catch (err) {
       setLoading(false);
-      ShowMessage(
-        type.ERROR,
-        'Sorry we could not process your order at this time',
-      );
+      Alert('Sorry we could not process your order at this time');
+
       // console.log(err, 'cartError');
     }
   };
@@ -356,14 +352,20 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     console.log(myAddress, deliveryOption, time, addressId, 'idddddddssss====');
     try {
       if (addressId === null && deliveryOption === 'Delivery') {
-        ShowMessage('Hello', 'completed processing', 'successs');
+        // ShowMessage('Hello', 'completed processing', 'successs');
+        Alert(
+          'please check if you have selected a delivery location, time and enter your delivery address',
+        );
         // ShowMessage(
         //   type.INFO,
         //   'please check if you have selected a delivery location, time and enter your delivery address',
         // ); // dispatch(cartStates(addedCart));
         setLoading(false);
       } else if (time === null && deliveryOption === 'Delivery') {
-        ShowMessage('Hello', 'completed processing', 'successs');
+        // ShowMessage('Hello', 'completed processing', 'successs');
+        Alert(
+          'please check if you have selected a delivery location, time and enter your delivery address',
+        );
 
         // ShowMessage(
         //   type.INFO,
@@ -371,7 +373,10 @@ const CardItem: FC<IProps> = ({route, menu}) => {
         // ); // dispatch(cartStates(addedCart));
         setLoading(false);
       } else if (myAddress === null && deliveryOption === 'Delivery') {
-        ShowMessage('Hello', 'completed processing', 'successs');
+        // ShowMessage('Hello', 'completed processing', 'successs');
+        Alert(
+          'please check if you have selected a delivery location, time and enter your delivery address',
+        );
 
         // ShowMessage(
         //   type.INFO,
@@ -379,7 +384,8 @@ const CardItem: FC<IProps> = ({route, menu}) => {
         // ); // dispatch(cartStates(addedCart));
         setLoading(false);
       } else if (deliveryOption == 'Pick-Up' && time === null) {
-        ShowMessage('Hello', 'completed processing', 'successs');
+        // ShowMessage('Hello', 'completed processing', 'successs');
+        Alert('please check if you have selected time of meal');
 
         // ShowMessage(
         //   type.INFO,
@@ -412,27 +418,27 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           setLoading(false);
           setCartItem(addedCart);
           setCartId(addedCart?.id);
-          ShowMessage(type.DONE, 'Item added to basket successfully');
+          // ShowMessage(type.DONE, 'Item added to basket successfully');
           navigation.goBack();
         } else if (addedCart?.id !== undefined) {
           setLoading(false);
-          ShowMessage(type.DONE, 'Item added to cart successfully'); // dispatch(cartStates(addedCart));
+          // ShowMessage(type.DONE, 'Item added to cart successfully'); // dispatch(cartStates(addedCart));
         }
         // console.log(addedCart, 'addedcaart');
       }
     } catch (err) {
       if (menuPlan == 'menuPlan' && err) {
         setLoading(false);
-        ShowMessage(
-          type.ERROR,
-          'An Error occured while adding your item to basket. Please ensure you supplied all the required details and try again',
-        );
+        // ShowMessage(
+        //   type.ERROR,
+        //   'An Error occured while adding your item to basket. Please ensure you supplied all the required details and try again',
+        // );
       } else {
         setLoading(false);
-        ShowMessage(
-          type.ERROR,
-          'An Error occured while adding your item to cart. please ensure you supplied all the required details and try again',
-        ); // dispatch(cartStates(addedCart));
+        // ShowMessage(
+        //   type.ERROR,
+        //   'An Error occured while adding your item to cart. please ensure you supplied all the required details and try again',
+        // ); // dispatch(cartStates(addedCart));
       }
       console.log(err, 'cartError');
     }
@@ -468,7 +474,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
       });
       const addedCart = cart?.data?.data;
       // if (cart?.config?.response == 'Cart updated successfully') {
-      ShowMessage(type.DONE, 'Item edited successfully'); // dispatch(cartStates(addedCart));
+      Alert('Item edited successfully');
       setCartItem(addedCart);
       navigation.goBack();
       // console.log(cart?.config?.data, 'editedcartttt');
@@ -738,7 +744,9 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                               processAddons={processAddons}
                               removeAddon={removeAddon}
                               props={(item: any) => submitProp(item)}
-                              mainStyle={{paddingVertical: 10}}
+                              mainStyle={{
+                                paddingVertical: 10,
+                              }}
                               title={
                                 addon?.isExtra == true
                                   ? `Extra ${addon?.Inventory?.itemName}`
@@ -826,6 +834,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           {/* <Divider /> */}
           <View style={{borderWidth: 1.5, borderColor: colors.t}} />
           <Adjust
+            mainquanty="main"
             props1={(item: any) => getQuantity(item)}
             mainStyle={{paddingVertical: 20}}
             title="Adjust Quantity"

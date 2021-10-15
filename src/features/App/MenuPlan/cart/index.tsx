@@ -572,7 +572,7 @@ export const Cart = () => {
                 width: 70,
                 alignSelf: 'flex-end',
                 position: 'absolute',
-                bottom: '30%',
+                bottom: route?.params?.plan ? '5%' : '25%',
                 right: 10,
                 // borderRadius: 70,
               }}>

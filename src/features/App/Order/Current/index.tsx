@@ -15,7 +15,7 @@ const RenderItems = ({item}: any) => {
   //   'item',
   // );
   return (
-    <View>
+    <View style={{backgroundColor: colors.white}}>
       <Text>{item?.deliveryTime}</Text>
       {item?.data?.map((items) =>
         items?.data?.map((item) => {
@@ -33,42 +33,62 @@ const RenderItems = ({item}: any) => {
                 titlePosition="right"
                 children={
                   <>
-                    <Total
-                      randomTitle="ORDER ID"
-                      randomValue={item?.itemData?.orderRef}
-                      mainStyle={S.totalStyle}
-                    />
-                    {/* {item?.itemData?.menuitemorders?.MenuItemOrderDetails?.map(
+                    <View style={{marginTop: -25}}>
+                      <Total
+                        itemorder={'itemorder'}
+                        randomTitle="Order ID"
+                        randomValue={item?.itemData?.orderRef}
+                        mainStyle={S.totalStyle}
+                        randomStyle={{
+                          color: colors.black,
+                          fontWeight: 'bold',
+                          fontSize: 14,
+                        }}
+                      />
+                      {/* {item?.itemData?.menuitemorders?.MenuItemOrderDetails?.map(
                     (items, index) => ( */}
-                    <Total
-                      randomTitle={'ITEM'}
-                      randomValue={
-                        item?.itemData?.menuitemorders?.MenuItemOrderDetails
-                          ?.length
-                      }
-                      mainStyle={S.totalStyle}
-                    />
-                    {/* ),
+                      <Total
+                        randomTitle={'ITEM'}
+                        randomValue={
+                          item?.itemData?.menuitemorders?.MenuItemOrderDetails
+                            ?.length
+                        }
+                        mainStyle={S.totalStyle}
+                        randomStyle={{
+                          color: colors.black,
+                          fontWeight: 'bold',
+                          fontSize: 14,
+                        }}
+                      />
+                      {/* ),
                   )} */}
 
-                    <Total
-                      orderTotal={Number(item?.itemData?.menuitemorders?.total)}
-                      totalTitle="PRICE"
-                      mainStyle={S.totalStyle}
-                    />
-                    <Total
-                      randomTitle="STATUS"
-                      randomValue={item?.itemData?.menuitemorders?.status}
-                      mainStyle={S.totalStyle}
-                      randomStyle={{
-                        color: colors.start,
-                        // item?.paymentStatus == 'Cancelled'
-                        //   ? colors.red
-                        //   : item?.paymentStatus == 'NOT-PAID'
-                        //   ? colors.primary
-                        //   : colors.black,
-                      }}
-                    />
+                      <Total
+                        orderTotal={Number(
+                          item?.itemData?.menuitemorders?.total,
+                        )}
+                        totalTitle="Price"
+                        mainStyle={S.totalStyle}
+                        randomStyle={{
+                          color: colors.black,
+                          fontWeight: 'bold',
+                          fontSize: 14,
+                        }}
+                      />
+                      <Total
+                        randomTitle="Status"
+                        randomValue={item?.itemData?.menuitemorders?.status}
+                        mainStyle={S.totalStyle}
+                        randomStyle={{
+                          color: colors.start,
+                          // item?.paymentStatus == 'Cancelled'
+                          //   ? colors.red
+                          //   : item?.paymentStatus == 'NOT-PAID'
+                          //   ? colors.primary
+                          //   : colors.black,
+                        }}
+                      />
+                    </View>
                   </>
                 }
               />

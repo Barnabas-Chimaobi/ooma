@@ -16,6 +16,7 @@ export default StyleSheet.create({
   },
   adjustTitleStyle: {
     fontWeight: 'normal',
-    width: '30%',
+    width: '35%',
+    fontFamily: 'Roboto',
   },
 });

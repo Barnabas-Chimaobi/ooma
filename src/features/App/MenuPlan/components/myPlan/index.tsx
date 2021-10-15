@@ -33,6 +33,7 @@ import {BallIndicator} from 'react-native-indicators';
 import {useDispatch, useSelector} from 'react-redux';
 import {planStates} from '../../../../../reducers/planlist';
 import {AppDispatch, RootState} from '../../../../../store';
+import {colors} from '../../../../../colors';
 
 const {width: windowWidth} = Dimensions.get('window');
 
@@ -281,40 +282,53 @@ export const MyPlans = ({findPlan}: Props) => {
     planId,
   }: ListProps) => {
     return (
-      <TouchableWithoutFeedback
-        onPress={() =>
-          navigation.navigate('Cart', {
-            id: planId,
-            plan: 'plan',
-            planName: itemName,
-          })
-        }
-        style={styles.innerListItemStyle}>
-        <Image
+      <View>
+        <View
           style={{
-            height: Dimensions.get('window').height / 6.8,
-            width: Dimensions.get('window').width / 3.4,
+            elevation: 10,
+            width: '96%',
+            backgroundColor: colors.white,
             borderRadius: 10,
-          }}
-          source={{uri: imageUrl}}
-        />
-        <View style={styles.itemTextArea}>
-          <Text style={styles.itemNameStyle}>{itemName}</Text>
-          <View style={{flexDirection: 'row'}}>
-            <Text style={styles.timeStyle}>
-              {new Date(time).toDateString()} -
-            </Text>
-            <Text> </Text>
-            <Text style={styles.timeStyle}>
-              {new Date(time1).toDateString()}
-            </Text>
-          </View>
-          <View>
-            <Text style={styles.statusStyle}>{status}</Text>
-            {/* <ProgressBar progressValue={pecentage} /> */}
-          </View>
+            marginBottom: 15,
+            alignSelf: 'center',
+          }}>
+          <TouchableWithoutFeedback
+            onPress={() =>
+              navigation.navigate('Cart', {
+                id: planId,
+                plan: 'plan',
+                planName: itemName,
+              })
+            }
+            style={styles.innerListItemStyle}>
+            <Image
+              style={{
+                height: Dimensions.get('window').height / 6.8,
+                width: Dimensions.get('window').width / 3.4,
+                borderRadius: 10,
+                marginLeft: -5,
+              }}
+              source={{uri: imageUrl}}
+            />
+            <View style={styles.itemTextArea}>
+              <Text style={styles.itemNameStyle}>{itemName}</Text>
+              <View style={{flexDirection: 'row'}}>
+                <Text style={styles.timeStyle}>
+                  {new Date(time).toDateString()} -
+                </Text>
+                <Text> </Text>
+                <Text style={styles.timeStyle}>
+                  {new Date(time1).toDateString()}
+                </Text>
+              </View>
+              <View>
+                <Text style={styles.statusStyle}>{status}</Text>
+                {/* <ProgressBar progressValue={pecentage} /> */}
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
         </View>
-      </TouchableWithoutFeedback>
+      </View>
     );
   };
 
@@ -379,7 +393,7 @@ export const MyPlans = ({findPlan}: Props) => {
               />
 
               <Text style={{textAlign: 'center', marginTop: 120}}>
-                Getting your plans ready...
+                Loading your meal plans...
               </Text>
             </View>
           ) : (
@@ -458,7 +472,7 @@ const styles = StyleSheet.create({
   },
   innerListItemStyle: {
     borderBottomColor: '#44444475',
-    borderBottomWidth: 1,
+    // borderBottomWidth: 1,
     padding: 10,
     flexDirection: 'row',
   },

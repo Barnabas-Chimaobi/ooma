@@ -186,7 +186,7 @@ const More: React.FC<Props> = ({navigation}) => {
     }
   };
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, backgroundColor: colors.white}}>
       <View style={{flex: 1, paddingHorizontal: 10}}>
         <SimpleHeader hasBottomBorder />
         {/* <RefreshControl refreshing={loading} /> */}
@@ -285,7 +285,7 @@ const More: React.FC<Props> = ({navigation}) => {
                     style={{
                       // backgroundColor: colors.activeTintColor,
                       borderRadius: 5,
-                      padding: 3,
+                      // padding: 3,
                       flexDirection: 'row',
                     }}>
                     <Text

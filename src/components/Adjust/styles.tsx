@@ -12,7 +12,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    width: '20%',
+    width: '25%',
   },
   buttonStyle: {
     padding: 7,
@@ -22,6 +22,7 @@ export default StyleSheet.create({
     // fontWeight: 'bold',
     fontSize: 15,
     fontFamily: 'Montserrat',
+    fontWeight: '900',
   },
   valueStyle: {
     paddingHorizontal: 15,

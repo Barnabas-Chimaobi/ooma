@@ -139,7 +139,7 @@ const MyCarousel: FC<CarouselProps> = ({menuItem, page = 1, keyProp}) => {
                 backgroundColor: colors.start,
                 // marginTop: '-8%',
                 color: colors.white,
-                width: 126,
+                width: 110,
                 padding: 8,
                 borderRadius: 5,
                 marginLeft: -4,

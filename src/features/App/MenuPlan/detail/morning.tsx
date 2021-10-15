@@ -131,7 +131,14 @@ const Morning = (morning: any, planIds: any, times: any) => {
             animating={refreshing}
             // style={{marginBottom: 30}}
           /> */}
-            <Text style={{height: 150, paddingTop: 70, alignSelf: 'center'}}>
+            <Text
+              style={{
+                height: 150,
+                paddingTop: 70,
+                alignSelf: 'center',
+                fontSize: 16,
+                fontFamily: 'Montserrat',
+              }}>
               Getting available meals
             </Text>
             {/* <EmptyList

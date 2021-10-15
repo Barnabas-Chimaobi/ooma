@@ -12,6 +12,12 @@ export default StyleSheet.create({
     // width: '100%',
     paddingBottom: 10,
   },
+  bodyStyle1: {
+    flexDirection: 'row',
+    // justifyContent: 'space-between',
+    // width: '100%',
+    paddingBottom: 10,
+  },
   bodyStyleAmout1: {
     flexDirection: 'row',
     width: '100%',
@@ -26,10 +32,13 @@ export default StyleSheet.create({
   },
   textStyle: {
     fontSize: 12,
+    fontFamily: 'Montserrat',
+    fontWeight: '900',
   },
   textStyle1: {
     fontSize: 14,
     fontWeight: 'bold',
+    fontFamily: 'Montserrat',
   },
   textStyle2: {
     fontSize: 14,

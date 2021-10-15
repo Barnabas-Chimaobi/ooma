@@ -42,9 +42,6 @@ import Toast from 'react-native-toast-message';
 // export default (type: string, message: string, url?: string) => {
 //   const snackBarOpts = {
 //     data:
-//       // message.includes('Variable "$')
-//       //   ? 'Error processing request please try again'
-//       //   :
 //       message,
 //     // position: WSnackBar.position.BOTTOM, // 1.TOP 2.CENTER 3.BOTTOM
 //     duration: 5000, //1.SHORT 2.LONG 3.INDEFINITE
@@ -65,7 +62,9 @@ import Toast from 'react-native-toast-message';
 //   INFO: 'INFO',
 // };
 
-const toast = (title: any, text: any, type: any) => {
+const Toasts = (title: any, text: any, type: any) => {
+
+  console.log(title, text, type, "fhgjkhgfgdfsdfgh")
   return(
     Toast.show({
       type: type,
@@ -82,4 +81,4 @@ const toast = (title: any, text: any, type: any) => {
   );
 };
 
-export default toast
+export default Toasts

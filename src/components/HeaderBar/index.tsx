@@ -48,7 +48,7 @@ const HeaderBar = ({
     const currentDate = selectedDate || date;
     setDate(currentDate);
     setShow(Platform.OS === 'ios');
-    modes(currentDate);
+    modes(DateFormatter.formatAMPM(currentDate));
   };
 
   const showMode = (currentMode: any) => {
@@ -72,15 +72,17 @@ const HeaderBar = ({
               ) : (
                 <Image source={image1} style={s.locationImage} />
               )}
-              <Text style={{fontSize: 13}}>{title}</Text>
+              <Text style={{fontSize: 13, fontFamily: 'Open Sans'}}>
+                {title}
+              </Text>
             </View>
             <TouchableOpacity
               onPress={() => {
                 // (otherTitle == 'Set Time' || title == 'Set Time') &&
                 showDatepicker();
               }}
-              style={[s.timerBar, rejig && {width: '50%', padding: 0}]}>
-              {rejig ? (
+              style={[s.timerBar, rejig && {width: '30%', padding: 0}]}>
+              {/* {rejig ? (
                 <>
                   <Text style={s.rejig}>{rejigTitle}</Text>
                 </>
@@ -89,7 +91,7 @@ const HeaderBar = ({
                   source={image2}
                   style={{height: 18, width: 18, marginLeft: -25}}
                 />
-              )}
+              )} */}
               <Text
                 style={
                   (rejig && {padding: 6}) ||
@@ -97,7 +99,8 @@ const HeaderBar = ({
                     paddingHorizontal: 5,
                     // width: 90,
                     fontSize: 12,
-                    paddingRight: 20,
+                    marginLeft: 20,
+                    textAlign: 'center',
                   })
                 }>
                 {date ? DateFormatter.formatAMPM(date) : 'Now'}
@@ -110,7 +113,8 @@ const HeaderBar = ({
                 testID="dateTimePicker"
                 value={date || new Date()}
                 mode={'time'}
-                is24Hour={true}
+                is24Hour
+                // is24Hour={true}
                 display="default"
                 onChange={onChange}
               />
@@ -119,7 +123,7 @@ const HeaderBar = ({
                 testID="dateTimePicker"
                 value={date || new Date()}
                 mode={'time'}
-                is24Hour={true}
+                // is24Hour={true}
                 display="default"
                 onChange={onChange}
               />
@@ -135,11 +139,12 @@ const HeaderBar = ({
                 alignSelf: 'flex-start',
                 opacity: 0.5,
                 left: 5,
+                fontFamily: 'Montserrat',
               }}>
               Location
             </Text>
             <View style={S.locationDetails}>
-              <Text style={{fontSize: 13}}>
+              <Text style={{fontSize: 13, fontFamily: 'Open Sans'}}>
                 {title.length > 25 ? title.substring(0, 25) + '..' : title}
               </Text>
 

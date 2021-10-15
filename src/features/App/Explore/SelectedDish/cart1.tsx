@@ -23,6 +23,7 @@ import {
   type,
   CheckBox,
   SimpleHeader,
+  Alert,
 } from '../../../../components';
 import {Icon, Divider} from 'react-native-elements';
 import CollapsibleView from '../Components/Collapsible';
@@ -252,7 +253,8 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     try {
       const cart = await api.put('/orders/cart', newbody);
       const addedCart = cart?.data?.data;
-      ShowMessage(type.DONE, 'Item edited successfully'); // dispatch(cartStates(addedCart));
+      Alert('Item edited successfully');
+      // ShowMessage(type.DONE, 'Item edited successfully'); // dispatch(cartStates(addedCart));
       setCartItem(addedCart);
       navigation.goBack();
     } catch (err) {

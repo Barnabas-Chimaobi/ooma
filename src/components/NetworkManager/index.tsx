@@ -10,20 +10,27 @@ import {
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState, AppDispatch} from '../../store';
 import {checkNetwork} from '../../reducers';
-import {instantSuccess} from '../../assets';
+import {instantSuccess, loader} from '../../assets';
+import {colors} from '../../colors';
 
 const NetworkStateWrapper = () => {
   const [loading, setLoading] = useState(false);
   const dispatch: AppDispatch = useDispatch();
   const {toggleNetwork} = useSelector((state: RootState) => state.network);
 
-  const subscriptions = NetInfo.addEventListener((state) => {
-    if (!state.isInternetReachable) {
-      dispatch(checkNetwork(false));
-    } else {
-      dispatch(checkNetwork(true));
-    }
-  });
+  const subscriptions = () => {
+    setLoading(true);
+    NetInfo.addEventListener((state) => {
+      console.log('subbbbbbccrrii');
+      if (!state.isInternetReachable) {
+        dispatch(checkNetwork(false));
+        // setLoading(false);
+      } else {
+        dispatch(checkNetwork(true));
+        // setLoading(false);
+      }
+    });
+  };
 
   useEffect(() => {
     const subscription = NetInfo.addEventListener((state) => {
@@ -50,22 +57,48 @@ const NetworkStateWrapper = () => {
         borderRadius: 5,
         margin: 5,
       }}>
-      <Text style={{fontWeight: 'bold', color: '#fff', textAlign: 'center'}}>
+      <Text
+        style={{
+          fontWeight: 'bold',
+          color: '#fff',
+          textAlign: 'center',
+          fontFamily: 'Roboto',
+        }}>
         You have lost internet connection
       </Text>
       <View
         style={{
-          alignSelf: 'center',
-          backgroundColor: 'green',
+          alignSelf: 'flex-end',
+          backgroundColor: colors.t,
           padding: 5,
           borderRadius: 10,
           width: 100,
           top: 8,
-          zIndex: 1,
+          zIndex: 5,
+          bottom: 15,
         }}>
-        <TouchableHighlight underlayColor="" onPress={() => subscriptions()}>
-          <Text style={{textAlign: 'center', color: '#fff'}}>Retry</Text>
-        </TouchableHighlight>
+        {loading ? (
+          <ActivityIndicator
+            color="green"
+            size="small"
+            animating={loading}
+            style={{zIndex: 1}}
+          />
+        ) : (
+          <TouchableHighlight
+            underlayColor={colors.grey}
+            onPress={() => subscriptions()}>
+            <Text
+              style={{
+                textAlign: 'center',
+                color: colors.black,
+                fontFamily: 'Roboto',
+                fontWeight: 'bold',
+              }}>
+              Retry
+            </Text>
+          </TouchableHighlight>
+        )}
       </View>
     </View>
     // <ImageBackground

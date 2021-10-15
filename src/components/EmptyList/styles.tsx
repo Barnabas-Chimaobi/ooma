@@ -8,6 +8,7 @@ export default StyleSheet.create({
   },
   message: {
     marginTop: 20,
+    fontFamily: 'Montserrat',
   },
   buttonStyle: {
     marginVertical: 50,

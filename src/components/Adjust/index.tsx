@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Text} from 'react-native';
 import PriceTag from '../PriceTag';
-import { Button } from '../Button';
+import {Button} from '../Button';
 import S from './styles';
 
 interface IProps {
@@ -21,6 +21,7 @@ interface IProps {
   itemAddon?: any;
   edit: any;
   itemEdit: any;
+  mainquanty: any;
 }
 
 const Adjust = ({
@@ -39,15 +40,14 @@ const Adjust = ({
   itemAddon,
   edit,
   itemEdit,
+  mainquanty,
 }: IProps) => {
   const [state, setState] = itemEdit
     ? useState(isAddon ? quantity : edit)
     : useState(isAddon ? 0 : 1);
   const [prices, setPrice] = useState(price);
   // const {value} = state;
-  useEffect(() => {
-
-  });
+  useEffect(() => {});
 
   const getQuantity = (item: any, str: any) => {
     props(item);
@@ -60,7 +60,7 @@ const Adjust = ({
     } else {
       if (state >= 1) {
         removeAddon(itemAddon);
-       
+
         let newPrice = itemEdit
           ? parseInt(item - 1) * parseInt(itemAddon?.initialPrice)
           : parseInt(item - 1) * parseInt(price);
@@ -70,22 +70,21 @@ const Adjust = ({
   };
 
   const getQuantity1 = (item: any, str: any) => {
-    
     if (str == 'plus') {
       props1(item + 1);
     } else {
-      item>1 && props1(item - 1);
+      item > 1 && props1(item - 1);
     }
   };
 
-  const getAddons = () => { };
+  const getAddons = () => {};
 
   const onChange = (str: string, title: any) => {
     str == 'minus' && state >= (title == 'Adjust Quantity' ? 2 : 1)
       ? setState(state - 1)
       : str == 'plus'
-        ? setState(state + 1)
-        : 1;
+      ? setState(state + 1)
+      : 1;
 
     if (title == 'Adjust Quantity') {
       getQuantity1(state, str);
@@ -116,7 +115,12 @@ const Adjust = ({
           }}
         />
       </View>
-      {price !== undefined && <PriceTag price={Number(prices)} clear />}
+
+      {mainquanty ? null : (
+        <View style={{width: '15%'}}>
+          {price !== undefined && <PriceTag price={Number(prices)} clear />}
+        </View>
+      )}
     </View>
   );
 };
