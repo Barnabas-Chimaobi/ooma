@@ -226,6 +226,7 @@ const OrderDetails = () => {
               <OrderCard
                 details={null}
                 dateTitle="Payment Details"
+                
                 // mainStyle={S.main}
                 children={
                   <>

@@ -62,7 +62,7 @@ const UserDetails = () => {
             inputContainerStyles={{paddingLeft: 13}}
             containerStyles={[
               S.passwordInputContainerStyle,
-              {marginBottom: 25},
+              {marginBottom: 25, width: '95%', alignSelf: 'center'},
             ]}
             keyboardType={KeyboardType.phone}
             maxLength={11}
@@ -78,7 +78,10 @@ const UserDetails = () => {
             placeholderTextColor={colors.offWhite}
             secureTextEntry={true}
             inputContainerStyles={{paddingLeft: 13}}
-            containerStyles={S.passwordInputContainerStyle}
+            containerStyles={[
+              S.passwordInputContainerStyle,
+              {width: '95%', alignSelf: 'center'},
+            ]}
             keyboardType={KeyboardType.phone}
             maxLength={11}
             rightIcon
@@ -96,7 +99,7 @@ const UserDetails = () => {
             style={{
               marginTop: 20,
               flexDirection: 'row',
-              marginHorizontal:10,
+              marginHorizontal: 10,
               justifyContent: 'space-between',
             }}>
             <InputPrimary
@@ -122,7 +125,7 @@ const UserDetails = () => {
                 paddingVertical: 10,
                 backfaceVisibility: 'visible',
                 position: 'relative',
-                zIndex: 10
+                zIndex: 10,
               }}
               value={lastName}
               containerStyles={[S.passwordInputContainerStyle, {width: '47%'}]}
