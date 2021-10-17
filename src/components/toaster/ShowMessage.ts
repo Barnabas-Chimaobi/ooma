@@ -1,5 +1,5 @@
 import {WSnackBar, WModal} from 'react-native-smart-tip';
-import {Alert, Platform} from 'react-native';
+import {Alert, Platform, ToastAndroid} from 'react-native';
 import { Text } from 'native-base';
 import Toast from 'react-native-toast-message';
 

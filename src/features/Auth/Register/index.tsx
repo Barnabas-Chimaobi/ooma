@@ -103,14 +103,14 @@ const Register = () => {
     }
   };
 
-  // const backHandler = () => {
-  //   if (newroute?.params?.route === 'login') {
-  //     BackHandler.exitApp();
-  //   }
-  // };
+  const backHandler = () => {
+    if (newroute?.params?.route === 'login') {
+      BackHandler.exitApp();
+    }
+  };
 
   useEffect(() => {
-    // BackHandler.addEventListener('hardwareBackPress', () => backHandler());
+    BackHandler.addEventListener('hardwareBackPress', () => backHandler());
     console.log(newroute?.params?.route, 'routeee=====sssss====');
     if (newroute?.params?.route === 'login') {
       setroute(null);
@@ -123,24 +123,26 @@ const Register = () => {
       if (number.length >= 13) {
         console.log(number.length, 'number1');
         const verifynumber = await api.get(`/users/exist?emailPhone=${number}`);
-        const {isAuser} = verifynumber?.data?.data;
-        if (isAuser) {
-          setLoading(false);
-          setroute('login');
-          setmockStep(1);
-        } else {
-          setLoading(false);
-          setroute('register');
-          setmockStep(0);
-        }
-        return;
-      } else {
-        setLoading(false);
-        console.log(number, 'number');
-        Alert('Phone number must be at least 11 characters');
-        // ShowMessage(type.INFO, 'Phone number must be at least 11 characters');
+        // const {isAuser} = verifynumber?.data?.data;
+        //   if (isAuser) {
+        //     setLoading(false);
+        //     setroute('login');
+        //     setmockStep(1);
+        //   } else {
+        //     setLoading(false);
+        //     setroute('register');
+        //     setmockStep(0);
+        //   }
+        //   return;
+        // } else {
+        //   setLoading(false);
+        //   console.log(number, 'number');
+        //   Alert('Phone number must be at least 11 characters');
+        //   // ShowMessage(type.INFO, 'Phone number must be at least 11 characters');
+        console.log(verifynumber, 'verifynumberrrr===');
       }
     } catch (err) {
+      console.log(err, 'errorsssss========');
       setLoading(false);
       Alert(err);
       // ShowMessage(type.ERROR, err);

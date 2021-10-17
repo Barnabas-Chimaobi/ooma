@@ -7,6 +7,7 @@ import {
   FlatList,
   RefreshControl,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native';
 import {cardDetails} from '../components/menuCards/cardInfo';
 import {styles} from './styles';
@@ -92,7 +93,7 @@ const DetailCard: React.FC<Props> = (props: Props) => {
 const Night = (night: any, planIds: any, times: any) => {
   const navigation = useNavigation();
   // console.log(night.planIds, '=====planidsssss=====');
-  const [refreshing] = useState(false);
+  const [refreshing] = useState(true);
   const [, setDataSource] = useState([]);
 
   const onRefresh = () => {
@@ -103,21 +104,40 @@ const Night = (night: any, planIds: any, times: any) => {
     <View>
       {refreshing ? <ActivityIndicator /> : null}
       {night.night === '' ? (
-        <View>
-          <ActivityIndicator
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              tintColor={'green'}
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }>
+          <View>
+            {/* <ActivityIndicator
             size={'large'}
             color={'green'}
             animating={refreshing}
             // style={{marginBottom: 30}}
-          />
-          <EmptyList
-            style={{height: 80, width: 80, marginTop: -120}}
-            // image={require('../../../../assets/Images/emptyCart.png')}
-            // title="FIND PLAN"
-            message="Getting available meals.."
-            onPress={() => navigation.goBack()}
-          />
-        </View>
+          /> */}
+            <Text
+              style={{
+                height: 150,
+                paddingTop: 70,
+                alignSelf: 'center',
+                fontSize: 16,
+                fontFamily: 'Montserrat',
+              }}>
+              Getting available meals
+            </Text>
+            {/* <EmptyList
+              style={{height: 80, width: 80, marginTop: -120}}
+              // image={require('../../../../assets/Images/emptyCart.png')}
+              // title="FIND PLAN"
+              message="Getting the meal ready in a moment.."
+              onPress={() => navigation.goBack()}
+            /> */}
+          </View>
+        </ScrollView>
       ) : (
         // <Skeleton />
         <FlatList

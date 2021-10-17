@@ -123,7 +123,14 @@ export default function Branch() {
           </TouchableHighlight>
         ) : null}
 
-        <Text style={{marginLeft: '30%', fontWeight: 'bold'}}>
+        <Text
+          style={{
+            marginLeft: '30%',
+            fontWeight: '900',
+            fontSize: 15,
+            bottom: 5,
+            fontFamily: 'Roboto',
+          }}>
           Select Branch
         </Text>
       </View>

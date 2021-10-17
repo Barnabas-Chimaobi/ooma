@@ -43,7 +43,7 @@ const Splash = () => {
       <Image
         resizeMode="contain"
         source={oomaNew}
-        style={{height: 80, width: 600, alignSelf: 'center', marginTop: '80%'}}
+        style={{height: 80, width: 600, alignSelf: 'center', marginTop: '60%'}}
       />
       <Image
         resizeMode="contain"

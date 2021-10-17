@@ -1,4 +1,4 @@
-import React, { useState, FC, useEffect } from 'react';
+import React, {useState, FC, useEffect} from 'react';
 import moment from 'moment';
 import {
   View,
@@ -13,16 +13,16 @@ import {
   TouchableHighlight,
   ImageBackground,
 } from 'react-native';
-import { styles } from './styles';
-import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import {styles} from './styles';
+import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 import Afternoon from './afternoon';
 import Morning from './morning';
 import Night from './night';
 
-import { Basket } from '../../../../components/Basket/index';
-import { useNavigation } from '@react-navigation/native';
+import {Basket} from '../../../../components/Basket/index';
+import {useNavigation} from '@react-navigation/native';
 import SimpleHeader from '../../../../components/HeaderBar/simpleHeader';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {
@@ -31,13 +31,13 @@ import {
   getMenuPlanDetailBydateAndtypePlanId,
   getMenuPlanCart,
 } from '../../../../FetchData';
-import { DateFormatter } from '../../../../Utils';
+import {DateFormatter} from '../../../../Utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useDispatch, useSelector } from 'react-redux';
-import { basketStates } from '../../../../reducers/basket';
-import { AppDispatch, RootState } from '../../../../store';
-import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
-import { NativeBaseProvider, Box } from 'native-base';
+import {useDispatch, useSelector} from 'react-redux';
+import {basketStates} from '../../../../reducers/basket';
+import {AppDispatch, RootState} from '../../../../store';
+import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+import {NativeBaseProvider, Box} from 'native-base';
 import Footer from '../../../../navigation/footer';
 import {StyleFoot} from '../../../../navigation/styles';
 import {colors} from '../../../../colors';
@@ -47,14 +47,14 @@ interface IProps {
   route?: {};
 }
 
-const initialLayout = { width: Dimensions.get('window').width };
-const MenuDetails: FC<IProps> = ({ route }) => {
+const initialLayout = {width: Dimensions.get('window').width};
+const MenuDetails: FC<IProps> = ({route}) => {
   const dispatch: AppDispatch = useDispatch();
   const basketItem = useSelector(
     (state: RootState) => state.basketState.payload,
   );
 
-  const { planId } = route?.params;
+  const {planId} = route?.params;
 
   const MorningRoute = () => (
     <View style={styles.scene}>
@@ -112,6 +112,7 @@ const MenuDetails: FC<IProps> = ({ route }) => {
   // getMenuPlansById;
 
   const getMorningAfternoonNight = async (item: any, newdate: any) => {
+    // setRefreshing(true);
     setPlanType(item);
     const news = new Date().toISOString();
     console.log(news.substring(0, 10), '====new dateeee=====');
@@ -138,7 +139,7 @@ const MenuDetails: FC<IProps> = ({ route }) => {
     });
     setDeliveryTime(getPlanTimes);
     console.log(getPlanTimes, 'plantimesssss===========');
-
+    // setRefreshing(false);
     console.log('arrFiltered=================', arrFiltered);
     console.log(morningorAfterOrEve, 'morningsssss');
   };
@@ -263,9 +264,9 @@ const MenuDetails: FC<IProps> = ({ route }) => {
   };
 
   const [routes] = useState([
-    { key: 'morning', title: 'Morning' },
-    { key: 'afternoon', title: 'Afternoon' },
-    { key: 'night', title: 'Evening' },
+    {key: 'morning', title: 'Morning'},
+    {key: 'afternoon', title: 'Afternoon'},
+    {key: 'night', title: 'Evening'},
   ]);
 
   const renderScene = SceneMap({
@@ -288,22 +289,23 @@ const MenuDetails: FC<IProps> = ({ route }) => {
       renderTabBar={(routers) => (
         <TabBar
           {...routers}
-          onTabPress={({ route, preventDefault }) => {
+          onTabPress={({route, preventDefault}) => {
+            setMorning('');
             getMorningAfternoonNight(
               route.key == 'morning'
                 ? 'Morning'
                 : route.key == 'afternoon'
-                  ? 'Afternoon'
-                  : route.key == 'night'
-                    ? 'Evening'
-                    : null,
+                ? 'Afternoon'
+                : route.key == 'night'
+                ? 'Evening'
+                : null,
               date,
             );
             // console.log(route, '======routerssss=====');
           }}
           indicatorStyle={styles.indicatorStyle}
           style={styles.tabBar}
-          renderLabel={({ route, focused }) => {
+          renderLabel={({route, focused}) => {
             return (
               <Text style={focused ? styles.focused : styles.tabLabel}>
                 {route.title}
@@ -317,10 +319,10 @@ const MenuDetails: FC<IProps> = ({ route }) => {
         // getAfternoonAndEvening('Afternoon');
       }}
       swipeEnabled={false}
-      navigationState={{ index, routes }}
+      navigationState={{index, routes}}
       renderScene={renderScene}
       onIndexChange={setIndex}
-      initialLayout={initialLayout}
+      // initialLayout={initialLayout}
     />
   );
 
@@ -328,7 +330,7 @@ const MenuDetails: FC<IProps> = ({ route }) => {
   return (
     <>
       <SimpleHeader
-        style={{ position: 'absolute', top: 0, zIndex: 555, paddingLeft: 10 }}
+        style={{position: 'absolute', top: 0, zIndex: 555, paddingLeft: 10}}
         icon={<AntDesign color="white" name="arrowleft" size={28} />}
       />
       {show && (
@@ -378,7 +380,7 @@ const MenuDetails: FC<IProps> = ({ route }) => {
           }
         /> */}
         <View style={styles.line} />
-        <View style={{ flex: 1 }}>
+        <View style={{flex: 1}}>
           <ScrollView
             refreshControl={
               <RefreshControl

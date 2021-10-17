@@ -21,5 +21,7 @@ export default StyleSheet.create({
   left: {
     fontSize: 17,
     padding: 10,
+    borderBottomWidth: 3.5,
+    borderColor: colors.grey,
   },
 });

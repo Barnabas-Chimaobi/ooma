@@ -69,6 +69,7 @@ import {NetworkManager, Loader} from '../components';
 // import Explore from './ExploreNavigation';
 import MenuPlan from './MenuNavigation';
 import Splash from '../navigation/AuthNavigation/splash';
+import {navigationRef} from '../../src/api/filter';
 // import {Stack} from 'native-base';
 // import MyCart from './MyCartNavigation';
 // import More from './MoreNavigation';
@@ -168,6 +169,7 @@ export default function App() {
     <AppearanceProvider>
       <ThemeProvider theme={theme}>
         <NavigationContainer
+          ref={navigationRef}
           theme={scheme === 'light' ? defaultTheme : darkTheme}>
           {/* <Loader /> */}
           <NetworkManager />

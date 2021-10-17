@@ -1,16 +1,21 @@
 import axios from 'axios';
+import React, {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/core';
+import {View} from 'react-native';
+import {useNavigation} from '@react-navigation/core';
+import BaseUrl from './baseUrl';
+// import navigationRef from './rootNavigation';
 const axiosInstance = axios.create({
   timeout: 60000,
   timeoutErrorMessage:
     'Either your internet connect is not strong or you have no internet connectiom',
-  baseURL: 'https://api.staging.ooma.kitchen/api/v1',
+  baseURL: BaseUrl,
   // baseURL: 'https://api.ooma.kitchen/api/v1',
 });
 const axiosFilter = (instance, token) => {
-//this navigation too.
   // const navigation = useNavigation();
+  // console.log(navigation, 'props========');
+  //this navigation too.
   instance.interceptors.request.use(
     function (config) {
       config.headers['Authorization'] = `Bearer ${token}`;
@@ -59,37 +64,31 @@ const axiosFilter = (instance, token) => {
     },
   );
 
-
   const getLoggedInUserFromReducer = async () => {
     const user = await AsyncStorage.getItem('userDetails');
     const gottenUser = await JSON.parse(user);
-
     return gottenUser;
   };
 
   const getNewToken = async () => {
-
-
-
     //get user info;
     const user = await getLoggedInUserFromReducer();
-   
+
     return new Promise((resolve, reject) => {
       const data = {
         userId: user?.id,
-        refreshToken: user?.refreshToken
+        refreshToken: user?.refreshToken,
       };
       //
       //make this navigation to be working...
-      // if (!user?.refreshToken) {
-      //   navigation.navigate('Register');
-      //   //navigate to login page using reset stack
-      //   return;
-      // }
-  
-      axiosInstance.post(`/users/refreshToken`, data)
+      if (!user?.refreshToken) {
+        navigationRef.current?.navigate('Register'); //navigate to login page using reset stack
+        return;
+      }
+
+      axiosInstance
+        .post(`/users/refreshToken`, data)
         .then((res) => {
-          
           let userData = res.data.data;
           //login action ..save to async and other places
           AsyncStorage.setItem('userId', userData?.id);
@@ -118,11 +117,10 @@ const axiosFilter = (instance, token) => {
     }
     return false;
   };
+
+  return <View></View>;
 };
-export const baseUrl=()=>{
-  return "https://api.staging.ooma.kitchen/api/v1";
-}
 
-export { axiosFilter };
+export const navigationRef = React.createRef();
 
-
+export default axiosFilter;

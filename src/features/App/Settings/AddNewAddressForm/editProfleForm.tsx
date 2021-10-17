@@ -20,6 +20,7 @@ import {
   Picker,
   ShowMessage,
   type,
+  Alert,
 } from '../../../../components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
@@ -79,7 +80,7 @@ const AddNewAddress: React.FC<Props> = ({}) => {
     const profile = await updateProfile(body);
     setLoading(false);
     if (profile?.statusCode) {
-      ShowMessage(type.DONE, 'Profile updated successfully');
+      Alert('Profile updated successfully');
       navigation.goBack();
     }
     console.log(profile, 'profilesss====');

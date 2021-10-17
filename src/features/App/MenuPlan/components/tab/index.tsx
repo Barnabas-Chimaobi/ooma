@@ -67,6 +67,7 @@ const MenuTab = () => {
   const [menuPlan2, setMenuPlan2] = useState();
   const [refreshing, setRefreshing] = useState(false);
   const [loader, setLoader] = useState(true);
+  const [param, setparam] = useState(null);
   const {menuPlanCategories} = useSelector(
     (state: RootState) => state.menuPlanCategories,
   );
@@ -110,12 +111,13 @@ const MenuTab = () => {
     // );
   };
 
-  const getMenuplanKart = async (id) => {
+  const getMenuplanKart = async (id, param) => {
+    console.log(id, 'plannnnniiiiidddddsssss=====');
     setLoader(true);
     const branch = await AsyncStorage.getItem('branchId');
     const newbranch = JSON.parse(branch);
     const menuplanscart = await getPlanCatId(newbranch, id);
-    console.log(newbranch, 'useriddd');
+    console.log(newbranch, menuplanscart, 'useriddd');
     // setPlanCart(menuplanscart?.items);
     // dispatch(getMenuItemsPlanForYou(menuplanscart));
     dispatch(getFindPlan(menuplanscart));
@@ -207,14 +209,9 @@ const MenuTab = () => {
         backgroundColor="transparent"
         barStyle={'dark-content'}
       />
-      {/* <Spinner
-        visible={loader}
-        // textStyle={styles.spinnerTextStyle}
-        overlayColor="rgba(66, 66, 66,0.6)"
-        customIndicator={<BallIndicator color="white" />}
-      /> */}
-      {/* {menuPlansMenuItem ? ( */}
+
       <ScrollView
+        contentContainerStyle={{flexGrow: 1}}
         style={{flex: 1}}
         refreshControl={
           <RefreshControl refreshing={loader} onRefresh={onRefresh} />
@@ -225,75 +222,26 @@ const MenuTab = () => {
           headerTextStyle={styles.headerText}
           onChangeTab={(index) => {
             getMenuplanKart(routes1[index].id);
+            setparam('param');
           }}
           defaultIndex={params?.categoryId - 1 || routes1[0]?.id}
           containerStyle={{flex: 1}}
           headerBackgroundColor={colors.white}
           headerUnderlayColor={colors.white}
-          // headerUnderlayColor={'blue'}
         />
-        {/* <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              height: 35,
-              borderColor: 'gray',
-              borderWidth: 1,
-              width: '90%',
-              alignSelf: 'center',
-              borderRadius: 7,
-              marginTop: 25,
-              marginBottom: 25,
-            }}>
-            <TextInput
-              style={{height: 35, width: '90%', borderRadius: 7}}
-              onChangeText={(text) => onChangeText(text)}
-              value={value}
-              onFocus={() => navigation.navigate('SearchMenuitemandPlan')}
-            />
-            <TouchableOpacity style={{marginTop: 10, marginRight: 10}}>
-              <Image source={require('../../assets/searchIcon.png')} />
-            </TouchableOpacity>
+        {!param && loader ? (
+          <View style={{alignSelf: 'center', position: 'absolute', top: '20%'}}>
+            <Text
+              style={{
+                textAlign: 'center',
+                fontFamily: 'Montserrat',
+                // zIndex: 5,
+              }}>
+              Loading meals for you...
+            </Text>
           </View>
-          {/* {routes.length != 0 ? ( */}
-        {/* <TabView
-            renderTabBar={(routers) => (
-              <TabBar
-                {...routers}
-                indicatorStyle={styles.indicatorStyle}
-                style={styles.tabBar}
-                tabStyle={{width: 'auto'}}
-                scrollEnabled
-                renderLabel={({route, focused}) => (
-                  <Text style={focused ? styles.focused : styles.tabLabel}>
-                    {route.title}
-                  </Text>
-                )}
-              />
-            )}
-            navigationState={{index, routes}}
-            renderScene={renderScene}
-            onIndexChange={setIndex}
-            initialLayout={initialLayout}
-          />  */}
-        {/* ) : null} */}
+        ) : null}
       </ScrollView>
-      {/* ) : ( */}
-      {/* <View style={styles.noData}> */}
-      {/* </View> <Image
-      //       style={{marginTop: 20}}
-      //       source={require('../../assets/no-data.png')}
-      //     />
-      //     <Text style={styles.btnText}>No meal plan available.</Text>
-
-      //     <View style={styles.btn}>
-      //       <Text style={{color: 'white', fontWeight: 'bold', fontSize: 14}}>
-      //         FIND PLANS
-      //       </Text>
-      //     </View>
-      //   </View>
-      // )} */}
     </View>
   );
 };

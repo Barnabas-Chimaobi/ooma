@@ -459,6 +459,7 @@ export const Cart = () => {
         {refreshing !== true ? (
           <View style={styles.root}>
             <ScrollView
+              contentContainerStyle={{flexGrow: 1}}
               ref={scrollRef}
               refreshControl={
                 <RefreshControl
@@ -473,6 +474,17 @@ export const Cart = () => {
                 size={'large'}
               />
             ) : ( */}
+              {loadplan && (
+                <Text
+                  style={{
+                    fontFamily: 'Montserrat',
+                    textAlign: 'center',
+                    top: '30%',
+                  }}>
+                  Loading your meal plans
+                </Text>
+              )}
+
               <FlatList
                 data={grouped}
                 style={styles.listStyle}
@@ -565,29 +577,32 @@ export const Cart = () => {
               />
             </ScrollView>
 
-            <View
-              style={{
-                zIndex: 1,
-                height: 90,
-                width: 70,
-                alignSelf: 'flex-end',
-                position: 'absolute',
-                bottom: route?.params?.plan ? '5%' : '25%',
-                right: 10,
-                // borderRadius: 70,
-              }}>
-              <TouchableOpacity onPressIn={onFabPress}>
-                <Image
-                  style={{
-                    height: 90,
-                    width: 70,
+            {basketItem?.length !== undefined && (
+              <View
+                style={{
+                  zIndex: 1,
+                  height: 90,
+                  width: 70,
+                  alignSelf: 'flex-end',
+                  position: 'absolute',
+                  bottom: route?.params?.plan ? '5%' : '25%',
+                  right: 10,
+                  // borderRadius: 70,
+                }}>
+                <TouchableOpacity onPressIn={onFabPress}>
+                  <Image
+                    style={{
+                      height: 90,
+                      width: 70,
 
-                    borderRadius: 70,
-                  }}
-                  source={scroll}
-                />
-              </TouchableOpacity>
-            </View>
+                      borderRadius: 70,
+                    }}
+                    source={scroll}
+                  />
+                </TouchableOpacity>
+              </View>
+            )}
+
             {/* <ListItems list={route?.params?.cartItems} styles={styles} /> */}
             {visible == true ? (
               <Modal
@@ -776,11 +791,21 @@ export const Cart = () => {
             ) : null}
           </View>
         ) : (
-          <ActivityIndicator
-            animating={refreshing}
-            color={'green'}
-            size={'large'}
-          />
+          <View>
+            <ActivityIndicator
+              animating={refreshing}
+              color={'green'}
+              size={'large'}
+            />
+            <Text
+              style={{
+                fontFamily: 'Montserrat',
+                textAlign: 'center',
+                top: '25%',
+              }}>
+              Getting your basket items ready...
+            </Text>
+          </View>
         )}
       </KeyboardAvoidingView>
     </>

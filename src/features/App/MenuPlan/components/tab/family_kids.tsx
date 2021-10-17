@@ -8,6 +8,7 @@ interface AllFamilyMenuPlanProps {
 }
 
 const AllFamilyMenu: FC<AllFamilyMenuPlanProps> = ({allFamilyMenuPlans}) => {
+  console.log(allFamilyMenuPlans, 'allfamilyplansss======');
   const [refreshing] = useState(false);
   const [, setDataSource] = useState([]);
 
@@ -17,9 +18,10 @@ const AllFamilyMenu: FC<AllFamilyMenuPlanProps> = ({allFamilyMenuPlans}) => {
     //Call the Service to get the latest data, thats the api call method
   };
   return (
-    <View style={{paddingBottom: 250, flex: 1}}>
+    <View style={{}}>
       {refreshing ? <ActivityIndicator /> : null}
       <FlatList
+        contentContainerStyle={{flexGrow: 1}}
         data={allFamilyMenuPlans}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item}) => (

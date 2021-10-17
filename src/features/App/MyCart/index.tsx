@@ -24,7 +24,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
 import {cartStates} from '../../../reducers/cart';
 import {AppDispatch, RootState} from '../../../store';
-import {ShowMessage, type} from '../../../components';
+import {ShowMessage, type, Alert} from '../../../components';
 import Skeleton from '../Home/skeleton';
 import {FunctionSelectItem} from 'native-base/lib/typescript/components/composites/Typeahead/useTypeahead/types';
 import {StyleFoot} from '../../../navigation/styles';
@@ -207,10 +207,7 @@ const MyCart = () => {
                 buttonStyle={{backgroundColor: '#303030'}}
                 onPress={() => {
                   total === ''
-                    ? ShowMessage(
-                        type.ALERT,
-                        'Please wait while we calculate your total',
-                      )
+                    ? Alert('Please wait while we calculate your total')
                     : navigation.navigate('Checkout', {
                         params: cartParams,
                         subTotal: total,
@@ -227,7 +224,8 @@ const MyCart = () => {
             color={'green'}
             size={'large'}
           />
-          <Text style={{textAlign: 'center', top: 120}}>
+          <Text
+            style={{textAlign: 'center', top: 120, fontFamily: 'Montserrat'}}>
             Getting your cart items ready..
           </Text>
         </View>

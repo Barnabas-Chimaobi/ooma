@@ -14,7 +14,7 @@ export default StyleSheet.create({
     borderColor: colors.elevationColor,
     backgroundColor: colors.white,
     borderRadius: 10,
-    margin: 10,
+    // margin: 10,
     // marginTop: 0,
     paddingTop: 15,
   },

@@ -109,6 +109,7 @@ const OrderDetails = () => {
               randomValue={item?.itemData?.orderInfo?.orderRef}
               mainStyle={S.totalHeaderStyle}
               randomTitleStyle={S.totalHeadertitle}
+              randomStyle={{fontWeight: 'bold'}}
             />
             <Total
               randomTitle="STATUS"
@@ -131,6 +132,7 @@ const OrderDetails = () => {
                 item?.itemData?.orderInfo?.MenuPlanDetail?.createdAt,
               ).toLocaleDateString()}
               mainStyle={S.totalHeaderStyle}
+              randomStyle={{fontWeight: 'bold'}}
             />
           </View>
           {/* <View style={S.main}> */}
@@ -168,16 +170,20 @@ const OrderDetails = () => {
 
             {/* </View> */}
 
-            <View style={{marginTop: 20}}>
-              <View style={S.main}>
-                <Total
-                  totalTitle="delivery Charge"
-                  orderTotal={Number(item?.itemData?.orderInfo?.deliveryCharge)}
-                  // total={Number(item?.itemData?.orderInfo?.amount)}
-                  mainStyle={S.totalHeaderStyle}
-                />
+            {Number(item?.itemData?.orderInfo?.deliveryCharge) !== 0 && (
+              <View style={{marginTop: 20}}>
+                <View style={S.main}>
+                  <Total
+                    totalTitle="delivery Charge"
+                    orderTotal={Number(
+                      item?.itemData?.orderInfo?.deliveryCharge,
+                    )}
+                    // total={Number(item?.itemData?.orderInfo?.amount)}
+                    mainStyle={S.totalHeaderStyle}
+                  />
+                </View>
               </View>
-            </View>
+            )}
 
             <View style={{marginTop: 20}}>
               <View style={S.main}>
@@ -197,14 +203,20 @@ const OrderDetails = () => {
                   <Total
                     randomTitle="Collection"
                     randomValue={item?.itemData?.orderInfo?.deliveryOption}
+                    randomStyle={{fontWeight: 'bold'}}
+                    randomTitleStyle={{fontWeight: 'bold'}}
                   />
                   <Total
                     randomTitle="Time of collection"
                     randomValue={item?.itemData?.orderInfo?.deliveryTime}
+                    randomStyle={{width: '80%', fontWeight: 'bold'}}
+                    randomTitleStyle={{fontWeight: 'bold'}}
                   />
                   <Total
                     randomTitle="Location"
                     randomValue={item?.itemData?.orderInfo?.deliveryAddress}
+                    randomStyle={{fontWeight: 'bold'}}
+                    randomTitleStyle={{fontWeight: 'bold'}}
                   />
                 </>
               }
@@ -224,10 +236,14 @@ const OrderDetails = () => {
                     <Total
                       randomTitle="Method"
                       randomValue={item?.itemData?.orderInfo?.paymentMethod}
+                      randomStyle={{fontWeight: 'bold'}}
+                      randomTitleStyle={{fontWeight: 'bold'}}
                     />
                     <Total
                       randomTitle="Status"
                       randomValue={item?.itemData?.orderInfo?.paymentStatus}
+                      randomStyle={{fontWeight: 'bold'}}
+                      randomTitleStyle={{fontWeight: 'bold'}}
                     />
                   </>
                 }
@@ -293,16 +309,18 @@ const OrderDetails = () => {
               />
             </View>
             {/* </View> */}
-            <View style={{marginTop: 20}}>
-              <View style={S.main}>
-                <Total
-                  totalTitle="delivery Charge"
-                  orderTotal={Number(item?.itemData?.deliveryCharge)}
-                  // total={Number(item?.itemData?.orderInfo?.amount)}
-                  mainStyle={S.totalHeaderStyle}
-                />
+            {Number(item?.itemData?.deliveryCharge) !== 0 && (
+              <View style={{marginTop: 20}}>
+                <View style={S.main}>
+                  <Total
+                    totalTitle="delivery Charge"
+                    orderTotal={Number(item?.itemData?.deliveryCharge)}
+                    // total={Number(item?.itemData?.orderInfo?.amount)}
+                    mainStyle={S.totalHeaderStyle}
+                  />
+                </View>
               </View>
-            </View>
+            )}
 
             <View style={{marginTop: 20}}>
               <View style={S.main}>

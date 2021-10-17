@@ -515,14 +515,15 @@ export const getOrderById = async (id: any) => {
 };
 
 export const getPlanCatId = async (branch: any, id: any) => {
-  console.log(branch, id, '====detailllsssss');
+  console.log(branch, id, '====detailllsssss=====');
   try {
     const MenuItemCart = await api.get(
-      `https://api.staging.ooma.kitchen/api/v1/menuplans/plan/branch/category?branchId=${branch}&page=1&categoryid=${id}`,
-      // `/menuplans/plan/branch/category?branchId=${branch}&page=${1}&categoryid=${id}`,
+      // `https://api.staging.ooma.kitchen/api/v1/menuplans/plan/branch/category?branchId=${branch}&page=1&categoryid=${id}`,
+      `/menuplans/plan/branch/category?branchId=${branch}&page=${1}&categoryid=${id}`,
     );
+    // console.log(MenuItemCart, 'menuitemcart=======');
     const menuOrderId = MenuItemCart?.data?.data?.data?.items;
-    // console.log(menuOrderId, 'categoryidddss==');
+    // console.log(menuOrderId, '====categoryidddss==');
     return menuOrderId;
   } catch (error) {
     console.log(error);

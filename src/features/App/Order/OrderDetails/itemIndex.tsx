@@ -308,7 +308,7 @@ const OrderDetails = () => {
                   //   'itemsssalllllll=====',
                   // );
                   return (
-                    <View>
+                    <View style={{marginTop: -40}}>
                       <OrderStack
                         headerCount={item?.Cart?.quantity}
                         headerDescription={item?.Cart?.MenuItem?.itemName}
@@ -342,9 +342,16 @@ const OrderDetails = () => {
                 },
               )}
             </View>
-            <View style={S.main}>
-              <Total total={Number(newAmount)} mainStyle={S.totalHeaderStyle} />
+            <View style={{marginTop: 30}}>
+              <View style={S.main}>
+                <Total
+                  total={Number(newAmount)}
+                  mainStyle={S.totalHeaderStyle}
+                  randomStyle={{marginLeft: 30}}
+                />
+              </View>
             </View>
+
             <OrderCard
               details={null}
               dateTitle="Delivery Details"
@@ -356,18 +363,24 @@ const OrderDetails = () => {
                     randomValue={
                       newlist?.itemData?.menuitemorders?.deliveryOption
                     }
+                    randomStyle={{fontWeight: 'bold'}}
+                    randomTitleStyle={{fontWeight: 'bold'}}
                   />
                   <Total
                     randomTitle="Time of collection"
                     randomValue={
                       newlist?.itemData?.menuitemorders?.deliveryTime
                     }
+                    randomStyle={{width: '80%', fontWeight: 'bold'}}
+                    randomTitleStyle={{fontWeight: 'bold'}}
                   />
                   <Total
                     randomTitle="Location"
                     randomValue={
                       newlist?.itemData?.menuitemorders?.deliveryAddress
                     }
+                    randomStyle={{width: '80%', fontWeight: 'bold'}}
+                    randomTitleStyle={{fontWeight: 'bold'}}
                   />
                 </>
               }
@@ -378,19 +391,19 @@ const OrderDetails = () => {
               // mainStyle={S.main}
               children={
                 <>
-                  {/* <Total
-                  randomTitle="style"
-                  randomValue={newlist?.itemData?.menuitemorders?.paymentType}
-                /> */}
                   <Total
                     randomTitle="Method"
                     randomValue={
                       newlist?.itemData?.menuitemorders?.paymentMethod
                     }
+                    randomTitleStyle={{fontWeight: 'bold'}}
+                    randomStyle={{fontWeight: 'bold'}}
                   />
                   <Total
                     randomTitle="Status"
                     randomValue={newlist?.itemData?.paymentStatus}
+                    randomTitleStyle={{fontWeight: 'bold'}}
+                    randomStyle={{fontWeight: 'bold'}}
                   />
                 </>
               }

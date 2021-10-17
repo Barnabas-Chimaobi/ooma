@@ -10,13 +10,13 @@ import {colors} from '../../../../colors';
 
 const RenderItems = ({item}: any) => {
   // console.log(
-  let ones = item?.data?.map((item) => item?.data?.map((item) => item));
+  // let ones = item?.data?.map((item) => item?.data?.map((item) => item));
   // console.log(ones, 'ones=======');
   //   'item',
   // );
   return (
     <View style={{backgroundColor: colors.white}}>
-      <Text>{item?.deliveryTime}</Text>
+      <Text style={{marginLeft: 10}}>{item?.deliveryTime}</Text>
       {item?.data?.map((items) =>
         items?.data?.map((item) => {
           // console.log(

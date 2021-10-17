@@ -1,16 +1,10 @@
 import React, {FC, useState} from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Alert,
-  ActivityIndicator,
-} from 'react-native';
+import {View, Text, TouchableOpacity, ActivityIndicator} from 'react-native';
 import {Icon} from 'react-native-elements';
 import {useNavigation} from '@react-navigation/native';
 import {styles} from './styles';
 import api from '../../../../api';
-import {ShowMessage, type} from '../../../../components';
+import {ShowMessage, type, Alert} from '../../../../components';
 import {getMenuPlanCart, getMenuitemCart} from '../../../../FetchData';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
@@ -102,10 +96,10 @@ const MoreAction: FC<IProps> = ({
       getCart();
       if (addedCart?.statusCode === 201) {
         setLoading(false);
-        ShowMessage(type.DONE, 'Item deleted successfully'); // dispatch(cartStates(addedCart));
+        Alert('Item deleted successfully'); // dispatch(cartStates(addedCart));
       } else {
         setLoading(false);
-        ShowMessage(type.ERROR, 'Could not delete item'); // dispatch(cartStates(addedCart));
+        Alert('Could not delete item'); // dispatch(cartStates(addedCart));
       }
       // if (cart?.config?.response == 'Cart updated successfully') {
       // setCartItem(addedCart);
@@ -116,7 +110,7 @@ const MoreAction: FC<IProps> = ({
       // }
     } catch (err) {
       setLoading(false);
-      ShowMessage(type.ERROR, 'Could not delete item'); // dispatch(cartStates(addedCart));
+      Alert('Could not delete item'); // dispatch(cartStates(addedCart));
       // console.log(err, 'cartError');
     }
   };
@@ -132,20 +126,17 @@ const MoreAction: FC<IProps> = ({
       getBasket();
       if (addedCart?.statusCode === 201) {
         setLoading(false);
-        ShowMessage(type.DONE, 'Item deleted successfully'); // dispatch(cartStates(addedCart));
+        Alert('Item deleted successfully'); // dispatch(cartStates(addedCart));
         // setCartItem(addedCart);
         navigation.navigate('Cart');
         // console.log(carts, 'deletedbasket');
       } else {
         setLoading(false);
-        ShowMessage(
-          type.ERROR,
-          'Cannot delete item, cart item already paid for',
-        ); // dispatch(cartStates(addedCart));
+        Alert('Cannot delete item, cart item already paid for'); // dispatch(cartStates(addedCart));
       }
     } catch (err) {
       setLoading(false);
-      ShowMessage(type.ERROR, 'Unable to delete item');
+      Alert('Unable to delete item');
       // console.log(err.response.data, 'cartError');
     }
   };

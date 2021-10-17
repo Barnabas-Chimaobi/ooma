@@ -32,6 +32,7 @@ import {
   Button,
   ShowMessage,
   type,
+  Alert,
 } from '../../../components';
 import Modal from 'react-native-modal';
 
@@ -92,7 +93,8 @@ export class State extends Component {
       // ShowMessage(type.DONE, 'Order Placed Successfully');
       // this.props.navigation.navigate('Home');
     } else {
-      ShowMessage(type.ERROR, 'Failed Transaction. please retry');
+      Alert('Failed Transaction. please retry');
+      // ShowMessage(type.ERROR, 'Failed Transaction. please retry');
     }
     console.log(verify, 'paymentverify======');
   };

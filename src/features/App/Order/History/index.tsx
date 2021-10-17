@@ -16,7 +16,7 @@ const RenderItems = ({item}: any) => {
   // );
   return (
     <View>
-      <Text>{item?.deliveryTime}</Text>
+      {/* <Text style={{marginLeft: 10}}>{item?.deliveryTime}</Text> */}
       {item?.data?.map((items) =>
         items?.data?.map((item) => {
           console.log(
@@ -25,7 +25,7 @@ const RenderItems = ({item}: any) => {
           ),
             console.log(item, 'item===========');
           return (
-            item?.itemData?.menuitemorders?.status !== 'Delivered' && (
+            item?.itemData?.menuitemorders?.status === 'Delivered' && (
               <OrderCard
                 total={item?.itemData?.menuitemorders?.total}
                 details={item}

@@ -48,7 +48,8 @@ const SearchTab = forwardRef(({getIndex}: Props, ref) => {
       renderTabBar={(routes) => (
         <TabBar
           {...routes}
-          // activeColor="green"
+          inactiveColor="grey"
+          activeColor="green"
           indicatorStyle={styles.indicatorStyle}
           style={styles.tabBar}
           renderLabel={({route}) => (

@@ -94,7 +94,14 @@ export default function region() {
             <Image source={arrow} style={{height: 10, width: 20}} />
           </View>
         </TouchableHighlight>
-        <Text style={{marginLeft: '30%', fontWeight: 'bold'}}>
+        <Text
+          style={{
+            marginLeft: '30%',
+            fontWeight: '900',
+            fontSize: 15,
+            bottom: 5,
+            fontFamily: 'Roboto',
+          }}>
           Select Region
         </Text>
       </View>
