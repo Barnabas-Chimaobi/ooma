@@ -36,6 +36,7 @@ export const MenuHistory = () => {
   const navigation = useNavigation();
   const [planOrders, setOrders] = useState([]);
   const [loader, setLoader] = useState(false);
+  const [newObject, setNewObject] = useState({});
 
   const flatListOptimizationProps = {
     // initialNumToRender: 0,
@@ -83,6 +84,11 @@ export const MenuHistory = () => {
         item['data'] = groupByPlanTypeDate(item.data);
       });
       setOrders(basketData);
+
+      let newObject = planOrders?.map((item) => {
+        return setNewObject({status: item?.planStatus});
+      });
+      // console.log(newObject);
       setLoader(false);
       // console.log('====baket items======= ', JSON.stringify(basketData));
       // setOrders(order?.items);
@@ -255,42 +261,46 @@ export const MenuHistory = () => {
         overlayColor="rgba(66, 66, 66,0.6)"
         customIndicator={<BallIndicator color="white" />}
       />
-      {planOrders?.map((item) =>
-        item?.planStatus.includes('Delivered' || 'Ready' || 'Cancelled'),
-      ) ? (
-        <FlatList
-          data={planOrders}
-          style={styles.listStyle}
-          renderItem={({item}) => {
-            return (
-              <Item
-                imageUrl={item?.planImage}
-                itemName={item?.planName}
-                pecentage={item.pecentage}
-                time={item?.planStart}
-                status={item?.planStatus}
-                time1={item?.planEnd}
-                planId={item?.planId}
-              />
-            );
-          }}
-          {...flatListOptimizationProps}
-          // ListEmptyComponent={
-          //   <EmptyList
-          //     image={require('../../../../../assets/Images/emptyCart.png')}
-          //     title="FIND MEAL"
-          //     message="Oops! You don't have any ongoing plan"
-          //     onPress={() => navigation.goBack()}
-          //   />
-          // }
-        />
-      ) : (
-        <EmptyList
-          image={require('../../../../../assets/Images/emptyCart.png')}
-          // title="FIND MEAL"
-          message="Oops! You don't have any completed plan"
-          // onPress={() => navigation.goBack()}
-        />
+      {!loader && (
+        <View>
+          {newObject?.status === 'Ready' ||
+          newObject?.status === 'Delivered' ||
+          newObject?.status === 'Cancelled' ? (
+            <FlatList
+              data={planOrders}
+              style={styles.listStyle}
+              renderItem={({item}) => {
+                return (
+                  <Item
+                    imageUrl={item?.planImage}
+                    itemName={item?.planName}
+                    pecentage={item.pecentage}
+                    time={item?.planStart}
+                    status={item?.planStatus}
+                    time1={item?.planEnd}
+                    planId={item?.planId}
+                  />
+                );
+              }}
+              {...flatListOptimizationProps}
+              // ListEmptyComponent={
+              //   <EmptyList
+              //     image={require('../../../../../assets/Images/emptyCart.png')}
+              //     title="FIND MEAL"
+              //     message="Oops! You don't have any ongoing plan"
+              //     onPress={() => navigation.goBack()}
+              //   />
+              // }
+            />
+          ) : (
+            <EmptyList
+              image={require('../../../../../assets/Images/emptyCart.png')}
+              // title="FIND MEAL"
+              message="Oops! You don't have any completed plan"
+              // onPress={() => navigation.goBack()}
+            />
+          )}
+        </View>
       )}
     </View>
   );

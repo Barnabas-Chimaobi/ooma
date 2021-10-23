@@ -112,11 +112,7 @@ const OrderDetails = () => {
   // console.log(route?.params, 'consolledddFDetailssss=====');
 
   let newlist = route?.params?.detail;
-  // console.log(
-  //   newlist?.itemData?.menuitemorders,
-  //   route?.params?.total,
-  //   'newlist========',
-  // );
+  console.log(newlist?.itemData, route?.params?.total, 'newlist========');
   useEffect(() => {
     let amount = route?.params?.total;
     setNewAmount(amount);
@@ -315,7 +311,7 @@ const OrderDetails = () => {
                   //   'itemsssalllllll=====',
                   // );
                   return (
-                    <View style={{marginTop: -40}}>
+                    <View style={{marginTop: 5}}>
                       <OrderStack
                         headerCount={item?.Cart?.quantity}
                         headerDescription={item?.Cart?.MenuItem?.itemName}

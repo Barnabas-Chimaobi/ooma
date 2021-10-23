@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   TouchableHighlight,
+  ScrollView,
+  RefreshControl,
 } from 'react-native';
 import {Avatar} from 'react-native-elements';
 import {useDispatch} from 'react-redux';
@@ -62,9 +64,10 @@ import {getFindPlan} from '../../../../reducers/findPlan';
 import {SortCart} from '../../../../Utils/sortCart';
 interface Props {
   closeModal: () => void;
+  props1: () => void;
 }
 
-export default function Header() {
+export default function Header({props1}) {
   const [showModal, setShowModal] = useState(false);
   const navigation = useNavigation();
   const [state, setState] = useState({country: ''});
@@ -76,13 +79,11 @@ export default function Header() {
   const [bName, setBname] = useState('');
   const [rName, setRname] = useState('');
   const [branch, setBranch] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
   const dispatch: AppDispatch = useDispatch();
 
-  // const handleGetRegion = async () => {
-  //   const allRegion = await getRegion();
-  //   if (allRegion) {
-  //     setModalData(allRegion);
-  //   }
+  // const handleRefresh = () => {
+  //   props1();
   // };
 
   const handleGetBranches = async () => {
@@ -289,6 +290,10 @@ export default function Header() {
     // getMenuPlanCategory(branchID);
   };
 
+  const onRefresh = () => {
+    setRefreshing(true);
+  };
+
   const Drop = ({closeModal}: Props) => {
     return (
       <View style={styles.modalContent}>
@@ -333,48 +338,57 @@ export default function Header() {
 
   return (
     <View style={S.header}>
-      <View style={S.logoBar}>
-        <Logo logoStyle={{width: 35, height: 35, marginLeft: 8}} />
-        <View style={S.notificationBar}>
-          {/* <Image source={oomaNotify} style={{height: 20, width: 20}} /> */}
-          {/* <Image source={active} style={S.activenotifications} /> */}
-          <TouchableOpacity
-            style={{marginLeft: 10}}
-            onPress={() => navigation.navigate('Profile')}>
-            <Avatar
-              size="small"
-              rounded
-              source={user}
-              iconStyle={{width: 30, height: 30}}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View style={S.locationBar}>
-        <HeaderBar
-          onPressImg={() =>
-            navigation.navigate('Branch', {branch: 'changeBranch'})
-          }
-          image1={pointDown}
-          title={`${bName}`}
-          image2={clock}
-          otherTitle="Set Time"
-        />
-        <TouchableHighlight
-          underlayColor=""
-          onPress={() => navigation.navigate('Filter')}>
-          <View
-            style={{width: 60, height: 60, marginRight: -20, marginTop: 10}}>
-            <Image source={active} style={S.activeFilter} />
-            <Image source={filter} style={{height: 20, width: 20}} />
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            style={{zIndex: 5}}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }>
+        <View style={S.logoBar}>
+          <Logo logoStyle={{width: 35, height: 35, marginLeft: 8}} />
+          <View style={S.notificationBar}>
+            {/* <Image source={oomaNotify} style={{height: 20, width: 20}} /> */}
+            {/* <Image source={active} style={S.activenotifications} /> */}
+            <TouchableOpacity
+              style={{marginLeft: 10}}
+              onPress={() => navigation.navigate('Profile')}>
+              <Avatar
+                size="small"
+                rounded
+                source={user}
+                iconStyle={{width: 30, height: 30}}
+              />
+            </TouchableOpacity>
           </View>
-        </TouchableHighlight>
-        <Modal
-          isVisible={showModal}
-          child={<Drop closeModal={() => setShowModal(!showModal)} />}
-          onBackdropPress={() => setShowModal(!showModal)}
-        />
-      </View>
+        </View>
+        <View style={S.locationBar}>
+          <HeaderBar
+            onPressImg={() =>
+              navigation.navigate('Branch', {branch: 'changeBranch'})
+            }
+            image1={pointDown}
+            title={`${bName}`}
+            image2={clock}
+            otherTitle="Set Time"
+          />
+          <TouchableHighlight
+            underlayColor=""
+            onPress={() => navigation.navigate('Filter')}>
+            <View
+              style={{width: 60, height: 60, marginRight: -20, marginTop: 10}}>
+              <Image source={active} style={S.activeFilter} />
+              <Image source={filter} style={{height: 20, width: 20}} />
+            </View>
+          </TouchableHighlight>
+          <Modal
+            isVisible={showModal}
+            child={<Drop closeModal={() => setShowModal(!showModal)} />}
+            onBackdropPress={() => setShowModal(!showModal)}
+          />
+        </View>
+      </ScrollView>
     </View>
   );
 }

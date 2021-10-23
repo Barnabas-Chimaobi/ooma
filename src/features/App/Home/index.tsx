@@ -11,6 +11,7 @@ import {
   // TouchableOpacity,
   BackHandler,
   StatusBar,
+  RefreshControl,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useSelector, useDispatch} from 'react-redux';
@@ -61,6 +62,7 @@ const Home = () => {
   const navigation = useNavigation();
   const [switchs, setSwitchs] = useState(false);
   const [check, setCheck] = useState('');
+  const [refresh, setRefresh] = useState(false);
   const {menuPlanCategories} = useSelector(
     (state: RootState) => state.menuPlanCategories,
   );
@@ -305,7 +307,11 @@ const Home = () => {
     <View style={S.main}>
       <StatusBar backgroundColor="transparent" barStyle="dark-content" />
 
-      <ScrollView ref={scrollRef}>
+      <ScrollView
+        // refreshControl={
+        //   <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
+        // }
+        ref={scrollRef}>
         <Header />
         <View style={{flex: 1}}>
           {/* <ScrollView

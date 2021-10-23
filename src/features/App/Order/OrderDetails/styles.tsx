@@ -16,7 +16,7 @@ export default StyleSheet.create({
     borderRadius: 10,
     // margin: 10,
     // marginTop: 0,
-    paddingTop: 15,
+    paddingTop: 10,
   },
   UnitOrdersmainadds: {
     justifyContent: 'space-between',
@@ -34,10 +34,11 @@ export default StyleSheet.create({
     // margin: 10,
     marginTop: 15,
     // borderTopWidth: 1,
+    flex: 1,
   },
   main: {
     borderRadius: 10,
-    paddingTop: 15,
+    // paddingTop: -215,
     // borderWidth: 1,
     margin: 10,
     marginTop: 10,

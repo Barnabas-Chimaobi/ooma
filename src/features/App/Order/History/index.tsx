@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, FlatList, Text} from 'react-native';
 import {SortBy, OrderCard} from '../components';
 import {Total, EmptyList} from '../../../../components';
@@ -91,11 +91,22 @@ const RenderItems = ({item}: any) => {
 
 const Current = ({item}) => {
   const navigation = useNavigation();
+  const [newObject, setNewObject] = useState({});
   // console.log(
   //   item?.map((items) => items?.status),
   //   'consoleditemmm======',
   // );
   // console.log(item, 'itemsss=====');
+  const getStatus = () => {
+    item?.map((items) => {
+      return setNewObject({status: items?.status});
+    });
+  };
+
+  useEffect(() => {
+    getStatus();
+  }, []);
+
   const data: any = [
     {
       orderId: 'ZS214298',
@@ -107,9 +118,9 @@ const Current = ({item}) => {
 
   return (
     <View style={S.main}>
-      {item?.map((items) =>
-        items?.status.includes('Ready' || 'Delivered' || 'Cancelled'),
-      ) ? (
+      {newObject?.status === 'Ready' ||
+      newObject?.status === 'Delivered' ||
+      newObject?.status === 'Cancelled' ? (
         <FlatList
           ListHeaderComponent={<>{item.length > 0 && <SortBy />}</>}
           renderItem={({item}) => <RenderItems item={item} />}

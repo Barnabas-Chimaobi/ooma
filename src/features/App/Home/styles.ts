@@ -12,6 +12,8 @@ export default StyleSheet.create({
     // borderBottomWidth: 2,
     // borderBottomColor: colors.lightGrey,
     // paddingBottom: 12,
+    flex: 1,
+    zIndex: 5
   },
   logoBar: {
     flexDirection: 'row',
