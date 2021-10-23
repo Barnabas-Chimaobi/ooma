@@ -594,3 +594,20 @@ export const updateProfile = async (body: any) => {
     return error;
   }
 };
+
+export const changeOrderStatus = async (body: any) => {
+  console.log(body, '====detailllsssss');
+  try {
+    const cancelOrder = await api.put(`/orders/changeOrderStatus`, {
+      isMenuPlan: body?.isMenuPlan,
+      orderId: body?.orderId,
+      status: body?.status,
+    });
+    const cancelled = cancelOrder;
+    console.log(cancelled, 'categoryidddss==');
+    return cancelled;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};

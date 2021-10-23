@@ -11,6 +11,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {basketStates} from '../../../../reducers/basket';
 import {cartStates} from '../../../../reducers/cart';
 import {AppDispatch, RootState} from '../../../../store';
+import {SortCart} from '../../../../Utils/sortCart';
 
 interface IProps {
   title: string;
@@ -79,6 +80,7 @@ const MoreAction: FC<IProps> = ({
 
     try {
       const menuICart = await getMenuitemCart(newbranch, userId);
+      SortCart(menuICart?.items);
       dispatch(cartStates(menuICart?.items));
       gottenNewCart(menuICart?.items);
       // console.log(menuICart, 'cart ===value');

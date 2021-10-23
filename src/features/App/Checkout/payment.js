@@ -7,6 +7,9 @@ import {
   TouchableHighlight,
   BackHandler,
   ImageBackground,
+  ActivityIndicator,
+  ScrollView,
+  Dimensions,
 } from 'react-native';
 import {color, colors} from '../../../colors';
 import {
@@ -21,7 +24,11 @@ import {PayWithFlutterwave} from 'flutterwave-react-native';
 // import Paystack from 'react-native-paystack-webview';
 import {Paystack, paystackProps} from 'react-native-paystack-webview';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import {verifyPayment, generatePaymentRef} from '../../../FetchData';
+import {
+  verifyPayment,
+  generatePaymentRef,
+  changeOrderStatus,
+} from '../../../FetchData';
 import {ref} from 'yup';
 import {
   HeaderBar,
@@ -51,6 +58,7 @@ export class State extends Component {
       modalVisible: false,
       success: false,
       planState: this.props.route.params?.planOrderState,
+      load: false,
     };
     this.paystackWebViewRef = React.createRef(null);
     this.backAction = this.backAction.bind(this);
@@ -85,6 +93,7 @@ export class State extends Component {
   };
 
   verifyRef = async () => {
+    console.log(this.state.refdata, 'refdataaaaaaa===on===errroorrr====');
     const verify = await verifyPayment(this.state.refdata);
     if (verify?.data.status === 'success') {
       this.setState({
@@ -100,9 +109,36 @@ export class State extends Component {
   };
 
   componentDidMount() {
+    console.log(
+      this.props.route.params?.planOrderState,
+      '===menuplanoritemsss====',
+    );
+
     BackHandler.addEventListener('hardwareBackPress', this.backAction);
     console.log(this.props.route.params, 'params=========');
   }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.backAction);
+  }
+
+  changeStatus = async () => {
+    const body = {
+      isMenuPlan: this.state.planState ? true : false,
+      orderId: this.state.order,
+      status: 'CANCELLED',
+    };
+
+    const cancel = await changeOrderStatus(body);
+
+    if (cancel?.errorStatus) {
+      Alert('Order Cancelled');
+    }
+    this.setState({
+      load: false,
+    });
+    console.log(cancel, 'cancelorder=====');
+  };
 
   toggleModal = () => {
     this.setState({
@@ -121,43 +157,51 @@ export class State extends Component {
     }
   };
 
-  backToHome = () => {
+  backToHome = async () => {
+    this.setState({
+      modalVisible: false,
+      load: true,
+    });
+    await this.changeStatus();
     this.props.navigation.navigate('Home');
   };
 
   render() {
     return this.state.success ? (
-      <ImageBackground
-        style={{width: '100%', height: '100%'}}
-        source={this.state.planState ? mealSuccess : instantSuccess}>
-        <View
-          style={{
-            // backgroundColor: colors.white,
-            top: '92%',
-            height: 40,
-            width: '40%',
-            alignSelf: 'center',
-            zIndex: 5,
-          }}>
-          <TouchableHighlight
-            underlayColor=""
-            onPress={() => {
-              this.setState({success: false}),
-                this.props.navigation.navigate('Home');
-            }}>
-            <Text></Text>
-          </TouchableHighlight>
-        </View>
-      </ImageBackground>
+      <View style={{flex: 1}}>
+        <ScrollView style={{flex: 1}}>
+          <ImageBackground
+            style={{width: '100%', height: Dimensions.get('screen').height}}
+            source={this.state.planState ? mealSuccess : instantSuccess}>
+            <View
+              style={{
+                // backgroundColor: colors.white,
+                top: Dimensions.get('screen').height / 1.125,
+                height: 40,
+                width: Dimensions.get('screen').width / 2.3,
+                alignSelf: 'center',
+                zIndex: 5,
+              }}>
+              <TouchableHighlight
+                underlayColor=""
+                onPress={() => {
+                  this.setState({success: false}),
+                    this.props.navigation.navigate('Home');
+                }}>
+                <Text></Text>
+              </TouchableHighlight>
+            </View>
+          </ImageBackground>
+        </ScrollView>
+      </View>
     ) : (
       <View style={styles.mainContainer}>
-        <TouchableHighlight
-          onPress={() => this.props.navigation.goBack()}
-          underlayColor="">
+        <TouchableHighlight onPress={() => this.backAction()} underlayColor="">
           <Image style={styles.backArrow} source={arrow} />
         </TouchableHighlight>
         <TouchableHighlight
           underlayColor=""
+          activeOpacity={0.5}
           onPress={() => this.genrateRef('PAYSTACK')}>
           <View style={styles.container}>
             <View>
@@ -199,104 +243,115 @@ export class State extends Component {
           </View>
         </TouchableHighlight> */}
 
-        <Modal
-          style={{
-            maxHeight: '25%',
-            width: '80%',
-            alignSelf: 'center',
-            backgroundColor: colors.white,
-            borderRadius: 12,
-            marginTop: '50%',
-          }}
-          // onBackdropPress={() => toggleModal()}
-          isVisible={this.state.modalVisible}>
-          <View style={{flex: 1, height: '50%'}}>
-            <Text
-              style={{
-                alignSelf: 'center',
-                color: colors.black,
-                marginTop: 15,
-                fontFamily: 'Montserrat',
-                fontWeight: 'bold',
-              }}>
-              Cancel Order
-            </Text>
-            <Text
-              style={{
-                alignSelf: 'center',
-                color: colors.black,
-                fontFamily: 'Montserrat',
-                fontSize: 11,
-                marginTop: 30,
-                fontWeight: '900',
-              }}>
-              Are you sure you want to cancel this order?
-            </Text>
-            <Text
-              style={{
-                alignSelf: 'center',
-                color: colors.black,
-                fontFamily: 'Montserrat',
-                fontSize: 11,
-                fontWeight: '900',
-              }}>
-              Note that this action cannot be reversed
-            </Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                width: '60%',
-                alignSelf: 'flex-end',
-              }}>
-              <TouchableHighlight
-                underlayColor=""
-                style={{width: '15%', marginTop: 35, marginLeft: 35}}
-                onPress={() => this.toggleModal()}>
-                <Text
-                  style={{
-                    color: colors.black,
-                    // borderBottomWidth: 1,
-                    // borderBottomColor: colors.black,
-                    fontFamily: 'Poppins-SemiBold',
-                  }}>
-                  No
-                </Text>
-              </TouchableHighlight>
-              <TouchableHighlight
-                underlayColor=""
-                style={{width: '20%', marginTop: 35, marginRight: 35}}
-                onPress={() => {
-                  this.backToHome();
+        {this.state.load ? (
+          <ActivityIndicator
+            style={{alignSelf: 'center', top: '50%'}}
+            animating={this.state.load}
+            color={colors.green}
+            size="large"
+          />
+        ) : (
+          <Modal
+            style={{
+              maxHeight: '25%',
+              width: '80%',
+              alignSelf: 'center',
+              backgroundColor: colors.white,
+              borderRadius: 12,
+              marginTop: '50%',
+            }}
+            // onBackdropPress={() => toggleModal()}
+            isVisible={this.state.modalVisible}>
+            <View style={{flex: 1, height: '50%'}}>
+              <Text
+                style={{
+                  alignSelf: 'center',
+                  color: colors.black,
+                  marginTop: 15,
+                  fontFamily: 'Montserrat',
+                  fontWeight: 'bold',
                 }}>
-                <View
-                  style={{
-                    // backgroundColor: colors.activeTintColor,
-                    borderRadius: 5,
-                    // padding: 3,
-                    flexDirection: 'row',
-                  }}>
+                Cancel Order
+              </Text>
+              <Text
+                style={{
+                  alignSelf: 'center',
+                  color: colors.black,
+                  fontFamily: 'Montserrat',
+                  fontSize: 11,
+                  marginTop: 30,
+                  fontWeight: '900',
+                }}>
+                Are you sure you want to cancel this order?
+              </Text>
+              <Text
+                style={{
+                  alignSelf: 'center',
+                  color: colors.black,
+                  fontFamily: 'Montserrat',
+                  fontSize: 11,
+                  fontWeight: '900',
+                }}>
+                Note that this action cannot be reversed
+              </Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  width: '60%',
+                  alignSelf: 'flex-end',
+                }}>
+                <TouchableHighlight
+                  underlayColor=""
+                  style={{width: '15%', marginTop: 35, marginLeft: 35}}
+                  onPress={() => this.toggleModal()}>
                   <Text
                     style={{
                       color: colors.black,
-                      paddingLeft: 3,
-                      paddingRight: 3,
+                      // borderBottomWidth: 1,
+                      // borderBottomColor: colors.black,
                       fontFamily: 'Poppins-SemiBold',
-                      textAlign: 'center',
                     }}>
-                    Yes
+                    No
                   </Text>
-                </View>
-              </TouchableHighlight>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  underlayColor=""
+                  style={{width: '20%', marginTop: 35, marginRight: 35}}
+                  onPress={() => {
+                    this.backToHome();
+                  }}>
+                  <View
+                    style={{
+                      // backgroundColor: colors.activeTintColor,
+                      borderRadius: 5,
+                      // padding: 3,
+                      flexDirection: 'row',
+                    }}>
+                    <Text
+                      style={{
+                        color: colors.black,
+                        paddingLeft: 3,
+                        paddingRight: 3,
+                        fontFamily: 'Poppins-SemiBold',
+                        textAlign: 'center',
+                      }}>
+                      Yes
+                    </Text>
+                  </View>
+                </TouchableHighlight>
+              </View>
             </View>
-          </View>
-        </Modal>
+          </Modal>
+        )}
 
         <Paystack
           paystackKey={this.state.pubkey}
           billingEmail="help.ooma@gmail.com"
           amount={this.state.amount}
           onCancel={(e) => {
+            this.verifyRef();
+            Alert('Payment was cancelled');
             console.log(
               e,
               JSON.stringify(this.state.refdata),

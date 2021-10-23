@@ -12,6 +12,7 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
+  RefreshControl,
 } from 'react-native';
 import {
   PriceTag,
@@ -62,6 +63,7 @@ import {StyleFoot} from '../../../../navigation/styles';
 import Footer from '../../../../navigation/footer';
 import {cartStates} from '../../../../reducers/cart';
 import Toast from 'react-native-toast-message';
+import {SortCart} from '../../../../Utils/sortCart';
 
 type ExploreNavigationProps = StackScreenProps<MainStackParamList, 'Explore'>;
 
@@ -125,6 +127,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   const [branch, setBranch] = useState('');
   const [editPre, setEditPref] = useState([]);
   const [profile, setProfile] = useState('');
+  const [load, setLoad] = useState(false);
   let grandsum;
   let [newgrand, setNewgrand] = useState('');
 
@@ -192,6 +195,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   };
 
   const getItemDetail = async () => {
+    setLoad(true);
     const userId = await AsyncStorage.getItem('userId');
     const item = await getMenuItemsById(route?.params?.id);
     const user = await getProfile(userId);
@@ -208,6 +212,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     console.log(user, 'uerrrrr=======');
     setProfile(user?.data);
     setMyAddress(user?.data?.address);
+    setLoad(false);
   };
 
   const carts = async () => {
@@ -216,16 +221,16 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     const userId = await AsyncStorage.getItem('userId');
     console.log(userId, 'useriddd');
     // const gottenId = JSON.parse(userId);
-
     try {
       // console.log(newsum, 'cartttttt');
-
       const menuICart = await getMenuitemCart(newbranch, userId);
+      SortCart(menuICart?.items);
       await dispatch(cartStates(menuICart?.items));
     } catch (error) {}
   };
 
   useEffect(() => {
+    console.log(route.params, 'cartttttt');
     const unsubscribe = navigation.addListener('focus', () => {
       getItemDetail();
     });
@@ -243,21 +248,13 @@ const CardItem: FC<IProps> = ({route, menu}) => {
 
     handleData();
     getAddress();
-    // console.log(id, cartId, planId, planTime, 'paramssssmmm');
-    getItemDetail();
     optionsForDelivery('Pick-Up'), toggleCheckOptions('Pick-Up');
-    // return () => {
-    //   getItemDetail();
-    // };
   }, [route?.params?.id]);
 
   const body = {
     branchId: menuItem?.branchId,
     menuitemid: menuItem?.id,
     quantity: itemQty,
-    // amount:
-    //   (parseInt(total) + parseInt(prefAmount) + parseInt(addsTotal)) *
-    //   parseInt(itemQty),
     amount: prices,
     addons: JSON.stringify(adds),
     Preferences: JSON.stringify(editPre),
@@ -267,37 +264,18 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     deliveryCharge: deliveryCharges,
     deliveryAddId: addressId,
     deliveryTime: time,
-    deliveryAddress: myAddress,
+    deliveryAddress:
+      deliveryOption === 'Pick-Up' ? `${bName}, ${rName}` : myAddress,
     deliveryOption: deliveryOption,
     orderForFriend: switchs,
     friendName: friendName,
     friendPhoneNumber: friendPhone,
-    deliveryDate: plandate,
+    deliveryDate: new Date(),
   };
 
-  const body1 = {
-    isMenuPlan: true,
-    branchId: branch,
-    // subTotal: parseInt(total) * parseInt(itemQty) + parseInt(addsTotal),
-    // total: parseInt(total) * parseInt(itemQty) + parseInt(addsTotal),
-    // paymentMethod: paymentMethod,
-    // paymentType: 'FullPayment',
-    deliveryCharge: deliveryCharges,
-    deliveryAddId: addressId,
-    // cartIds: params?.params?.map((item: any) => item?.cartId),
-    deliveryTime: time,
-    deliveryAddress: myAddress,
-    deliveryOption: deliveryOption,
-    orderForFriend: switchs,
-    friendName: friendName,
-    friendPhoneNumber: friendPhone,
-    cartIds: cartid,
-  };
   const createCart = async (item: any) => {
-    console.log(JSON.stringify(body.addons), 'addingonnn===');
+    console.log(body, 'addingonnn===');
     setLoading(true);
-    // console.log(addsTotal, 'bodyyyquntyyss');
-    // console.log(body, 'bodyyy');
     try {
       const cart = await api.post(`/orders/cart`, {
         branchId: body.branchId,
@@ -405,7 +383,8 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           deliveryCharge: deliveryCharges,
           deliveryAddId: addressId,
           deliveryTime: time,
-          deliveryAddress: myAddress,
+          deliveryAddress:
+            deliveryOption === 'Pick-Up' ? `${bName}, ${rName}` : myAddress,
           deliveryOption: deliveryOption,
           orderForFriend: switchs,
           friendName: friendName,
@@ -444,24 +423,6 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     }
   };
 
-  // const orderNow = async () => {
-  //   setOpenModal(false);
-  //   console.log(body, 'idddddddd');
-  //   if (myAddress == '' && deliveryOption == '') {
-  //     ShowMessage(
-  //       type.INFO,
-  //       'please select either a pick-up location or enter your delivery address or location',
-  //     ); // dispatch(cartStates(addedCart));
-  //   } else {
-  //     const cart = await createOrder(body1);
-  //     const orderNow = await createmenuplanorderDetail(body1, cart?.id);
-  //     ShowMessage(type.DONE, 'Order Placed successfully'); // dispatch(cartStates(addedCart));
-  //     console.log(cart, 'cart');
-  //     console.log(orderNow, 'cartorderdetail');
-  //     navigation.goBack();
-  //   }
-  // };
-
   const editCart = async () => {
     try {
       const cart = await api.put(`/orders/cart`, {
@@ -477,20 +438,10 @@ const CardItem: FC<IProps> = ({route, menu}) => {
       Alert('Item edited successfully');
       setCartItem(addedCart);
       navigation.goBack();
-      // console.log(cart?.config?.data, 'editedcartttt');
-      // } else {
-      //   ShowMessage(type.ERROR, 'Item could not be updated'); // dispatch(cartStates(addedCart));
-      // }
     } catch (err) {
       console.log(err, 'cartError');
     }
   };
-
-  // const addToCart = async () => {
-  //   const cart = await createCart(body);
-  //   console.log(cart, 'cart');
-  //   setCartItem(cartItem);
-  // };
 
   let Image_Http_URL = {uri: menuItem?.imageUrl};
 
@@ -673,13 +624,16 @@ const CardItem: FC<IProps> = ({route, menu}) => {
             {menuItem?.itemName}
           </Text>
           <PriceTag
+            itemPrice={'itemprice'}
             price={parseInt(Number(prices)) + parseInt(Number(deliveryCharges))}
           />
         </View>
-        <ScrollView style={S.sdMain}>
+        <ScrollView
+          refreshControl={<RefreshControl refreshing={load} />}
+          style={S.sdMain}>
           <View style={S.sdHold}>
             <View style={S.sdRating}>
-              <Rating rating={count} />
+              {/* <Rating rating={count} /> */}
               {/* <Icon
                 name="share-alt"
                 type="font-awesome-5"
@@ -704,15 +658,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
             subStyle={{paddingBottom: 13}}
             mainStyle={{paddingHorizontal: 12}}
           />
-          {/* <Divider /> */}
-          {/* <View style={{borderWidth: 1, borderColor: colors.t}} /> */}
 
-          {/* <CollapsibleView
-          itemPreferences={menuItem?.menuItemPreferences}
-          addOns={menuItem?.addons}
-          title="Add-Ons"
-        /> */}
-          {/* <Divider /> */}
           <View style={{borderWidth: 1.5, borderColor: colors.t}} />
 
           <View style={{paddingHorizontal: 12, width: '100%'}}>
@@ -782,31 +728,18 @@ const CardItem: FC<IProps> = ({route, menu}) => {
               <Collapsible collapsed={!visible1} style={{width: '100%'}}>
                 <>
                   {menuItem?.menuItemPreferences.map((preference: any) => (
-                    <TouchableWithoutFeedback
-                      onPress={() => {
-                        // console.log(
-                        //   preference?.Preference?.name,
-                        //   '====preefereeeenn====',
-                        // );
-                        // JSON.stringify(
-                        //   Preferences.push(preference?.Preference?.name),
-                        // );
-                      }}>
+                    <TouchableWithoutFeedback onPress={() => {}}>
                       <View
                         style={{
                           flexDirection: 'row',
                           justifyContent: 'space-between',
                         }}>
                         <CheckBox
-                          // onPress={() => processPreference()}
                           prefCheck={'pref'}
                           id={preference?.Preference?.id}
                           value={preference?.Preference?.unitPrice}
                           key={preference?.Preference?.id}
                           title={preference?.Preference?.name}
-                          // props1={(name: any, unitPrice: any, id: any) => {
-                          //   processPreference(preference);
-                          // }}
                           preferencAdd={() =>
                             processPreference(preference?.Preference)
                           }
@@ -824,14 +757,6 @@ const CardItem: FC<IProps> = ({route, menu}) => {
               </Collapsible>
             </View>
           )}
-
-          {/* <CollapsibleView
-          itemPreferences={menuItem?.menuItemPreferences}
-          addOns={menuItem?.addons}
-          title="Preference"
-        /> */}
-
-          {/* <Divider /> */}
           <View style={{borderWidth: 1.5, borderColor: colors.t}} />
           <Adjust
             mainquanty="main"
@@ -1032,15 +957,16 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                             flexDirection: 'row',
                             width: '50%',
                             borderRadius: 5,
-                            // borderWidth: 0.5,
+                            borderWidth: 1,
                             backgroundColor: 'rgba(246, 246, 246, 0.7)',
                             height: 45,
                             marginRight: 5,
+                            borderColor: colors.grey,
                           }}>
                           <TextInput
-                            onFocus={() =>
-                              myAddress === null ? editProfile() : null
-                            }
+                            // onFocus={() =>
+                            //   myAddress === null ? editProfile() : null
+                            // }
                             value={myAddress}
                             style={{
                               backgroundColor: 'rgba(246, 246, 246, 0.7)',
@@ -1085,24 +1011,6 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                       </View>
                     ) : null}
                   </View>
-
-                  {/* <View
-                  style={{
-                    backgroundColor: 'rgba(246, 246, 246, 0.75)',
-                    padding: 5,
-                    top: 8,
-                  }}>
-                  <TouchableHighlight
-                    underlayColor="rgba(0, 0, 0, 0.2)"
-                    onPress={() => deliveryTime()}>
-                    <Text
-                      style={{fontSize: 16, marginLeft: 10, marginBottom: 15}}>
-                      Select Time
-                    </Text>
-                  </TouchableHighlight>
-                </View> */}
-
-                  {/* {showTime == true ? ( */}
                   <View style={{marginTop: -50}}>
                     <Button
                       titleStyle={s.buttonTitle}
@@ -1113,8 +1021,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                         setShowTime(false), setTime(planTime);
                       }}
                     />
-                    {/* <View style={{flexDirection: 'row', flex: 1}}> */}
-                    {/* <Image style={{height: 20, width: 20}} source={clock} /> */}
+
                     <DropDownPicker
                       zIndex={0.5}
                       placeholder="Select time"
@@ -1126,13 +1033,9 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                       setItems={planTime}
                       onChangeItem={(value) => {
                         setShowTime(false), setTime(value.label);
-                        // setMyAddress(value?.label);
-                        // console.log(value, 'amountt');
                       }}
                     />
-                    {/* </View> */}
                   </View>
-                  {/* ) : null} */}
                 </ScrollView>
               </View>
             </Modal>

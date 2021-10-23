@@ -24,7 +24,7 @@ const OrderCard = ({
   mainStyle,
 }: IProps) => {
   const navigation = useNavigation();
-  console.log(details, 'details======');
+  // console.log(details, 'details======');
 
   return (
     // <Pressable onPress={onPress}>

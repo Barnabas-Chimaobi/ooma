@@ -5,12 +5,31 @@ import {Text, View} from 'react-native';
 import {setUserDetails} from '../../../../reducers';
 import {useDispatch} from 'react-redux';
 import {AppDispatch} from '../../../../store';
+import {
+  createMenuItemOrder,
+  getDeliveryAddress,
+  createMenuItemOrderDetail,
+  createMenuPlanOrder,
+  getMenuitemCart,
+  getProfile,
+} from '../../../../FetchData';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginPassword = () => {
   const dispatch: AppDispatch = useDispatch();
   const [password, setpassword] = useState('');
+  const [username, setUserName] = useState('');
+
+  const getProfiles = async () => {
+    const userId = await AsyncStorage.getItem('userId');
+    //  const parseAddress = JSON.parse(adress);
+    const user = await getProfile(userId);
+    console.log(user, 'user======ssserrr===');
+    setUserName(user?.data?.firstName);
+  };
 
   useEffect(() => {
+    getProfiles();
     const delayDebounceFn = setTimeout(() => {
       dispatch(setUserDetails({password}));
       // Send Axios request here
@@ -21,7 +40,7 @@ const LoginPassword = () => {
 
   return (
     <OmaCard
-      overTitle="Hello! Harriet"
+      overTitle={username !== undefined ? `Hello ${username}` : 'Hello User'}
       overStyle={S.overStyle}
       title="Please enter your Password"
       titleStyle={S.omaTitle}

@@ -10,6 +10,7 @@ import {
   ImageBackground,
   // TouchableOpacity,
   BackHandler,
+  StatusBar,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useSelector, useDispatch} from 'react-redux';
@@ -302,6 +303,8 @@ const Home = () => {
 
   return (
     <View style={S.main}>
+      <StatusBar backgroundColor="transparent" barStyle="dark-content" />
+
       <ScrollView ref={scrollRef}>
         <Header />
         <View style={{flex: 1}}>
@@ -608,7 +611,7 @@ const Home = () => {
             </View>
           )}
 
-          {popularMenuItem?.length == 0 ? (
+          {/* {popularMenuItem?.length == 0 ? (
             <Skeleton />
           ) : (
             <View>
@@ -624,7 +627,7 @@ const Home = () => {
                   borderBottomColor: colors.grey,
                 }}></View>
             </View>
-          )}
+          )} */}
 
           {glutenMenuItem?.length == 0 ? (
             <Skeleton />

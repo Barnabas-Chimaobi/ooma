@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
   View,
   ScrollView,
@@ -8,6 +8,10 @@ import {
   TouchableHighlight,
   ActivityIndicator,
   ImageBackground,
+  Dimensions,
+  BackHandler,
+
+  // Alert,
 } from 'react-native';
 import {
   HeaderBar,
@@ -25,7 +29,13 @@ import S from './styles';
 import s from '../../App/Checkout/DeliveryOptions/styles';
 import DeliveryOptions from './DeliveryOptions';
 import RadioSelect from './RadioSelect';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {
+  useNavigation,
+  useRoute,
+  useFocusEffect,
+  NavigationAction,
+  CommonActions,
+} from '@react-navigation/native';
 import ModalMessage from '../../../components/CartMessagesModal';
 import {
   createMenuItemOrder,
@@ -47,12 +57,13 @@ import {RootState, AppDispatch} from '../../../store';
 import {instantSuccess, mealSuccess} from '../../../assets';
 import {colors} from '../../../colors';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {SortCart} from '../../../Utils/sortCart';
 
 const Checkout = () => {
   const dispatch: AppDispatch = useDispatch();
   const navigation = useNavigation();
   const route = useRoute();
-  const params = route.params;
+  const params = route?.params;
   const [deliveryOption, setDeliveryOptions] = useState('');
   const [myAddress, setMyAddress] = useState(null);
   const [open, setOpen] = useState(true);
@@ -78,10 +89,11 @@ const Checkout = () => {
   const [payState, setPayState] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [exitHome, setExitHome] = useState(false);
 
   const carts = async () => {
     const branch = await AsyncStorage.getItem('branchId');
-    const newbranch = JSON.parse(branch);
+    const newbranch = await JSON.parse(branch);
     const userId = await AsyncStorage.getItem('userId');
     console.log(userId, 'useriddd');
     // const gottenId = JSON.parse(userId);
@@ -90,6 +102,7 @@ const Checkout = () => {
       // console.log(newsum, 'cartttttt');
 
       const menuICart = await getMenuitemCart(newbranch, userId);
+      SortCart(menuICart?.items);
       await dispatch(cartStates(menuICart?.items));
     } catch (error) {}
   };
@@ -118,25 +131,52 @@ const Checkout = () => {
   };
   let a = 50;
   let b = 60;
+
+  //   const onBackPress = () => {
+  //   navigation.reset({
+  //     index: 0,
+  //     routes: [{name: 'Home'}],
+  //   });
+  // };
+
+  const onBackPress = () => {
+    setExitHome(true);
+    console.log(success, 'success==sss====');
+    if (success === true) {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{name: 'Home'}],
+        }),
+      );
+      setSuccess(false);
+      // setExitHome(false);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [success]),
+  );
+
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+    // BackHandler.addEventListener('hardwareBackPress', backHandler);
+    const unsubscribe = navigation?.addListener('focus', () => {
       getAddress();
     });
 
-    console.log(params, a + b, 'paramssss');
-    console.log(params?.paramsBuynow?.amount, a + b, 'paramssss');
+    // console.log(params, a + b, 'paramssss');
+    // console.log(params?.paramsBuynow?.amount, a + b, 'paramssss');
 
-    // let one = params?.params?.map((item: any) => {
-    //   console.log(item.cartId, '===mapppppeddd====');
-    // });
-    // let ones = one.map((item: any, index: any) => item);
-
-    // console.log(cartId, '===cartidddss===');
     const handleData = async () => {
       const regionName = await AsyncStorage.getItem('regionName');
       const branchName = await AsyncStorage.getItem('branchName');
       const newBranchId: any = await AsyncStorage.getItem('branchId');
-      const branchs = JSON.parse(newBranchId);
+      const branchs = await JSON.parse(newBranchId);
       setBranch(branchs);
       console.log(branchs, 'branchiddddd');
 
@@ -147,7 +187,9 @@ const Checkout = () => {
 
     optionsForDelivery('Pick-Up'), toggleCheckOptions('Pick-Up');
     handleData();
-    getAddress();
+    // getAddress();
+    // return () =>
+    //   BackHandler.removeEventListener('hardwareBackPress', backHandler);
   }, []);
 
   const body = {
@@ -170,10 +212,11 @@ const Checkout = () => {
       params?.paramsBuynow === 'buynow'
         ? params?.params?.id?.toString()
         : !params?.planOrder
-        ? params?.params?.map((item: any) => item.cartId)?.toString()
+        ? params?.params?.map((item: any) => item?.cartId)?.toString()
         : params?.params?.map((item: any) => item.id)?.toString(),
     deliveryTime: date,
-    deliveryAddress: myAddress,
+    deliveryAddress:
+      deliveryOption == 'Pick-Up' ? `${bName}, ${rName}` : myAddress,
     deliveryOption: deliveryOption,
     orderForFriend: switchs,
     friendName: friendName,
@@ -189,7 +232,7 @@ const Checkout = () => {
 
   const orderNow = async () => {
     setLoading(true);
-    console.log(body, '===idddddddd');
+    console.log(body, '===iddddddddconfirmedd=====');
     if (deliveryOption === 'Delivery' && !addressId) {
       Alert('please select a pick-up location and enter your delivery address');
       // ShowMessage(
@@ -214,14 +257,14 @@ const Checkout = () => {
     } else {
       const cart = await createMenuItemOrder(body);
       carts();
-      // console.log(cart, 'cartttttt=====');
+      console.log(cart, 'cartttttt=====');
       if (cart?.statusCode === 201) {
         // if (payState !== 'CARD') {
         //   ShowMessage(type.DONE, 'Order Placed successfully'); // dispatch(cartStates(addedCart));
         // }
         setLoading(false);
         if (payState === 'CARD') {
-          navigation.navigate('Payment', {
+          navigation?.navigate('Payment', {
             planOrderState: params?.planOrder,
             amount: totalAmount,
             branchId: branch,
@@ -269,7 +312,7 @@ const Checkout = () => {
         //   ShowMessage(type.DONE, 'Order Placed successfully'); // dispatch(cartStates(addedCart));
         // }
         if (payState === 'CARD') {
-          navigation.navigate('Payment', {
+          navigation?.navigate('Payment', {
             planOrderState: params?.planOrder,
             amount: totalAmount,
             branchId: branch,
@@ -373,26 +416,37 @@ const Checkout = () => {
   };
 
   return success ? (
-    <ImageBackground
-      style={{width: '100%', height: '100%'}}
-      source={params?.planOrder ? mealSuccess : instantSuccess}>
-      <View
-        style={{
-          top: '92%',
-          height: 40,
-          width: '40%',
-          alignSelf: 'center',
-          zIndex: 1,
-        }}>
-        <TouchableHighlight
-          underlayColor=""
-          onPress={() => {
-            setSuccess(false), navigation.navigate('Home');
-          }}>
-          <Text></Text>
-        </TouchableHighlight>
-      </View>
-    </ImageBackground>
+    <View style={{flex: 1}}>
+      <ScrollView style={{flex: 1}}>
+        <ImageBackground
+          style={{width: '100%', height: Dimensions.get('screen').height}}
+          source={params?.planOrder ? mealSuccess : instantSuccess}>
+          {/* <ActivityIndicator
+            color={colors.green}
+            size="large"
+            animating={exitHome}
+            style={{zIndex: 5}}
+          /> */}
+          <View
+            style={{
+              top: Dimensions.get('screen').height / 1.125,
+              height: 40,
+              width: Dimensions.get('screen').width / 2.3,
+              alignSelf: 'center',
+              zIndex: 1,
+              // backgroundColor: colors.white,
+            }}>
+            <TouchableHighlight
+              underlayColor=""
+              onPress={() => {
+                setSuccess(false), navigation.navigate('Home');
+              }}>
+              <Text></Text>
+            </TouchableHighlight>
+          </View>
+        </ImageBackground>
+      </ScrollView>
+    </View>
   ) : (
     <View style={{flex: 1, backgroundColor: colors.white}}>
       <ScrollView style={S.main}>
@@ -507,13 +561,14 @@ const Checkout = () => {
                   flexDirection: 'row',
                   width: '50%',
                   borderRadius: 5,
-                  // borderWidth: 0.5,
+                  borderWidth: 1,
                   backgroundColor: '#fff',
                   height: 45,
                   marginRight: 5,
+                  borderColor: colors.grey,
                 }}>
                 <TextInput
-                  onFocus={() => (myAddress === null ? editProfile() : null)}
+                  // onFocus={() => (myAddress === null ? editProfile() : null)}
                   value={myAddress}
                   style={{
                     backgroundColor: '#fff',
@@ -546,8 +601,8 @@ const Checkout = () => {
                   setValue={value}
                   setItems={items}
                   onChangeItem={(value) => {
-                    setDeliveryCharges(value.amount);
-                    setAddressId(value.id);
+                    setDeliveryCharges(value?.amount);
+                    setAddressId(value?.id);
                     // setMyAddress(value?.label);
                     console.log(value, 'amountt');
                   }}

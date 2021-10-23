@@ -36,10 +36,10 @@ function percentageCalc(oldPrice: any, newPrice: any) {
 
 const DetailCard: React.FC<Props> = (props: Props) => {
   // console.log(props.planTime, '====plantimessss===========');
-  const discount = percentageCalc(props.oldPrice, props.amount);
+  const discount = percentageCalc(props?.oldPrice, props?.amount);
   const navigation = useNavigation();
   const morningTimes = async (id) => {
-    console.log(props.allplanTime, props?.id, 'plantimeeee==sss');
+    // console.log(props.allplanTime, props?.id, 'plantimeeee==sss');
     const findAllTime = await props?.allplanTime?.filter(
       (a) => a?.MenuItem?.id == id,
     );

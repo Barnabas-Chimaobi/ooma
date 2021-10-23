@@ -138,10 +138,10 @@ const MenuDetails: FC<IProps> = ({route}) => {
       };
     });
     setDeliveryTime(getPlanTimes);
-    console.log(getPlanTimes, 'plantimesssss===========');
+    // console.log(getPlanTimes, 'plantimesssss===========');
     // setRefreshing(false);
-    console.log('arrFiltered=================', arrFiltered);
-    console.log(morningorAfterOrEve, 'morningsssss');
+    // console.log('arrFiltered=================', arrFiltered);
+    // console.log(morningorAfterOrEve, 'morningsssss');
   };
 
   const getMenuplanKart = async () => {
@@ -159,7 +159,7 @@ const MenuDetails: FC<IProps> = ({route}) => {
     dispatch(basketStates(menuplanscart?.items));
     const all = menuplanscart?.items?.map((item: any) => item.MenuPlan);
     let all1 = all?.map((item: any) => item.MenuPlanDetails);
-    console.log(menuplanscart, '=====all1======');
+    // console.log(menuplanscart, '=====all1======');
   };
 
   const getMenuPlanDetails = async () => {

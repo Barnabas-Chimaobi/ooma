@@ -87,8 +87,8 @@ const FilterBar = () => {
       1,
       // category1,
       category,
-      minPrice,
-      maxPrice,
+      minPrices === undefined ? 100 : minPrices,
+      maxPrices,
       sorts,
       // combination1,
     );
@@ -209,7 +209,9 @@ const FilterBar = () => {
       <Button
         title={
           minPrices > 0 || maxPrices > 0
-            ? `\u20A6${minPrices} - \u20A6${maxPrices}`
+            ? `\u20A6${
+                minPrices === undefined ? 100 : minPrices
+              } - \u20A6${maxPrices}`
             : 'Price'
         }
         buttonStyle={[S.buttonStyle, price && S.activeButtonStyle]}

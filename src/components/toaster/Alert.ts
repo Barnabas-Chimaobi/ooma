@@ -1,15 +1,13 @@
 import {ToastAndroid, Platform, Alert} from 'react-native';
 
 export default (msg: string) => {
-  if (Platform.OS === 'android') {
-    ToastAndroid.showWithGravityAndOffset(
+  // if (Platform.OS === 'android') {
+    ToastAndroid.showWithGravity(
       msg,
       ToastAndroid.LONG,
-      ToastAndroid.CENTER,
-      25,
-      50,
+      ToastAndroid.TOP,
     );
-  } else {
-    Alert.alert(msg);
-  }
+  // } else {
+  //   Alert.alert(msg);
+  // }
 };

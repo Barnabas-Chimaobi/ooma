@@ -115,6 +115,9 @@ const Register = () => {
     if (newroute?.params?.route === 'login') {
       setroute(null);
     }
+
+    return () =>
+      BackHandler.removeEventListener('hardwareBackPress', backHandler);
   }, [newroute?.params?.route]);
 
   const verifyNumber = async () => {

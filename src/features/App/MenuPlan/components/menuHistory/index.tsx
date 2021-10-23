@@ -13,11 +13,13 @@ import {
   ButtonType,
   PriceTag,
   EmptyList,
+  SimpleHeader,
 } from '../../../../../components';
 import {useNavigation} from '@react-navigation/native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {BallIndicator} from 'react-native-indicators';
 const {width: windowWidth} = Dimensions.get('window');
+import {colors} from '../../../../../colors';
 
 interface ListProps {
   imageUrl: any;
@@ -80,7 +82,6 @@ export const MenuHistory = () => {
         //replace the already exist data with the grouped plan data
         item['data'] = groupByPlanTypeDate(item.data);
       });
-
       setOrders(basketData);
       setLoader(false);
       // console.log('====baket items======= ', JSON.stringify(basketData));
@@ -150,7 +151,7 @@ export const MenuHistory = () => {
       planName: itemData.orderInfo.orderName,
       plantotal: itemData.orderInfo.total,
       planImage: itemData.orderInfo.MenuPlan.imageurl,
-      planStart: itemData.orderInfo.MenuPlan.startDate,
+      planStart: itemData.orderInfo.deliveryDate,
       planEnd: itemData.orderInfo.MenuPlan.endDate,
       planStatus: itemData.orderInfo.status,
       planId: itemData.orderInfo.orderId,
@@ -186,66 +187,77 @@ export const MenuHistory = () => {
     //   list?.map((item: any) => item),
     //   '===listitemmsss===',
     // );
-    return status === 'completed' ? (
-      <TouchableWithoutFeedback
-        onPress={() =>
-          navigation.navigate('Cart', {
-            id: planId,
-            plan: 'plan',
-            planName: itemName,
-          })
-        }
-        style={styles.innerListItemStyle}>
-        <View style={styles.innerListItemStyle}>
-          <View style={styles.overlayStyle} />
-          <Image
-            style={{height: 100, width: 100, borderRadius: 10}}
-            source={{uri: imageUrl}}
-          />
-          <View style={styles.itemTextArea}>
-            <Text style={styles.itemNameStyle}>{itemName}</Text>
-            <View style={{flexDirection: 'row'}}>
-              <Text style={styles.timeStyle}>
-                {new Date(time).toDateString()} -
-              </Text>
-              <Text> </Text>
+    return status === 'Delivered' ||
+      status === 'Ready' ||
+      status === 'Cancelled' ? (
+      <View
+        style={{
+          elevation: 10,
+          width: '96%',
+          backgroundColor: colors.white,
+          borderRadius: 10,
+          marginBottom: 15,
+          alignSelf: 'center',
+          marginTop: 10,
+        }}>
+        <TouchableWithoutFeedback
+          onPress={() =>
+            navigation.navigate('Cart', {
+              id: planId,
+              plan: 'plan',
+              planName: itemName,
+            })
+          }
+          style={styles.innerListItemStyle}>
+          <View style={styles.innerListItemStyle}>
+            <View style={styles.overlayStyle} />
+            <Image
+              style={{height: 100, width: 100, borderRadius: 10}}
+              source={{uri: imageUrl}}
+            />
+            <View style={styles.itemTextArea}>
+              <Text style={styles.itemNameStyle}>{itemName}</Text>
+              <View style={{flexDirection: 'row'}}>
+                <Text style={styles.timeStyle}>
+                  {new Date(time).toDateString()}
+                </Text>
+                {/* <Text> </Text>
               <Text style={styles.timeStyle}>
                 {new Date(time1).toDateString()}
-              </Text>
+              </Text> */}
+              </View>
+              <View>
+                <Text style={styles.statusStyle}>{status}</Text>
+                {/* <ProgressBar progressValue={pecentage} /> */}
+              </View>
             </View>
-            <View>
-              <Text style={styles.statusStyle}>{status}</Text>
-              <ProgressBar progressValue={pecentage} />
-            </View>
-          </View>
-          <View style={{marginLeft: 'auto', zIndex: 555, top: 10}}>
+            {/* <View style={{marginLeft: 'auto', zIndex: 555, top: 10}}>
             <PopupMenu
               actions={['View Full Details', 'Delete']}
               onPressMenu={onPopupEvent}
             />
+          </View> */}
           </View>
-        </View>
-      </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+      </View>
     ) : null;
   };
 
   return (
     <View>
+      <View style={{marginLeft: 10}}>
+        <SimpleHeader />
+      </View>
       <Spinner
         visible={loader}
-        // textStyle={styles.spinnerTextStyle}
+        textContent={'Getting your order history ready..'}
+        textStyle={{fontSize: 16, fontFamily: 'Montserrat', fontWeight: '900'}}
         overlayColor="rgba(66, 66, 66,0.6)"
         customIndicator={<BallIndicator color="white" />}
       />
-      {planOrders?.includes('completed') === false ||
-      planOrders?.length === 0 ? (
-        <EmptyList
-          image={require('../../../../../assets/Images/emptyCart.png')}
-          // title="FIND MEAL"
-          message="Oops! You don't have any completed plan"
-          // onPress={() => navigation.goBack()}
-        />
-      ) : (
+      {planOrders?.map((item) =>
+        item?.planStatus.includes('Delivered' || 'Ready' || 'Cancelled'),
+      ) ? (
         <FlatList
           data={planOrders}
           style={styles.listStyle}
@@ -272,6 +284,13 @@ export const MenuHistory = () => {
           //   />
           // }
         />
+      ) : (
+        <EmptyList
+          image={require('../../../../../assets/Images/emptyCart.png')}
+          // title="FIND MEAL"
+          message="Oops! You don't have any completed plan"
+          // onPress={() => navigation.goBack()}
+        />
       )}
     </View>
   );
@@ -290,12 +309,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     right: 10,
     zIndex: 5,
-    opacity: 0.6,
+    opacity: 0.4,
   },
   innerListItemStyle: {
     borderBottomColor: '#44444475',
-    borderBottomWidth: 1,
-    padding: 10,
+    // borderBottomWidth: 1,
+    padding: 4,
     flexDirection: 'row',
   },
   listStyle: {},
@@ -308,7 +327,7 @@ const styles = StyleSheet.create({
   },
   itemNameStyle: {fontWeight: 'bold', fontSize: 16},
   timeStyle: {opacity: 0.5, fontSize: 12},
-  statusStyle: {color: 'gray'},
+  statusStyle: {color: colors.green},
   pecentageStyle: {fontSize: 10, fontWeight: 'bold'},
   buttonContainer: {
     flexDirection: 'row',

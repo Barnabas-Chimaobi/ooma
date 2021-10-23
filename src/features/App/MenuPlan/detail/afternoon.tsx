@@ -37,7 +37,7 @@ const DetailCard: React.FC<Props> = (props: Props) => {
   const navigation = useNavigation();
   const discount = percentageCalc(props.oldPrice, props.amount);
   const afternoonTimes = async (id) => {
-    console.log(props.allplanTime, props?.id, 'plantimeeee==sss');
+    console.log(props?.allplanTime, props?.id, 'plantimeeee==sss');
     const findAllTime = await props?.allplanTime?.filter(
       (a) => a?.MenuItem?.id == id,
     );
@@ -57,7 +57,7 @@ const DetailCard: React.FC<Props> = (props: Props) => {
         id: item,
       };
     });
-    console.log(mapSortTime, 'time=======');
+    // console.log(mapSortTime, 'time=======');
 
     navigation.navigate('Dish', {
       id: props.id,

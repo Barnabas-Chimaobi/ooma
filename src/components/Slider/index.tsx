@@ -25,8 +25,8 @@ const SliderBar = ({
   parameters2,
 }: any) => {
   // const {minPrice,maxPrice} = useSelector((state: RootState) => state.filter);
-  const [minPrices, setMinprice] = useState();
-  const [maxPrices, setMaxprice] = useState();
+  const [minPrices, setMinprice] = useState(0);
+  const [maxPrices, setMaxprice] = useState(0);
   const dispatch: AppDispatch = useDispatch();
   const [branchId, setBranchId] = useState('');
 

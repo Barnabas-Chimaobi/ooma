@@ -36,7 +36,7 @@ const Total = ({
   orderefId,
   itemorder,
 }: IProps) => {
-  console.log(total, typeof total, '=======listssss===ssss==');
+  // console.log(total, typeof total, '=======listssss===ssss==');
   return (
     <View style={[S.main, mainStyle]}>
       {randomTitle && (

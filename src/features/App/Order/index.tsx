@@ -95,7 +95,13 @@ const OrderTab = () => {
       item['data'] = groupByPlanTypeDate(item.data);
     });
 
+    basketData.sort(function (a, b) {
+      var dateA: any = new Date(a.deliveryTime),
+        dateB: any = new Date(b.deliveryTime);
+      return dateB - dateA;
+    });
     setOrders(basketData);
+
     //  await dispatch(cartStates(menuICart?.items));
     // console.log(basketData, 'cart ===value');
     // console.log(orders?.items, 'cart ===value');
@@ -106,10 +112,17 @@ const OrderTab = () => {
   const groupByDate = (itemData: any, basketItems: any) => {
     // console.log(basketItems, 'basketitems====');
     for (const item of basketItems) {
-      // console.log(item, 'iiiiiiiiiitems====');
-      if (itemData?.menuitemorders?.deliveryTime == item?.deliveryTime) {
+      // console.log(
+      //   itemData?.menuitemorders?.createdAt,
+      //   item,
+      //   'iiiiiiiiiitems====',
+      // );
+      if (
+        new Date(itemData?.menuitemorders?.createdAt)?.toLocaleDateString() ==
+        new Date(item?.deliveryTime)?.toLocaleDateString()
+      ) {
         item.data.push({
-          planType: itemData?.menuitemorders?.deliveryTime,
+          planType: itemData?.menuitemorders?.createdAt,
           itemData,
         });
 
@@ -118,7 +131,7 @@ const OrderTab = () => {
     }
     // if the basket item date doesnt exist before
     basketItems.push({
-      deliveryTime: itemData?.menuitemorders?.deliveryTime,
+      deliveryTime: itemData?.menuitemorders?.createdAt,
       status: itemData?.menuitemorders?.status,
       data: [{itemData}],
     });
@@ -167,7 +180,7 @@ const OrderTab = () => {
 
   useEffect(() => {
     getOrders();
-    console.log(itemOrder, 'itemorderssss======');
+    // console.log(itemOrder, 'itemorderssss======');
   }, [itemOrders?.length && loading === true]);
 
   const Current = () => <CurrentOrder item={order} />;

@@ -141,7 +141,7 @@ const HeaderBar = ({
                 left: 5,
                 fontFamily: 'Montserrat',
               }}>
-              Location
+              Branch
             </Text>
             <View style={S.locationDetails}>
               <Text style={{fontSize: 13, fontFamily: 'Open Sans'}}>

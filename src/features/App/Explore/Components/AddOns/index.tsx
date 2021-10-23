@@ -17,7 +17,7 @@ const T = ({title, price, noBorder, onPress}: TProps) => {
       <TouchableOpacity onPress={onPress} style={S.Tmain}>
         <Text>{title}</Text>
         {price ? (
-          <PriceTag price={price} clear />
+          <PriceTag price={Number(price)} clear />
         ) : (
           <Icon name="chevron-right" color="#05944F" />
         )}
@@ -39,7 +39,7 @@ const CheckBoxWithPrice = ({price, title, noBorder}: TProps) => {
           paddingHorizontal: 10,
         }}>
         <CheckBox title={title} />
-        <PriceTag price={price} clear />
+        <PriceTag price={Number(price)} clear />
       </View>
       {!noBorder && <Divider />}
     </>

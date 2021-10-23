@@ -156,19 +156,19 @@ const SelectedCategory: FC<selectedProps> = ({route}) => {
                 />
               )
             }
-            ListFooterComponent={
-              <>
-                {truth == true && (
-                  <Button
-                    title="BACK TO TOP"
-                    type={ButtonType.outline}
-                    buttonStyle={S.backTopButtonStyle}
-                    titleStyle={S.backtopTitleStyle}
-                    onPress={() => {}}
-                  />
-                )}
-              </>
-            }
+            // ListFooterComponent={
+            //   <>
+            //     {truth == true && (
+            //       <Button
+            //         title="BACK TO TOP"
+            //         type={ButtonType.outline}
+            //         buttonStyle={S.backTopButtonStyle}
+            //         titleStyle={S.backtopTitleStyle}
+            //         onPress={() => {}}
+            //       />
+            //     )}
+            //   </>
+            // }
           />
         </View>
 

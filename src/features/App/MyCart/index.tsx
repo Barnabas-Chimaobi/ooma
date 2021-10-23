@@ -30,6 +30,7 @@ import {FunctionSelectItem} from 'native-base/lib/typescript/components/composit
 import {StyleFoot} from '../../../navigation/styles';
 import Footer from '../../../navigation/footer';
 import {colors} from '../../../colors';
+import {SortCart} from '../../../Utils/sortCart';
 
 const MyCart = () => {
   const [mycart, setMyCart] = useState('cart');
@@ -38,6 +39,7 @@ const MyCart = () => {
   const [cartParams, setParams] = useState();
   const [total, setTotal] = useState('');
   let [reload, setReload] = useState(false);
+  const [states, setStates] = useState({totals: ''});
   const navigation = useNavigation();
   const route = useRoute();
   const [refreshing, setRefreshing] = useState(false);
@@ -45,6 +47,7 @@ const MyCart = () => {
   const dispatch: AppDispatch = useDispatch();
   const cartItem = useSelector((state: RootState) => state.addedCart.payload);
   console.log('=====cart length========', cartItem?.length);
+  console.log(cartItem?.length, route?.params, '=====length=====');
 
   const cart = async () => {
     getCart();
@@ -56,15 +59,15 @@ const MyCart = () => {
     const userId = await AsyncStorage.getItem('userId');
     console.log(userId, 'useriddd');
     // const gottenId = JSON.parse(userId);
-
     try {
       // console.log(newsum, 'cartttttt');
 
       const menuICart = await getMenuitemCart(newbranch, userId);
       setCart(menuICart?.items);
+      SortCart(menuICart?.items);
       await dispatch(cartStates(menuICart?.items));
 
-      console.log(menuICart?.items?.length, 'cart ===value');
+      console.log(menuICart, 'cart ===value');
       setRefreshing(false);
     } catch (error) {
       setRefreshing(false);
@@ -75,13 +78,14 @@ const MyCart = () => {
 
   const getCart = async () => {
     // setTimeout(() => {
-    const sum = cartItem?.map((v) => v?.amount);
-    console.log(sum, cartItem?.length, '====summm====');
+    const sum = await cartItem?.map((v) => v?.amount);
+    console.log(sum, cartItem?.length, '====summm====summ===');
     if (cartItem?.length !== 0) {
       let newsum = sum?.reduce(
         (sum: any, current: any) => parseInt(sum) + parseInt(current),
       );
       setTotal(newsum);
+      setStates({totals: newsum});
       console.log(newsum, 'cartttttt');
       console.log(total, 'totalllss');
 
@@ -93,8 +97,10 @@ const MyCart = () => {
           cartId: item.id,
         };
       });
+      setReload(true);
       setParams(getEachItem);
     }
+    setReload(false);
   };
 
   const onRefresh = () => {
@@ -102,9 +108,8 @@ const MyCart = () => {
     cart();
   };
   useEffect(() => {
-    console.log(cartItem?.length, '=====length=====');
     const unsubscribe = navigation.addListener('focus', () => {
-      // this.componentDidMount();
+      console.log('adlistennerrrsss=====ssss=====');
       cart();
     });
 
@@ -142,7 +147,7 @@ const MyCart = () => {
                 keyExtractor={() => shortid.generate()}
                 // style={styles.listStyle}
                 renderItem={({item}) => {
-                  console.log(item, 'addonssss====stringgg');
+                  // console.log(item, 'addonssss====stringgg');
                   return (
                     cartItem?.length >= 1 && (
                       <Card
@@ -195,7 +200,12 @@ const MyCart = () => {
                   justifyContent: 'space-between',
                 }}>
                 <Text>Total :</Text>
-                {total !== '' && <PriceTag price={total} clear />}
+                {total !== '' && (
+                  <PriceTag
+                    price={Number(route?.params?.editTotal || total)}
+                    clear
+                  />
+                )}
               </View>
               <Button
                 title="CHECKOUT"
@@ -210,7 +220,7 @@ const MyCart = () => {
                     ? Alert('Please wait while we calculate your total')
                     : navigation.navigate('Checkout', {
                         params: cartParams,
-                        subTotal: total,
+                        subTotal: route?.params?.editTotal || total,
                       });
                 }}
               />

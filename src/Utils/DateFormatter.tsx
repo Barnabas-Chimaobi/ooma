@@ -91,7 +91,7 @@ export default class DateFormatter {
 
     var hours = date.getHours();
 
-    console.log(hours, date, 'hoursss===');
+    // console.log(hours, date, 'hoursss===');
     var minutes = date.getMinutes();
     var ampm = hours >= 12 ? 'PM' : 'AM';
     hours = hours % 12;

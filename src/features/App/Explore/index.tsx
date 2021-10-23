@@ -138,10 +138,10 @@ const Explore = () => {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
           <View style={S.exploreCard}>
-            <Card
+            {/* <Card
               title="Hot categories"
               categories={shuffleArray(categories)}
-            />
+            /> */}
             <Card
               title="Top Meal Plans"
               categories={shuffleArray(menuPlanCategories)}

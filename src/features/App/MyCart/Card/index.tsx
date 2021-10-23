@@ -82,7 +82,12 @@ const Card: FC<IProps> = ({
           />
           <View style={{width: '70%', paddingLeft: 20}}>
             <Text
-              style={{fontFamily: 'Roboto', fontWeight: 'bold', fontSize: 16}}>
+              style={{
+                fontFamily: 'Roboto',
+                fontWeight: 'bold',
+                fontSize: 16,
+                width: '80%',
+              }}>
               {title}
             </Text>
             <Text
@@ -96,8 +101,8 @@ const Card: FC<IProps> = ({
               }}>
               {`(${qunt}x)`}
             </Text>
-            <View style={{marginRight: '65%'}}>
-              <PriceTag price={price} clear={true} />
+            <View style={{marginRight: '65%', top: 25}}>
+              <PriceTag price={Number(price)} clear={true} />
             </View>
           </View>
         </View>

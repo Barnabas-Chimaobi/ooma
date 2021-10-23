@@ -113,7 +113,13 @@ export const Cart = () => {
     );
     setTotal(newsum);
     // console.log(newsum, 'newbasket======sss====');
+    basketData.sort(function (a, b) {
+      var dateA: any = new Date(a.deliveryDate),
+        dateB: any = new Date(b.deliveryDate);
+      return dateB - dateA;
+    });
     setgrouped(basketData);
+
     // console.log('====baket items======= ', JSON.stringify(basketData));
     // setRefreshing(false);
     return basketData;
@@ -132,6 +138,11 @@ export const Cart = () => {
     basketData?.forEach((item: any) => {
       //replace the already exist data with the grouped plan data
       item['data'] = groupByPlanTypeDate1(item?.data);
+    });
+    basketData.sort(function (a, b) {
+      var dateA: any = new Date(a.deliveryDate),
+        dateB: any = new Date(b.deliveryDate);
+      return dateB - dateA;
     });
     setgrouped(basketData);
     setLoadPlan(false);
@@ -400,6 +411,7 @@ export const Cart = () => {
           data={list}
           style={styles.listStyle}
           renderItem={({item}) => {
+            // console.log(item, 'itemmmss=====');
             return (
               <List
                 styles={styles}
@@ -758,7 +770,6 @@ export const Cart = () => {
                         }}>
                         <Text style={{fontSize: 15}}>Sub Total</Text>
                         <Text style={{fontSize: 15}}>
-                          {' '}
                           <PriceTag price={9500.0} clear />
                         </Text>
                       </View>

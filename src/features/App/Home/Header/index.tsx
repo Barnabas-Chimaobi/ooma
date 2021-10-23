@@ -59,6 +59,7 @@ import {getMenuItemsPlanForYou} from '../../../../reducers/MenuPlansForYou';
 import {AppDispatch} from '../../../../store';
 import {cartStates} from '../../../../reducers/cart';
 import {getFindPlan} from '../../../../reducers/findPlan';
+import {SortCart} from '../../../../Utils/sortCart';
 interface Props {
   closeModal: () => void;
 }
@@ -113,6 +114,7 @@ export default function Header() {
       // console.log(newsum, 'cartttttt');
 
       const menuICart = await getMenuitemCart(newbranch, userId);
+      SortCart(menuICart?.items);
       await dispatch(cartStates(menuICart?.items));
     } catch (error) {}
   };

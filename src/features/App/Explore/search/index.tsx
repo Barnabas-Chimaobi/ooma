@@ -16,6 +16,7 @@ const SearchMenuitemandPlan = () => {
   const [explore, setExplore] = useState('explore');
   const navigation = useNavigation();
   const [input, setInput] = useState('');
+  const [progress, setProgress] = useState(false);
   const [gottenSearch, setGottenSearch] = useState<any>([]);
 
   const search = async () => {
@@ -31,6 +32,14 @@ const SearchMenuitemandPlan = () => {
       search();
     }
   });
+
+  const focusSearch = () => {
+    setProgress(true);
+
+    setTimeout(() => {
+      setProgress(false);
+    }, 3000);
+  };
 
   const renderItem = (item: any) => {
     console.log(item.item.menuItemType, 'itemssssss');
@@ -123,12 +132,17 @@ const SearchMenuitemandPlan = () => {
             onChangeText={(text) => {
               setInput(text);
               debouncefunc();
+              focusSearch();
             }}
             rightIcon={
               <Icon name="search" color={colors.blackGrey} size={18} />
             }
             style={S.exploreInput}
           />
+
+          {progress && (
+            <ProgressBar styleAttr="Horizontal" color={colors.green} />
+          )}
         </View>
       </View>
       {gottenSearch.length == 0 ? (

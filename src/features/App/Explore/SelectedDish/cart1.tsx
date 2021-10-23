@@ -9,6 +9,7 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import {
   PriceTag,
@@ -36,6 +37,7 @@ import {
   getDeliveryAddress,
   createOrder,
   createmenuplanorderDetail,
+  getMenuitemCart,
 } from '../../../../FetchData';
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState, AppDispatch} from '../../../../store';
@@ -53,6 +55,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import s from '../../../App/Checkout/DeliveryOptions/styles';
 import {add} from 'react-native-reanimated';
 import {colors} from '../../../../colors';
+import {cartStates} from '../../../../reducers/cart';
+import {SortCart} from '../../../../Utils/sortCart';
 
 type ExploreNavigationProps = StackScreenProps<MainStackParamList, 'Explore'>;
 
@@ -74,6 +78,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     addon,
   } = route.params;
 
+  const dispatch: AppDispatch = useDispatch();
   const navigation = useNavigation();
   const [value, setValue] = useState(
     eachItem?.specialInstruction === '' ? null : eachItem?.specialInstruction,
@@ -116,6 +121,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     JSON.parse(eachItem?.preferences),
   );
   const [editPre, setEditPref] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const visibility = () => {
     setVisible((previousState) => !previousState);
@@ -241,7 +247,35 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     menuplanid: planId,
   };
 
+  const cartItems = async () => {
+    const branch = await AsyncStorage.getItem('branchId');
+    const newbranch = JSON.parse(branch);
+    const userId = await AsyncStorage.getItem('userId');
+    console.log(userId, 'useriddd');
+    // const gottenId = JSON.parse(userId);
+
+    try {
+      const menuICart = await getMenuitemCart(newbranch, userId);
+      console.log(menuICart?.items, 'cartttttt=====ssss====');
+      SortCart(menuICart?.items);
+      await dispatch(cartStates(menuICart?.items));
+
+      const sum = await menuICart?.items?.map((v) => v?.amount);
+      if (menuICart?.items?.length !== 0) {
+        let newsum = sum?.reduce(
+          (sum: any, current: any) => parseInt(sum) + parseInt(current),
+        );
+        Alert('Item edited successfully');
+        // ShowMessage(type.DONE, 'Item edited successfully'); // dispatch(cartStates(addedCart));
+        // setCartItem(addedCart);
+        setLoading(false);
+        navigation.navigate('MyCart', {editTotal: newsum});
+      }
+    } catch (error) {}
+  };
+
   const editCart = async () => {
+    setLoading(true);
     let newbody = {
       cartId: cartId,
       quantity: body.quantity,
@@ -252,11 +286,10 @@ const CardItem: FC<IProps> = ({route, menu}) => {
 
     try {
       const cart = await api.put('/orders/cart', newbody);
-      const addedCart = cart?.data?.data;
-      Alert('Item edited successfully');
-      // ShowMessage(type.DONE, 'Item edited successfully'); // dispatch(cartStates(addedCart));
-      setCartItem(addedCart);
-      navigation.goBack();
+      await cartItems();
+      const addedCart = cart?.data?.data?.Items;
+
+      // console.log(addedCart, 'cartttttt');
     } catch (err) {
       console.log(err, 'cartError');
     }
@@ -442,12 +475,12 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           }}>
           {menuItem?.MenuItem.itemName}
         </Text>
-        <PriceTag price={prices} />
+        <PriceTag price={Number(prices)} />
       </View>
       <ScrollView style={S.sdMain}>
         <View style={S.sdHold}>
           <View style={S.sdRating}>
-            <Rating rating={count} />
+            {/* <Rating rating={count} /> */}
             {/* <Icon
               name="share-alt"
               type="font-awesome-5"
@@ -472,12 +505,6 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           subStyle={{paddingBottom: 13}}
           mainStyle={{paddingHorizontal: 12}}
         />
-        {/* <View style={{borderWidth: 1.5, borderColor: colors.t}} /> */}
-        {/* <CollapsibleView
-          itemPreferences={menuItem?.menuItemPreferences}
-          addOns={menuItem?.addons}
-          title="Add-Ons"
-        /> */}
         <View style={{borderWidth: 1.5, borderColor: colors.t}} />
 
         <View style={{paddingHorizontal: 12, width: '100%'}}>
@@ -528,7 +555,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
 
         <View style={{borderWidth: 1.5, borderColor: colors.t}} />
 
-        {eachItem?.preferences?.length !== undefined && (
+        {preference?.length !== 0 && (
           <View style={{paddingHorizontal: 12, width: '100%'}}>
             <Button
               type={ButtonType.solid}
@@ -571,14 +598,9 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           </View>
         )}
 
-        {/* <CollapsibleView
-          itemPreferences={menuItem?.menuItemPreferences}
-          addOns={menuItem?.addons}
-          title="Preference"
-        /> */}
-
         <View style={{borderWidth: 1.5, borderColor: colors.t}} />
         <Adjust
+          mainquanty="main"
           itemEdit
           edit={eachItem?.quantity}
           props1={(item: any) => getQuantity(item)}
@@ -899,19 +921,27 @@ const CardItem: FC<IProps> = ({route, menu}) => {
 
         {cartId != undefined ? (
           <View style={{marginBottom: 20}}>
-            <Button
-              title="Edit"
-              type={ButtonType.solid}
-              containerStyle={{width: '35%', alignSelf: 'center'}}
-              buttonStyle={{backgroundColor: '#303030', paddingVertical: 12}}
-              iconColor="#FFF"
-              iconName="cart-plus"
-              iconSize={18}
-              titleStyle={{color: 'white', marginHorizontal: 20}}
-              onPress={() => {
-                editCart();
-              }}
-            />
+            {loading ? (
+              <ActivityIndicator
+                color="green"
+                size="large"
+                animating={loading}
+              />
+            ) : (
+              <Button
+                title="Edit"
+                type={ButtonType.solid}
+                containerStyle={{width: '35%', alignSelf: 'center'}}
+                buttonStyle={{backgroundColor: '#303030', paddingVertical: 12}}
+                iconColor="#FFF"
+                iconName="cart-plus"
+                iconSize={18}
+                titleStyle={{color: 'white', marginHorizontal: 20}}
+                onPress={() => {
+                  editCart();
+                }}
+              />
+            )}
           </View>
         ) : menuPlan == 'menuPlan' ? (
           <View style={{marginBottom: 20}}>

@@ -7,17 +7,17 @@ import S from './styles';
 import {emptyCart} from '../../../../assets';
 import {useNavigation} from '@react-navigation/native';
 import {colors} from '../../../../colors';
+import {DateFormatter} from '../../../../Utils';
 
-const RenderItems = ({item}: any) => {
-  // console.log(
-  // let ones = item?.data?.map((item) => item?.data?.map((item) => item));
-  // console.log(ones, 'ones=======');
-  //   'item',
-  // );
+const RenderItems = ({itemss}: any) => {
+  // console.log(item, 'ones=======');
+
   return (
     <View style={{backgroundColor: colors.white}}>
-      <Text style={{marginLeft: 10}}>{item?.deliveryTime}</Text>
-      {item?.data?.map((items) =>
+      <Text style={{marginLeft: 10}}>
+        {new Date(itemss?.deliveryTime)?.toLocaleDateString()}
+      </Text>
+      {itemss?.data?.map((items) =>
         items?.data?.map((item) => {
           // console.log(
           //   item?.itemData?.menuitemorders?.MenuItemOrderDetails,
@@ -33,7 +33,26 @@ const RenderItems = ({item}: any) => {
                 titlePosition="right"
                 children={
                   <>
-                    <View style={{marginTop: -25}}>
+                    <View style={{marginTop: -5}}>
+                      <Total
+                        randomTitle={'item'}
+                        randomTitleStyle={{color: colors.white}}
+                        randomValue={DateFormatter.formatAMPM(
+                          itemss?.deliveryTime,
+                        )}
+                        randomStyle={{
+                          color: colors.black,
+                          fontSize: 12,
+                          marginLeft: '60%',
+                        }}
+                        mainStyle={{
+                          paddingVertical: -40,
+                          borderBottomWidth: 2,
+                          borderColor: colors.grey,
+                          marginBottom: 10,
+                        }}
+                      />
+
                       <Total
                         itemorder={'itemorder'}
                         randomTitle="Order ID"
@@ -101,6 +120,7 @@ const RenderItems = ({item}: any) => {
 };
 
 const Current = ({item}) => {
+  // console.log(item, 'itemmmsss=====');
   const navigation = useNavigation();
   const data = [
     {
@@ -112,10 +132,15 @@ const Current = ({item}) => {
   ];
 
   return (
-    <View style={S.main}>
+    <View
+      style={{
+        alignSelf: 'center',
+        marginTop: 10,
+        backgroundColor: colors.white,
+      }}>
       <FlatList
         ListHeaderComponent={<>{item.length > 0 && <SortBy />}</>}
-        renderItem={({item}) => <RenderItems item={item} />}
+        renderItem={({item}) => <RenderItems itemss={item} />}
         data={item}
         keyExtractor={() => shortid.generate()}
         ListEmptyComponent={

@@ -55,7 +55,7 @@ const initialLayout = {width: Dimensions.get('window').width};
 const MenuTab = () => {
   const navigation = useNavigation();
   let route = useRoute();
-  const params = route.params;
+  const params = route?.params;
   const [index, setIndex] = React.useState(0);
   const [value, onChangeText] = useState('');
   const [] = useState([]);
@@ -68,47 +68,38 @@ const MenuTab = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [loader, setLoader] = useState(true);
   const [param, setparam] = useState(null);
+  const [refresh, setRefresh] = useState(false);
   const {menuPlanCategories} = useSelector(
-    (state: RootState) => state.menuPlanCategories,
+    (state: RootState) => state?.menuPlanCategories,
   );
   const menuPlansMenuItem = useSelector(
-    (state: RootState) => state.menuItemPlanForYou.payload,
+    (state: RootState) => state?.menuItemPlanForYou?.payload,
   );
   const findPlansItem = useSelector(
-    (state: RootState) => state.findPlanState.payload,
+    (state: RootState) => state?.findPlanState?.payload,
   );
   const dispatch: AppDispatch = useDispatch();
   const basketItem = useSelector(
-    (state: RootState) => state.basketState.payload,
+    (state: RootState) => state?.basketState?.payload,
   );
 
   const menuPlan = async (id: any) => {
     setLoader(true);
     console.log(id, 'allplannnnnssss');
     const allPlan = await GetAllMenuPlanCategory(id);
-    const mapPlan = allPlan?.map(
-      (item: any) => {
-        return {
-          title: item.name,
-          key: item.name,
-          id: item.id,
-        };
-      },
-      // routes.push({
-      //   key: 'test',
-      //   title: item.name,
-      // }),
-    );
+    const mapPlan = allPlan?.map((item: any) => {
+      return {
+        title: item.name,
+        key: item.name,
+        id: item.id,
+      };
+    });
     // await getMenuplanKart(1);
     setLoader(false);
     // console.log(allPlan, '====alllrplannnn=======');
-    setRoutes1(mapPlan);
-    // setRoutes(mapPlan);
-    // console.log(
-    //   mapPlan,
-    //   params?.categoryId,
-    //   'allplannnnnssssecccccccitemmmsss',
-    // );
+    if (mapPlan !== undefined) {
+      setRoutes1(mapPlan);
+    }
   };
 
   const getMenuplanKart = async (id, param) => {
@@ -124,11 +115,18 @@ const MenuTab = () => {
     // setLoader(false);
     // console.log(menuplanscart, '=======planscategoryyyyyyyyy=========');
     setLoader(false);
+    setparam('param');
     // console.log(all1, '=====all1======');
   };
 
+  let array = [
+    {title: 'Tab1', key: 'item1'},
+    {title: 'Tab2', key: 'item2'},
+    {title: 'Tab3', key: 'item3'},
+  ];
+
   useEffect(() => {
-    // console.log(routes1[0]?.id, 'indexxxx=====');
+    console.log(routes1?.length, 'indexxxx=====');
     if (params?.eachCat === 'eachCat') {
       getMenuplanKart(params?.categoryId);
     } else {
@@ -143,9 +141,11 @@ const MenuTab = () => {
 
       menuPlan(newbranch);
     };
+    setRefresh(false);
+    // return findPlansItem;
     // console.log(params.planId, '=====planid=====');
     getBranchId();
-  }, []);
+  }, [refresh]);
 
   const handleDataFilter = (categoryName: string, searchText?: string) => {
     if (searchText !== '') {
@@ -153,15 +153,15 @@ const MenuTab = () => {
         menuPlans &&
         menuPlans?.filter(
           (plan: any) =>
-            plan.MenuPlanCategory.name === categoryName &&
-            plan.name.includes(searchText),
+            plan?.MenuPlanCategory?.name === categoryName &&
+            plan?.name?.includes(searchText),
         )
       );
     } else {
       return (
         menuPlans &&
         menuPlans?.filter(
-          (plan: any) => plan.MenuPlanCategory.name === categoryName,
+          (plan: any) => plan?.MenuPlanCategory?.name === categoryName,
         )
       );
     }
@@ -170,6 +170,7 @@ const MenuTab = () => {
   const onRefresh = () => {
     setLoader(true);
     getMenuplanKart(1);
+    setRefresh(true);
     // menuPlan('82059935-89dc-4daf-aff3-adcf997d6859');
   };
 
@@ -216,6 +217,7 @@ const MenuTab = () => {
         refreshControl={
           <RefreshControl refreshing={loader} onRefresh={onRefresh} />
         }>
+        {/* {findPlansItem?.length !== undefined && ( */}
         <DynamicTabView
           data={routes1}
           renderTab={FamilyRoute}
@@ -229,6 +231,8 @@ const MenuTab = () => {
           headerBackgroundColor={colors.white}
           headerUnderlayColor={colors.white}
         />
+        {/* )} */}
+
         {!param && loader ? (
           <View style={{alignSelf: 'center', position: 'absolute', top: '20%'}}>
             <Text

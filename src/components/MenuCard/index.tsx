@@ -123,7 +123,7 @@ const Card: FC<IProps> = ({
                   dish2={dish2}
                   dish3={dish3}
                 />
-                <PriceTag price={price} oldPrice={oldPrice} />
+                <PriceTag price={Number(price)} oldPrice={Number(oldPrice)} />
               </View>
               <Text style={S.dishType}>{dishType?.toUpperCase()}</Text>
             </View>
@@ -150,7 +150,7 @@ const Card: FC<IProps> = ({
             </ImageBackground>
             <View style={S.textBarRow}>
               <Text style={S.title}>{title}</Text>
-              <PriceTag price={price} />
+              <PriceTag price={Number(price)} />
               <View style={S.rating1}>
                 <Rating1 />
                 <RatingCount

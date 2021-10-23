@@ -122,15 +122,15 @@ const More: React.FC<Props> = ({navigation}) => {
   };
 
   const backAction = async () => {
+    setModalVisible(!isModalVisible);
+    setLoading(true);
     navigation.navigate('Register', {route: 'login'});
-    // setLoading(true);
     dispatch(reset());
     dispatch(setUserDetails({number: number}));
     await AsyncStorage.removeItem('intro');
     await AsyncStorage.removeItem('token');
-    setModalVisible(!isModalVisible);
 
-    // setLoading(false);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -190,7 +190,12 @@ const More: React.FC<Props> = ({navigation}) => {
       <View style={{flex: 1, paddingHorizontal: 10}}>
         <SimpleHeader hasBottomBorder />
         {/* <RefreshControl refreshing={loading} /> */}
-        {/* <ActivityIndicator size={'large'} color={'green'} animating={loading} /> */}
+        <ActivityIndicator
+          style={{position: 'absolute'}}
+          size={'large'}
+          color={'green'}
+          animating={loading}
+        />
         <ScrollView
         // refreshControl={
         //   <RefreshControl

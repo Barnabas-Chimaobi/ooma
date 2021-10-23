@@ -57,8 +57,8 @@ class Footer extends Component {
   render() {
     const theme = this.props;
     // const notify = this.props.notify;
-    console.log(theme, 'notifyprops');
-    console.log(this.props.length, 'schedullless');
+    // console.log(theme, 'notifyprops');
+    // console.log(this.props.length, 'schedullless');
     // console.log(this.props.dashboard, 'dashboard');
     // console.log(this.props.notifications, 'notifications');
     // console.log(this.props.message, 'messages');

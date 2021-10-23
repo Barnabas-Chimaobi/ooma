@@ -134,9 +134,8 @@ export const MyPlans = ({findPlan}: Props) => {
       const order = await getMenuPlanOrders(userId);
       dispatch(planStates(order?.items));
 
-      console.log(order?.items, 'orderItemsss=======');
+      // console.log(order?.items, 'orderItemsss=======');
 
-      console.log('====baket items======= ', JSON.stringify(basketData));
       // setOrders(order?.items);
       //  await dispatch(cartStates(menuICart?.items));
       setLoader(false);
@@ -154,7 +153,7 @@ export const MyPlans = ({findPlan}: Props) => {
     let basketData: any = [];
 
     planItem?.forEach((item: any) => {
-      console.log(item);
+      // console.log(item);
       groupByDate(item, basketData);
     });
     basketData.forEach((item: any) => {
@@ -162,8 +161,12 @@ export const MyPlans = ({findPlan}: Props) => {
       item['data'] = groupByPlanTypeDate(item.data);
     });
 
+    basketData.sort(function (a, b) {
+      var dateA: any = new Date(a.planStart),
+        dateB: any = new Date(b.planStart);
+      return dateB - dateA;
+    });
     setOrders(basketData);
-    console.log('====baket items======= ', JSON.stringify(basketData));
     // setOrders(order?.items);
     //  await dispatch(cartStates(menuICart?.items));
   };
@@ -229,7 +232,7 @@ export const MyPlans = ({findPlan}: Props) => {
       planName: itemData.orderInfo.orderName,
       plantotal: itemData.orderInfo.total,
       planImage: itemData.orderInfo.MenuPlan.imageurl,
-      planStart: itemData.orderInfo.MenuPlan.startDate,
+      planStart: itemData.orderInfo.deliveryDate,
       planEnd: itemData.orderInfo.MenuPlan.endDate,
       planStatus: itemData.orderInfo.status,
       planId: itemData.orderInfo.orderId,
@@ -241,27 +244,6 @@ export const MyPlans = ({findPlan}: Props) => {
       ],
     });
   };
-
-  // const groupByDate = (orderInfo: any, basketItems: any) => {
-  //   console.log(orderInfo, 'orderinfoconsoled====');
-  //   console.log(basketItems, 'orderinfoconsoled====');
-
-  //   for (const item of basketItems) {
-  //     if (orderInfo.orderName == item.orderName) {
-  //       item.data.push({
-  //         PlanType: orderInfo.MenuPlanDetail.plantype,
-  //         orderInfo,
-  //       });
-
-  //       return;
-  //     }
-  //   }
-  //   // if the basket item date doesnt exist before
-  //   basketItems.push({
-  //     deliveryDate: orderInfo.orderName,
-  //     data: [{PlanType: orderInfo.MenuPlanDetail.plantype, orderInfo}],
-  //   });
-  // };
 
   useEffect(() => {
     groupBasketItem();
@@ -282,53 +264,55 @@ export const MyPlans = ({findPlan}: Props) => {
     planId,
   }: ListProps) => {
     return (
-      <View>
-        <View
-          style={{
-            elevation: 10,
-            width: '96%',
-            backgroundColor: colors.white,
-            borderRadius: 10,
-            marginBottom: 15,
-            alignSelf: 'center',
-          }}>
-          <TouchableWithoutFeedback
-            onPress={() =>
-              navigation.navigate('Cart', {
-                id: planId,
-                plan: 'plan',
-                planName: itemName,
-              })
-            }
-            style={styles.innerListItemStyle}>
-            <Image
-              style={{
-                height: Dimensions.get('window').height / 6.8,
-                width: Dimensions.get('window').width / 3.4,
-                borderRadius: 10,
-                marginLeft: -5,
-              }}
-              source={{uri: imageUrl}}
-            />
-            <View style={styles.itemTextArea}>
-              <Text style={styles.itemNameStyle}>{itemName}</Text>
-              <View style={{flexDirection: 'row'}}>
-                <Text style={styles.timeStyle}>
-                  {new Date(time).toDateString()} -
-                </Text>
-                <Text> </Text>
+      status !== 'Delivered' && (
+        <View>
+          <View
+            style={{
+              elevation: 10,
+              width: '96%',
+              backgroundColor: colors.white,
+              borderRadius: 10,
+              marginBottom: 15,
+              alignSelf: 'center',
+            }}>
+            <TouchableWithoutFeedback
+              onPress={() =>
+                navigation.navigate('Cart', {
+                  id: planId,
+                  plan: 'plan',
+                  planName: itemName,
+                })
+              }
+              style={styles.innerListItemStyle}>
+              <Image
+                style={{
+                  height: Dimensions.get('window').height / 6.8,
+                  width: Dimensions.get('window').width / 3.4,
+                  borderRadius: 10,
+                  marginLeft: -5,
+                }}
+                source={{uri: imageUrl}}
+              />
+              <View style={styles.itemTextArea}>
+                <Text style={styles.itemNameStyle}>{itemName}</Text>
+                <View style={{flexDirection: 'row', top: 30}}>
+                  <Text style={styles.timeStyle}>
+                    {new Date(time).toDateString()}
+                  </Text>
+                  {/* <Text> </Text>
                 <Text style={styles.timeStyle}>
                   {new Date(time1).toDateString()}
-                </Text>
+                </Text> */}
+                </View>
+                <View>
+                  {/* <Text style={styles.statusStyle}>{status}</Text> */}
+                  {/* <ProgressBar progressValue={pecentage} /> */}
+                </View>
               </View>
-              <View>
-                <Text style={styles.statusStyle}>{status}</Text>
-                {/* <ProgressBar progressValue={pecentage} /> */}
-              </View>
-            </View>
-          </TouchableWithoutFeedback>
+            </TouchableWithoutFeedback>
+          </View>
         </View>
-      </View>
+      )
     );
   };
 
@@ -481,7 +465,7 @@ const styles = StyleSheet.create({
   innerListStyle: {},
   itemTextArea: {
     flexDirection: 'column',
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
     marginLeft: 10,
   },
   itemNameStyle: {fontWeight: 'bold', fontSize: 16},

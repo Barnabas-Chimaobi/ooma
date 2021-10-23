@@ -12,6 +12,7 @@ import OrderCard from '../components/OrderCard';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {colors} from '../../../../colors';
 import {SimpleHeader, CheckBox1} from '../../../../components';
+import {DateFormatter} from '../../../../Utils';
 
 const OrderStack = ({
   headerPrice,
@@ -67,7 +68,7 @@ const UnitOrders = ({
             {description}
             {/* {attachAddons} */}
           </Text>
-          {unitPrice && <PriceTag price={unitPrice} clear />}
+          {unitPrice && <PriceTag price={Number(unitPrice)} clear />}
         </View>
         {price && (
           <PriceTag
@@ -93,10 +94,10 @@ const Adds = ({price, count, description, unitPrice, style, addons}: any) => {
           <View style={{width: '70%', flexWrap: 'wrap'}}>
             <Text style={S.AddonsdescriptionStyle}>{item?.name}</Text>
             <View style={{marginLeft: '-70%'}}>
-              <PriceTag price={item?.initialPrice} clear />
+              <PriceTag price={Number(item?.initialPrice)} clear />
             </View>
           </View>
-          <PriceTag price={item?.totalPrice} clear />
+          <PriceTag price={Number(item?.totalPrice)} clear />
         </View>
       ))}
     </>
@@ -111,11 +112,15 @@ const OrderDetails = () => {
   // console.log(route?.params, 'consolledddFDetailssss=====');
 
   let newlist = route?.params?.detail;
-  // console.log(newlist, route?.params?.total, 'newlist========');
+  // console.log(
+  //   newlist?.itemData?.menuitemorders,
+  //   route?.params?.total,
+  //   'newlist========',
+  // );
   useEffect(() => {
     let amount = route?.params?.total;
     setNewAmount(amount);
-    console.log(newAmount, 'newamount=====');
+    // console.log(newAmount, 'newamount=====');
   }, [0]);
 
   // let renderItem = ({item}) => {
@@ -270,7 +275,9 @@ const OrderDetails = () => {
             />
             <Total
               randomTitle="Requested at:"
-              randomValue={newlist?.itemData?.menuitemorders?.deliveryTime}
+              randomValue={DateFormatter.formatAMPM(
+                newlist?.itemData?.menuitemorders?.createdAt,
+              )}
               mainStyle={S.totalHeaderStyle}
             />
           </View>
@@ -342,6 +349,23 @@ const OrderDetails = () => {
                 },
               )}
             </View>
+
+            {Number(newlist?.itemData?.menuitemorders?.deliveryCharge) !==
+              0 && (
+              <View style={{marginTop: 20}}>
+                <View style={S.main}>
+                  <Total
+                    totalTitle="delivery Charge"
+                    orderTotal={Number(
+                      newlist?.itemData?.menuitemorders?.deliveryCharge,
+                    )}
+                    // total={Number(item?.itemData?.orderInfo?.amount)}
+                    mainStyle={S.totalHeaderStyle}
+                  />
+                </View>
+              </View>
+            )}
+
             <View style={{marginTop: 30}}>
               <View style={S.main}>
                 <Total

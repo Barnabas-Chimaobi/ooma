@@ -21,7 +21,7 @@ const AllFamilyMenu: FC<AllFamilyMenuPlanProps> = ({allFamilyMenuPlans}) => {
     <View style={{}}>
       {refreshing ? <ActivityIndicator /> : null}
       <FlatList
-        contentContainerStyle={{flexGrow: 1}}
+        contentContainerStyle={{flexGrow: 1, marginBottom: 300}}
         data={allFamilyMenuPlans}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item}) => (

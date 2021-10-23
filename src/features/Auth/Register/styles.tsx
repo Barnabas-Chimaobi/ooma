@@ -65,6 +65,7 @@ export default StyleSheet.create({
     fontSize: 12,
     margin: 10,
     fontFamily: 'Montserrat',
+    fontWeight: '900',
   },
   backButtonStyle: {
     backgroundColor: 'transparent',
