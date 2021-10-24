@@ -1,4 +1,4 @@
-import React, {useState, FC} from 'react';
+import React, {useState, FC, useEffect} from 'react';
 import {View, FlatList, ActivityIndicator, RefreshControl} from 'react-native';
 import Card from '../menuCards/card';
 import {cardDetails} from '../menuCards/cardInfo';
@@ -8,10 +8,12 @@ interface AllFamilyMenuPlanProps {
 }
 
 const AllFamilyMenu: FC<AllFamilyMenuPlanProps> = ({allFamilyMenuPlans}) => {
-  console.log(allFamilyMenuPlans, 'allfamilyplansss======');
   const [refreshing] = useState(false);
   const [, setDataSource] = useState([]);
 
+  useEffect(() => {
+    console.log(allFamilyMenuPlans, '=====allfamilyplansss======');
+  }, []);
   const onRefresh = () => {
     //Clear old data of the list
     setDataSource([]);

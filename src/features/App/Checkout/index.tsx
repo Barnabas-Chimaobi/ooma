@@ -145,8 +145,8 @@ const Checkout = () => {
     if (success === true) {
       navigation.dispatch(
         CommonActions.reset({
-          index: 0,
-          routes: [{name: 'Home'}],
+          index: 1,
+          routes: [{name: 'Home'}, {name: 'Home'}],
         }),
       );
       setSuccess(false);

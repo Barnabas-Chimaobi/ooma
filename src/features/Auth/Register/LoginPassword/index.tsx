@@ -24,7 +24,7 @@ const LoginPassword = () => {
     const userId = await AsyncStorage.getItem('userId');
     //  const parseAddress = JSON.parse(adress);
     const user = await getProfile(userId);
-    console.log(user, 'user======ssserrr===');
+    console.log(user?.data?.firstName, 'user======ssserrr===');
     setUserName(user?.data?.firstName);
   };
 
@@ -40,7 +40,7 @@ const LoginPassword = () => {
 
   return (
     <OmaCard
-      overTitle={username !== undefined ? `Hello ${username}` : 'Hello User'}
+      overTitle={username !== '' ? `Hello ${username}` : 'Hello User'}
       overStyle={S.overStyle}
       title="Please enter your Password"
       titleStyle={S.omaTitle}

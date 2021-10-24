@@ -13,6 +13,7 @@ import {
   ScrollView,
   ActivityIndicator,
   StatusBar,
+  Dimensions,
 } from 'react-native';
 import CurrentOrder from './Current';
 import OrderHistory from './History';
@@ -228,74 +229,80 @@ const OrderTab = () => {
             refreshing={loading}
           />
         }>
-        {itemOrders?.length === 0 ? (
-          <View style={{textAlign: 'center', marginTop: 60}}>
-            <ActivityIndicator
-              animating={true}
-              size={'large'}
-              color={'green'}
-            />
-            <Text
+        <View>
+          {itemOrders?.length === 0 ? (
+            <View style={{textAlign: 'center', marginTop: 60}}>
+              <ActivityIndicator
+                animating={true}
+                size={'large'}
+                color={'green'}
+              />
+              <Text
+                style={{
+                  textAlign: 'center',
+                  marginTop: 120,
+                  fontFamily: 'Montserrat',
+                }}>
+                Getting your order details ready..
+              </Text>
+            </View>
+          ) : // <EmptyList
+          //   image={emptyCart}
+          //   // title="Make Order"
+          //   message="Getting your order items ready in a moment..."
+          //   // onPress={() => navigation.navigate('Explore')}
+          // />
+          itemOrders?.length === 0 || itemOrders?.length === undefined ? (
+            <View
               style={{
-                textAlign: 'center',
-                marginTop: 120,
-                fontFamily: 'Montserrat',
+                backgroundColor: colors.white,
+                height: Dimensions.get('window').height,
               }}>
-              Getting your order details ready..
-            </Text>
-          </View>
-        ) : // <EmptyList
-        //   image={emptyCart}
-        //   // title="Make Order"
-        //   message="Getting your order items ready in a moment..."
-        //   // onPress={() => navigation.navigate('Explore')}
-        // />
-        itemOrders?.length === 0 ? (
-          <View>
-            <EmptyList
-              image={emptyCart}
-              // title="Make Order"
-              message="oops, your order list is empty!"
-              // onPress={() => navigation.navigate('Explore')}
-            />
-          </View>
-        ) : (
-          <Tab.Navigator
-            tabBarOptions={{
-              activeTintColor: '#fff',
-              inactiveTintColor: 'rgba(255, 255, 255, 0.5)',
-              indicatorStyle: {
-                height: 6,
-                backgroundColor: '#fff',
-              },
-              labelStyle: {
-                fontSize: 12,
-                marginBottom: 0,
-                fontFamily: 'Muli-Bold',
-              },
-              tabStyle: {
-                paddingBottom: 0,
-                paddingTop: 0,
-                borderTopWidth: 0,
-                borderTopColor: '#fff',
-              },
-              style: {
-                borderTopWidth: 0,
-                borderTopColor: '#fff',
-                paddingBottom: 0,
-                paddingTop: 0,
-                backgroundColor: '#303030',
-              },
-            }}>
-            {itemOrders !== undefined && (
-              <Tab.Screen name="Current" component={Current} />
-            )}
-            {itemOrders !== undefined && (
-              <Tab.Screen name="History" component={History} />
-            )}
-            {/* <Tab.Screen name="Upcoming" component={Upcoming} /> */}
-          </Tab.Navigator>
-        )}
+              <EmptyList
+                image={emptyCart}
+                // title="Make Order"
+                message="oops, your order list is empty!"
+                // onPress={() => navigation.navigate('Explore')}
+              />
+            </View>
+          ) : (
+            <Tab.Navigator
+              tabBarOptions={{
+                activeTintColor: '#fff',
+                inactiveTintColor: 'rgba(255, 255, 255, 0.5)',
+                indicatorStyle: {
+                  height: 6,
+                  backgroundColor: '#fff',
+                },
+                labelStyle: {
+                  fontSize: 12,
+                  marginBottom: 0,
+                  fontFamily: 'Muli-Bold',
+                },
+                tabStyle: {
+                  paddingBottom: 0,
+                  paddingTop: 0,
+                  borderTopWidth: 0,
+                  borderTopColor: '#fff',
+                },
+                style: {
+                  borderTopWidth: 0,
+                  borderTopColor: '#fff',
+                  paddingBottom: 0,
+                  paddingTop: 0,
+                  backgroundColor: '#303030',
+                },
+              }}>
+              {itemOrders !== undefined && (
+                <Tab.Screen name="Current" component={Current} />
+              )}
+              {itemOrders !== undefined && (
+                <Tab.Screen name="History" component={History} />
+              )}
+              {/* <Tab.Screen name="Upcoming" component={Upcoming} /> */}
+            </Tab.Navigator>
+          )}
+        </View>
       </ScrollView>
 
       {/* <View style={StyleFoot.footer}>

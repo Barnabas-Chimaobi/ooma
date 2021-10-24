@@ -217,21 +217,30 @@ const MenuTab = () => {
         refreshControl={
           <RefreshControl refreshing={loader} onRefresh={onRefresh} />
         }>
-        {/* {findPlansItem?.length !== undefined && ( */}
-        <DynamicTabView
-          data={routes1}
-          renderTab={FamilyRoute}
-          headerTextStyle={styles.headerText}
-          onChangeTab={(index) => {
-            getMenuplanKart(routes1[index].id);
-            setparam('param');
-          }}
-          defaultIndex={params?.categoryId - 1 || routes1[0]?.id}
-          containerStyle={{flex: 1}}
-          headerBackgroundColor={colors.white}
-          headerUnderlayColor={colors.white}
-        />
-        {/* )} */}
+        {!loader && findPlansItem?.length === undefined ? (
+          <View style={{}}>
+            <EmptyList
+              image={require('../../../../../assets/Images/emptyCart.png')}
+              // title="FIND MEAL"
+              message="Oops! No meal plan Available now"
+              // onPress={() => navigation.goBack()}
+            />
+          </View>
+        ) : (
+          <DynamicTabView
+            data={routes1}
+            renderTab={FamilyRoute}
+            headerTextStyle={styles.headerText}
+            onChangeTab={(index) => {
+              getMenuplanKart(routes1[index].id);
+              setparam('param');
+            }}
+            defaultIndex={params?.categoryId - 1 || routes1[0]?.id}
+            containerStyle={{flex: 1}}
+            headerBackgroundColor={colors.white}
+            headerUnderlayColor={colors.white}
+          />
+        )}
 
         {!param && loader ? (
           <View style={{alignSelf: 'center', position: 'absolute', top: '20%'}}>
