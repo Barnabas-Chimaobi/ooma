@@ -69,6 +69,7 @@ const MenuTab = () => {
   const [loader, setLoader] = useState(true);
   const [param, setparam] = useState(null);
   const [refresh, setRefresh] = useState(false);
+  const [displayCategoryList, setDisplayCategoryList] = useState([]);
   const {menuPlanCategories} = useSelector(
     (state: RootState) => state?.menuPlanCategories,
   );
@@ -94,9 +95,9 @@ const MenuTab = () => {
         id: item.id,
       };
     });
+    setDisplayCategoryList(mapPlan);
     // await getMenuplanKart(1);
     setLoader(false);
-    // console.log(allPlan, '====alllrplannnn=======');
     if (mapPlan !== undefined) {
       setRoutes1(mapPlan);
     }
@@ -217,7 +218,7 @@ const MenuTab = () => {
         refreshControl={
           <RefreshControl refreshing={loader} onRefresh={onRefresh} />
         }>
-        {!loader && findPlansItem?.length === undefined ? (
+        {!loader && displayCategoryList === undefined ? (
           <View style={{}}>
             <EmptyList
               image={require('../../../../../assets/Images/emptyCart.png')}

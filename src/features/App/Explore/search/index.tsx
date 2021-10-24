@@ -84,7 +84,11 @@ const SearchMenuitemandPlan = () => {
                   marginTop: 10,
                   // width: '30%',
                 }}>
-                ({item?.item?.menuItemType})
+                (
+                {item?.item?.menuItemType == 'MenuPlan'
+                  ? 'Meal Plan'
+                  : 'Instant Order'}
+                )
               </Text>
             </View>
 
