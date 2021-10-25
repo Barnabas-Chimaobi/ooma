@@ -105,18 +105,24 @@ const RadioSelect = ({
     const newbranch = JSON.parse(branch);
     // setLoad(true);
     console.log(switchs, 'switchssss');
+    console.log(
+      categories,
+      combine,
+      parsePrice,
+      parsePrice1,
+      'parameterts=====',
+    );
     const filteredItem = await filterMenuItems(
       newbranch,
       1,
-      // category1,
-      // category,
       categories,
-      parsePrice ? parsePrice : 0,
-      parsePrice1 ? parsePrice1 : 0,
+      0,
+      0,
+      // parsePrice ? parsePrice : 0,
+      // parsePrice1 ? parsePrice1 : 0,
       combine,
-      // combination1,
     );
-    console.log(filteredItem, 'filteredItem');
+    console.log(filteredItem, categories, combine, 'filteredItem');
     dispatch(useMenuItemByCategory(filteredItem));
     setLoad(false);
   };
@@ -226,7 +232,7 @@ const RadioSelect = ({
           containerStyle={S.containerStyle}
         />
       )}
-      {type && showButton && (
+      {/* {type && showButton && (
         <>
           <Divider />
 
@@ -266,7 +272,7 @@ const RadioSelect = ({
             buttonStyle={S.buttonStyle}
           />
         </>
-      )}
+      )} */}
     </View>
   );
 };

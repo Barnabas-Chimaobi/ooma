@@ -431,20 +431,34 @@ const Checkout = () => {
           <View
             style={{
               top: Dimensions.get('screen').height / 1.125,
-              height: Dimensions.get('screen').height,
+              // height: Dimensions.get('screen').height,
               width: Dimensions.get('screen').width / 2.3,
               alignSelf: 'center',
-              zIndex: 5,
+              // zIndex: 5,
+              flex: 1,
               // backgroundColor: colors.black,
             }}>
-            <TouchableHighlight
+            {/* <TouchableHighlight
               style={{top: Dimensions.get('screen').height / 1.125}}
               underlayColor=""
               onPress={() => {
                 setSuccess(false), navigation.navigate('Home');
               }}>
-              <Text></Text>
-            </TouchableHighlight>
+              <Text style={{color: colors.white}}>Go to Home</Text>
+            </TouchableHighlight> */}
+
+            <Button
+              onPress={() => {
+                setSuccess(false), navigation.navigate('Home');
+              }}
+              title="Go to home"
+              titleStyle={{
+                fontFamily: 'Montserrat',
+                fontWeight: 'bold',
+                fontSize: 18,
+              }}
+              buttonStyle={{borderRadius: 15}}
+            />
           </View>
         </ImageBackground>
       </ScrollView>

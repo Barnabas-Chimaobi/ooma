@@ -513,6 +513,7 @@ const Home = () => {
               bool={menuItemSpecialOffer?.length == 0 ? true : false}
               menuItem={menuItemSpecialOffer}
               title="Exclusive meals for you"
+              keys="special"
               // subtitle="Buy one, get one free. Bonuses ranging from free delivery services to extra meat."
             />
           )}
@@ -607,6 +608,7 @@ const Home = () => {
                 bool={newMenuItem?.length == 0 ? true : false}
                 menuItem={newMenuItem}
                 title="New"
+                keys="new"
                 // subtitle="Fantastic items on the menu, for you."
               />
               <View

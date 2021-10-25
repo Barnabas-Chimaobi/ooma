@@ -177,19 +177,24 @@ export class State extends Component {
               style={{
                 // backgroundColor: colors.white,
                 top: Dimensions.get('screen').height / 1.125,
-                height: Dimensions.get('screen').height,
+                // height: Dimensions.get('screen').height,
                 width: Dimensions.get('screen').width / 2.3,
                 alignSelf: 'center',
                 zIndex: 5,
               }}>
-              <TouchableHighlight
-                underlayColor=""
+              <Button
                 onPress={() => {
                   this.setState({success: false}),
                     this.props.navigation.navigate('Home');
-                }}>
-                <Text></Text>
-              </TouchableHighlight>
+                }}
+                title="Go to home"
+                titleStyle={{
+                  fontFamily: 'Montserrat',
+                  fontWeight: 'bold',
+                  fontSize: 18,
+                }}
+                buttonStyle={{borderRadius: 15}}
+              />
             </View>
           </ImageBackground>
         </ScrollView>

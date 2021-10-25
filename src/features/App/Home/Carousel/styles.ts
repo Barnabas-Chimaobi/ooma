@@ -19,7 +19,7 @@ export default StyleSheet.create({
   },
   title: {
     // width: 129,
-    height: 18,
+    // height: 18,
     marginLeft: 7,
     marginTop: 3,
     fontFamily: 'Montserrat',
@@ -60,7 +60,8 @@ export default StyleSheet.create({
     fontSize: 12,
     marginLeft: -2,
     fontFamily: 'Montserrat',
-    fontWeight: '900'
+    fontWeight: '900',
+    paddingTop: 2
 
   },
 });

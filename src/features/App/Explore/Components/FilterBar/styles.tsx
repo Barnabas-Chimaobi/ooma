@@ -7,9 +7,9 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingBottom: 20,
-    width: "100%",
-    flexWrap: "wrap",
-    marginHorizontal:1
+    width: '100%',
+    flexWrap: 'wrap',
+    marginHorizontal: 1,
   },
   buttonStyle: {
     backgroundColor: colors.greyShade,

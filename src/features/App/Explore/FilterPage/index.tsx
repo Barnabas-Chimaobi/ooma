@@ -99,10 +99,10 @@ const Filter = () => {
     }
 
     if (
-      title == 'Popular' ||
-      title == 'Special Offer' ||
-      title == 'Discount' ||
-      title == 'New'
+      title == 'POPULAR' ||
+      title == 'SPECIAL_OFFER' ||
+      title == 'DISCOUNT' ||
+      title == 'NEW'
     ) {
       setCategory(title);
     } else {
@@ -156,10 +156,10 @@ const Filter = () => {
       <ScrollView style={{flex: 1, marginBottom: 50}}>
         <Radio
           title="Category"
-          title1="Popular"
-          title2="Special Offer"
-          title3="Discount"
-          title4="New"
+          title1="POPULAR"
+          title2="SPECIAL_OFFER"
+          title3="DISCOUNT"
+          title4="NEW"
           type="category"
           props={(title: any) => setTitle(title)}
           props1={(title: any) => setLoad(title)}

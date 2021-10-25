@@ -23,6 +23,8 @@ import shortid from 'shortid';
 import {
   SearchMenuItemByCategoryId,
   filterMenuItems,
+  getMenuItemsSpecialOffer,
+  getMenuItemsNew,
 } from '../../../../FetchData';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
@@ -42,6 +44,7 @@ import {
 } from 'react-native-indicators';
 import Footer from '../../../../navigation/footer';
 import {StyleFoot} from '../../../../navigation/styles';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface selectedProps {
   route: any;
@@ -73,10 +76,39 @@ const SelectedCategory: FC<selectedProps> = ({route}) => {
     setLoader(false);
   };
 
+  const getItemSpecial = async () => {
+    setLoader(true);
+    const getbranch = await AsyncStorage.getItem('branchId');
+    const parseBranch = JSON.parse(getbranch);
+    const newData = await getMenuItemsSpecialOffer(parseBranch, 1);
+    // console.log(parseBranch, newData, 'alldata===sss===');
+    dispatch(useMenuItemByCategory(newData));
+    setLoader(false);
+  };
+
+  const getItemNew = async () => {
+    setLoader(true);
+    const getbranch = await AsyncStorage.getItem('branchId');
+    const parseBranch = JSON.parse(getbranch);
+    const newData = await getMenuItemsNew(parseBranch, 1);
+    // console.log(parseBranch, newData, 'alldata===sss===');
+    dispatch(useMenuItemByCategory(newData));
+    setLoader(false);
+  };
+
   useEffect(() => {
+    // setLoader(true);
     console.log(categoryId, route.params, 'iddcategoryyy====');
     if (route?.params?.filter !== 'filter') {
       getItemByCategoryId();
+    }
+
+    if (route?.params?.special === 'special') {
+      getItemSpecial();
+    }
+
+    if (route?.params?.new === 'new') {
+      getItemNew();
     }
   }, [categoryId]);
 
@@ -110,66 +142,63 @@ const SelectedCategory: FC<selectedProps> = ({route}) => {
           <FilterBar />
         </View>
         {/* {payload.length < 0 ? ( */}
-        {/* <Spinner
-        visible={loader}
-        // textStyle={styles.spinnerTextStyle}
-        overlayColor="rgba(66, 66, 66,0.6)"
-        customIndicator={<BallIndicator color="white" />}
-      /> */}
+        <Spinner
+          visible={loader}
+          textContent="Loading all items.."
+          textStyle={{
+            fontSize: 16,
+            fontFamily: 'Montserrat',
+            fontWeight: 'normal',
+          }}
+          overlayColor="rgba(66, 66, 66,0.6)"
+          customIndicator={<BallIndicator color="white" />}
+        />
         {/* ) : ( */}
         <View style={{paddingBottom: 200}}>
-          <FlatList
-            refreshControl={
-              <RefreshControl refreshing={loader} onRefresh={refreshing} />
-            }
-            renderItem={({item}) => (
-              <View>
-                <View style={{paddingHorizontal: 10}}>
-                  <CardItem
-                    item={item}
-                    onPress={() => navigation.navigate('Dish', {id: item?.id})}
-                    gridView={gridView}
+          {!loader && (
+            <FlatList
+              refreshControl={
+                <RefreshControl refreshing={loader} onRefresh={refreshing} />
+              }
+              renderItem={({item}) => (
+                <View>
+                  <View style={{paddingHorizontal: 10}}>
+                    <CardItem
+                      item={item}
+                      onPress={() =>
+                        navigation.navigate('Dish', {id: item?.id})
+                      }
+                      gridView={gridView}
+                    />
+                  </View>
+
+                  <View
+                    style={{
+                      borderWidth: 2,
+                      borderColor: colors.t,
+                      marginTop: 10,
+                      marginBottom: 10,
+                      width: '100%',
+                      marginRight: -10,
+                    }}
                   />
                 </View>
-
-                <View
-                  style={{
-                    borderWidth: 2,
-                    borderColor: colors.t,
-                    marginTop: 10,
-                    marginBottom: 10,
-                    width: '100%',
-                    marginRight: -10,
-                  }}
-                />
-              </View>
-            )}
-            data={payload}
-            keyExtractor={() => shortid.generate()}
-            ListEmptyComponent={
-              payload?.length !== undefined && (
-                <EmptyList
-                  image={emptyCart}
-                  title="Find Meal"
-                  message="Oops! Your Menu is empty"
-                  // onPress={() => navigation.navigate('Explore')}
-                />
-              )
-            }
-            // ListFooterComponent={
-            //   <>
-            //     {truth == true && (
-            //       <Button
-            //         title="BACK TO TOP"
-            //         type={ButtonType.outline}
-            //         buttonStyle={S.backTopButtonStyle}
-            //         titleStyle={S.backtopTitleStyle}
-            //         onPress={() => {}}
-            //       />
-            //     )}
-            //   </>
-            // }
-          />
+              )}
+              data={payload}
+              keyExtractor={() => shortid.generate()}
+              ListEmptyComponent={
+                (!loader && payload?.length === undefined) ||
+                (!loader && payload?.length === 0) ? (
+                  <EmptyList
+                    image={emptyCart}
+                    title="Find Meal"
+                    message="Oops! Your Menu is empty"
+                    // onPress={() => navigation.navigate('Explore')}
+                  />
+                ) : null
+              }
+            />
+          )}
         </View>
 
         {/* )} */}

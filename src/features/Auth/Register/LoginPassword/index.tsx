@@ -41,9 +41,9 @@ const LoginPassword = () => {
   return (
     <OmaCard
       overTitle={
-        username !== null || username !== undefined
-          ? `Hello ${username}`
-          : 'Hello User'
+        username === null || username === undefined
+          ? 'Hello User'
+          : `Hello ${username}`
       }
       overStyle={S.overStyle}
       title="Please enter your Password"

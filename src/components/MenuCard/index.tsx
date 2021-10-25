@@ -37,6 +37,7 @@ interface IProps {
   oldPrice?: any;
   diff: any;
   catId: any;
+  keyProp: any;
 }
 
 const Card: FC<IProps> = ({
@@ -59,6 +60,7 @@ const Card: FC<IProps> = ({
   oldPrice,
   diff,
   catId,
+  keyProp,
 }) => {
   const navigation = useNavigation();
 
@@ -74,11 +76,19 @@ const Card: FC<IProps> = ({
             <View style={{alignSelf: 'flex-end', height: 30, width: 30}}>
               <TouchableHighlight
                 underlayColor=""
-                onPress={() =>
-                  navigation.navigate('SelectedCategory', {
-                    categoryId: catId,
-                  })
-                }>
+                onPress={() => {
+                  keyProp === 'special'
+                    ? navigation.navigate('SelectedCategory', {
+                        special: 'special',
+                      })
+                    : keyProp === 'new'
+                    ? navigation.navigate('SelectedCategory', {
+                        new: 'new',
+                      })
+                    : navigation.navigate('SelectedCategory', {
+                        categoryId: catId,
+                      });
+                }}>
                 <Text
                   style={{
                     opacity: 0.5,

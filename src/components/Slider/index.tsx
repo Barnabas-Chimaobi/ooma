@@ -95,7 +95,7 @@ const SliderBar = ({
   const windowHeight = Dimensions.get('window').height;
   const left1 = ((state.value1 / 300) * windowHeight + 100) / 100 - 10;
   const left2 = ((state.value2 / 300) * windowHeight + 100) / 100 - 10;
-  const minimumValue = 100;
+  const minimumValue = 0;
   const maximumValue = 10000;
   const {value1, value2} = state;
   return (
@@ -160,7 +160,7 @@ const SliderBar = ({
         </Text>
       </View>
 
-      {type && (
+      {/* {type && (
         <Button
           title="APPLY"
           onPress={() => {
@@ -175,7 +175,7 @@ const SliderBar = ({
           }}
           buttonStyle={S.buttonStyle}
         />
-      )}
+      )} */}
     </View>
   );
 };

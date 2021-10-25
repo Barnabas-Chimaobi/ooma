@@ -134,25 +134,33 @@ const MyCarousel: FC<CarouselProps> = ({menuItem, page = 1, keyProp}) => {
               // navigation.navigate('Menu')
               navigation.navigate('Detail', {planId: item.id})
             }>
-            <Text
+            <View
               style={{
+                // maxWidth: 130,
+                // maxWidth: 100,
+                width: '33%',
                 backgroundColor: colors.start,
-                // marginTop: '-8%',
-                color: colors.white,
-                width: 110,
-                padding: 8,
                 borderRadius: 5,
-                marginLeft: -4,
-                // paddingBottom: 5,
-                marginBottom: 5,
               }}>
-              CREATE PLAN
-            </Text>
+              <Text
+                style={{
+                  // marginTop: '-8%',
+                  color: colors.white,
+                  width: 140,
+                  padding: 8,
+                  marginLeft: -4,
+                  // paddingBottom: 5,
+                  marginBottom: 5,
+                }}>
+                CREATE PLAN
+              </Text>
+            </View>
           </TouchableHighlight>
         </View>
       </View>
     ) : (
       <Card
+        keyProp={keyProp}
         catId={item.MenuItemCategories[0]?.itemCategoryId}
         page={page}
         img={Image_Http_URL}

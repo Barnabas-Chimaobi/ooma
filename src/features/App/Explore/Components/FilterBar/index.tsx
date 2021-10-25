@@ -41,8 +41,8 @@ const FilterBar = () => {
   const [sorts, setSorts] = useState('');
   const [categorys, setCategory] = useState('');
   const [loader, setLoader] = useState(false);
-  const [minPrices, setMinprice] = useState();
-  const [maxPrices, setMaxprice] = useState();
+  const [minPrices, setMinprice] = useState(0);
+  const [maxPrices, setMaxprice] = useState(0);
   const {value} = state;
   const toggleSwitch = () => setSwitchs((previousState) => !previousState);
 
@@ -79,28 +79,32 @@ const FilterBar = () => {
   });
 
   const filterMenuItem = async () => {
+    setLoader(true);
     console.log('dhfjgkhjhgghjgkhlgjhfjgdfjgk==========');
     const branch = await AsyncStorage.getItem('branchId');
     const newbranch = JSON.parse(branch);
+    console.log(
+      // filteredItem,
+      branch,
+      sorts,
+      minPrice,
+      maxPrice,
+      categorys,
+      'filtered=======',
+    );
     const filteredItem = await filterMenuItems(
       newbranch,
       1,
-      // category1,
-      category,
-      minPrices === undefined ? 100 : minPrices,
+      categorys,
+      minPrices,
       maxPrices,
       sorts,
       // combination1,
     );
-    console.log(
-      filteredItem,
-      category,
-      state,
-      minPrice,
-      maxPrice,
-      'filtered=======',
-    );
+    console.log(filteredItem, 'filtereditemmmsss===');
+
     dispatch(useMenuItemByCategory(filteredItem));
+    setLoader(false);
   };
 
   const setTitle = (title: any) => {
@@ -280,6 +284,21 @@ const FilterBar = () => {
                 parameters2={(item: any, item1: any) => loading(item, item1)}
               />
             )}
+
+            <Button
+              title={'APPLY'}
+              onPress={
+                () => {
+                  filterMenuItem(), toggleSwitch();
+                }
+                // {
+                // console.log(combination1, category1)
+                // dispatch(useCombination(combination1));
+                // dispatch(useCategory(category1));
+                // }
+              }
+              // containerStyle={S.buttonStyle}
+            />
           </>
         }
         onPress={() => {
