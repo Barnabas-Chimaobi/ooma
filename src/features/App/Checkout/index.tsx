@@ -23,6 +23,7 @@ import {
   ShowMessage,
   type,
   Alert,
+  SimpleHeader,
 } from '../../../components';
 import {check} from '../../../assets';
 import S from './styles';
@@ -430,13 +431,14 @@ const Checkout = () => {
           <View
             style={{
               top: Dimensions.get('screen').height / 1.125,
-              height: 40,
+              height: Dimensions.get('screen').height,
               width: Dimensions.get('screen').width / 2.3,
               alignSelf: 'center',
-              zIndex: 1,
-              // backgroundColor: colors.white,
+              zIndex: 5,
+              // backgroundColor: colors.black,
             }}>
             <TouchableHighlight
+              style={{top: Dimensions.get('screen').height / 1.125}}
               underlayColor=""
               onPress={() => {
                 setSuccess(false), navigation.navigate('Home');
@@ -449,6 +451,9 @@ const Checkout = () => {
     </View>
   ) : (
     <View style={{flex: 1, backgroundColor: colors.white}}>
+      <View style={{marginLeft: 10}}>
+        <SimpleHeader />
+      </View>
       <ScrollView style={S.main}>
         {!params?.planOrder && (
           <View style={S.header}>

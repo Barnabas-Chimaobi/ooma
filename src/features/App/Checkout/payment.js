@@ -177,7 +177,7 @@ export class State extends Component {
               style={{
                 // backgroundColor: colors.white,
                 top: Dimensions.get('screen').height / 1.125,
-                height: 40,
+                height: Dimensions.get('screen').height,
                 width: Dimensions.get('screen').width / 2.3,
                 alignSelf: 'center',
                 zIndex: 5,

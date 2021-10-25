@@ -334,16 +334,24 @@ const MenuDetails: FC<IProps> = ({route}) => {
         icon={<AntDesign color="white" name="arrowleft" size={28} />}
       />
       {show && (
-        <View style={{zIndex: 1, position: 'relative', height: 400}}>
+        <View
+          style={{
+            zIndex: 1,
+            // position: 'relative',
+            height: 450,
+          }}>
           <Text
             style={{
               alignSelf: 'center',
               fontSize: 22,
-              fontFamily: 'Poppins',
+              fontFamily: 'Montserrat',
             }}>
             Select a Date
           </Text>
           <Calendar
+            hideExtraDays
+            hideDayNames
+            style={{zIndex: 5}}
             // markingType={'period'}
             // markingType="multi-period"
             // markingType={'multi-dot'}

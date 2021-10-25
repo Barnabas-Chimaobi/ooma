@@ -274,13 +274,13 @@ export default function Header({props1}) {
     getPopular(branchID, page);
     getSpecial(branchID, page);
     const allCategory = await GetAllMenuItemCategory(branchID);
-    // console.log(allCategory, 'alllcategoryyyyyyy=====================');
+    console.log(allCategory, 'alllcategoryyyyyyy=====================');
     dispatch(useMenuItemCategory(allCategory));
     let shuffled = allCategory
       ?.map((a: any) => ({sort: Math.random(), value: a}))
       ?.sort((a: any, b: any) => a.sort - b.sort)
       ?.map((a: any) => a.value.id);
-    // console.log(shuffled, 'shuffleddd');
+    console.log(shuffled[0], 'shuffleddd');
     // const moreForYou = await SearchMenuItemByCategoryId(shuffled[1], page);
     if (allCategory != null) {
       getGlutenCategory(shuffled[0], page);

@@ -120,7 +120,7 @@ const Home = () => {
       getMenuPlansForYouCategory();
     });
     BackHandler.addEventListener('hardwareBackPress', backHandler);
-
+    console.log(glutenMenuItem, 'glutennmenuitemm=======');
     // getMenuPlansForYouCategory();
   }, [0]);
   //  const {categories} = useSelector(
@@ -641,8 +641,8 @@ const Home = () => {
             <View>
               <Categories
                 bool={glutenMenuItem?.length == 0 ? true : false}
-                menuItem={breakFastMenuItem}
-                title={secondCategory1[0]}
+                menuItem={glutenMenuItem}
+                title={thirdCategory1[0]}
                 // subtitle={secondDescription1[0]}
               />
               <View
@@ -677,8 +677,9 @@ const Home = () => {
             <View>
               <Categories
                 bool={breakFastMenuItem?.length == 0 ? true : false}
-                menuItem={glutenMenuItem}
-                title={thirdCategory1[0]}
+                menuItem={breakFastMenuItem}
+                title={secondCategory1[0]}
+
                 // subtitle={thirdDescription1[0]}
               />
               <View
@@ -688,8 +689,8 @@ const Home = () => {
                 }}></View>
             </View>
           )}
-
-          {/* {menuItem?.length == 0 ? (
+          {/* 
+          {menuItem?.length == 0 ? (
             <Skeleton />
           ) : (
             <View>

@@ -18,14 +18,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const LoginPassword = () => {
   const dispatch: AppDispatch = useDispatch();
   const [password, setpassword] = useState('');
-  const [username, setUserName] = useState('');
+  const [username, setUserName] = useState(null);
 
   const getProfiles = async () => {
     const userId = await AsyncStorage.getItem('userId');
     //  const parseAddress = JSON.parse(adress);
     const user = await getProfile(userId);
-    console.log(user?.data?.firstName, 'user======ssserrr===');
     setUserName(user?.data?.firstName);
+    console.log(username, 'user======ssserrr===');
   };
 
   useEffect(() => {
@@ -40,7 +40,11 @@ const LoginPassword = () => {
 
   return (
     <OmaCard
-      overTitle={username !== '' ? `Hello ${username}` : 'Hello User'}
+      overTitle={
+        username !== null || username !== undefined
+          ? `Hello ${username}`
+          : 'Hello User'
+      }
       overStyle={S.overStyle}
       title="Please enter your Password"
       titleStyle={S.omaTitle}
