@@ -54,7 +54,7 @@ import Collapsible from 'react-native-collapsible';
 import ss from '../Components/Collapsible/styles';
 import Modal from 'react-native-modal';
 import ToggleSwitch from 'toggle-switch-react-native';
-import {check, clock} from '../../../../assets';
+import {check, clock, clockNew, info} from '../../../../assets';
 import DropDownPicker from 'react-native-dropdown-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import s from '../../../App/Checkout/DeliveryOptions/styles';
@@ -64,6 +64,7 @@ import Footer from '../../../../navigation/footer';
 import {cartStates} from '../../../../reducers/cart';
 import Toast from 'react-native-toast-message';
 import {SortCart} from '../../../../Utils/sortCart';
+import {color} from 'react-native-reanimated';
 
 type ExploreNavigationProps = StackScreenProps<MainStackParamList, 'Explore'>;
 
@@ -787,6 +788,23 @@ const CardItem: FC<IProps> = ({route, menu}) => {
               />
             }
           />
+
+          <View style={{flexDirection: 'row', paddingHorizontal: 10}}>
+            <Image source={clockNew} style={{height: 18, width: 18, top: 18}} />
+            <Text
+              style={{
+                padding: 10,
+                width: '90%',
+                fontFamily: 'Montserrat',
+                fontSize: 12,
+              }}>
+              Pre-order ends{' '}
+              <Text style={{fontWeight: 'bold', color: colors.green}}>
+                45mins
+              </Text>{' '}
+              before delivery time, as all our meals are prepared fresh.
+            </Text>
+          </View>
           {openModal == true ? (
             <Modal
               style={{
@@ -1011,6 +1029,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                       </View>
                     ) : null}
                   </View>
+
                   <View style={{marginTop: -50}}>
                     <Button
                       titleStyle={s.buttonTitle}
@@ -1035,6 +1054,32 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                         setShowTime(false), setTime(value.label);
                       }}
                     />
+                  </View>
+
+                  <View style={{flexDirection: 'row', paddingHorizontal: 10}}>
+                    <Image
+                      source={info}
+                      style={{height: 18, width: 18, top: 18}}
+                    />
+                    <Text
+                      style={{
+                        padding: 10,
+                        width: '90%',
+                        fontFamily: 'Montserrat',
+                        fontSize: 12,
+                      }}>
+                      Delivery time
+                      <Text style={{fontWeight: 'bold', color: colors.black}}>
+                        <Text> </Text>
+                        (Mon-Sat 8am-7pm), (Sun 10am-7pm).
+                      </Text>
+                      <Text> </Text>
+                      Pick-up
+                      <Text> </Text>
+                      <Text style={{fontWeight: 'bold', color: colors.black}}>
+                        (Mon-Sat 8am-7pm), (Sun 10am-9.30pm).
+                      </Text>
+                    </Text>
                   </View>
                 </ScrollView>
               </View>

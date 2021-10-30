@@ -25,7 +25,7 @@ import {
   Alert,
   SimpleHeader,
 } from '../../../components';
-import {check} from '../../../assets';
+import {check, info} from '../../../assets';
 import S from './styles';
 import s from '../../App/Checkout/DeliveryOptions/styles';
 import DeliveryOptions from './DeliveryOptions';
@@ -487,6 +487,20 @@ const Checkout = () => {
 
         {/* <DeliveryOptions title="Delivery Options" /> */}
         {/* {!params?.planOrder && ( */}
+        <View style={{flexDirection: 'row', paddingHorizontal: 10}}>
+          <Image source={info} style={{height: 18, width: 18, top: 18}} />
+          <Text
+            style={{
+              padding: 10,
+              width: '90%',
+              fontFamily: 'Montserrat',
+              fontSize: 12,
+            }}>
+            Delivery time <Text style={{fontWeight: 'bold'}}> 8am - 7pm</Text>.
+            Pick-up time <Text style={{fontWeight: 'bold'}}>8am - 9:30pm</Text>.
+          </Text>
+        </View>
+
         {!params?.planOrder && (
           <View style={{backgroundColor: '#FFFFFF'}}>
             <Text
@@ -781,6 +795,19 @@ const Checkout = () => {
             )}
             mainStyle={S.totalStyle}
           />
+        </View>
+        <View style={{flexDirection: 'row', paddingHorizontal: 10, top: -20}}>
+          <Image source={info} style={{height: 18, width: 18, top: 18}} />
+          <Text
+            style={{
+              padding: 10,
+              width: '90%',
+              fontFamily: 'Montserrat',
+              fontSize: 12,
+            }}>
+            This is a daily instant order. You can schedule this meal and more
+            for other days, weeks or months from meal plan.
+          </Text>
         </View>
       </ScrollView>
       {params?.planOrder ? (

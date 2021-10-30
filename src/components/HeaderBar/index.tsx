@@ -13,6 +13,8 @@ import {Divider} from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {DateFormatter} from '../../Utils';
 import {useNavigation} from '@react-navigation/native';
+import {colors} from '../../colors';
+import {clockNew} from '../../assets';
 
 interface IProps {
   image1: any;
@@ -67,10 +69,10 @@ const HeaderBar = ({
             <View style={s.locationDetails}>
               {onPressImg ? (
                 <TouchableOpacity onPress={() => showDatepicker()}>
-                  <Image source={image1} style={s.locationImage} />
+                  <Image source={clockNew} style={s.locationImage} />
                 </TouchableOpacity>
               ) : (
-                <Image source={image1} style={s.locationImage} />
+                <Image source={clockNew} style={s.locationImage} />
               )}
               <Text style={{fontSize: 13, fontFamily: 'Open Sans'}}>
                 {title}
@@ -86,25 +88,41 @@ const HeaderBar = ({
                 <>
                   <Text style={s.rejig}>{rejigTitle}</Text>
                 </>
-              ) : (
+              ) : ( */}
+              <View
+                style={{
+                  flexDirection: 'row',
+                  backgroundColor: colors.white,
+                  marginRight: 5,
+                  marginLeft: -15,
+                  borderRadius: 50,
+                  paddingHorizontal: 5,
+                }}>
                 <Image
                   source={image2}
-                  style={{height: 18, width: 18, marginLeft: -25}}
-                />
-              )} */}
-              <Text
-                style={
-                  (rejig && {padding: 6}) ||
-                  (date && {
+                  style={{
+                    height: 18,
+                    width: 18,
+                    marginRight: 5,
+                    top: 7,
                     paddingHorizontal: 5,
-                    // width: 90,
-                    fontSize: 12,
-                    marginLeft: 20,
-                    textAlign: 'center',
-                  })
-                }>
-                {date ? DateFormatter.formatAMPM(date) : 'Now'}
-              </Text>
+                  }}
+                />
+                {/* )} */}
+                <Text
+                  style={
+                    (rejig && {padding: 6}) ||
+                    (date && {
+                      paddingHorizontal: 5,
+                      // width: 90,
+                      fontSize: 12,
+                      marginLeft: 20,
+                      textAlign: 'center',
+                    })
+                  }>
+                  {date ? DateFormatter.formatAMPM(date) : 'Select time'}
+                </Text>
+              </View>
             </TouchableOpacity>
           </View>
           {show &&

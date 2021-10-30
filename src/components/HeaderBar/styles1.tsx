@@ -15,10 +15,10 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   locationImage: {
-    marginRight: 2,
+    marginRight: 10,
     height: 20,
     width: 20,
-    marginLeft: -5,
+    marginLeft: 3,
   },
   rejig: {
     paddingRight: 10,

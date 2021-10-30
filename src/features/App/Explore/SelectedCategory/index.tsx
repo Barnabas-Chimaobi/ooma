@@ -76,6 +76,33 @@ const SelectedCategory: FC<selectedProps> = ({route}) => {
     setLoader(false);
   };
 
+  const getCategoryByRefresh = async () => {
+    const getbranch = await AsyncStorage.getItem('branchId');
+    const parseBranch = JSON.parse(getbranch);
+    const type = await AsyncStorage.getItem('type');
+    const category = await AsyncStorage.getItem('category');
+    const price = await AsyncStorage.getItem('price');
+    const price1 = await AsyncStorage.getItem('price1');
+    const filteredItem = await filterMenuItems(
+      parseBranch,
+      1,
+      category || '',
+      price || 0,
+      price1 || 0,
+      type || '',
+    );
+    console.log(
+      filteredItem,
+      parseBranch,
+      category,
+      price,
+      price1,
+      type,
+      'filtereddddddd',
+    );
+    dispatch(useMenuItemByCategory(filteredItem));
+  };
+
   const getItemSpecial = async () => {
     setLoader(true);
     const getbranch = await AsyncStorage.getItem('branchId');
@@ -119,7 +146,8 @@ const SelectedCategory: FC<selectedProps> = ({route}) => {
   const toggleGrid = () => setstate({gridView: !gridView});
 
   const refreshing = () => {
-    getItemByCategoryId();
+    getCategoryByRefresh();
+    // getItemByCategoryId();
   };
   return (
     <View style={{flex: 1, width: '100%'}}>

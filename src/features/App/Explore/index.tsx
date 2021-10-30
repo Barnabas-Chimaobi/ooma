@@ -147,7 +147,7 @@ const Explore = () => {
               categories={shuffleArray(menuPlanCategories)}
               compType={'menuPlan'}
             />
-            <Card title="Others" categories={shuffleArray(categories)} />
+            <Card title="Instant Order" categories={shuffleArray(categories)} />
           </View>
           {/* <Button
             title="BACK TO TOP"

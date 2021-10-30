@@ -94,6 +94,7 @@ const Filter = () => {
     console.log(title, 'titttllll');
     if (title == 'Both' || title == 'Single Meal' || title == 'Combo dish') {
       setSorts(title);
+      AsyncStorage.setItem('type', title);
     } else {
       null;
     }
@@ -105,6 +106,7 @@ const Filter = () => {
       title == 'NEW'
     ) {
       setCategory(title);
+      AsyncStorage.setItem('category', title);
     } else {
       null;
     }
@@ -119,11 +121,13 @@ const Filter = () => {
   const pricing = (item: any) => {
     console.log(item, 'pricinggggg');
     setMinprice(item);
+    AsyncStorage.setItem('price', item);
     console.log(item, 'itemssss');
   };
 
   const pricing1 = (item: any) => {
     setMaxprice(item);
+    AsyncStorage.setItem('price1', item);
     console.log(item, 'itemssss');
   };
   const loading = (item: any, item1: any) => {

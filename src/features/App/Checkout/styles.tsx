@@ -4,7 +4,7 @@ export default StyleSheet.create({
   main: {
     flex: 1,
     height: '100%',
-    marginBottom: 50,
+    marginBottom: 90,
   },
   header: {
     padding: 12,

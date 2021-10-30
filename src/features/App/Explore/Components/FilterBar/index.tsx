@@ -110,6 +110,7 @@ const FilterBar = () => {
   const setTitle = (title: any) => {
     if (title == 'Both' || title == 'Single Meal' || title == 'Combo dish') {
       setSorts(title);
+      AsyncStorage.setItem('type', title);
     } else {
       null;
     }
@@ -121,6 +122,7 @@ const FilterBar = () => {
       title == 'NEW'
     ) {
       setCategory(title);
+      AsyncStorage.setItem('category', title);
     } else {
       null;
     }
@@ -150,12 +152,14 @@ const FilterBar = () => {
 
   const pricing = (item: any) => {
     setMinprice(item);
+    AsyncStorage.setItem('price', item === null ? 0 : item);
     // dispatch(useMinPricing(item));
     console.log(item, 'itemssss');
   };
 
   const pricing1 = (item: any) => {
     setMaxprice(item);
+    AsyncStorage.setItem('price1', item === null ? 0 : item);
     // dispatch(useMaxPricing(item));
     console.log(item, 'itemssss');
   };

@@ -45,8 +45,12 @@ const plus = require('./Images/plus.png');
 const instantSuccess = require('./Images/instant.png');
 const mealSuccess = require('./Images/mealPlan.png');
 const loader = require('./Images/oomaLoad.gif');
+const info = require('../assets/Images/info.png');
+const clockNew = require('../assets/Images/clockNew.png');
 
 export {
+    info,
+    clockNew,
     loader,
     instantSuccess,
     mealSuccess,
