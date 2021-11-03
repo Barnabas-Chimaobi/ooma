@@ -67,16 +67,21 @@ const AddNewAddress: React.FC<Props> = ({navigation}) => {
                 flex: 1,
                 paddingHorizontal: 15,
               }}>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={{paddingVertical: 5, marginBottom: 10}}
                 onPress={() => navigation.goBack()}>
                 <AntDesign name="arrowleft" size={28} />
               </TouchableOpacity>
-              <View style={{flexDirection: 'row', alignItems: 'center', marginBottom: 10}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginBottom: 10,
+                }}>
                 <Entypo name="home" size={25} />
                 <Text style={{marginLeft: 15, fontSize: 20}}>Home</Text>
-              </View>
-              <Picker
+              </View> */}
+              {/* <Picker
                 topLabel="City"
                 PickerOptions={data}
                 selectedValue={values.city}
@@ -99,8 +104,16 @@ const AddNewAddress: React.FC<Props> = ({navigation}) => {
                 onValueChange={handleChange('streetOrLayout')}
                 errors={errors.streetOrLayout}
                 touched={touched.streetOrLayout}
-              />
-              <Text style={{marginBottom: 9, fontSize: 16, color: 'rgba(0, 0, 0, 0.25)'}}> House Number</Text>
+              /> */}
+              <Text
+                style={{
+                  marginBottom: 9,
+                  fontSize: 16,
+                  color: 'rgba(0, 0, 0, 0.25)',
+                }}>
+                {' '}
+                House Number
+              </Text>
               <BaseInput
                 value={values.houseNumber}
                 onChangeText={handleChange('houseNumber')}
@@ -114,16 +127,38 @@ const AddNewAddress: React.FC<Props> = ({navigation}) => {
                 }}
               />
 
-              <Picker
+              <Text
+                style={{
+                  marginBottom: 9,
+                  fontSize: 16,
+                  color: 'rgba(0, 0, 0, 0.25)',
+                }}>
+                {' '}
+                House Number
+              </Text>
+              <BaseInput
+                value={values.houseNumber}
+                onChangeText={handleChange('houseNumber')}
+                errors={errors.houseNumber}
+                touched={touched.houseNumber}
+                name={values.houseNumber}
+                style={{
+                  backgroundColor: 'transparent',
+                  borderWidth: 1,
+                  borderColor: 'rgba(0, 0, 0, 0.25)',
+                }}
+              />
+
+              {/* <Picker
                 topLabel="Landmark(optional)"
                 PickerOptions={data}
                 selectedValue={values.landmark}
                 onValueChange={handleChange('landmark')}
                 errors={errors.landmark}
                 touched={touched.landmark}
-              />
+              /> */}
 
-              <Button title="Update" onPress={handleSubmit} />
+              {/* <Button title="Update" onPress={handleSubmit} /> */}
             </View>
           )}
         </Formik>

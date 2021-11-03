@@ -34,6 +34,8 @@ const SearchTab = forwardRef(({getIndex}: Props, ref) => {
 
   useEffect(() => {
     getIndex(index);
+
+    return () => getIndex(index);
   }, [index]);
 
   // console.warn({index});
@@ -48,13 +50,16 @@ const SearchTab = forwardRef(({getIndex}: Props, ref) => {
       renderTabBar={(routes) => (
         <TabBar
           {...routes}
+          inactiveColor="grey"
+          activeColor="green"
           indicatorStyle={styles.indicatorStyle}
           style={styles.tabBar}
           renderLabel={({route}) => (
-            <Text style={styles.tabLabel}>{route.title}</Text>
+            <Text style={styles.tabLabel}>{route?.title}</Text>
           )}
         />
       )}
+      swipeEnabled={false}
       navigationState={{index, routes}}
       renderScene={renderScene}
       onIndexChange={setIndex}

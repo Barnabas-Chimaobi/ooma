@@ -1,48 +1,127 @@
 import React from 'react';
-import {View, FlatList} from 'react-native';
+import {View, FlatList, Text} from 'react-native';
 import {SortBy, OrderCard} from '../components';
 import {Total, EmptyList} from '../../../../components';
 import shortid from 'shortid';
 import S from './styles';
 import {emptyCart} from '../../../../assets';
 import {useNavigation} from '@react-navigation/native';
+import {colors} from '../../../../colors';
+import {DateFormatter} from '../../../../Utils';
 
-const RenderItems = ({item}: any) => {
-  const navigation = useNavigation();
+const RenderItems = ({itemss}: any) => {
+  // console.log(item, 'ones=======');
+
   return (
-    <OrderCard
-      onPress={() => navigation.navigate('OrderDetails')}
-      dateTitle="24/9/2021"
-      titlePosition="left"
-      children={
-        <>
-          <Total
-            randomTitle="ORDER ID"
-            randomValue={item.orderId}
-            mainStyle={S.totalStyle}
-          />
-          <Total
-            randomTitle="Scheduled Time"
-            randomValue={item.time}
-            mainStyle={S.totalStyle}
-          />
-          <Total
-            randomTitle="Item(s)"
-            randomValue={item.item}
-            mainStyle={S.totalStyle}
-          />
-          <Total
-            total={Number(item.price)}
-            totalTitle="Total Price"
-            mainStyle={S.totalStyle}
-          />
-        </>
-      }
-    />
+    <View style={{backgroundColor: colors.white}}>
+      <Text style={{marginLeft: 10}}>
+        {new Date(itemss?.deliveryTime)?.toLocaleDateString()}
+      </Text>
+      {itemss?.data?.map((items) =>
+        items?.data?.map((item) => {
+          // console.log(
+          //   item?.itemData?.menuitemorders?.MenuItemOrderDetails,
+          //   '===========orderlenght=====',
+          // ),
+          //   console.log(item, 'item===========');
+          return (
+            item?.itemData?.menuitemorders?.status !== 'Delivered' && (
+              <OrderCard
+                total={item?.itemData?.menuitemorders?.total}
+                details={item}
+                dateTitle={item?.deliveryTime}
+                titlePosition="right"
+                children={
+                  <>
+                    <View style={{marginTop: -5}}>
+                      <Total
+                        randomTitle={'item'}
+                        randomTitleStyle={{color: colors.white}}
+                        randomValue={DateFormatter.formatAMPM(
+                          itemss?.deliveryTime,
+                        )}
+                        randomStyle={{
+                          color: colors.black,
+                          fontSize: 12,
+                          marginLeft: '60%',
+                        }}
+                        mainStyle={{
+                          paddingVertical: -40,
+                          borderBottomWidth: 2,
+                          borderColor: colors.grey,
+                          marginBottom: 10,
+                        }}
+                      />
+
+                      <Total
+                        itemorder={'itemorder'}
+                        randomTitle="Order ID"
+                        randomValue={item?.itemData?.orderRef}
+                        mainStyle={S.totalStyle}
+                        randomStyle={{
+                          color: colors.black,
+                          fontWeight: 'bold',
+                          fontSize: 14,
+                        }}
+                      />
+                      {/* {item?.itemData?.menuitemorders?.MenuItemOrderDetails?.map(
+                    (items, index) => ( */}
+                      <Total
+                        randomTitle={'ITEM'}
+                        randomValue={
+                          item?.itemData?.menuitemorders?.MenuItemOrderDetails
+                            ?.length
+                        }
+                        mainStyle={S.totalStyle}
+                        randomStyle={{
+                          color: colors.black,
+                          fontWeight: 'bold',
+                          fontSize: 14,
+                        }}
+                      />
+                      {/* ),
+                  )} */}
+
+                      <Total
+                        orderTotal={Number(
+                          item?.itemData?.menuitemorders?.total,
+                        )}
+                        totalTitle="Price"
+                        mainStyle={S.totalStyle}
+                        randomStyle={{
+                          color: colors.black,
+                          fontWeight: 'bold',
+                          fontSize: 14,
+                        }}
+                      />
+                      <Total
+                        randomTitle="Status"
+                        randomValue={item?.itemData?.menuitemorders?.status}
+                        mainStyle={S.totalStyle}
+                        randomStyle={{
+                          color: colors.start,
+                          // item?.paymentStatus == 'Cancelled'
+                          //   ? colors.red
+                          //   : item?.paymentStatus == 'NOT-PAID'
+                          //   ? colors.primary
+                          //   : colors.black,
+                        }}
+                      />
+                    </View>
+                  </>
+                }
+              />
+            )
+          );
+        }),
+      )}
+    </View>
   );
 };
 
 const Current = ({item}) => {
+  // console.log(item, 'itemmmsss=====');
+  const navigation = useNavigation();
   const data = [
     {
       orderId: 'ZS214298',
@@ -53,11 +132,16 @@ const Current = ({item}) => {
   ];
 
   return (
-    <View style={S.main}>
+    <View
+      style={{
+        alignSelf: 'center',
+        marginTop: 10,
+        backgroundColor: colors.white,
+      }}>
       <FlatList
-        ListHeaderComponent={<>{data.length > 0 && <SortBy />}</>}
-        renderItem={({item}) => <RenderItems item={item} />}
-        data={data}
+        ListHeaderComponent={<>{item.length > 0 && <SortBy />}</>}
+        renderItem={({item}) => <RenderItems itemss={item} />}
+        data={item}
         keyExtractor={() => shortid.generate()}
         ListEmptyComponent={
           <EmptyList

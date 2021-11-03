@@ -2,13 +2,16 @@ import * as React from 'react';
 import {Text, View, Image} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MenuNavigation from '../MenuNavigation';
+import Explore from '../ExploreNavigation';
 import Cart from '../MyCartNavigation';
+import More from '../MoreNavigation';
+// import Home from '../HomeNavigation';
 import {
   Home,
-  Explore,
+  // Explore,
   MenuPlanIntro as MenuPlan,
   CartIntro as MyCart,
-  More,
+  // More,
 } from '../../features/App';
 
 // import MyCart from '../MyCartNavigation';
@@ -20,6 +23,9 @@ import {
   menuIcon,
   cartIcon,
   moreIcon,
+  newCart,
+  newMore,
+  newPlan,
 } from '../../assets';
 
 // function Explore() {
@@ -45,9 +51,10 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   return (
     <Tab.Navigator
+      // backBehavior={'none'}
       initialRouteName="Home"
       tabBarOptions={{
-        activeTintColor: '#303030',
+        activeTintColor: '#26C867',
         inactiveTintColor: '#C4C4C4',
         style: {
           height: 65,
@@ -76,6 +83,22 @@ export default function App() {
         }}
       />
       <Tab.Screen
+        name="Meal plan"
+        component={MenuNavigation}
+        options={{
+          title: 'My profile',
+          tabBarLabel: 'Meal plan',
+          tabBarIcon: ({color, size}) => (
+            <View>
+              <Image
+                source={newPlan}
+                style={{tintColor: color, width: size, height: size}}
+              />
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
         name="Explore"
         component={Explore}
         options={{
@@ -89,29 +112,13 @@ export default function App() {
         }}
       />
       <Tab.Screen
-        name="Menu plan"
-        component={MenuNavigation}
-        options={{
-          title: 'My profile',
-          tabBarLabel: 'Menu plan',
-          tabBarIcon: ({color, size}) => (
-            <View>
-              <Image
-                source={menuIcon}
-                style={{tintColor: color, width: size, height: size}}
-              />
-            </View>
-          ),
-        }}
-      />
-      <Tab.Screen
         name="My Cart"
         component={Cart}
         options={{
           tabBarLabel: 'My Cart',
           tabBarIcon: ({color, size}) => (
             <Image
-              source={cartIcon}
+              source={newCart}
               style={{tintColor: color, width: size, height: size}}
             />
           ),
@@ -124,7 +131,7 @@ export default function App() {
           tabBarLabel: 'More',
           tabBarIcon: ({color, size}) => (
             <Image
-              source={moreIcon}
+              source={newMore}
               style={{tintColor: color, width: size, height: size}}
             />
           ),

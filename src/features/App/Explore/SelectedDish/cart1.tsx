@@ -9,6 +9,7 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import {
   PriceTag,
@@ -22,6 +23,8 @@ import {
   ShowMessage,
   type,
   CheckBox,
+  SimpleHeader,
+  Alert,
 } from '../../../../components';
 import {Icon, Divider} from 'react-native-elements';
 import CollapsibleView from '../Components/Collapsible';
@@ -34,6 +37,7 @@ import {
   getDeliveryAddress,
   createOrder,
   createmenuplanorderDetail,
+  getMenuitemCart,
 } from '../../../../FetchData';
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState, AppDispatch} from '../../../../store';
@@ -49,6 +53,10 @@ import {check} from '../../../../assets';
 import DropDownPicker from 'react-native-dropdown-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import s from '../../../App/Checkout/DeliveryOptions/styles';
+import {add} from 'react-native-reanimated';
+import {colors} from '../../../../colors';
+import {cartStates} from '../../../../reducers/cart';
+import {SortCart} from '../../../../Utils/sortCart';
 
 type ExploreNavigationProps = StackScreenProps<MainStackParamList, 'Explore'>;
 
@@ -70,21 +78,23 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     addon,
   } = route.params;
 
+  const dispatch: AppDispatch = useDispatch();
   const navigation = useNavigation();
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(
+    eachItem?.specialInstruction === '' ? null : eachItem?.specialInstruction,
+  );
   const [menuItem, setMenuItem] = useState(menu);
   const [prices, setPrice] = useState(eachItem?.amount);
-  const [prices1, setPrice1] = useState(menuItem?.amount);
   const [quantity, setQuantity] = useState(number);
   const [cartItem, setCartItem] = useState('');
   const [visible, setVisible] = useState(false);
   const [visible1, setVisible1] = useState(false);
-  const [firstProps, setFirstProps] = useState('');
   let [adds, setAdds] = useState([]);
   const [addQunty, setAdqunty] = useState(1);
   const [Preferences, setPreference] = useState([]);
   const [itemQty, setItemqty] = useState(1);
-  const [total, setTotal] = useState(menuItem?.amount);
+  const [itemQtyAddons, setItemqtyAddons] = useState(addon);
+  const [total, setTotal] = useState(menuItem?.MenuItem?.amount);
   const [addsTotal, setAddsTotal] = useState('');
   const [switchs, setSwitchs] = useState(false);
   const [friendName, setFriendName] = useState('');
@@ -106,6 +116,12 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   const [cartid, setCartId] = useState('');
   const [showTime, setShowTime] = useState(false);
   const [newItem, setNewItem] = useState([]);
+  const [branch, setBranch] = useState('');
+  const [preference, setPreferences] = useState(
+    JSON.parse(eachItem?.preferences),
+  );
+  const [editPre, setEditPref] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const visibility = () => {
     setVisible((previousState) => !previousState);
@@ -164,11 +180,41 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   };
 
   let eachItems = JSON.parse(eachItem?.addons);
+  const buildAddonObjectForCartEdit = () => {
+    JSON.parse(addon)?.map((item) =>
+      adds.push({
+        id: item?.id,
+        name: item?.name,
+        price: item?.price,
+        quantity: item?.quantity,
+        totalPrice: item?.totalPrice,
+        initialPrice: item?.price,
+        isExtra: item?.isExtra == true ? true : false,
+        originalQuantity: 1,
+      }),
+    );
+  };
+
+  const buildInitialPreferenceObject = () => {
+    preference?.map((item) => {
+      editPre.push({
+        id: item?.id,
+        name: item?.name,
+        price: item?.price,
+      });
+    });
+  };
+
   useEffect(() => {
-    console.log(JSON.parse(addon), '====eachitemmm ====');
+    buildAddonObjectForCartEdit();
+    buildInitialPreferenceObject();
+    setItemqty(eachItem?.quantity);
     const handleData = async () => {
       const regionName = await AsyncStorage.getItem('regionName');
       const branchName = await AsyncStorage.getItem('branchName');
+      const branch = await AsyncStorage.getItem('branchId');
+      const newbranch = JSON.parse(branch);
+      setBranch(newbranch);
 
       setBname(branchName);
       setRname(regionName);
@@ -177,7 +223,15 @@ const CardItem: FC<IProps> = ({route, menu}) => {
 
     handleData();
     getAddress();
-    console.log(id, cartId, planId, planTime, 'paramssssmmm');
+    console.log(
+      id,
+      cartId,
+      planId,
+      planTime,
+      eachItem,
+      menuItem?.menuItemPreferences?.length,
+      'paramssssmmm',
+    );
     getItemDetail();
   }, []);
 
@@ -185,100 +239,57 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     branchId: menuItem?.branchId,
     menuitemid: menuItem?.id,
     quantity: itemQty,
-    amount: parseInt(total) * parseInt(itemQty) + parseInt(addsTotal),
-    addons: adds,
-    Preferences: Preferences,
+    amount: prices,
+    // amount: parseInt(total) * parseInt(itemQty) + parseInt(addsTotal),
+    addons: JSON.stringify(adds),
+    Preferences: JSON.stringify(editPre),
     specialInstruction: value,
     menuplanid: planId,
   };
 
-  const body1 = {
-    isMenuPlan: true,
-    branchId: '82059935-89dc-4daf-aff3-adcf997d6859',
-    subTotal: parseInt(total) * parseInt(itemQty) + parseInt(addsTotal),
-    total: parseInt(total) * parseInt(itemQty) + parseInt(addsTotal),
-    paymentMethod: paymentMethod,
-    paymentType: 'FullPayment',
-    deliveryCharge: deliveryCharges,
-    deliveryAddId: addressId,
-    // cartIds: params?.params?.map((item: any) => item?.cartId),
-    deliveryTime: time,
-    deliveryAddress: myAddress,
-    deliveryOption: deliveryOption,
-    orderForFriend: switchs,
-    friendName: friendName,
-    friendPhoneNumber: friendPhone,
-    cartIds: cartid,
-  };
-  const createCart = async () => {
-    console.log(addsTotal, 'bodyyyquntyyss');
-    setOpenModal(true);
-    console.log(body, 'bodyyy');
-    try {
-      const cart = await api.post(`/orders/cart`, {
-        branchId: body.branchId,
-        menuitemid: body.menuitemid,
-        quantity: body.quantity,
-        amount: body.amount,
-        addons: JSON.stringify(body.addons),
-        Preferences: body.Preferences,
-        specialInstruction: body.specialInstruction,
-        menuplanid: planId,
-      });
-      const addedCart = cart?.data?.data;
-      if (menuPlan == 'menuPlan') {
-        ShowMessage(type.DONE, 'Item added to basket successfully'); // dispatch(cartStates(addedCart));
-      } else {
-        ShowMessage(type.DONE, 'Item added to cart successfully'); // dispatch(cartStates(addedCart));
-      }
-      setCartItem(addedCart);
-      setCartId(addedCart?.id);
-      if (menuPlan != 'menuPlan') {
-        navigation.goBack();
-      }
-      console.log(addedCart?.id, 'addedcaart');
-    } catch (err) {
-      console.log(err, 'cartError');
-    }
-  };
+  const cartItems = async () => {
+    const branch = await AsyncStorage.getItem('branchId');
+    const newbranch = JSON.parse(branch);
+    const userId = await AsyncStorage.getItem('userId');
+    console.log(userId, 'useriddd');
+    // const gottenId = JSON.parse(userId);
 
-  const orderNow = async () => {
-    setOpenModal(false);
-    console.log(body, 'idddddddd');
-    if (myAddress == '' && deliveryOption == '') {
-      ShowMessage(
-        type.INFO,
-        'please select either a pick-up location or enter your delivery address or location',
-      ); // dispatch(cartStates(addedCart));
-    } else {
-      const cart = await createOrder(body1);
-      const orderNow = await createmenuplanorderDetail(body1, cart?.id);
-      ShowMessage(type.DONE, 'Order Placed successfully'); // dispatch(cartStates(addedCart));
-      console.log(cart, 'cart');
-      console.log(orderNow, 'cartorderdetail');
-      navigation.goBack();
-    }
+    try {
+      const menuICart = await getMenuitemCart(newbranch, userId);
+      console.log(menuICart?.items, 'cartttttt=====ssss====');
+      SortCart(menuICart?.items);
+      await dispatch(cartStates(menuICart?.items));
+
+      const sum = await menuICart?.items?.map((v) => v?.amount);
+      if (menuICart?.items?.length !== 0) {
+        let newsum = sum?.reduce(
+          (sum: any, current: any) => parseInt(sum) + parseInt(current),
+        );
+        Alert('Item edited successfully');
+        // ShowMessage(type.DONE, 'Item edited successfully'); // dispatch(cartStates(addedCart));
+        // setCartItem(addedCart);
+        setLoading(false);
+        navigation.navigate('MyCart', {editTotal: newsum});
+      }
+    } catch (error) {}
   };
 
   const editCart = async () => {
+    setLoading(true);
+    let newbody = {
+      cartId: cartId,
+      quantity: body.quantity,
+      amount: prices,
+      addons: JSON.stringify(body.addons),
+      specialInstruction: body.specialInstruction,
+    };
+
     try {
-      const cart = await api.put(`/orders/cart`, {
-        cartId: cartId,
-        quantity: body.quantity,
-        amount: total * body.quantity,
-        addons: JSON.stringify(body.addons),
-        Preferences: body.Preferences,
-        specialInstruction: body.specialInstruction,
-      });
-      const addedCart = cart?.data?.data;
-      // if (cart?.config?.response == 'Cart updated successfully') {
-      ShowMessage(type.DONE, 'Item edited successfully'); // dispatch(cartStates(addedCart));
-      setCartItem(addedCart);
-      navigation.goBack();
-      console.log(cart?.config?.data, 'editedcartttt');
-      // } else {
-      //   ShowMessage(type.ERROR, 'Item could not be updated'); // dispatch(cartStates(addedCart));
-      // }
+      const cart = await api.put('/orders/cart', newbody);
+      await cartItems();
+      const addedCart = cart?.data?.data?.Items;
+
+      // console.log(addedCart, 'cartttttt');
     } catch (err) {
       console.log(err, 'cartError');
     }
@@ -286,19 +297,12 @@ const CardItem: FC<IProps> = ({route, menu}) => {
 
   const getItemDetail = async () => {
     const item = await getMenuItemsById(id);
-    console.log(item.amount, 'itemssssss');
-    setTotal(eachItem?.amount);
+    setTotal(eachItem?.MenuItem?.amount);
     setPrice(eachItem?.amount);
-    setMenuItem(item);
+    setMenuItem(eachItem);
   };
 
-  // const addToCart = async () => {
-  //   const cart = await createCart(body);
-  //   console.log(cart, 'cart');
-  //   setCartItem(cartItem);
-  // };
-
-  let Image_Http_URL = {uri: menuItem?.imageUrl};
+  let Image_Http_URL = {uri: menuItem?.MenuItem.imageUrl};
 
   const count = menuItem?.rating / menuItem?.ratingCount;
 
@@ -311,42 +315,16 @@ const CardItem: FC<IProps> = ({route, menu}) => {
   const getPreference = () => {};
 
   const getQuantity = (item: any) => {
-    console.log(item, 'itemss');
     setItemqty(item);
-    // parseInt(total) * parseInt(item) + parseInt(addsTotal);
-    let newPrice = parseInt(item) * parseInt(prices1);
-    setPrice(newPrice);
   };
-
-  // activated,
-  // addons,
-  // amount,
-  // available,
-  // branchId,
-  // caption,
-  // createdAt,
-  // createdBy,
-  // description,
-  // discount,
-  // discountPercent,
-  // id,
-  // imageUrl,
-  // inventories,
-  // itemName,
-  // menuItemCategories,
-  // menuItemPreferences,
-  // menuItemType,
-  // preference,
-  // rating,
-  // ratingCount,
-  // specialOffer,
-  // updatedAt,
 
   const submitProp = (item: any) => {
-    console.log(item, 'quantity');
-    // setFirstProps(item);
     setAdqunty(item);
   };
+
+  useEffect(() => {
+    calculateTotalAmount();
+  }, [itemQty]);
 
   //add item in addons
   const processAddons = (item: any) => {
@@ -360,17 +338,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
       let addonInitial = buildInitialAddonObject(item);
       adds.push(addonInitial);
     }
-
-    const sum = adds?.map((v) => v?.totalPrice);
-    let newsum = sum.reduce(
-      (sum: any, current: any) => parseInt(sum) + parseInt(current),
-    );
-
-    setAddsTotal(newsum);
-    setPrice(parseInt(newsum) + parseInt(total));
-    setPrice1(parseInt(newsum) + parseInt(total));
-    console.log(newsum, 'newsummmmmssssss');
-    console.log(prices, 'pricesss');
+    calculateTotalAmount();
   };
 
   //remove item from addons
@@ -384,6 +352,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           break;
         }
       }
+      calculateTotalAmount();
       return;
     }
     if (previousItem) {
@@ -392,14 +361,30 @@ const CardItem: FC<IProps> = ({route, menu}) => {
         parseFloat(previousItem['totalPrice']) -
         parseFloat(previousItem.initialPrice);
     }
-    const sum = adds?.map((v) => v?.totalPrice);
-    let newsum = sum.reduce(
-      (sum: any, current: any) => parseInt(sum) + parseInt(current),
-    );
-    console.log(newsum, 'newsummmmmssssss');
-    setAddsTotal(newsum);
-    setPrice(parseInt(newsum) + parseInt(total));
-    setPrice1(parseInt(newsum) + parseInt(total));
+    calculateTotalAmount();
+  };
+
+  const calculateTotalAmount = () => {
+    try {
+      let totalPrefSum = 0;
+      editPre.forEach((val: any) => {
+        totalPrefSum += parseFloat(val.price);
+      });
+
+      let totalAddonSum = 0;
+      adds.forEach((val: any) => {
+        totalAddonSum +=
+          parseFloat(val.initialPrice) * parseFloat(val.quantity);
+      });
+
+      console.log(totalAddonSum, 'addons value');
+      let totalItemAmount =
+        (totalAddonSum + parseFloat(total) + parseFloat(totalPrefSum)) *
+        itemQty;
+      !isNaN(totalItemAmount) && setPrice(totalItemAmount);
+    } catch (error) {
+      console.log('====error====', error);
+    }
   };
 
   const buildInitialAddonObject = (addon: any) => {
@@ -411,7 +396,51 @@ const CardItem: FC<IProps> = ({route, menu}) => {
       totalPrice: addon?.price,
       initialPrice: addon?.price,
       isExtra: addon?.isExtra == true ? true : false,
+      originalQuantity: 1,
     };
+  };
+
+  const buildInitialPreference = (pref: any) => {
+    return {
+      id: pref?.id,
+      name: pref?.name,
+      price: pref?.price,
+    };
+  };
+
+  const processPreference = (item: any) => {
+    if (editPre?.length !== 0) {
+      for (let i = 0; i < editPre.length; i++) {
+        console.log(editPre[i], item, 'editedprffffcomparerrrr====');
+
+        if (editPre[i]?.id !== item?.id) {
+          let addonInitial = buildInitialPreference(item);
+          editPre.push(addonInitial);
+          console.log(editPre, 'editedprffffsss==hhhjg==');
+          calculateTotalAmount();
+
+          break;
+        }
+      }
+    } else {
+      let addonInitial = buildInitialPreference(item);
+      editPre.push(addonInitial);
+      console.log(editPre, 'editedprffffsss====');
+    }
+    calculateTotalAmount();
+  };
+
+  const removePreference = (item: any) => {
+    for (let i = 0; i < editPre.length; i++) {
+      console.log(editPre[i], item, 'editedprffffcomparerrrr====');
+
+      if (editPre[i]?.id === item?.id) {
+        editPre.splice(i, 1);
+        console.log(editPre, item, 'editedprffffssminussss====');
+        // break;
+      }
+    }
+    calculateTotalAmount();
   };
 
   const getSelectedItemFromAddons = (id: any) => {
@@ -431,22 +460,33 @@ const CardItem: FC<IProps> = ({route, menu}) => {
     <View style={{flex: 1}}>
       <ImageBackground
         style={S.sdImage}
-        source={route.params.img || Image_Http_URL}
-      />
+        source={route.params.img || Image_Http_URL}>
+        <View style={{marginLeft: 10}}>
+          <SimpleHeader color={colors.white} />
+        </View>
+      </ImageBackground>
+      <View style={S.sdContainer}>
+        <Text
+          style={{
+            fontSize: 16,
+            fontWeight: 'bold',
+            maxWidth: '70%',
+            fontFamily: 'Montserrat',
+          }}>
+          {menuItem?.MenuItem.itemName}
+        </Text>
+        <PriceTag price={Number(prices)} />
+      </View>
       <ScrollView style={S.sdMain}>
         <View style={S.sdHold}>
-          <View style={S.sdContainer}>
-            <Text>{menuItem?.itemName}</Text>
-            {/* <PriceTag price={prices} /> */}
-          </View>
           <View style={S.sdRating}>
-            <Rating rating={count} />
-            <Icon
+            {/* <Rating rating={count} /> */}
+            {/* <Icon
               name="share-alt"
               type="font-awesome-5"
               color="#000"
               size={18}
-            />
+            /> */}
           </View>
           <DishTypes
             categories={menuItem?.menuItemCategories}
@@ -456,20 +496,16 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           />
           <Text style={S.sdDelivery}>Delivery fee applies</Text>
         </View>
+        <View style={{borderWidth: 1.5, borderColor: colors.t}} />
+
         <OmaCard
           title="Description"
           titleStyle={S.cdDescription}
-          subTitle={menuItem?.description}
+          subTitle={menuItem?.MenuItem.description}
           subStyle={{paddingBottom: 13}}
           mainStyle={{paddingHorizontal: 12}}
         />
-        <Divider />
-        {/* <CollapsibleView
-          itemPreferences={menuItem?.menuItemPreferences}
-          addOns={menuItem?.addons}
-          title="Add-Ons"
-        /> */}
-        <Divider />
+        <View style={{borderWidth: 1.5, borderColor: colors.t}} />
 
         <View style={{paddingHorizontal: 12, width: '100%'}}>
           <Button
@@ -485,11 +521,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           />
           <Collapsible collapsed={!visible} style={{width: '100%'}}>
             <>
-              {console.log(
-                JSON.parse(addon).map((item) => item),
-                '===consolleedddd====',
-              )}
-              {JSON.parse(addon).map((addons: any) => {
+              {JSON.parse(itemQtyAddons)?.map((addons: any) => {
                 return (
                   <TouchableWithoutFeedback
                     onPress={() => {
@@ -497,6 +529,8 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                     }}>
                     <View key={addons?.id}>
                       <Adjust
+                        itemEdit
+                        quantity={addons?.quantity}
                         isAddon
                         itemAddon={addons}
                         processAddons={processAddons}
@@ -508,7 +542,7 @@ const CardItem: FC<IProps> = ({route, menu}) => {
                             ? `Extra ${addons?.name} `
                             : addons?.name
                         }
-                        price={(addons?.totalPrice).toFixed(2)}
+                        price={Number(addons?.totalPrice).toFixed(2)}
                         titleStyle={ss.adjustTitleStyle}
                       />
                     </View>
@@ -519,63 +553,64 @@ const CardItem: FC<IProps> = ({route, menu}) => {
           </Collapsible>
         </View>
 
-        <View style={{paddingHorizontal: 12, width: '100%'}}>
-          <Button
-            type={ButtonType.solid}
-            title={'Preferences'}
-            iconRight={true}
-            iconName={!visible1 ? 'plus' : 'minus'}
-            iconColor="rgba(48, 48, 48, 0.85)"
-            iconSize={16}
-            buttonStyle={ss.buttonStyle}
-            titleStyle={ss.titleStyle}
-            onPress={() => visibility1()}
-          />
-          <Collapsible collapsed={!visible1} style={{width: '100%'}}>
-            <>
-              {menuItem?.menuItemPreferences.map((preference: any) => (
-                <TouchableWithoutFeedback
-                  onPress={() => {
-                    console.log(preference?.Preference?.name, 'preefereeeenn');
-                    JSON.stringify(
-                      Preferences.push(preference?.Preference?.name),
-                    );
-                  }}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                    }}>
-                    <CheckBox
-                      key={preference?.Preference?.id}
-                      title={preference?.Preference?.name}
-                      props={(item: any) => Preferences.push(item)}
-                    />
-                    <Text style={{paddingTop: 20}}>
-                      {preference?.Preference?.unitPrice}
-                    </Text>
-                  </View>
-                </TouchableWithoutFeedback>
-              ))}
-            </>
-          </Collapsible>
-        </View>
-        {/* <CollapsibleView
-          itemPreferences={menuItem?.menuItemPreferences}
-          addOns={menuItem?.addons}
-          title="Preference"
-        /> */}
+        <View style={{borderWidth: 1.5, borderColor: colors.t}} />
 
-        <Divider />
+        {preference?.length !== 0 && (
+          <View style={{paddingHorizontal: 12, width: '100%'}}>
+            <Button
+              type={ButtonType.solid}
+              title={'Preferences'}
+              iconRight={true}
+              iconName={!visible1 ? 'plus' : 'minus'}
+              iconColor="rgba(48, 48, 48, 0.85)"
+              iconSize={16}
+              buttonStyle={ss.buttonStyle}
+              titleStyle={ss.titleStyle}
+              onPress={() => visibility1()}
+            />
+            <Collapsible collapsed={!visible1} style={{width: '100%'}}>
+              <>
+                {preference?.map((preference: any) => (
+                  <TouchableWithoutFeedback
+                    onPress={() => {
+                      // processPreference(preference);
+                    }}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <CheckBox
+                        edit={'edit'}
+                        prefCheck={'pref'}
+                        key={preference?.Preference?.id}
+                        title={preference?.name}
+                        // onPress={() => processPreference(preference)}
+                        preferencAdd={() => processPreference(preference)}
+                        prefRemove={() => removePreference(preference)}
+                      />
+                      <Text style={{paddingTop: 20}}>{preference?.price}</Text>
+                    </View>
+                  </TouchableWithoutFeedback>
+                ))}
+              </>
+            </Collapsible>
+          </View>
+        )}
+
+        <View style={{borderWidth: 1.5, borderColor: colors.t}} />
         <Adjust
+          mainquanty="main"
+          itemEdit
+          edit={eachItem?.quantity}
           props1={(item: any) => getQuantity(item)}
           mainStyle={{paddingVertical: 20}}
           title="Adjust Quantity"
         />
-        <Divider />
+        <View style={{borderWidth: 1.5, borderColor: colors.t}} />
         <OmaCard
           title="Special Instructions"
-          titleStyle={{fontSize: 15}}
+          titleStyle={{fontSize: 15, fontFamily: 'Montserrat'}}
           mainStyle={{paddingHorizontal: 12}}
           otherProps={
             <BaseInput
@@ -586,8 +621,9 @@ const CardItem: FC<IProps> = ({route, menu}) => {
               inputStyle={{textAlignVertical: 'top'}}
               style={{
                 borderRadius: 4,
-                borderColor: 'rgba(48, 48, 48, 0.85)',
-                borderWidth: 1,
+                borderColor: colors.greyShade,
+                borderWidth: 1.5,
+                top: 15,
               }}
             />
           }
@@ -885,19 +921,27 @@ const CardItem: FC<IProps> = ({route, menu}) => {
 
         {cartId != undefined ? (
           <View style={{marginBottom: 20}}>
-            <Button
-              title="Edit"
-              type={ButtonType.solid}
-              containerStyle={{width: '35%', alignSelf: 'center'}}
-              buttonStyle={{backgroundColor: '#303030', paddingVertical: 12}}
-              iconColor="#FFF"
-              iconName="cart-plus"
-              iconSize={18}
-              titleStyle={{color: 'white', marginHorizontal: 20}}
-              onPress={() => {
-                editCart();
-              }}
-            />
+            {loading ? (
+              <ActivityIndicator
+                color="green"
+                size="large"
+                animating={loading}
+              />
+            ) : (
+              <Button
+                title="Edit"
+                type={ButtonType.solid}
+                containerStyle={{width: '35%', alignSelf: 'center'}}
+                buttonStyle={{backgroundColor: '#303030', paddingVertical: 12}}
+                iconColor="#FFF"
+                iconName="cart-plus"
+                iconSize={18}
+                titleStyle={{color: 'white', marginHorizontal: 20}}
+                onPress={() => {
+                  editCart();
+                }}
+              />
+            )}
           </View>
         ) : menuPlan == 'menuPlan' ? (
           <View style={{marginBottom: 20}}>

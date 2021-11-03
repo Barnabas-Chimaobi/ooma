@@ -1,12 +1,16 @@
 import React, {useState} from 'react';
-import {Image, Text, View} from 'react-native';
+import {Image, Text, View, FlatList, Dimensions} from 'react-native';
 import {
+  TouchableHighlight,
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from 'react-native-gesture-handler';
 import MoreAction from '../../MyCart/MoreAction/index';
 import {useNavigation} from '@react-navigation/native';
 import PriceTag from '../../../../components/PriceTag/index';
+import shortid from 'shortid';
+import InnerList from './veryInnerList';
+import {colors} from '../../../../colors';
 
 interface ListDataProps {
   styles: any;
@@ -20,6 +24,10 @@ interface ListDataProps {
   planDetails: any;
   date: any;
   plantime: any;
+  plandiff: any;
+  planName: any;
+  allDetails: any;
+  newBasket: (item: any) => void;
 }
 
 export const List = ({
@@ -34,10 +42,148 @@ export const List = ({
   planDetails,
   date,
   plantime,
+  plandiff,
+  planName,
+  allDetails,
+  newBasket,
 }: ListDataProps) => {
+  // console.log(planDetails, plantime, plandiff, '===planDetailsss===');
+
+  //  const remapp = (Id) => {
+  //    console.log('ASSIGN ID: ', assignmentId);
+  //    const newObject = this.state.CourseId.map((item) => {
+  //      return {
+  //        Id: item.Id,
+  //        instruction1: item.Instructions,
+  //        Text: item.AssignmentinText,
+  //        Url: item.URL,
+  //        Semester: item.Semester,
+  //        DateSet: item.DateSet,
+  //        DueDate: item.DueDate,
+  //        Assignment: item.Assignment,
+  //        CourseName: item.CourseName,
+  //        CourseCode: item.CourseCode,
+  //      };
+  //    });
+
+  //    const {state, setParams, navigate} = this.props.navigation;
+  //    const params = state.params || {};
+
+  //    this.setState({modalVisible: false});
+
+  //    const selectedAsignment = newObject.find((as) => as.Id === assignmentId);
+
+  //    console.log(selectedAsignment, ':ASDDDDDDD');
+  //    this.setState({assignment: selectedAsignment});
+  //    console.log(this.state.assignment, ':ASSIGNMT');
+  //  };
+
+  //   const renderDelete = () => {
+  //     return (
+  //       <View>
+  //         {/* <Text
+  //             style={{
+  //               fontSize: 20,
+  //               color: 'rgba(48, 48, 48, 0.75)',
+  //               paddingBottom: 10,
+  //             }}>
+  //             Scrambled eggs; Almond milk, Rare medium stir fry and Chicken.
+  //           </Text> */}
+  //         <View
+  //           style={{
+  //             flexDirection: 'row',
+  //           }}>
+  //           {/* <MoreAction title="Edit Order" iconName="pen" /> */}
+  //           {/* <MoreAction title="Add Quantity" iconName="signal" count /> */}
+  //           <MoreAction
+  //             cart={basketId}
+  //             params={'deleteBasket'}
+  //             title="Delete"
+  //             iconName="trash"
+  //             color="red"
+  //             del
+  //           />
+  //         </View>
+  //       </View>
+  //     );
+  // }
+
+  const renderItem = ({item, index}) => {
+    // console.log(index, 'indexxxx====');
+    return (
+      <View>
+        <View>
+          <TouchableHighlight
+            style={{zIndex: 200}}
+            underlayColor=""
+            key={item?.itemData?.id}
+            onPress={toggleView}>
+            <View style={styles.itemStyle}>
+              <Image
+                style={{
+                  height: Dimensions.get('window').height / 6.8,
+                  width: Dimensions.get('window').width / 3.8,
+                  borderRadius: 10,
+                }}
+                source={{
+                  uri:
+                    item?.itemData?.MenuPlan?.MenuplanDetail?.MenuItem
+                      ?.imageUrl,
+                }}
+              />
+              <View style={{flexDirection: 'row', width: 180}}>
+                <View style={styles.textViewStyles}>
+                  <Text style={styles.itemNameStyle}>
+                    {
+                      item?.itemData?.MenuPlan?.MenuplanDetail?.MenuItem
+                        ?.itemName
+                    }
+                    <Text></Text>
+                    <Text style={styles.countStyles}>
+                      ({item?.itemData?.quantity}x)
+                    </Text>
+                  </Text>
+
+                  {/* <Text style={styles.priceStyle}>{format(price)}</Text> */}
+                  <Text style={styles.priceStyle}>
+                    {<PriceTag price={format(item?.itemData?.amount)} clear />}
+                  </Text>
+
+                  <Text style={styles.deliveryStyle}>
+                    {item?.itemData?.deliveryAddress}
+                  </Text>
+                </View>
+                <Text style={styles.timeStyle}>
+                  {item?.itemData?.deliveryTime}
+                </Text>
+              </View>
+            </View>
+          </TouchableHighlight>
+        </View>
+
+        <View>
+          <View
+            style={{
+              flexDirection: 'row',
+            }}>
+            <MoreAction
+              cart={basketId}
+              params={'deleteBasket'}
+              title="Delete"
+              iconName="trash"
+              color="red"
+              del
+            />
+          </View>
+        </View>
+      </View>
+    );
+  };
+
   const [toggle, setToggle] = useState(false);
   const toggleView = () => {
     setToggle(!toggle);
+    // console.log('consoleedddd');
   };
 
   const format = (amount: Number) => {
@@ -50,70 +196,109 @@ export const List = ({
   //   planDetails?.map((item) => item?.plantype),
   //   '===planDetailsss===',
   // );
-
-  console.log(planDetails, plantime, '===planDetailsss===');
-
+  let basket = 'basket';
   return (
     <View>
-      <TouchableWithoutFeedback onPress={toggleView}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={{fontSize: 15, marginBottom: 5}}>
-            {new Date(date).toString().substring(0, 15)}
-          </Text>
-          <Text style={{marginRight: 10, fontWeight: 'bold'}}>{time}</Text>
-        </View>
-
-        <View style={styles.itemStyle}>
-          <Image
-            style={{height: 105, width: 105, borderRadius: 10}}
-            source={{uri: imageUrl}}
-          />
-          <View style={{flexDirection: 'row', width: 180}}>
-            <View style={styles.textViewStyles}>
-              <Text style={styles.itemNameStyle}>
-                {itemName}
-                <Text></Text>
-                <Text style={styles.countStyles}>({count}x)</Text>
-              </Text>
-
-              {/* <Text style={styles.priceStyle}>{format(price)}</Text> */}
-              <Text style={styles.priceStyle}>
-                {<PriceTag price={format(price)} clear />}
-              </Text>
-
-              <Text style={styles.deliveryStyle}>{delivery}</Text>
-            </View>
-            <Text style={styles.timeStyle}>{plantime}</Text>
-          </View>
-        </View>
-      </TouchableWithoutFeedback>
-      {toggle && (
-        <View>
-          {/* <Text
-            style={{
-              fontSize: 20,
-              color: 'rgba(48, 48, 48, 0.75)',
-              paddingBottom: 10,
-            }}>
-            Scrambled eggs; Almond milk, Rare medium stir fry and Chicken.
-          </Text> */}
-          <View
-            style={{
-              flexDirection: 'row',
-            }}>
-            {/* <MoreAction title="Edit Order" iconName="pen" /> */}
-            {/* <MoreAction title="Add Quantity" iconName="signal" count /> */}
-            <MoreAction
-              cart={basketId}
-              params={'deleteBasket'}
-              title="Delete"
-              iconName="trash"
-              color="red"
-              del
+      <View
+        style={{borderBottomWidth: 1, borderColor: colors.inactiveTintColor}}>
+        <Text style={{fontSize: 15, marginBottom: 5}}>
+          {new Date(date).toString().substring(0, 15)}
+        </Text>
+      </View>
+      {planDetails?.map((item: any) => {
+        return (
+          <View>
+            <Text
+              style={{
+                marginRight: 10,
+                fontWeight: 'bold',
+                alignSelf: 'flex-end',
+                marginBottom: 10,
+              }}>
+              {item?.planType}
+            </Text>
+            <FlatList
+              data={item?.data}
+              style={styles.listStyle}
+              renderItem={({item, index}) => {
+                // console.log(item, 'itemmm======sssss==');
+                return plandiff === 'plan' ? (
+                  <View>
+                    <InnerList
+                      // plantime={planName}
+                      // date={item?.deliveryDate}
+                      // planDetails={item?.data}
+                      styles={styles}
+                      imageUrl={
+                        item?.itemData?.orderInfo?.MenuPlanDetail?.MenuItem
+                          ?.imageUrl
+                      }
+                      itemName={
+                        item?.itemData?.orderInfo?.MenuPlanDetail?.MenuItem
+                          ?.itemName
+                      }
+                      price={item?.itemData?.orderInfo?.amount}
+                      delivery={item?.itemData?.orderInfo?.deliveryAddress}
+                      count={item?.itemData?.orderInfo?.quantity}
+                      time={item?.itemData?.orderInfo?.deliveryTime}
+                      basketId={item?.itemData?.orderInfo?.basketid}
+                      option={item?.itemData?.orderInfo?.deliveryOption}
+                      details={item}
+                      showDelete={'true'}
+                    />
+                  </View>
+                ) : (
+                  <InnerList
+                    // plantime={item?.MenuPlan?.MenuplanDetail?.deliveryTime}
+                    // date={item?.deliveryDate}
+                    // planDetails={item?.data}
+                    styles={styles}
+                    imageUrl={
+                      item?.itemData?.MenuPlan?.MenuplanDetail?.MenuItem
+                        ?.imageUrl
+                    }
+                    itemName={
+                      item?.itemData?.MenuPlan?.MenuplanDetail?.MenuItem
+                        ?.itemName
+                    }
+                    price={item?.itemData?.amount}
+                    delivery={item?.itemData?.deliveryAddress}
+                    count={item?.itemData?.quantity}
+                    time={item?.itemData?.deliveryTime}
+                    basketId={item?.itemData?.id}
+                    details={item}
+                    option={item?.itemData?.deliveryOption}
+                    diffParams={basket}
+                    getNewbasket={(item) => newBasket(item)}
+                  />
+                );
+              }}
+              pagingEnabled
+              keyExtractor={() => shortid.generate()}
             />
+            {/* {toggle && (
+              <View>
+              
+                <View
+                  style={{
+                    flexDirection: 'row',
+                  }}>
+                  <MoreAction title="Edit Order" iconName="pen" />
+                  <MoreAction title="Add Quantity" iconName="signal" count />
+                  <MoreAction
+                    cart={basketId}
+                    params={'deleteBasket'}
+                    title="Delete"
+                    iconName="trash"
+                    color="red"
+                    del
+                  />
+                </View>
+              </View>
+            )} */}
           </View>
-        </View>
-      )}
+        );
+      })}
     </View>
   );
 };

@@ -1,5 +1,5 @@
 import React, {FC, useState, useEffect} from 'react';
-import {View, Image, Text, TouchableOpacity} from 'react-native';
+import {View, Image, Text, TouchableOpacity, Dimensions} from 'react-native';
 import {PriceTag} from '../../../../components';
 import MoreAction from '../MoreAction';
 import {useNavigation} from '@react-navigation/native';
@@ -17,6 +17,7 @@ interface IProps {
   cartId: string;
   item: any;
   addons: any;
+  newMenu: (item: any) => void;
 }
 
 const Card: FC<IProps> = ({
@@ -31,6 +32,7 @@ const Card: FC<IProps> = ({
   cartId,
   item,
   addons,
+  newMenu,
 }) => {
   const [state, setState] = useState({toggle: false});
   const [qunt, setQunt] = useState(quantity);
@@ -39,11 +41,15 @@ const Card: FC<IProps> = ({
   useEffect(() => {
     // console.log(price++, 'pricess');
     console.log(cartId, 'itemidddddddssss');
-    // console.log(title, 'itemidddddddssss');
+    console.log(addons, 'itemidddddddssss=====');
   });
 
   const toggleView = () => {
     setState({...state, toggle: !state.toggle});
+  };
+
+  const getNew = (item: any) => {
+    newMenu(item);
   };
 
   return (
@@ -52,6 +58,8 @@ const Card: FC<IProps> = ({
         width: '95%',
         marginVertical: 10,
         alignSelf: 'center',
+        flex: 1,
+        // bottom: 50,
       }}>
       <TouchableOpacity onPress={toggleView}>
         <View
@@ -64,17 +72,22 @@ const Card: FC<IProps> = ({
           }}>
           <Image
             style={{
-              height: 63,
-              width: 74,
+              height: Dimensions.get('window').height / 6.8,
+              width: Dimensions.get('window').width / 3.8,
               backgroundColor: 'transparent',
-              borderRadius: 2,
+              borderRadius: 5,
               borderColor: 'transparent',
             }}
             source={{uri: image}}
           />
           <View style={{width: '70%', paddingLeft: 20}}>
             <Text
-              style={{fontFamily: 'Roboto', fontWeight: 'bold', fontSize: 16}}>
+              style={{
+                fontFamily: 'Roboto',
+                fontWeight: 'bold',
+                fontSize: 16,
+                width: '80%',
+              }}>
               {title}
             </Text>
             <Text
@@ -88,13 +101,40 @@ const Card: FC<IProps> = ({
               }}>
               {`(${qunt}x)`}
             </Text>
-            <PriceTag price={price} clear={true} />
+            <View style={{marginRight: '65%', top: 25}}>
+              <PriceTag price={Number(price)} clear={true} />
+            </View>
           </View>
         </View>
       </TouchableOpacity>
       {state.toggle && (
         <View style={{marginTop: 10}}>
-          <Text style={{marginVertical: 10}}>{description}</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              maxWidth: '100%',
+              flexWrap: 'wrap',
+              bottom: 10,
+              left: 10,
+            }}>
+            {JSON.parse(addons)?.map((item: any) => {
+              console.log(item, 'item===addonssss=======');
+              return (
+                <View>
+                  <Text></Text>
+                  <Text
+                    style={{
+                      fontFamily: 'Roboto',
+                      marginRight: 5,
+                    }}>
+                    {item?.name}({item?.quantity}x);
+                  </Text>
+                </View>
+              );
+            })}
+          </View>
+
+          {/* <Text style={{marginVertical: 10}}>{description}</Text> */}
           <View
             style={{
               flexDirection: 'row',
@@ -109,6 +149,7 @@ const Card: FC<IProps> = ({
             />
             {/* <MoreAction title="Add Quantity" iconName="signal" count /> */}
             <MoreAction
+              gottenNewCart={(item) => getNew(item)}
               cart={cartId}
               editItems={item}
               title="Delete"

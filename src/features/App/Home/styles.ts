@@ -4,23 +4,28 @@ import {colors} from '../../../colors';
 export default StyleSheet.create({
   main: {
     flex: 1,
+    marginTop: -10,
+    backgroundColor: colors.white
   },
   header: {
     backgroundColor: colors.white,
-    borderBottomWidth: 2,
-    borderBottomColor: colors.lightGrey,
-    paddingBottom: 12,
+    // borderBottomWidth: 2,
+    // borderBottomColor: colors.lightGrey,
+    // paddingBottom: 12,
+    flex: 1,
+    zIndex: 5
   },
   logoBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginHorizontal: 15,
-    marginTop: 20,
+    marginHorizontal: 5,
+    marginTop: 10,
     alignItems: 'center',
   },
   notificationBar: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginRight: 10
   },
   activenotifications: {
     position: 'relative',
@@ -28,24 +33,43 @@ export default StyleSheet.create({
     right: 10,
     zIndex: 10,
   },
+   activeFilter: {
+    position: 'relative',
+    bottom: -6,
+    left: 15,
+    zIndex: 10,
+  },
   locationBar: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     marginHorizontal: 15,
-    marginTop: 35,
+    marginTop: 15,
+    backgroundColor: '#F6F6F6',
+    borderRadius: 5,
+    // height: 120,
+    borderColor: '#F6F6F6',
+    // borderWidth: 1,
+    paddingTop: 10,
+    elevation: 10,
+    marginBottom: 5
+    
+    // paddingBottom: 15
   },
   categoryTitle: {
     fontFamily: 'Montserrat',
     fontSize: 20,
-    margin: 10,
+    marginTop: 15,
     fontWeight: 'bold',
     marginStart: 10,
+    marginBottom: -25,
+
   },
   categorySubtitle: {
-    fontFamily: 'Roboto',
+    fontFamily: 'Montserrat',
     fontSize: 12,
-    marginBottom: 13,
+    top: 7,
+    marginBottom: 7,
     marginStart: 10,
     marginEnd: 25,
     color: colors.blackGrey,
@@ -78,8 +102,8 @@ export default StyleSheet.create({
   },
   viewAllStyle: {
     textAlign: 'right',
-    padding: 10,
-    paddingTop: -20,
+    padding: 23,
+    // paddingTop: -20,
     fontSize: 11,
     color: colors.blackGrey,
   },
@@ -88,5 +112,32 @@ export default StyleSheet.create({
     marginVertical: 2,
     paddingBottom: 5,
     marginStart: 5
+  },
+    textStyle: {
+    fontWeight: 'normal',
+    marginLeft: 30,
+  },
+  activeTextStyle: {
+    fontWeight: 'bold',
+  },
+  containerStyle: {
+    backgroundColor: 'white',
+    borderWidth: 0,
+    borderRadius: 5
+  },
+  titleStyle: {
+    fontSize: 18,
+    padding: 15,
+    fontWeight: 'bold',
+  },
+  buttonStyle: {
+    width: '90%',
+    alignSelf: 'center',
+  },
+    footer: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    // backgroundColor: '#ffffff',
   },
 });

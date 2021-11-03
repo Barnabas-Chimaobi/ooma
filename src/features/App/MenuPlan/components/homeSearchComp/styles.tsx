@@ -7,8 +7,11 @@ export const styles = StyleSheet.create({
     marginBottom: -220,
   },
   indicatorStyle: {
-    backgroundColor: 'black',
+    backgroundColor: 'green',
     height: 7,
+    borderRadius: 5,
+    width: 80,
+    marginLeft: 40,
   },
   tabBar: {
     // display: "flex",
@@ -29,5 +32,8 @@ export const styles = StyleSheet.create({
     height: 40,
     textAlign: 'center',
     alignItems: 'center',
+  },
+  active: {
+    color: 'green',
   },
 });

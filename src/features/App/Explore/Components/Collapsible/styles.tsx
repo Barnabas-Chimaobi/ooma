@@ -10,11 +10,13 @@ export default StyleSheet.create({
   },
   titleStyle: {
     color: 'black',
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     fontSize: 15.5,
+    fontFamily: 'Montserrat',
   },
   adjustTitleStyle: {
     fontWeight: 'normal',
-    width: '30%',
+    width: '35%',
+    fontFamily: 'Roboto',
   },
 });

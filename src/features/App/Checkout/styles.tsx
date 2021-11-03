@@ -3,6 +3,8 @@ import {StyleSheet} from 'react-native';
 export default StyleSheet.create({
   main: {
     flex: 1,
+    height: '100%',
+    marginBottom: 90,
   },
   header: {
     padding: 12,
@@ -37,7 +39,11 @@ export default StyleSheet.create({
     alignSelf: 'center',
   },
   footerStyle: {
-    backgroundColor: 'white',
-    paddingVertical: 50,
+    // backgroundColor: 'white',
+    // paddingVertical: 50,
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 20,
   },
 });

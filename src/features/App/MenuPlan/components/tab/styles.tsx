@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { colors } from '../../../../../colors/index'
+import {StyleSheet} from 'react-native';
+import {colors} from '../../../../../colors/index';
 export const styles = StyleSheet.create({
   scene: {
     // flex: 1,
@@ -10,20 +10,20 @@ export const styles = StyleSheet.create({
     paddingLeft: 15,
     justifyContent: 'center',
     alignItems: 'center',
-},
+  },
 
-tabStyle: {
+  tabStyle: {
     borderBottomColor: 'grey',
     borderBottomWidth: 15,
     elevation: 45,
-},
+  },
 
-activeTabStyle: {
+  activeTabStyle: {
     backgroundColor: colors.lightGrey,
-    borderBottomColor:colors.lightGrey,
+    borderBottomColor: colors.lightGrey,
     borderBottomWidth: 5,
-    borderWidth: 0
-},
+    borderWidth: 0,
+  },
   indicatorStyle: {
     backgroundColor: 'white',
   },
@@ -64,7 +64,7 @@ activeTabStyle: {
   btn: {
     height: 40,
     width: 150,
-    backgroundColor: '#303030',
+    // backgroundColor: '#303030',
     marginTop: 20,
     borderRadius: 5,
     justifyContent: 'center',
@@ -76,9 +76,16 @@ activeTabStyle: {
     letterSpacing: 1,
   },
   noData: {
-    justifyContent: 'center',
     width: '100%',
     alignItems: 'center',
-    flexDirection: 'column',
+    flex: 1,
+  },
+  headerText: {
+    color: 'black',
+    backgroundColor: colors.grey,
+    padding: 5,
+    // paddingLeft: 10,
+    // paddingRight: 10,
+    borderRadius: 50,
   },
 });

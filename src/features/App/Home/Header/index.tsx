@@ -1,5 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  TouchableHighlight,
+  ScrollView,
+  RefreshControl,
+} from 'react-native';
 import {Avatar} from 'react-native-elements';
 import {useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
@@ -13,6 +22,11 @@ import {
   clock,
   filter,
   user,
+  oomaNotify,
+  profilePics,
+  pointDown,
+  nologo,
+  oomaNew,
 } from '../../../../assets';
 import S from '../styles';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -30,25 +44,30 @@ import {
   SearchMenuItemAndMenuPlan,
   GetAllMenuPlanCategory,
   getMenuPlansByBranch,
+  getMenuitemCart,
 } from '../../../../FetchData';
 import {getMenuItems} from '../../../../reducers/MenuItems';
 import {getSpecialOffer} from '../../../../reducers/SpecialOffer';
 import {getNewItem} from '../../../../reducers/NewMenuItem';
 import {getPopularItem} from '../../../../reducers/PopularItem';
 import {getMenuItemsForYou} from '../../../../reducers/MoreForYouMenu';
-import {getMenuItemsPlanForYou} from '../../../../reducers/MenuPlansForYou';
 import {getGlutenMenuItems} from '../../../../reducers/GlutenFreeMenu';
 import {getDrinkMenuItems} from '../../../../reducers/DrinkMenu';
 import {getBreakFastMenuItems} from '../../../../reducers/BreakFastMenu';
 import {useMenuItemCategory} from '../../../../reducers/ItemCategory';
 import {useMenuPlanCategory} from '../../../../reducers/MenuPlanCategory';
 import {getMenuItemsHistory} from '../../../../reducers/HistoryMenu';
+import {getMenuItemsPlanForYou} from '../../../../reducers/MenuPlansForYou';
 import {AppDispatch} from '../../../../store';
+import {cartStates} from '../../../../reducers/cart';
+import {getFindPlan} from '../../../../reducers/findPlan';
+import {SortCart} from '../../../../Utils/sortCart';
 interface Props {
   closeModal: () => void;
+  props1: () => void;
 }
 
-export default function Header() {
+export default function Header({props1}) {
   const [showModal, setShowModal] = useState(false);
   const navigation = useNavigation();
   const [state, setState] = useState({country: ''});
@@ -59,61 +78,93 @@ export default function Header() {
   const [asyncBranchId, setAsyncBranchId] = useState('');
   const [bName, setBname] = useState('');
   const [rName, setRname] = useState('');
+  const [branch, setBranch] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
   const dispatch: AppDispatch = useDispatch();
 
-  // const handleGetRegion = async () => {
-  //   const allRegion = await getRegion();
-  //   if (allRegion) {
-  //     setModalData(allRegion);
-  //   }
+  // const handleRefresh = () => {
+  //   props1();
   // };
 
-  const handleGetBranches = async (regionId: number) => {
-    const allBranches = await getBranches(regionId);
+  const handleGetBranches = async () => {
+    const regionIds = await AsyncStorage.getItem('regionId');
+    const allBranches = await getBranches(regionIds);
+    // console.log(allBranches, '====alllbranchesss=====');
+
     if (allBranches) {
+      // console.log(allBranches, '====alllbranchesss=====');
       setModalData2(allBranches);
+      setModalData(allBranches);
     }
   };
 
+  const anyBranch = async () => {
+    const branch = await AsyncStorage.getItem('branchId');
+    const newbranch = JSON.parse(branch);
+    setBranch(newbranch);
+  };
+
+  const cart = async () => {
+    const branch = await AsyncStorage.getItem('branchId');
+    const newbranch = JSON.parse(branch);
+    const userId = await AsyncStorage.getItem('userId');
+    console.log(userId, 'useriddd');
+    // const gottenId = JSON.parse(userId);
+
+    try {
+      // console.log(newsum, 'cartttttt');
+
+      const menuICart = await getMenuitemCart(newbranch, userId);
+      SortCart(menuICart?.items);
+      await dispatch(cartStates(menuICart?.items));
+    } catch (error) {}
+  };
+
   useEffect(() => {
-    const checkBranch = async () => {
-      if (await AsyncStorage.getItem('branchId')) {
-        const branchId = await AsyncStorage.getItem('branchId');
-        branchId && getAllMenuItems(branchId, 1);
-        // setShowModal(false);
-      }
-    };
-    console.log('connssssoollleedddd');
+    cart();
+    anyBranch();
+    handleGetBranches();
+    // const checkBranch = async () => {
+    //   if (await AsyncStorage.getItem('branchId')) {
+    //     const branchId = await AsyncStorage.getItem('branchId');
+    //     branchId && getAllMenuItems(branchId, 1);
+    //     // setShowModal(false);
+    //   }
+    // };
+    // console.log('connssssoollleedddd');
     const handleData = async () => {
-      const branchId = await AsyncStorage.getItem('branchId');
-      const regionIds = await AsyncStorage.getItem('regionId');
+      const branch = await AsyncStorage.getItem('branchId');
+      const newbranch = JSON.parse(branch);
+      // setBranch(newbranch);
+      // const branchId = await AsyncStorage.getItem('branchId');
+      // const regionIds = await AsyncStorage.getItem('regionId');
       const regionName = await AsyncStorage.getItem('regionName');
       const branchName = await AsyncStorage.getItem('branchName');
 
       setBname(branchName);
       setRname(regionName);
-      console.log(regionName, branchName, 'regionbranch');
+      // console.log(regionName, branchName, 'regionbranch');
 
-      setRegionId(Number(regionIds));
-      setAsyncBranchId(String(branchId));
-      if (Number(regionIds) === 0) {
-        // handleGetRegion();
-        // setShowModal(!showModal);
-      } else if (branchId != null) {
-        // setShowModal(showModal);
-        // showBranches(Number(regionIds));
-      } else {
-        setRegionId(Number(regionIds));
-        showBranches(Number(regionIds));
-      }
+      // setRegionId(Number(regionIds));
+      // setAsyncBranchId(String(branchId));
+      // if (Number(regionIds) === 0) {
+      //   // handleGetRegion();
+      //   // setShowModal(!showModal);
+      // } else if (branchId != null) {
+      //   // setShowModal(showModal);
+      //   // showBranches(Number(regionIds));
+      // } else {
+      //   setRegionId(Number(regionIds));
+      //   showBranches(Number(regionIds));
+      // }
 
-      if (branchId != null) {
-        getAllMenuItems(asyncBranchId, 1);
-      }
+      // if (branch != null) {
+      getAllMenuItems(newbranch, 1);
+      // }
     };
 
     handleData();
-    checkBranch();
+    // checkBranch();
   }, []);
 
   // useEffect(() => {
@@ -155,11 +206,23 @@ export default function Header() {
   //   return newMenuItems
   // }
 
+  const getMenuPlanCategory = async (branchID: string) => {
+    const planCategories = await GetAllMenuPlanCategory(branchID);
+    dispatch(useMenuPlanCategory(planCategories));
+    // console.log(planCategories, '====plancategory==========' + branchID);
+  };
+
+  const getMenuPlansForYouCategory = async (branchID: string, page: number) => {
+    const menuItem = await getMenuPlansByBranch(branchID, page);
+    console.log(menuItem, 'menuplanforyouuuuu');
+    dispatch(getMenuItemsPlanForYou(menuItem));
+    dispatch(getFindPlan(menuItem));
+  };
+
   const getMenuItem = async (branchID: string, page: number) => {
     const menuItem = await getMenuItemsByBranch(branchID, page);
-
     dispatch(getMenuItems(menuItem));
-    console.log(menuItem?.data?.item, 'newmenuitemmmmsss');
+    // console.log(menuItem, 'newmenuitemmmmsss=========================');
   };
   const getSpecial = async (branchID: string, page: number) => {
     const specialOffer = await getMenuItemsSpecialOffer(branchID, page);
@@ -180,12 +243,6 @@ export default function Header() {
     dispatch(getNewItem(newMenuItems));
   };
 
-  const getMenuPlansForYouCategory = async (branchID: string, page: number) => {
-    const menuItem = await getMenuPlansByBranch(branchID, page);
-    console.log(menuItem, 'menuplanforyouuuuu');
-    dispatch(getMenuItemsPlanForYou(menuItem));
-  };
-
   const getGlutenCategory = async (branchID: number, page: number) => {
     const menuItem = await SearchMenuItemByCategoryId(branchID, page);
 
@@ -195,7 +252,7 @@ export default function Header() {
   const getDrinkCategory = async (branchID: number, page: number) => {
     const menuItem = await SearchMenuItemByCategoryId(branchID, page);
 
-    console.log(menuItem, 'drinks');
+    // console.log(menuItem, 'drinks');
     dispatch(getDrinkMenuItems(menuItem?.data?.items));
   };
 
@@ -209,32 +266,32 @@ export default function Header() {
     const menuItem = await SearchMenuItemByCategoryId(branchID, page);
   };
 
-  const getMenuPlanCategory = async (branchID: string) => {
-    const planCategories = await GetAllMenuPlanCategory(branchID);
-    dispatch(useMenuPlanCategory(planCategories));
-    console.log(planCategories, '====plancategory==========' + branchID);
-  };
-
   const getAllMenuItems = async (branchID: string, page: number) => {
-    getMenuPlansForYouCategory('82059935-89dc-4daf-aff3-adcf997d6859', page);
+    getMenuPlanCategory(branchID);
+    getMenuPlansForYouCategory(branchID, page);
     getMenuItem(branchID, page);
     getNew(branchID, page);
     getPopular(branchID, page);
     getSpecial(branchID, page);
-    const allCategory = await GetAllMenuItemCategory(branchId);
+    const allCategory = await GetAllMenuItemCategory(branchID);
+    console.log(allCategory, 'alllcategoryyyyyyy=====================');
     dispatch(useMenuItemCategory(allCategory));
     let shuffled = allCategory
-      .map((a: any) => ({sort: Math.random(), value: a}))
-      .sort((a: any, b: any) => a.sort - b.sort)
-      .map((a: any) => a.value.id);
-    console.log(shuffled, 'shuffleddd');
+      ?.map((a: any) => ({sort: Math.random(), value: a}))
+      ?.sort((a: any, b: any) => a.sort - b.sort)
+      ?.map((a: any) => a.value.id);
+    console.log(shuffled[0], 'shuffleddd');
     // const moreForYou = await SearchMenuItemByCategoryId(shuffled[1], page);
     if (allCategory != null) {
       getGlutenCategory(shuffled[0], page);
       getBreakFastCategory(shuffled[1], page);
       getDrinkCategory(shuffled[2], page);
     }
-    getMenuPlanCategory(branchID);
+    // getMenuPlanCategory(branchID);
+  };
+
+  const onRefresh = () => {
+    setRefreshing(true);
   };
 
   const Drop = ({closeModal}: Props) => {
@@ -281,33 +338,57 @@ export default function Header() {
 
   return (
     <View style={S.header}>
-      <View style={S.logoBar}>
-        <Logo logoStyle={{width: 150, height: 50, marginLeft: -12}} />
-        <View style={S.notificationBar}>
-          <Image source={notification} style={{height: 22, width: 22}} />
-          <Image source={active} style={S.activenotifications} />
-          <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-            <Avatar size="small" rounded source={user} />
-          </TouchableOpacity>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            style={{zIndex: 5}}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }>
+        <View style={S.logoBar}>
+          <Logo logoStyle={{width: 35, height: 35, marginLeft: 8}} />
+          <View style={S.notificationBar}>
+            {/* <Image source={oomaNotify} style={{height: 20, width: 20}} /> */}
+            {/* <Image source={active} style={S.activenotifications} /> */}
+            <TouchableOpacity
+              style={{marginLeft: 10}}
+              onPress={() => navigation.navigate('Profile')}>
+              <Avatar
+                size="small"
+                rounded
+                source={user}
+                iconStyle={{width: 30, height: 30}}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-      <View style={S.locationBar}>
-        <HeaderBar
-          onPressImg={() => setShowModal(!showModal)}
-          image1={direction}
-          title={`${bName}, ${rName}`}
-          image2={clock}
-          otherTitle="Set Time"
-        />
-        <TouchableOpacity>
-          <Image source={filter} style={{height: 20, width: 20}} />
-        </TouchableOpacity>
-        <Modal
-          isVisible={showModal}
-          child={<Drop closeModal={() => setShowModal(!showModal)} />}
-          onBackdropPress={() => setShowModal(!showModal)}
-        />
-      </View>
+        <View style={S.locationBar}>
+          <HeaderBar
+            onPressImg={() =>
+              navigation.navigate('Branch', {branch: 'changeBranch'})
+            }
+            image1={pointDown}
+            title={`${bName}`}
+            image2={clock}
+            otherTitle="Set Time"
+          />
+          <TouchableHighlight
+            underlayColor=""
+            onPress={() => navigation.navigate('Filter')}>
+            <View
+              style={{width: 60, height: 60, marginRight: -20, marginTop: 10}}>
+              <Image source={active} style={S.activeFilter} />
+              <Image source={filter} style={{height: 20, width: 20}} />
+            </View>
+          </TouchableHighlight>
+          <Modal
+            isVisible={showModal}
+            child={<Drop closeModal={() => setShowModal(!showModal)} />}
+            onBackdropPress={() => setShowModal(!showModal)}
+          />
+        </View>
+      </ScrollView>
     </View>
   );
 }

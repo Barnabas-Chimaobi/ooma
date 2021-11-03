@@ -32,6 +32,9 @@ import menuItemByCategorySlice, {
 } from './MenuItemByCategory';
 import cartSlice, {cartStates} from './cart';
 import basketSlice, {basketStates} from './basket';
+import planSlice, {planStates} from './planlist';
+import findPlanSlice, {getFindPlan} from './findPlan';
+import itemOrderSlice, {itemOrderStates} from './menuItemOrder';
 
 export {
   authSlice,
@@ -80,4 +83,10 @@ export {
   useMenuPlanCategory,
   basketSlice,
   basketStates,
+  planSlice,
+  planStates,
+  itemOrderSlice,
+  itemOrderStates,
+  findPlanSlice,
+  getFindPlan,
 };

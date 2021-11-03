@@ -29,15 +29,23 @@ import {
 export default function Branch() {
   const [branch, setBranch] = useState();
   const [loader, setLoader] = useState(false);
+  const [newToken, setNewToken] = useState();
   const navigation = useNavigation();
   const route = useRoute();
   const params = route.params;
 
   const handleGetBranch = async () => {
-    const allRegion = await getBranches(params?.id);
+    const regionId = await AsyncStorage.getItem('regionId');
+    const token = await AsyncStorage.getItem('token');
+    // const parseToken = JSON.parse(token);
+    setNewToken(token);
+    const parseId = JSON.parse(regionId);
+    console.log(regionId, '=====regioniddd=====');
+    const allRegion = await getBranches(params?.id || parseId);
     if (allRegion) {
       setBranch(allRegion);
     }
+    console.log(allRegion, 'alllregions====');
   };
 
   useEffect(() => {
@@ -46,21 +54,22 @@ export default function Branch() {
 
   const gotoHome = async (branchId: any) => {
     setLoader(true);
-    await AsyncStorage.setItem('token', params?.token);
+
+    await AsyncStorage.setItem('token', params?.token || newToken);
     await AsyncStorage.setItem('branchId', JSON.stringify(branchId));
-    navigation.navigate('BottomNavigator');
+    navigation.navigate('Home');
     setLoader(false);
   };
 
   const renderItem = (item: any) => {
-    // console.log(item.item.name, 'itemssssss');
+    console.log(item.item.name, 'itemssssss');
     return (
       <View style={{marginLeft: 10, marginTop: 20}}>
         <TouchableHighlight
           activeOpacity={1}
           underlayColor="rgba(255, 255, 255, 0.3)"
           onPress={() => {
-            AsyncStorage.setItem('branchName', item?.item?.address),
+            AsyncStorage.setItem('branchName', item?.item?.name),
               gotoHome(item?.item?.id);
           }}>
           <View>
@@ -72,7 +81,7 @@ export default function Branch() {
                 <Image source={pin} style={{height: 20, width: 20}} />
               </View>
               <Text style={{fontSize: 14, color: '#000', marginLeft: 10}}>
-                {item?.item?.address}
+                {item?.item?.name}
               </Text>
             </View>
 
@@ -103,15 +112,25 @@ export default function Branch() {
           height: 50,
           paddingTop: 25,
         }}>
-        <TouchableHighlight
-          activeOpacity={1}
-          underlayColor="rgba(255, 255, 255, 0.3)"
-          onPress={() => navigation.navigate('Region')}>
-          <View style={{marginLeft: 10}}>
-            <Image source={arrow} style={{height: 10, width: 20}} />
-          </View>
-        </TouchableHighlight>
-        <Text style={{marginLeft: '30%', fontWeight: 'bold'}}>
+        {params?.branch !== 'changeBranch' ? (
+          <TouchableHighlight
+            activeOpacity={1}
+            underlayColor="rgba(255, 255, 255, 0.3)"
+            onPress={() => navigation.navigate('Region')}>
+            <View style={{marginLeft: 10}}>
+              <Image source={arrow} style={{height: 10, width: 20}} />
+            </View>
+          </TouchableHighlight>
+        ) : null}
+
+        <Text
+          style={{
+            marginLeft: '30%',
+            fontWeight: '900',
+            fontSize: 15,
+            bottom: 5,
+            fontFamily: 'Roboto',
+          }}>
           Select Branch
         </Text>
       </View>

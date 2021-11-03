@@ -32,7 +32,12 @@ export default function region() {
   }, []);
 
   const getBranch = (regionId: any) => {
-    navigation.navigate('Branch', {id: regionId, token: params?.newToken});
+    AsyncStorage.setItem('regionId', JSON.stringify(regionId)),
+      AsyncStorage.setItem('token', JSON.stringify(params?.newToken));
+    navigation.navigate('Branch', {
+      id: regionId,
+      token: params?.newToken,
+    });
   };
 
   const renderItem = (item: any) => {
@@ -44,6 +49,7 @@ export default function region() {
           underlayColor="rgba(255, 255, 255, 0.3)"
           onPress={() => {
             AsyncStorage.setItem('regionName', item?.item?.city),
+              AsyncStorage.setItem('regionId', JSON.stringify(item?.item?.id)),
               getBranch(item?.item?.id);
           }}>
           <View>
@@ -88,7 +94,14 @@ export default function region() {
             <Image source={arrow} style={{height: 10, width: 20}} />
           </View>
         </TouchableHighlight>
-        <Text style={{marginLeft: '30%', fontWeight: 'bold'}}>
+        <Text
+          style={{
+            marginLeft: '30%',
+            fontWeight: '900',
+            fontSize: 15,
+            bottom: 5,
+            fontFamily: 'Roboto',
+          }}>
           Select Region
         </Text>
       </View>

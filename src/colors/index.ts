@@ -1,3 +1,5 @@
+import { newCheck } from "../assets";
+
 export const colors = {
   primary: '#05944F',
   lightGreen: 'rgba(5, 148, 79, 0.12)',
@@ -26,14 +28,22 @@ export const colors = {
   h: 'rgba(11, 102, 35, 0.85)',
   offWhite: 'rgba(255, 255, 255, 0.9)',
   elevationColor: 'rgba(0, 0, 0, 0.25)',
-  grey: 'rgba(48, 48, 48, 0.3)',
+  grey: '#F6F6F6',
   t: '#F1F1F1',
   b: '#C8C8C8',
-  green: '#0B6623',
+  green: '#05944F',
   k1: '#F6F6F6',
   b3: '#BF0002',
   b4: '#0753AB',
   b5: '#4C5B52',
   b6: '#5E5E5E',
   b7: '',
+  nColor1: '#909973',
+  nColor2: '#494949',
+  start: '#05944F',
+  mainbg: '#E5E5E5',
+  nColor3: '#909973',
+  activeTintColor: '#26C867',
+  inactiveTintColor: '#C4C4C4',
+  logout: '#232222'
 };

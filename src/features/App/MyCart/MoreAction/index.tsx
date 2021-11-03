@@ -1,16 +1,17 @@
 import React, {FC, useState} from 'react';
-import {View, Text, TouchableOpacity, Alert} from 'react-native';
+import {View, Text, TouchableOpacity, ActivityIndicator} from 'react-native';
 import {Icon} from 'react-native-elements';
 import {useNavigation} from '@react-navigation/native';
 import {styles} from './styles';
 import api from '../../../../api';
-import {ShowMessage, type} from '../../../../components';
+import {ShowMessage, type, Alert} from '../../../../components';
 import {getMenuPlanCart, getMenuitemCart} from '../../../../FetchData';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
 import {basketStates} from '../../../../reducers/basket';
 import {cartStates} from '../../../../reducers/cart';
 import {AppDispatch, RootState} from '../../../../store';
+import {SortCart} from '../../../../Utils/sortCart';
 
 interface IProps {
   title: string;
@@ -23,7 +24,10 @@ interface IProps {
   cart?: any;
   editItems: any;
   params: any;
-  addons;
+  addons: any;
+  details: any;
+  basket: any;
+  gottenNewCart?: (item: any) => void;
 }
 
 const MoreAction: FC<IProps> = ({
@@ -38,22 +42,29 @@ const MoreAction: FC<IProps> = ({
   editItems,
   params,
   addons,
+  details,
+  basket,
+  gottenNewCart,
 }) => {
   const [isCounter, setIsCounter] = useState(false);
   const [countValue, setCountValue] = useState(0);
+  const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
   const dispatch: AppDispatch = useDispatch();
 
-  console.log(id, cart, editItems, 'idforeditttttt');
+  // console.log(id, cart, editItems, 'idforeditttttt');
 
   const getBasket = async () => {
     // const getMenuplanKart = async () => {
     const userId = await AsyncStorage.getItem('userId');
+    const branch = await AsyncStorage.getItem('branchId');
+    const newbranch = JSON.parse(branch);
     console.log(userId, 'useriddd');
 
-    const menuplanscart = await getMenuPlanCart(userId);
+    const menuplanscart = await getMenuPlanCart(userId, newbranch);
+    gottenNewCart(menuplanscart?.items);
     dispatch(basketStates(menuplanscart?.items));
-    console.log(menuplanscart, '=======planscarttttttt=========');
+    // console.log(menuplanscart, '=======planscarttttttt=========');
     const all = menuplanscart?.items.map((item: any) => item.MenuPlan);
     let all1 = all.map((item: any) => item.MenuPlanDetails);
     // console.log(all1, '=====all1======');
@@ -61,56 +72,74 @@ const MoreAction: FC<IProps> = ({
   };
 
   const getCart = async () => {
+    const branch = await AsyncStorage.getItem('branchId');
+    const newbranch = JSON.parse(branch);
     const userId = await AsyncStorage.getItem('userId');
-    console.log(userId, 'useriddd');
+    // console.log(userId, 'useriddd');
     // const gottenId = JSON.parse(userId);
 
     try {
-      const menuICart = await getMenuitemCart(userId);
+      const menuICart = await getMenuitemCart(newbranch, userId);
+      SortCart(menuICart?.items);
       dispatch(cartStates(menuICart?.items));
-      console.log(menuICart, 'cart ===value');
+      gottenNewCart(menuICart?.items);
+      // console.log(menuICart, 'cart ===value');
     } catch (error) {}
   };
 
   const deleteCart = async () => {
-    console.log(cart, '===deltessss===');
+    setLoading(true);
+    // console.log(cart, '===deltessss===');
     try {
       const carts = await api.delete(`/orders/cart`, {
         cartId: cart,
       });
-      const addedCart = carts?.data?.data;
+      const addedCart = carts?.data;
       getCart();
+      if (addedCart?.statusCode === 201) {
+        setLoading(false);
+        Alert('Item deleted successfully'); // dispatch(cartStates(addedCart));
+      } else {
+        setLoading(false);
+        Alert('Could not delete item'); // dispatch(cartStates(addedCart));
+      }
       // if (cart?.config?.response == 'Cart updated successfully') {
-      ShowMessage(type.DONE, 'Item deleted successfully'); // dispatch(cartStates(addedCart));
       // setCartItem(addedCart);
       // navigation.goBack('Mycart');
-      console.log(carts, 'editedcartttt');
+      // console.log(addedCart, 'deleteddddddartttt');
       // } else {
       //   ShowMessage(type.ERROR, 'Item could not be updated'); // dispatch(cartStates(addedCart));
       // }
     } catch (err) {
-      console.log(err, 'cartError');
+      setLoading(false);
+      Alert('Could not delete item'); // dispatch(cartStates(addedCart));
+      // console.log(err, 'cartError');
     }
   };
 
   const deleteBasket = async () => {
-    console.log(cart, '===deltessss===');
+    setLoading(true);
+    // console.log(cart, '===deltessss===');
     try {
       const carts = await api.delete(`/orders/basket`, {
         basketId: cart,
       });
-      const addedCart = carts?.data?.data;
+      const addedCart = carts?.data;
       getBasket();
-      // if (cart?.config?.response == 'Cart updated successfully') {
-      ShowMessage(type.DONE, 'Item deleted successfully'); // dispatch(cartStates(addedCart));
-      // setCartItem(addedCart);
-      navigation.navigate('Cart');
-      console.log(carts, 'deletedbasket');
-      // } else {
-      //   ShowMessage(type.ERROR, 'Item could not be updated'); // dispatch(cartStates(addedCart));
-      // }
+      if (addedCart?.statusCode === 201) {
+        setLoading(false);
+        Alert('Item deleted successfully'); // dispatch(cartStates(addedCart));
+        // setCartItem(addedCart);
+        navigation.navigate('Cart');
+        // console.log(carts, 'deletedbasket');
+      } else {
+        setLoading(false);
+        Alert('Cannot delete item, cart item already paid for'); // dispatch(cartStates(addedCart));
+      }
     } catch (err) {
-      console.log(err.response.data, 'cartError');
+      setLoading(false);
+      Alert('Unable to delete item');
+      // console.log(err.response.data, 'cartError');
     }
   };
 
@@ -125,6 +154,16 @@ const MoreAction: FC<IProps> = ({
       }
       // Run delete function here
       // Alert.alert('No function to call');
+    } else if (params == 'details') {
+      navigation.navigate('OrderDetails', {
+        basket: basket,
+        id: id,
+        cartId: cart,
+        eachItem: editItems,
+        editParams: 'editParams',
+        addon: addons,
+        itemDetails: details,
+      });
     } else {
       navigation.navigate('Cart1', {
         id: id,
@@ -161,6 +200,8 @@ const MoreAction: FC<IProps> = ({
             <Text style={styles.countIcon}>+</Text>
           </TouchableOpacity>
         </View>
+      ) : loading ? (
+        <ActivityIndicator size={'large'} color={'red'} animating={loading} />
       ) : (
         <TouchableOpacity onPress={() => handleActions()}>
           <Icon

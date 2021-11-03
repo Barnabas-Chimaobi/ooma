@@ -10,6 +10,7 @@ import {
   StatusBar,
   ScrollView,
   RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
 import {styles} from './styles';
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
@@ -21,87 +22,131 @@ import Search from '../homeSearchComp/search';
 import {
   getMenuPlansByBranch,
   GetAllMenuPlanCategory,
+  getPlanCatId,
+  getMenuPlanCart,
+  getMenuitemCart,
 } from '../../../../../FetchData';
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState, AppDispatch} from './../../../../../store';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import {Item} from 'react-native-paper/lib/typescript/components/List/List';
+import {NativeBaseProvider, Box} from 'native-base';
+import DynamicTabView from 'react-native-dynamic-tab-view';
+import {getMenuItemsPlanForYou} from '../../../../../reducers/MenuPlansForYou';
+import {getFindPlan} from '../../../../../reducers';
+import Spinner from 'react-native-loading-spinner-overlay';
+import {
+  BallIndicator,
+  BarIndicator,
+  DotIndicator,
+  MaterialIndicator,
+  PacmanIndicator,
+  PulseIndicator,
+  SkypeIndicator,
+  UIActivityIndicator,
+  WaveIndicator,
+} from 'react-native-indicators';
+import {latest} from 'immer/dist/internal';
+import {colors} from '../../../../../colors';
+import {EmptyList} from '../../../../../components';
 
 const initialLayout = {width: Dimensions.get('window').width};
 
 const MenuTab = () => {
   const navigation = useNavigation();
   let route = useRoute();
-  const params = route.params;
+  const params = route?.params;
   const [index, setIndex] = React.useState(0);
   const [value, onChangeText] = useState('');
   const [] = useState([]);
-  const [routes, setRoutes] = React.useState([
-    {key: 'all', title: 'All'},
-    {key: 'familyandkids', title: 'Yam'},
-    {key: 'test', title: 'beans'},
-    {key: 'testing', title: 'rice'},
-    {key: 'vegan', title: 'beans'},
-    {key: 'office', title: 'rice'},
-  ]);
-  const [routes1, setRoutes1] = useState(params?.items);
+  const [routes1, setRoutes1] = useState([]);
   let [scenes, setScenes] = useState({});
   const [branchId, setBranchId] = useState('');
   const [menuPlans, setMenuPlans]: any = useState();
   const [menuPlans1, setMenuPlans1] = useState();
   const [menuPlan2, setMenuPlan2] = useState();
   const [refreshing, setRefreshing] = useState(false);
+  const [loader, setLoader] = useState(true);
+  const [param, setparam] = useState(null);
+  const [refresh, setRefresh] = useState(false);
+  const [displayCategoryList, setDisplayCategoryList] = useState([]);
   const {menuPlanCategories} = useSelector(
-    (state: RootState) => state.menuPlanCategories,
+    (state: RootState) => state?.menuPlanCategories,
   );
   const menuPlansMenuItem = useSelector(
-    (state: RootState) => state.menuItemPlanForYou.payload,
+    (state: RootState) => state?.menuItemPlanForYou?.payload,
+  );
+  const findPlansItem = useSelector(
+    (state: RootState) => state?.findPlanState?.payload,
+  );
+  const dispatch: AppDispatch = useDispatch();
+  const basketItem = useSelector(
+    (state: RootState) => state?.basketState?.payload,
   );
 
   const menuPlan = async (id: any) => {
-    // console.log(id, 'allplannnnnssss');
-    // const allPlan = await GetAllMenuPlanCategory(id);
-    // const mapPlan = allPlan?.map((item: any) =>
-    //   routes.push({
-    //     key: 'test',
-    //     title: item.name,
-    //   }),
-    // );
-    // setRoutes(mapPlan);
-    // console.log(mapPlan, 'allplannnnnsssseccccccc');
+    setLoader(true);
+    console.log(id, 'allplannnnnssss');
+    const allPlan = await GetAllMenuPlanCategory(id);
+    const mapPlan = allPlan?.map((item: any) => {
+      return {
+        title: item.name,
+        key: item.name,
+        id: item.id,
+      };
+    });
+    setDisplayCategoryList(mapPlan);
+    // await getMenuplanKart(1);
+    setLoader(false);
+    if (mapPlan !== undefined) {
+      setRoutes1(mapPlan);
+    }
   };
 
-  // const mapScenes = () => {
-  //   params?.items.forEach((category: any) => {
-  //     routes1.push({
-  //       key: category.key,
-  //       title: category.title,
-  //     });
-  //   });
-  //   let scenes = {};
-  //   params?.items.forEach((category) => {
-  //     if (category.key != '') {
-  //       const FirstRoute = () => (
-  //         <View style={[{backgroundColor: '#ff4081'}]} />
-  //       );
-  //       setScenes((scenes[category.key] = FirstRoute));
+  const getMenuplanKart = async (id, param) => {
+    console.log(id, 'plannnnniiiiidddddsssss=====');
+    setLoader(true);
+    const branch = await AsyncStorage.getItem('branchId');
+    const newbranch = JSON.parse(branch);
+    const menuplanscart = await getPlanCatId(newbranch, id);
+    console.log(newbranch, menuplanscart, 'useriddd');
+    // setPlanCart(menuplanscart?.items);
+    // dispatch(getMenuItemsPlanForYou(menuplanscart));
+    dispatch(getFindPlan(menuplanscart));
+    // setLoader(false);
+    // console.log(menuplanscart, '=======planscategoryyyyyyyyy=========');
+    setLoader(false);
+    setparam('param');
+    // console.log(all1, '=====all1======');
+  };
 
-  //       // scenes[category.key] = FirstRoute;
-  //     }
-  //   });
-  // };
+  let array = [
+    {title: 'Tab1', key: 'item1'},
+    {title: 'Tab2', key: 'item2'},
+    {title: 'Tab3', key: 'item3'},
+  ];
 
   useEffect(() => {
+    console.log(routes1?.length, 'indexxxx=====');
+    if (params?.eachCat === 'eachCat') {
+      getMenuplanKart(params?.categoryId);
+    } else {
+      getMenuplanKart(1);
+    }
     // mapScenes();
-    console.log(params?.items, 'itemmmssss');
+    // console.log(params?.items, 'itemmmssss');
     const getBranchId = async () => {
-      const id: any = await AsyncStorage.getItem('branchId');
-      setBranchId(id);
+      const branch = await AsyncStorage.getItem('branchId');
+      const newbranch = JSON.parse(branch);
+      setBranchId(newbranch);
 
-      // menuPlan('82059935-89dc-4daf-aff3-adcf997d6859');
+      menuPlan(newbranch);
     };
-    console.log(params.planId, '=====planid=====');
+    setRefresh(false);
+    // return findPlansItem;
+    // console.log(params.planId, '=====planid=====');
     getBranchId();
-  }, []);
+  }, [refresh]);
 
   const handleDataFilter = (categoryName: string, searchText?: string) => {
     if (searchText !== '') {
@@ -109,54 +154,55 @@ const MenuTab = () => {
         menuPlans &&
         menuPlans?.filter(
           (plan: any) =>
-            plan.MenuPlanCategory.name === categoryName &&
-            plan.name.includes(searchText),
+            plan?.MenuPlanCategory?.name === categoryName &&
+            plan?.name?.includes(searchText),
         )
       );
     } else {
       return (
         menuPlans &&
         menuPlans?.filter(
-          (plan: any) => plan.MenuPlanCategory.name === categoryName,
+          (plan: any) => plan?.MenuPlanCategory?.name === categoryName,
         )
       );
     }
   };
 
-  const onRefresh = () => {};
-
-  const AllRoute = () => (
-    <View style={styles.scene}>
-      <AllMenu allMenuPlans={menuPlansMenuItem} />
-    </View>
-  );
-
-  const OfficeRoute = () => (
-    <View style={styles.scene}>
-      <OfficeMenu allOfficeMenuPlans={menuPlansMenuItem} />
-    </View>
-  );
-
-  const VeganRoute = () => (
-    <View style={styles.scene}>
-      <VeganMenu allVeganMenuPlans={menuPlansMenuItem} />
-    </View>
-  );
-
-  const FamilyRoute = () => (
-    <View style={styles.scene}>
-      <FamilyMenu allFamilyMenuPlans={menuPlansMenuItem} />
-    </View>
-  );
-  let test = {
-    all: AllRoute,
-    office: OfficeRoute,
-    vegan: VeganRoute,
-    familyandkids: FamilyRoute,
-    test: FamilyRoute,
-    testing: FamilyRoute,
+  const onRefresh = () => {
+    setLoader(true);
+    getMenuplanKart(1);
+    setRefresh(true);
+    // menuPlan('82059935-89dc-4daf-aff3-adcf997d6859');
   };
-  const renderScene = SceneMap(test);
+
+  const FamilyRoute = (item, index) => {
+    // console.log(item, '====itemsssss===');
+    return (
+      <View style={{paddingBottom: 40}}>
+        {/* <ActivityIndicator color={'green'} size={'large'} animating={true} /> */}
+        {!loader ? (
+          <View key={item?.id} style={styles.scene}>
+            <FamilyMenu allFamilyMenuPlans={findPlansItem} />
+          </View>
+        ) : (
+          // <EmptyList />
+          <View style={styles.noData}>
+            <Image
+              style={{marginTop: 20}}
+              source={require('../../assets/no-data.png')}
+            />
+            <Text style={styles.btnText}>Getting available meal plans.</Text>
+
+            <View style={styles.btn}>
+              <Text style={{color: 'white', fontWeight: 'bold', fontSize: 14}}>
+                FIND PLANS
+              </Text>
+            </View>
+          </View>
+        )}
+      </View>
+    );
+  };
 
   return (
     <View style={{flex: 1}}>
@@ -165,74 +211,51 @@ const MenuTab = () => {
         backgroundColor="transparent"
         barStyle={'dark-content'}
       />
-      {menuPlansMenuItem ? (
-        <ScrollView
-          style={{flex: 1}}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }>
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              height: 35,
-              borderColor: 'gray',
-              borderWidth: 1,
-              width: '90%',
-              alignSelf: 'center',
-              borderRadius: 7,
-              marginTop: 25,
-              marginBottom: 25,
-            }}>
-            <TextInput
-              style={{height: 35, width: '90%', borderRadius: 7}}
-              onChangeText={(text) => onChangeText(text)}
-              value={value}
-              onFocus={() => navigation.navigate('SearchMenuitemandPlan')}
-            />
-            <TouchableOpacity style={{marginTop: 10, marginRight: 10}}>
-              <Image source={require('../../assets/searchIcon.png')} />
-            </TouchableOpacity>
-          </View>
-          {/* {routes.length != 0 ? ( */}
-          <TabView
-            renderTabBar={(routers) => (
-              <TabBar
-                {...routers}
-                indicatorStyle={styles.indicatorStyle}
-                style={styles.tabBar}
-                tabStyle={{width: 'auto'}}
-                scrollEnabled
-                renderLabel={({route, focused}) => (
-                  <Text style={focused ? styles.focused : styles.tabLabel}>
-                    {route.title}
-                  </Text>
-                )}
-              />
-            )}
-            navigationState={{index, routes}}
-            renderScene={renderScene}
-            onIndexChange={setIndex}
-            initialLayout={initialLayout}
-          />
-          {/* ) : null} */}
-        </ScrollView>
-      ) : (
-        <View style={styles.noData}>
-          <Image
-            style={{marginTop: 20}}
-            source={require('../../assets/no-data.png')}
-          />
-          <Text style={styles.btnText}>No menu plan available.</Text>
 
-          <View style={styles.btn}>
-            <Text style={{color: 'white', fontWeight: 'bold', fontSize: 14}}>
-              FIND PLANS
+      <ScrollView
+        contentContainerStyle={{flexGrow: 1}}
+        style={{flex: 1}}
+        refreshControl={
+          <RefreshControl refreshing={loader} onRefresh={onRefresh} />
+        }>
+        {!loader && displayCategoryList === undefined ? (
+          <View style={{}}>
+            <EmptyList
+              image={require('../../../../../assets/Images/emptyCart.png')}
+              // title="FIND MEAL"
+              message="Oops! No meal plan Available now"
+              // onPress={() => navigation.goBack()}
+            />
+          </View>
+        ) : (
+          <DynamicTabView
+            data={routes1}
+            renderTab={FamilyRoute}
+            headerTextStyle={styles.headerText}
+            onChangeTab={(index) => {
+              getMenuplanKart(routes1[index].id);
+              setparam('param');
+            }}
+            defaultIndex={params?.categoryId - 1 || routes1[0]?.id}
+            containerStyle={{flex: 1}}
+            headerBackgroundColor={colors.white}
+            headerUnderlayColor={colors.white}
+          />
+        )}
+
+        {!param && loader ? (
+          <View style={{alignSelf: 'center', position: 'absolute', top: '20%'}}>
+            <Text
+              style={{
+                textAlign: 'center',
+                fontFamily: 'Montserrat',
+                // zIndex: 5,
+              }}>
+              Loading meals for you...
             </Text>
           </View>
-        </View>
-      )}
+        ) : null}
+      </ScrollView>
     </View>
   );
 };

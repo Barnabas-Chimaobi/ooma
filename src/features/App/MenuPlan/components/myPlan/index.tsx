@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,14 +6,34 @@ import {
   FlatList,
   Dimensions,
   Image,
+  RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
 
 import shortid from 'shortid';
 import {myPlanData} from './myPlanData';
 import {ProgressBar} from '../../../../../components/ProgressBar/index';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {
+  ScrollView,
+  TouchableWithoutFeedback,
+} from 'react-native-gesture-handler';
 import {BottomSheet} from '../../../../../components/BottomSheetModal';
 import {BottomSheetList} from './bottomSheetList';
+import {getMenuPlanOrders} from '../../../../../FetchData';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  Button,
+  ButtonType,
+  PriceTag,
+  EmptyList,
+} from '../../../../../components';
+import {useNavigation} from '@react-navigation/native';
+import Spinner from 'react-native-loading-spinner-overlay';
+import {BallIndicator} from 'react-native-indicators';
+import {useDispatch, useSelector} from 'react-redux';
+import {planStates} from '../../../../../reducers/planlist';
+import {AppDispatch, RootState} from '../../../../../store';
+import {colors} from '../../../../../colors';
 
 const {width: windowWidth} = Dimensions.get('window');
 
@@ -26,7 +46,8 @@ interface ListItemProps {
     pecentage: Number;
     time: string;
     status: string;
-  }[];
+    time1: any;
+  };
 }
 interface ListProps {
   imageUrl: any;
@@ -34,6 +55,8 @@ interface ListProps {
   pecentage: Number;
   time: string;
   status: string;
+  time1: any;
+  planId: any;
 }
 
 interface Props {
@@ -41,7 +64,13 @@ interface Props {
 }
 
 export const MyPlans = ({findPlan}: Props) => {
+  const planItem = useSelector((state: RootState) => state.planState.payload);
+  const dispatch: AppDispatch = useDispatch();
+
+  const navigation = useNavigation();
   const [isOpen, setOpen] = useState<boolean>(false);
+  const [planOrders, setOrders] = useState([]);
+  const [loader, setLoader] = useState(false);
   const openDrawer = useCallback(() => {
     setOpen(true);
   }, []);
@@ -51,37 +80,239 @@ export const MyPlans = ({findPlan}: Props) => {
   }, []);
 
   const flatListOptimizationProps = {
-    initialNumToRender: 0,
-    maxToRenderPerBatch: 1,
-    removeClippedSubviews: true,
-    scrollEventThrottle: 16,
-    windowSize: 2,
+    // initialNumToRender: 0,
+    // maxToRenderPerBatch: 1,
+    // removeClippedSubviews: true,
+    // scrollEventThrottle: 16,
+    // windowSize: 2,
     keyExtractor: () => shortid.generate(),
-    getItemLayout: useCallback(
-      (_, index) => ({
-        index,
-        length: windowWidth * 0.9,
-        offset: index * windowWidth * 0.9,
-      }),
-      [],
-    ),
+    // getItemLayout: useCallback(
+    //   (_, index) => ({
+    //     index,
+    //     length: windowWidth * 0.9,
+    //     offset: index * windowWidth * 0.9,
+    //   }),
+    //   [],
+    // ),
   };
 
-  const Item = ({imageUrl, itemName, pecentage, time, status}: ListProps) => {
+  // const getOrders = async () => {
+  //   const userId = await AsyncStorage.getItem('userId');
+  //   console.log(userId, 'useriddd');
+  //   // const gottenId = JSON.parse(userId);
+
+  //   try {
+  //     // console.log(newsum, 'cartttttt');
+  //     const order = await getMenuPlanOrders(userId);
+
+  //     groupBasketItem()
+  //     // setOrders(order?.items);
+  //     //  await dispatch(cartStates(menuICart?.items));
+  //     console.log(order, 'cart ===value');
+  //     console.log(
+  //       order?.items?.map((item: any) => item),
+  //       'cart ===valuesssss',
+  //     );
+
+  //     // setRefreshing(false);
+  //   } catch (error) {
+  //     console.log(error, '====errorrsss====');
+  //     // setRefreshing(false);
+  //   }
+  // };
+
+  const groupBasketItem = async (item: any) => {
+    getPlansfromRedux();
+    const userId = await AsyncStorage.getItem('userId');
+    console.log(userId, 'useriddd');
+    // const gottenId = JSON.parse(userId);
+    if (planItem?.length === 0) {
+      setLoader(true);
+    }
+    try {
+      // console.log(newsum, 'cartttttt');
+      const order = await getMenuPlanOrders(userId);
+      dispatch(planStates(order?.items));
+
+      // console.log(order?.items, 'orderItemsss=======');
+
+      // setOrders(order?.items);
+      //  await dispatch(cartStates(menuICart?.items));
+      setLoader(false);
+      return item;
+
+      // setRefreshing(false);
+    } catch (error) {
+      setLoader(false);
+      console.log(error, '====errorrsss====');
+      // setRefreshing(false);
+    }
+  };
+
+  const getPlansfromRedux = () => {
+    let basketData: any = [];
+
+    planItem?.forEach((item: any) => {
+      // console.log(item);
+      groupByDate(item, basketData);
+    });
+    basketData.forEach((item: any) => {
+      //replace the already exist data with the grouped plan data
+      item['data'] = groupByPlanTypeDate(item.data);
+    });
+
+    basketData.sort(function (a, b) {
+      var dateA: any = new Date(a.planStart),
+        dateB: any = new Date(b.planStart);
+      return dateB - dateA;
+    });
+    setOrders(basketData);
+    // setOrders(order?.items);
+    //  await dispatch(cartStates(menuICart?.items));
+  };
+
+  const groupByPlanTypeDate = (basketItems: any) => {
+    let planTypeData: any = [];
+    for (const item of basketItems) {
+      // console.log('======hello itemmmssss=====', item);
+      // console.log('======basketitemmmssss=====', basketItems);
+      if (planTypeData.length == 0) {
+        planTypeData.push({
+          planType: item.planType,
+          data: [{itemData: item.itemData}],
+        });
+      } else {
+        for (const planData of planTypeData) {
+          // console.log('======hello world=====', planData);
+          if (planData.planType == item.planType) {
+            if (!checkIfPlanExist(item, planData.data)) {
+              planData.data.push({itemData: item.itemData});
+            }
+            break;
+          } else {
+            planTypeData.push({
+              planType: item.planType,
+              data: [{itemData: item.itemData}],
+            });
+          }
+        }
+      }
+    }
+    return planTypeData;
+  };
+
+  const checkIfPlanExist = (item: any, plans: any) => {
+    for (const plan of plans) {
+      // console.log('======hello plansss=====', plan);
+      if (
+        plan.itemData.MenuplanOrderDetailId ==
+        item?.itemData?.MenuplanOrderDetailId
+      ) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const groupByDate = (itemData: any, basketItems: any) => {
+    // console.log(basketItems, '=====panadetailsss=====');
+    for (const item of basketItems) {
+      // console.log(item, '=====itemsssssss');
+      if (itemData.orderInfo.orderName == item.planName) {
+        item.data.push({
+          planType: itemData.orderInfo.orderName,
+          itemData,
+        });
+
+        return;
+      }
+    }
+    // if the basket item date doesnt exist before
+    basketItems.push({
+      planName: itemData.orderInfo.orderName,
+      plantotal: itemData.orderInfo.total,
+      planImage: itemData.orderInfo.MenuPlan.imageurl,
+      planStart: itemData.orderInfo.deliveryDate,
+      planEnd: itemData.orderInfo.MenuPlan.endDate,
+      planStatus: itemData.orderInfo.status,
+      planId: itemData.orderInfo.orderId,
+      data: [
+        {
+          planType: itemData.orderInfo.orderName,
+          itemData,
+        },
+      ],
+    });
+  };
+
+  useEffect(() => {
+    groupBasketItem();
+  }, []);
+
+  const refresh = () => {
+    setLoader(true);
+    groupBasketItem();
+  };
+
+  const Item = ({
+    imageUrl,
+    itemName,
+    pecentage,
+    time,
+    status,
+    time1,
+    planId,
+  }: ListProps) => {
     return (
-      <TouchableWithoutFeedback
-        onPress={openDrawer}
-        style={styles.innerListItemStyle}>
-        <Image source={imageUrl} />
-        <View style={styles.itemTextArea}>
-          <Text style={styles.itemNameStyle}>{itemName}</Text>
-          <Text style={styles.timeStyle}>{time}</Text>
-          <View>
-            <Text style={styles.statusStyle}>{status}</Text>
-            <ProgressBar progressValue={pecentage} />
+      status !== 'Delivered' && (
+        <View>
+          <View
+            style={{
+              elevation: 10,
+              width: '96%',
+              backgroundColor: colors.white,
+              borderRadius: 10,
+              marginBottom: 15,
+              alignSelf: 'center',
+            }}>
+            <TouchableWithoutFeedback
+              onPress={() =>
+                navigation.navigate('Cart', {
+                  id: planId,
+                  plan: 'plan',
+                  planName: itemName,
+                })
+              }
+              style={styles.innerListItemStyle}>
+              <Image
+                style={{
+                  height: Dimensions.get('window').height / 6.8,
+                  width: Dimensions.get('window').width / 3.4,
+                  borderRadius: 10,
+                  marginLeft: -5,
+                }}
+                source={{uri: imageUrl}}
+              />
+              <View style={styles.itemTextArea}>
+                <Text style={styles.itemNameStyle}>{itemName}</Text>
+                <View style={{flexDirection: 'row', top: 30}}>
+                  <Text style={styles.timeStyle}>
+                    {new Date(time).toDateString()}
+                  </Text>
+                  {/* <Text> </Text>
+                <Text style={styles.timeStyle}>
+                  {new Date(time1).toDateString()}
+                </Text> */}
+                </View>
+                <View>
+                  {/* <Text style={styles.statusStyle}>{status}</Text> */}
+                  {/* <ProgressBar progressValue={pecentage} /> */}
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
           </View>
         </View>
-      </TouchableWithoutFeedback>
+      )
     );
   };
 
@@ -98,20 +329,30 @@ export const MyPlans = ({findPlan}: Props) => {
     return (
       <View style={styles.main}>
         <FlatList
-          data={list}
+          data={planOrders}
           style={styles.innerListStyle}
           renderItem={({item}) => {
             return (
               <Item
-                imageUrl={item.imageUrl}
-                itemName={item.itemName}
+                imageUrl={item?.planImage}
+                itemName={item?.planName}
                 pecentage={item.pecentage}
-                time={item.time}
-                status={item.status}
+                time={item.planStart}
+                status={item?.planStatus}
+                time1={item?.planEnd}
+                planId={item?.planId}
               />
             );
           }}
           {...flatListOptimizationProps}
+          ListEmptyComponent={
+            <EmptyList
+              image={require('../../../../../assets/Images/emptyCart.png')}
+              title="FIND MEAL"
+              message="Oops! You don't have any ongoing plan"
+              onPress={() => navigation.goBack()}
+            />
+          }
           ListHeaderComponent={<Header icon={icon} location={location} />}
         />
       </View>
@@ -122,22 +363,49 @@ export const MyPlans = ({findPlan}: Props) => {
 
   return (
     <>
-      {myPlanData.length !== 0 ? (
+      <View style={{flex: 1, marginBottom: 65, top: -25}}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl onRefresh={() => refresh()} refreshing={loader} />
+          }>
+          {planItem?.length === 0 && loader === true ? (
+            <View>
+              <ActivityIndicator
+                color={'green'}
+                size={'large'}
+                animating={loader}
+              />
+
+              <Text style={{textAlign: 'center', marginTop: 120}}>
+                Loading your meal plans...
+              </Text>
+            </View>
+          ) : (
+            <ListItem
+            // icon={item.icon}
+            // location={item.location}
+            // list={item.list}
+            />
+          )}
+        </ScrollView>
+        {/* <Spinner
+        visible={loader}
+        // textStyle={styles.spinnerTextStyle}
+        overlayColor="rgba(66, 66, 66,0.6)"
+        customIndicator={<BallIndicator color="white" />}
+      /> */}
+        {/* {planOrders?.length !== 0 ? ( */}
         <>
-          <FlatList
+          {/* <FlatList
             data={myPlanData || []}
             style={styles.listStyle}
             renderItem={({item}) => {
-              return (
-                <ListItem
-                  icon={item.icon}
-                  location={item.location}
-                  list={item.list}
-                />
-              );
+              return ( */}
+
+          {/* );
             }}
             {...flatListOptimizationProps}
-          />
+          /> */}
           <BottomSheet
             isOpen={isOpen}
             openedPercentage={0.7}
@@ -147,14 +415,14 @@ export const MyPlans = ({findPlan}: Props) => {
             </View>
           </BottomSheet>
         </>
-      ) : (
+        {/* ) : (
         <View style={styles.noData}>
           <Image
             style={{marginTop: 20}}
             source={require('../../assets/no-data.png')}
           />
           <Text style={styles.btnText}>
-            You do not have any ongoing menu plan.
+            You do not have any ongoing meal plan.
           </Text>
           <TouchableWithoutFeedback onPress={() => findPlan(0)}>
             <View style={styles.btn}>
@@ -164,7 +432,8 @@ export const MyPlans = ({findPlan}: Props) => {
             </View>
           </TouchableWithoutFeedback>
         </View>
-      )}
+      )} */}
+      </View>
     </>
   );
 };
@@ -182,11 +451,12 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   main: {
-    marginBottom: 20,
+    marginBottom: 200,
+    flex: 1,
   },
   innerListItemStyle: {
     borderBottomColor: '#44444475',
-    borderBottomWidth: 1,
+    // borderBottomWidth: 1,
     padding: 10,
     flexDirection: 'row',
   },
@@ -195,7 +465,7 @@ const styles = StyleSheet.create({
   innerListStyle: {},
   itemTextArea: {
     flexDirection: 'column',
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
     marginLeft: 10,
   },
   itemNameStyle: {fontWeight: 'bold', fontSize: 16},

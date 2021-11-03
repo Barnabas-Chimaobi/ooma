@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
   root: {
-    padding: 10,
+    // padding: 10,
     flex: 1,
     flexDirection: 'column',
   },
@@ -99,6 +99,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 10,
+    padding: 10
   },
   totalPrice: {
     fontWeight: '100',
@@ -127,10 +128,10 @@ export const styles = StyleSheet.create({
   btnStyles: {
     alignItems: 'center',
     backgroundColor: '#303030',
-    height: 44,
+    height: 50,
     justifyContent: 'center',
     borderRadius: 5,
-    width: '100%',
+    width: '95%',
   },
   radioSection: {
     backgroundColor: 'white',

@@ -1,24 +1,54 @@
-import { StyleSheet } from 'react-native';
-import { colors } from '../../colors';
+import {StyleSheet, Dimensions} from 'react-native';
+import {colors} from '../../colors';
 
 export default StyleSheet.create({
   main: {
-    flex: 1
+    flex: 1,
   },
   imageBackground: {
     flex: 1,
-    height: 172,
-    borderRadius: 5
+    height: 300,
+    width: '100%',
+    marginTop: 5,
+    // width: Dimensions.get('window').width / 1,
+
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+
+  imageBackground3: {
+    flex: 1,
+    height: 300,
+    width: '100%',
+    // width: Dimensions.get('window').width / 1,
+    marginLeft: 2,
+    borderRadius: 10,
+    overflow: 'hidden',
+    alignSelf: 'center',
+    borderTopRightRadius: 10,
+    borderBottomRightRadius: 10,
+  },
+  imageBackground2: {
+    flex: 1,
+    height: 250,
+    // width: 300,
+    width: '100%',
+    // width: Dimensions.get('window').width / 1.07,
+
+    borderRadius: 10,
+    overflow: 'hidden',
   },
   labelMain: {
     height: 30,
-    // width: '40%',
+    minWidth: '20%',
     borderBottomRightRadius: 8,
     borderTopRightRadius: 8,
     backgroundColor: '#05944F',
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
+    paddingRight: 20,
+    paddingLeft: 5,
   },
   labelText: {
     color: 'white',
@@ -45,6 +75,13 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 13,
+    justifyContent: 'space-between',
+  },
+  rating1: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 13,
+    // justifyContent: 'space-between',
   },
   ratingImage: {
     width: 15,
@@ -64,10 +101,21 @@ export default StyleSheet.create({
   rowMain: {
     flexDirection: 'row',
     width: '100%',
+    borderRadius: 15,
+    elevation: 10,
+    flex: 1,
+  },
+  rowMain1: {
+    flexDirection: 'row',
+    width: '100%',
+    borderRadius: 15,
   },
   imageBackgroundRow: {
     width: 130,
-    height: 150,
+    height: 140,
+    marginTop: 15,
+    borderRadius: 10,
+    overflow: 'hidden',
   },
   flexRow: {
     marginTop: 14,
@@ -81,5 +129,6 @@ export default StyleSheet.create({
     marginStart: 10,
     flexWrap: 'wrap',
     paddingTop: 10,
+    marginTop: 15,
   },
 });

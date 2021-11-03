@@ -7,12 +7,12 @@ const Logo = ({logoStyle, large}: any) => {
       {large ? (
         <Image
           resizeMode="contain"
-          source={require('../../assets/Images/foodersBig.png')}
+          source={require('../../assets/Images/oomaNologo.png')}
           style={logoStyle}
         />
       ) : (
         <Image
-          source={require('../../assets/Images/OOMA.png')}
+          source={require('../../assets/Images/ooma.jpeg')}
           style={logoStyle}
           resizeMode="contain"
         />

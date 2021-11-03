@@ -3,19 +3,20 @@ import {colors} from '../../../colors';
 
 export default StyleSheet.create({
   omaTitle: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
-    margin:10
+    margin: 10,
+    fontFamily: 'Montserrat',
   },
   omaSubTitle: {
     fontSize: 12,
-    fontFamily: 'openSans',
+    fontFamily: 'Montserrat',
     margin: 10,
   },
   omaMainStyle: {
     flex: 1,
     alignSelf: 'center',
-    margin:10
+    margin: 10,
   },
   phoneInput: {
     fontFamily: 'OpenSans',
@@ -36,11 +37,13 @@ export default StyleSheet.create({
     fontSize: 30,
     elevation: 1,
     backgroundColor: 'white',
+    borderRadius: 5,
   },
   codeInputContainerStyle: {
     alignItems: 'center',
-    margin:10,
-    marginBottom:40
+    margin: 10,
+    marginBottom: 40,
+    marginTop: -30,
   },
   passwordInputContainerStyle: {
     backgroundColor: 'rgba(48, 48, 48, 0.3)',
@@ -60,7 +63,9 @@ export default StyleSheet.create({
   },
   overStyle: {
     fontSize: 12,
-    margin:10
+    margin: 10,
+    fontFamily: 'Montserrat',
+    fontWeight: '900',
   },
   backButtonStyle: {
     backgroundColor: 'transparent',
@@ -70,8 +75,9 @@ export default StyleSheet.create({
   logoStyle: {
     alignSelf: 'center',
     position: 'absolute',
-    top: 80,
-    width: 163,
+    // top: 250,
+    marginTop: '10%',
+    width: 350,
   },
   registerBody: {
     flexDirection: 'column',

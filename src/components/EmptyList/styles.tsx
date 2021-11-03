@@ -8,10 +8,11 @@ export default StyleSheet.create({
   },
   message: {
     marginTop: 20,
+    fontFamily: 'Montserrat',
   },
   buttonStyle: {
     marginVertical: 50,
-    backgroundColor: '#303030',
+    backgroundColor: '#fff',
   },
   titleStyle: {
     color: 'white',

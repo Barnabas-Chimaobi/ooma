@@ -1,4 +1,4 @@
-import  React, {useState} from 'react';
+import React, {useState} from 'react';
 import {View, Dimensions, Text} from 'react-native';
 import {SimpleHeader} from '../../../../components';
 import {styles} from './styles';
@@ -24,7 +24,7 @@ const MenuTab = () => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     {key: 'all', title: 'Dishes'},
-    {key: 'office', title: 'Menu Plan'},
+    {key: 'office', title: 'Meal Plan'},
   ]);
 
   const renderScene = SceneMap({

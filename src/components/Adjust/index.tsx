@@ -19,6 +19,9 @@ interface IProps {
   processAddons?: any;
   removeAddon?: any;
   itemAddon?: any;
+  edit: any;
+  itemEdit: any;
+  mainquanty: any;
 }
 
 const Adjust = ({
@@ -35,55 +38,54 @@ const Adjust = ({
   removeAddon,
   processAddons,
   itemAddon,
+  edit,
+  itemEdit,
+  mainquanty,
 }: IProps) => {
-  const [state, setState] = useState(isAddon ? 0 : 1);
+  const [state, setState] = itemEdit
+    ? useState(isAddon ? quantity : edit)
+    : useState(isAddon ? 0 : 1);
   const [prices, setPrice] = useState(price);
   // const {value} = state;
-  // useEffect(() => {
-  //   itemAddon?.map((item) => {
-  //     setState(item.quantity);
-  //   });
-  // });
+  useEffect(() => {});
 
   const getQuantity = (item: any, str: any) => {
-    console.log(state, 'state');
     props(item);
     if (str == 'plus') {
       processAddons(itemAddon);
-      let newPrice = parseInt(item + 1) * parseInt(price);
+      let newPrice = itemEdit
+        ? parseInt(item + 1) * parseInt(itemAddon?.initialPrice)
+        : parseInt(item + 1) * parseInt(price);
       newPrice != 0 ? setPrice(newPrice) : null;
     } else {
-      state >= 1 && removeAddon(itemAddon);
-      let newPrice = parseInt(item - 1) * parseInt(price);
-      newPrice != 0 ? setPrice(newPrice) : null;
+      if (state >= 1) {
+        removeAddon(itemAddon);
+
+        let newPrice = itemEdit
+          ? parseInt(item - 1) * parseInt(itemAddon?.initialPrice)
+          : parseInt(item - 1) * parseInt(price);
+        newPrice != 0 ? setPrice(newPrice) : null;
+      }
     }
   };
 
   const getQuantity1 = (item: any, str: any) => {
-    console.log(state, 'statess111');
     if (str == 'plus') {
       props1(item + 1);
     } else {
-      props1(item - 1);
+      item > 1 && props1(item - 1);
     }
   };
 
   const getAddons = () => {};
 
   const onChange = (str: string, title: any) => {
-    str == 'minus' && state >= 1
+    str == 'minus' && state >= (title == 'Adjust Quantity' ? 2 : 1)
       ? setState(state - 1)
       : str == 'plus'
       ? setState(state + 1)
       : 1;
-    // setState({
-    //   value:
-    //     str == 'minus' && value >= 1
-    //       ? value - 1
-    //       : str == 'plus'
-    //       ? value + 1
-    //       : 1,
-    // });
+
     if (title == 'Adjust Quantity') {
       getQuantity1(state, str);
     } else {
@@ -113,7 +115,12 @@ const Adjust = ({
           }}
         />
       </View>
-      {price && <PriceTag price={prices} clear />}
+
+      {mainquanty ? null : (
+        <View style={{width: '15%'}}>
+          {price !== undefined && <PriceTag price={Number(prices)} clear />}
+        </View>
+      )}
     </View>
   );
 };

@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 
 export const styles = StyleSheet.create({
   main: {
@@ -26,15 +26,21 @@ export const styles = StyleSheet.create({
     zIndex: 20,
     backgroundColor: '#00000075',
   },
-  itemImg: {width: 128, height: 112, borderRadius: 10, alignSelf: 'center'},
+  itemImg: {
+    width: Dimensions.get('window').width / 2.4,
+    height: 115,
+    borderRadius: 10,
+    alignSelf: 'center',
+  },
   itemWrapper: {
-    width: 148,
+    width: Dimensions.get('window').width / 2.3,
     borderRadius: 10,
     padding: 10,
+    paddingTop: 3,
     alignItems: 'center',
     backgroundColor: '#F1F1F1',
     height: 225,
-    margin: 10,
+    marginBottom: 10,
     flexDirection: 'column',
   },
   space: {
@@ -91,9 +97,12 @@ export const styles = StyleSheet.create({
     position: 'relative',
     width: '100%',
     height: '100%',
-    bottom: 55,
+    // paddingBottom: 25,
     padding: 10,
     zIndex: 32,
+    flex: 1,
+    overflow: 'hidden',
+    marginTop: -80,
   },
 
   calendar: {
@@ -101,7 +110,7 @@ export const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     padding: 5,
-    width: '35%',
+    width: '40%',
     borderStyle: 'solid',
     borderRadius: 5,
     flexDirection: 'row',
@@ -124,13 +133,13 @@ export const styles = StyleSheet.create({
     alignContent: 'center',
     backgroundColor: '#EEEEEE',
     height: 33,
-    width: '85%',
+    width: '95%',
     alignSelf: 'center',
     marginBottom: 10,
     borderRadius: 50,
-    elevation: 0,
+    elevation: 5,
     overflow: 'hidden',
-    position: 'relative',
+    // position: 'relative',
   },
   tabLabel: {
     color: 'rgba(48, 48, 48, 0.4)',
@@ -154,7 +163,7 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     backgroundColor: '#303030',
     borderRadius: 50,
-    width: 110,
+    width: Dimensions.get('window').width / 3.2,
     height: 30,
     paddingTop: 7,
     left: -18,

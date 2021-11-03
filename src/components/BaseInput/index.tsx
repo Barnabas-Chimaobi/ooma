@@ -57,7 +57,7 @@ export const BaseInput: FC<InputProps> = ({
   ...props
 }) => {
   return (
-    <View style={{marginBottom: 12,marginHorizontal:10}}>
+    <View style={{marginBottom: 12}}>
       <View style={[styles.inputContainer, style]} {...props}>
         <TextInput
           value={value}
@@ -81,14 +81,13 @@ export const BaseInput: FC<InputProps> = ({
 
 export const styles = StyleSheet.create({
   inputContainer: {
-  
     borderRadius: 5,
-    paddingHorizontal: 10,
+    // paddingHorizontal: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     // height: 48,
-    width: '100%'
+    width: '100%',
     // backgroundColor: 'rgba(48, 48, 48, 0.3)',
   },
   errorMessage: {

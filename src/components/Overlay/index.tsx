@@ -6,9 +6,16 @@ interface IProps {
   child?: any;
   isVisible: boolean;
   onBackdropPress?: () => void;
+  onPress?: () => void;
 }
 
-const Modal = ({overlayStyle, child, isVisible, onBackdropPress}: IProps) => {
+const Modal = ({
+  overlayStyle,
+  child,
+  isVisible,
+  onBackdropPress,
+  onPress,
+}: IProps) => {
   return (
     <Overlay
       isVisible={isVisible}

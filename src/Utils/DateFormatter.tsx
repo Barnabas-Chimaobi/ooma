@@ -3,7 +3,7 @@ import moment from 'moment';
 export default class DateFormatter {
   static date1 = (date: any) => moment(date).format('YYYY-MM-DD');
 
-  static date2 = (date: any) => date && moment(date).format('ll');
+  static date2 = (date: any) => date && new Date(date).toDateString();
 
   static date3 = (date: any) => moment(date).format('YYYY/MM/DD');
 
@@ -18,7 +18,7 @@ export default class DateFormatter {
     return moment(date).format('DD/MM/YYYY');
   };
 
-  static UTCStringDate = () => new Date().toUTCString();
+  static UTCStringDate = () => new Date().toDateString();
 
   static date7 = (date: any) => moment(date).format('YYYY-MM-DD HH:mm:ss');
 
@@ -86,8 +86,12 @@ export default class DateFormatter {
   static yesterday = moment().subtract(1, 'days');
 
   static formatAMPM = (date: any) => {
-    date = new Date(new Date(date).getTime() - 60 * 60000);
+    // date = new Date(new Date(date).getTime() - 60 * 60000);
+    date = new Date(date);
+
     var hours = date.getHours();
+
+    // console.log(hours, date, 'hoursss===');
     var minutes = date.getMinutes();
     var ampm = hours >= 12 ? 'PM' : 'AM';
     hours = hours % 12;

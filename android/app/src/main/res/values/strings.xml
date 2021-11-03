@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">Oma develope</string>
+    <string name="app_name">ooma</string>
+    <!-- production key -->
+    <string name="CodePushDeploymentKey">A7SuKMjBlgjnXkUNSZoOxZa-ZCWz8gBBDsAb_</string>
+    <!-- staging -->
+   <!-- <string name="CodePushDeploymentKey">778y57i08OfeypAFR_8zpqE0h64pXsqemS0Ik</string> -->
 </resources>

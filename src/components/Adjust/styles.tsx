@@ -12,15 +12,17 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    width: '20%',
+    width: '25%',
   },
   buttonStyle: {
     padding: 7,
     backgroundColor: 'rgba(196, 196, 196, 0.5)',
   },
   titleStyle: {
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     fontSize: 15,
+    fontFamily: 'Montserrat',
+    fontWeight: '900',
   },
   valueStyle: {
     paddingHorizontal: 15,

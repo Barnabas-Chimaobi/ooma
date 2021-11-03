@@ -37,7 +37,9 @@ const authSlice = createSlice({
     },
     reset: (state) => initialState,
     setUserDetails: (state, {payload}) => {
-      payload.firstName ? (state.firstName = payload.firstName) : state.firstName;
+      payload.firstName
+        ? (state.firstName = payload.firstName)
+        : state.firstName;
       payload.lastName ? (state.lastName = payload.lastName) : state.lastName;
       payload.password ? (state.password = payload.password) : state.password;
       payload.confirmPassword

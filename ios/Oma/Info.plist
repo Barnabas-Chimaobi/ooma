@@ -22,9 +22,14 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<!-- <key>CodePushDeploymentKey</key> -->
+    <!-- <string>5vSQS23KIttcu_m_7oThygna5V_H8jmc6xcIf</string> -->
+	<!-- <key>CodePushDeploymentKey</key> -->
+    <!-- <string>H3MSIt0KnXbKGeqMhPOWCqK33kS2UgQITRHFV</string> -->
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
+	
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
@@ -71,6 +76,13 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+		<string>Montserrat.otf</string>
+		<string>Muli-Black.ttf</string>
+		<string>Muli-Bold.ttf</string>
+		<string>Muli-ExtraBold.ttf</string>
+		<string>Muli-Regular.ttf</string>
+		<string>Muli-SemiBold.ttf</string>
+		<string>Proxima Nova.otf</string>
 	</array>
 </dict>
 </plist>

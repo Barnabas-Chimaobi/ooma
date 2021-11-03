@@ -11,7 +11,11 @@ import {
   SearchMenuItemByCategoryId,
   filterMenuItems,
 } from '../../../../../FetchData';
-import {useMenuItemByCategory} from '../../../../../reducers';
+import {
+  useMenuItemByCategory,
+  useMinPricing,
+  useMaxPricing,
+} from '../../../../../reducers';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {RootState, AppDispatch} from '../../../../../store';
@@ -37,8 +41,8 @@ const FilterBar = () => {
   const [sorts, setSorts] = useState('');
   const [categorys, setCategory] = useState('');
   const [loader, setLoader] = useState(false);
-  const [minPrices, setMinprice] = useState();
-  const [maxPrices, setMaxprice] = useState();
+  const [minPrices, setMinprice] = useState(0);
+  const [maxPrices, setMaxprice] = useState(0);
   const {value} = state;
   const toggleSwitch = () => setSwitchs((previousState) => !previousState);
 
@@ -75,33 +79,50 @@ const FilterBar = () => {
   });
 
   const filterMenuItem = async () => {
-    const filteredItem = await filterMenuItems(
+    setLoader(true);
+    console.log('dhfjgkhjhgghjgkhlgjhfjgdfjgk==========');
+    const branch = await AsyncStorage.getItem('branchId');
+    const newbranch = JSON.parse(branch);
+    console.log(
+      // filteredItem,
       branch,
-      1,
-      // category1,
-      category,
-      state,
+      sorts,
       minPrice,
       maxPrice,
+      categorys,
+      'filtered=======',
+    );
+    const filteredItem = await filterMenuItems(
+      newbranch,
+      1,
+      categorys,
+      minPrices,
+      maxPrices,
+      sorts,
       // combination1,
     );
+    console.log(filteredItem, 'filtereditemmmsss===');
+
     dispatch(useMenuItemByCategory(filteredItem));
+    setLoader(false);
   };
 
   const setTitle = (title: any) => {
-    if (title == 'Both' || title == 'Single dishes' || title == 'Combo meals') {
+    if (title == 'Both' || title == 'Single Meal' || title == 'Combo dish') {
       setSorts(title);
+      AsyncStorage.setItem('type', title);
     } else {
       null;
     }
 
     if (
-      title == 'Popular' ||
-      title == 'Special Offer' ||
-      title == 'Discount' ||
-      title == 'New'
+      title == 'POPULAR' ||
+      title == 'SPECIAL_OFFER' ||
+      title == 'DISCOUNT' ||
+      title == 'NEW'
     ) {
       setCategory(title);
+      AsyncStorage.setItem('category', title);
     } else {
       null;
     }
@@ -126,16 +147,20 @@ const FilterBar = () => {
     setSorts('');
     setCategory('');
     setMinprice('');
-    setMinprice('');
+    setMaxprice('');
   };
 
   const pricing = (item: any) => {
     setMinprice(item);
+    AsyncStorage.setItem('price', item === null ? 0 : item);
+    // dispatch(useMinPricing(item));
     console.log(item, 'itemssss');
   };
 
   const pricing1 = (item: any) => {
     setMaxprice(item);
+    AsyncStorage.setItem('price1', item === null ? 0 : item);
+    // dispatch(useMaxPricing(item));
     console.log(item, 'itemssss');
   };
   const loading = (item: any, item1: any) => {
@@ -152,7 +177,7 @@ const FilterBar = () => {
     const newData = categoryId
       ? await SearchMenuItemByCategoryId(categoryId, 1)
       : [];
-    dispatch(useMenuItemByCategory(newData.data.items));
+    dispatch(useMenuItemByCategory(newData?.data?.items));
     setLoader(false);
   };
 
@@ -192,7 +217,9 @@ const FilterBar = () => {
       <Button
         title={
           minPrices > 0 || maxPrices > 0
-            ? `\u20A6${minPrices} - \u20A6${maxPrices}`
+            ? `\u20A6${
+                minPrices === undefined ? 100 : minPrices
+              } - \u20A6${maxPrices}`
             : 'Price'
         }
         buttonStyle={[S.buttonStyle, price && S.activeButtonStyle]}
@@ -231,8 +258,8 @@ const FilterBar = () => {
             {value == 'sort' ? (
               <Radio
                 title1="Both"
-                title2="Single dishes"
-                title3="Combo meals"
+                title2="Single Meal"
+                title3="Combo dish"
                 type="combination"
                 showButton
                 overlay
@@ -242,10 +269,10 @@ const FilterBar = () => {
               />
             ) : value == 'category' ? (
               <Radio
-                title1="Popular"
-                title2="Special Offer"
-                title3="Discount"
-                title4="New"
+                title1="POPULAR"
+                title2="SPECIAL_OFFER"
+                title3="DISCOUNT"
+                title4="NEW"
                 type="category"
                 showButton
                 overlay
@@ -261,6 +288,21 @@ const FilterBar = () => {
                 parameters2={(item: any, item1: any) => loading(item, item1)}
               />
             )}
+
+            <Button
+              title={'APPLY'}
+              onPress={
+                () => {
+                  filterMenuItem(), toggleSwitch();
+                }
+                // {
+                // console.log(combination1, category1)
+                // dispatch(useCombination(combination1));
+                // dispatch(useCategory(category1));
+                // }
+              }
+              // containerStyle={S.buttonStyle}
+            />
           </>
         }
         onPress={() => {

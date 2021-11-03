@@ -6,11 +6,14 @@ import {
   ImageBackground,
   Text,
   Dimensions,
+  TouchableHighlight,
 } from 'react-native';
 import S from './styles';
 import Label from './Label';
 import {PriceTag, RatingCount, Rating1, DishTypes} from '../../components';
 import {hearts} from '../../assets';
+import {useNavigation} from '@react-navigation/native';
+import {colors} from '../../colors';
 
 const window = Dimensions.get('window');
 interface IProps {
@@ -22,7 +25,7 @@ interface IProps {
   dish2?: string;
   dish3?: string;
   img: any;
-  cardStyle:any,
+  cardStyle: any;
   price?: number;
   ratingCount: number;
   dishType?: string;
@@ -32,6 +35,9 @@ interface IProps {
   page: number;
   onpress1?: () => void;
   oldPrice?: any;
+  diff: any;
+  catId: any;
+  keyProp: any;
 }
 
 const Card: FC<IProps> = ({
@@ -52,44 +58,90 @@ const Card: FC<IProps> = ({
   onPress,
   onpress1,
   oldPrice,
+  diff,
+  catId,
+  keyProp,
 }) => {
+  const navigation = useNavigation();
+
   return (
-    <View style={[S.main,cardStyle, gridView && S.mainRow]}>
+    <View style={[S.main, cardStyle, gridView && S.mainRow]}>
       {!gridView ? (
-        <TouchableOpacity onPress={onPress}>
-          <ImageBackground source={img} style={S.imageBackground} >
-            <View style={S.flex}>
-              <Label
-                labelText={labelText}
-                labelStyle={{
-                  top: !labelText ? window.height * 1000 : 0,
-                  bottom: !labelText ? -window.height * 1000 : 0,
-                }}
-              />
-              <TouchableOpacity>
+        <View
+          style={{
+            marginTop: 5,
+            width: '100%',
+          }}>
+          {diff !== 'plan' ? (
+            <View style={{alignSelf: 'flex-end', height: 30, width: 30}}>
+              <TouchableHighlight
+                underlayColor=""
+                onPress={() => {
+                  keyProp === 'special'
+                    ? navigation.navigate('SelectedCategory', {
+                        special: 'special',
+                      })
+                    : keyProp === 'new'
+                    ? navigation.navigate('SelectedCategory', {
+                        new: 'new',
+                      })
+                    : navigation.navigate('SelectedCategory', {
+                        categoryId: catId,
+                      });
+                }}>
+                <Text
+                  style={{
+                    opacity: 0.5,
+                    fontSize: 11,
+                    marginRight: -15,
+                    top: 4,
+                    zIndex: 30,
+                  }}>
+                  View all
+                </Text>
+              </TouchableHighlight>
+            </View>
+          ) : null}
+
+          <TouchableOpacity onPress={onPress}>
+            <ImageBackground
+              source={img}
+              style={diff == 'plan' ? S.imageBackground2 : S.imageBackground}>
+              <View style={S.flex}>
+                <Label
+                  labelText={labelText}
+                  labelStyle={{
+                    top: !labelText ? window.height * 1000 : 0,
+                    bottom: !labelText ? -window.height * 1000 : 0,
+                  }}
+                />
+                {/* <TouchableOpacity>
                 <Image source={hearts} style={S.likeImage} />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
+              </View>
+            </ImageBackground>
+            <View style={S.textBar}>
+              <Text style={S.title}>{title}</Text>
+
+              {/* <PriceTag price={price} oldPrice={oldPrice} /> */}
+              <View style={S.rating}>
+                {/* <Rating1 /> */}
+                {/* <RatingCount ratingCount={ratingCount} /> */}
+                <DishTypes
+                  categories={categories}
+                  dish1={dish1}
+                  dish2={dish2}
+                  dish3={dish3}
+                />
+                <PriceTag price={Number(price)} oldPrice={Number(oldPrice)} />
+              </View>
+              <Text style={S.dishType}>{dishType?.toUpperCase()}</Text>
             </View>
-          </ImageBackground>
-          <View style={S.textBar}>
-            <Text style={S.title}>{title}</Text>
-            <PriceTag price={price} oldPrice={oldPrice} />
-            <View style={S.rating}>
-              <Rating1 />
-              <RatingCount ratingCount={ratingCount} />
-              <DishTypes
-                categories={categories}
-                dish1={dish1}
-                dish2={dish2}
-                dish3={dish3}
-              />
-            </View>
-            <Text style={S.dishType}>{dishType?.toUpperCase()}</Text>
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </View>
       ) : (
         <TouchableOpacity onPress={onPress}>
-          <View style={S.rowMain}>
+          <View style={S.rowMain1}>
             <ImageBackground source={img} style={S.imageBackgroundRow}>
               <View style={S.flexRow}>
                 <Label
@@ -101,15 +153,15 @@ const Card: FC<IProps> = ({
                     marginTop: 35,
                   }}
                 />
-                <TouchableOpacity>
+                {/* <TouchableOpacity>
                   <Image source={hearts} style={S.likeImageRow} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
             </ImageBackground>
             <View style={S.textBarRow}>
               <Text style={S.title}>{title}</Text>
-              <PriceTag price={price} />
-              <View style={S.rating}>
+              <PriceTag price={Number(price)} />
+              <View style={S.rating1}>
                 <Rating1 />
                 <RatingCount
                   ratingCount={ratingCount}

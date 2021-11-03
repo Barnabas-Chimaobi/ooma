@@ -2,22 +2,23 @@ import 'react-native-gesture-handler';
 import * as React from 'react';
 import {
   NavigationContainer,
-  NavigatorScreenParams,
+  NavigatorNavigatorParams,
   DefaultTheme,
   DarkTheme,
   RouteProp,
 } from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+// import {createStackNavigator} from '@react-navigation/Stack';
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState, AppDispatch} from '../store';
 import {signIn, signOut} from '../reducers';
 import Slash from '../navigation/AuthNavigation/splash';
-import {Register, Region, Branch} from '../features/Auth';
+import {Register, Region, Branch, Login, PhoneNo} from '../features/Auth';
 import {
-  DetailsScreen,
-  SplashScreen,
+  DetailsNavigator,
+  SplashNavigator,
   Home,
-  HomeScreen,
+  HomeNavigator,
   AddNewAddressForm,
   Profile,
   UpdatePassword,
@@ -45,6 +46,11 @@ import {
   Menu,
   Cart,
   Cart1,
+  Payment,
+  OrderDetails1,
+  Help,
+  Explore,
+  MenuHistory,
 } from '../features/App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AppearanceProvider, useColorScheme} from 'react-native-appearance';
@@ -59,11 +65,12 @@ import MenuNavigation from './MenuNavigation';
 import HomeNav from './HomeNavigation';
 import ExploreNavigation, {ExploreStackParamList} from './ExploreNavigation';
 import {NetworkManager, Loader} from '../components';
-
 // import Home from './HomeNavigation';
-import Explore from './ExploreNavigation';
+// import Explore from './ExploreNavigation';
 import MenuPlan from './MenuNavigation';
 import Splash from '../navigation/AuthNavigation/splash';
+import {navigationRef} from '../../src/api/filter';
+// import {Stack} from 'native-base';
 // import MyCart from './MyCartNavigation';
 // import More from './MoreNavigation';
 
@@ -71,7 +78,7 @@ const theme = {
   colors,
 };
 
-export type MainStackParamList = {
+export type StackParamList = {
   Home: undefined;
   Details: undefined;
   Splash: undefined;
@@ -107,9 +114,11 @@ export type MainStackParamList = {
   SearchMenuitemandPlan: undefined;
   Cart: undefined;
   Cart1: undefined;
+  OrderDetails1: undefined;
 };
 
-const MainStack = createStackNavigator<MainStackParamList>();
+const Stack = createStackNavigator();
+// const Stack = createStackNavigator<StackParamList>();
 
 const defaultTheme = {
   ...DefaultTheme,
@@ -160,92 +169,84 @@ export default function App() {
     <AppearanceProvider>
       <ThemeProvider theme={theme}>
         <NavigationContainer
+          ref={navigationRef}
           theme={scheme === 'light' ? defaultTheme : darkTheme}>
           {/* <Loader /> */}
           <NetworkManager />
           {/* {branch != '' ? ( */}
-          <MainStack.Navigator
+          <Stack.Navigator
             initialRouteName="Splash"
             headerMode="none"
-            screenOptions={{
+            NavigatorOptions={{
               headerStyle: {elevation: 0},
               cardStyle: {backgroundColor: 'white'},
             }}>
-            <MainStack.Screen name="Splash" component={Splash} />
-
-            <MainStack.Screen
-              name="BottomNavigator"
-              component={BottomNavigator}
-            />
-            <MainStack.Screen name="Region" component={Region} />
-            <MainStack.Screen name="Branch" component={Branch} />
-            <MainStack.Screen
+            <Stack.Screen name="Splash" component={Splash} />
+            {/* <Stack.Screen name="BottomNavigator" component={BottomNavigator} /> */}
+            <Stack.Screen name="Region" component={Region} />
+            <Stack.Screen name="Branch" component={Branch} />
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Payment" component={Payment} />
+            <Stack.Screen name="Help" component={Help} />
+            <Stack.Screen
               name="SearchMenuitemandPlan"
               component={SearchMenuitemandPlan}
             />
-            <MainStack.Screen name="Register" component={Register} />
-            {/* <MainStack.Screen name="Splash" component={SplashScreen} /> */}
-            <MainStack.Screen name="Explore" component={Explore} />
-            <MainStack.Screen name="Dish" component={Dish} />
-            <MainStack.Screen name="Order" component={Order} />
-            <MainStack.Screen name="OrderDetails" component={OrderDetails} />
-            <MainStack.Screen name="MenuPlanByCategory" component={Menu} />
-            <MainStack.Screen name="Detail" component={Detail} />
-            <MainStack.Screen
+            <Stack.Screen name="Register" component={Register} />
+            <Stack.Screen name="PhoneNo" component={PhoneNo} />
+            {/* <Stack.Screen name="Splash" component={SplashNavigator} /> */}
+            <Stack.Screen name="Explore" component={Explore} />
+            <Stack.Screen name="Dish" component={Dish} />
+            <Stack.Screen name="Order" component={Order} />
+            <Stack.Screen name="OrderDetails" component={OrderDetails} />
+            <Stack.Screen name="OrderDetails1" component={OrderDetails1} />
+            <Stack.Screen name="MenuPlanByCategory" component={Menu} />
+            <Stack.Screen name="Detail" component={Detail} />
+            <Stack.Screen
               name="SelectedCategory"
               component={SelectedCategory}
             />
+            <Stack.Screen name="Filter" component={Filter} />
+            <Stack.Screen name="CartIntro" component={CartIntro} />
+            <Stack.Screen name="MyCart" component={MyCart} />
+            <Stack.Screen name="Checkout" component={Checkout} />
+            <Stack.Screen name="Wallet" component={Wallet} />
 
-            <MainStack.Screen name="Filter" component={Filter} />
+            {/* <Stack.Screen name="More" component={More} /> */}
+            <Stack.Screen name="RateUs" component={RateUs} />
+            <Stack.Screen name="Favourites" component={Favourites} />
+            <Stack.Screen name="WalletIntro" component={WalletIntro} />
+            <Stack.Screen name="PromotionsIntro" component={PromotionsIntro} />
+            <Stack.Screen name="Menu" component={Menu} />
+            <Stack.Screen name="Cart" component={Cart} />
+            <Stack.Screen name="Cart1" component={Cart1} />
+            <Stack.Screen name="Promotions" component={Promotions} />
+            <Stack.Screen name="Voucher" component={Voucher} />
+            <Stack.Screen name="More" component={More} />
 
-            <MainStack.Screen name="CartIntro" component={CartIntro} />
-            <MainStack.Screen name="MyCart" component={MyCart} />
-            <MainStack.Screen name="Checkout" component={Checkout} />
-            <MainStack.Screen name="Wallet" component={Wallet} />
-
-            <MainStack.Screen name="More" component={More} />
-            <MainStack.Screen name="RateUs" component={RateUs} />
-            <MainStack.Screen name="Favourites" component={Favourites} />
-            <MainStack.Screen name="WalletIntro" component={WalletIntro} />
-            <MainStack.Screen
-              name="PromotionsIntro"
-              component={PromotionsIntro}
-            />
-            <MainStack.Screen name="Menu" component={Menu} />
-            <MainStack.Screen name="Cart" component={Cart} />
-            <MainStack.Screen name="Cart1" component={Cart1} />
-            <MainStack.Screen name="Promotions" component={Promotions} />
-            <MainStack.Screen name="Voucher" component={Voucher} />
-
-            <MainStack.Screen name="Profile" component={Profile} />
-            <MainStack.Screen
+            <Stack.Screen name="Profile" component={Profile} />
+            <Stack.Screen
               name="ViewAllAddresses"
               component={ViewAllAddresses}
             />
-            <MainStack.Screen name="EditProfile" component={EditProfile} />
-            <MainStack.Screen
-              name="UpdatePassword"
-              component={UpdatePassword}
-            />
-            <MainStack.Screen
+            <Stack.Screen name="EditProfile" component={EditProfile} />
+            <Stack.Screen name="UpdatePassword" component={UpdatePassword} />
+            <Stack.Screen
               name="AddNewAddressForm"
               component={AddNewAddressForm}
             />
-            <MainStack.Screen name="Home" component={Home} />
-            <MainStack.Screen name="HomeNav" component={HomeNav} />
-            {/* <MainStack.Screen name="Explore" component={ExploreNavigation} /> */}
-            <MainStack.Screen name="Details" component={DetailsScreen} />
-            <MainStack.Screen
+            <Stack.Screen name="MenuHistory" component={MenuHistory} />
+            <Stack.Screen name="Home" component={Home} />
+            {/* <Stack.Screen name="HomeNav" component={HomeNav} /> */}
+            {/* <Stack.Screen name="Explore" component={ExploreNavigation} /> */}
+            {/* <Stack.Screen name="Details" component={Detail} /> */}
+            {/* <Stack.Screen
               name="MyCartNavigation"
               component={MyCartNavigation}
-            />
-            <MainStack.Screen
-              name="MenuNavigation"
-              component={MenuNavigation}
-            />
-
-            {/* <MainStack.Screen name="SignIn" component={SignInScreen} /> */}
-          </MainStack.Navigator>
+            /> */}
+            {/* <Stack.Screen name="MenuNavigation" component={MenuNavigation} /> */}
+            {/* <Stack.Screen name="SignIn" component={SignInNavigator} /> */}
+          </Stack.Navigator>
           {/* ) : ( */}
           {/* <AuthNavigation /> */}
           {/* )} */}

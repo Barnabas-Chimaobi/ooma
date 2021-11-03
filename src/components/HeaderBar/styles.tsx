@@ -2,23 +2,26 @@ import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
   location: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#F6F6F6',
-    width: '90%',
+    // backgroundColor: '#F6F6F6',
+    // width: '90%',
     padding: 9,
+    paddingLeft: 0,
     borderRadius: 20,
   },
   locationDetails: {
     flexDirection: 'row',
-    alignItems: 'center',
+    paddingLeft: 5,
+    // alignItems: 'center',
+    // marginLeft: -27,
   },
   locationImage: {
     marginRight: 2,
     height: 20,
-    width: 20,
-    marginLeft: -5,
+    width: 15,
+    marginLeft: 10,
   },
   rejig: {
     paddingRight: 10,

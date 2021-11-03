@@ -1,10 +1,22 @@
-import React, {useRef, useState} from 'react';
-import {View, ImageBackground, ActivityIndicator} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {
+  View,
+  ImageBackground,
+  ActivityIndicator,
+  BackHandler,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useSelector, useDispatch} from 'react-redux';
 import Wizard from 'react-native-wizard';
 import Terms from '../components/Terms';
-import {Logo, Button, ButtonType, ShowMessage, type} from '../../../components';
+import {
+  Logo,
+  Button,
+  ButtonType,
+  ShowMessage,
+  type,
+  Alert,
+} from '../../../components';
 import S from './styles';
 import {factoryStyles as IS} from './styles';
 import Name from './Name';
@@ -20,7 +32,7 @@ import {signIn} from '../../../reducers';
 import {AuthImage} from '../../../assets';
 import api from '../../../api';
 import {setUserDetails} from '../../../reducers';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 const registerStepList = [
   {
@@ -44,6 +56,7 @@ const entryStepList = [
 ];
 
 const Register = () => {
+  const newroute = useRoute();
   const navigation = useNavigation();
   const dispatch: AppDispatch = useDispatch();
   const {
@@ -67,7 +80,7 @@ const Register = () => {
     // console.log(number, password, 'login');
     try {
       setLoading(true);
-      const loginUser = await api.post(`/users/login?`, {
+      const loginUser = await api.post(`/users/login`, {
         username: number,
         password,
       });
@@ -76,14 +89,36 @@ const Register = () => {
       if (token != false) {
         navigation.navigate('Region', {newToken: token});
         await AsyncStorage.setItem('userId', id);
+        await AsyncStorage.setItem(
+          'userDetails',
+          JSON.stringify(loginUser?.data?.data),
+        );
         setLoading(false);
         // dispatch(signIn());
       }
     } catch (err) {
+      Alert('Incorrect password');
       setLoading(false);
-      console.log(err);
+      console.log(err, 'sdhjghkljhgfhds');
     }
   };
+
+  const backHandler = () => {
+    if (newroute?.params?.route === 'login') {
+      BackHandler.exitApp();
+    }
+  };
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', () => backHandler());
+    console.log(newroute?.params?.route, 'routeee=====sssss====');
+    if (newroute?.params?.route === 'login') {
+      setroute(null);
+    }
+
+    return () =>
+      BackHandler.removeEventListener('hardwareBackPress', backHandler);
+  }, [newroute?.params?.route]);
 
   const verifyNumber = async () => {
     try {
@@ -105,11 +140,14 @@ const Register = () => {
       } else {
         setLoading(false);
         console.log(number, 'number');
-        ShowMessage(type.INFO, 'Phone number must be at least 11 characters');
+        Alert('Phone number must be at least 11 characters');
+        // ShowMessage(type.INFO, 'Phone number must be at least 11 characters');
       }
     } catch (err) {
+      console.log(err, 'errorsssss========');
       setLoading(false);
-      ShowMessage(type.ERROR, err);
+      Alert(err);
+      // ShowMessage(type.ERROR, err);
     }
   };
 
@@ -180,7 +218,8 @@ const Register = () => {
       }
     } else {
       setLoading(false);
-      ShowMessage(type.ERROR, 'please confirm password');
+      Alert('please confirm password');
+      // ShowMessage(type.ERROR, 'please confirm password');
       console.log('please confirm password');
     }
   };
@@ -251,6 +290,12 @@ const Register = () => {
               width: '90%',
               alignSelf: 'center',
               borderRadius: 5,
+              zIndex: 5,
+            }}
+            titleStyle={{
+              fontSize: 22,
+              fontFamily: 'Montserrat',
+              fontWeight: 'bold',
             }}
           />
         )}

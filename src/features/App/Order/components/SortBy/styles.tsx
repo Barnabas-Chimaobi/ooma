@@ -5,8 +5,9 @@ export default StyleSheet.create({
     flexDirection: 'row',
     // width: '90%',
     // alignSelf: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     alignItems: 'center',
     // marginTop: 20,
+    marginBottom: '-10%',
   },
 });

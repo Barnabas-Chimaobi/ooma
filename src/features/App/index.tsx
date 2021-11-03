@@ -32,6 +32,9 @@ import MyCart from './MyCart';
 import CartIntro from './MyCart/myCartIntro';
 import AllMenuPlanByCategory from '../../features/App/MenuPlan/components/MenuPlanByCategory';
 import Cart1 from '../App/Explore/SelectedDish/cart1';
+import Payment from './Checkout/payment';
+import OrderDetails1 from './Order/OrderDetails/itemIndex';
+import Help from './More/help';
 
 export {
   HomeScreen,
@@ -68,4 +71,7 @@ export {
   AllMenuPlanByCategory,
   SearchMenuitemandPlan,
   Cart1,
+  Payment,
+  OrderDetails1,
+  Help,
 };

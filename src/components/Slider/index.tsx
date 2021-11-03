@@ -25,8 +25,8 @@ const SliderBar = ({
   parameters2,
 }: any) => {
   // const {minPrice,maxPrice} = useSelector((state: RootState) => state.filter);
-  const [minPrices, setMinprice] = useState();
-  const [maxPrices, setMaxprice] = useState();
+  const [minPrices, setMinprice] = useState(0);
+  const [maxPrices, setMaxprice] = useState(0);
   const dispatch: AppDispatch = useDispatch();
   const [branchId, setBranchId] = useState('');
 
@@ -55,23 +55,30 @@ const SliderBar = ({
 
   const pricing = (item1: any) => {
     parameters(item1);
+    AsyncStorage.setItem('price', JSON.stringify(item1));
   };
   const pricing1 = (item1: any) => {
     parameters1(item1);
+    AsyncStorage.setItem('price1', JSON.stringify(item1));
+    console.log(item1, 'itemmmmmssss');
   };
   const loading = (item1: any, item2: any) => {
     parameters2(item1, item2);
   };
 
   const filterMenuItem = async () => {
+    const getCategory = await AsyncStorage.getItem('category');
+    const getMenuType = await AsyncStorage.getItem('menuType');
+    const branch = await AsyncStorage.getItem('branchId');
+    const newbranch = JSON.parse(branch);
     loading(true, false);
     const filteredItem = await filterMenuItems(
-      branchId,
+      newbranch,
       1,
-      category1,
+      getCategory,
       minPrice1,
       maxPrice1,
-      combination1,
+      getMenuType,
     );
     console.log(filteredItem, 'filteredItem');
     dispatch(useMenuItemByCategory(filteredItem));
@@ -88,66 +95,72 @@ const SliderBar = ({
   const windowHeight = Dimensions.get('window').height;
   const left1 = ((state.value1 / 300) * windowHeight + 100) / 100 - 10;
   const left2 = ((state.value2 / 300) * windowHeight + 100) / 100 - 10;
-  const minimumValue = 500;
+  const minimumValue = 0;
   const maximumValue = 10000;
   const {value1, value2} = state;
   return (
     <View style={S.mainStyle}>
       {title && <Text style={S.titleStyle}>{title}</Text>}
 
-      <Text style={{fontSize: 10, bottom: 3}}>Minimum</Text>
-      <Slider
-        style={S.sliderStyle}
-        step={500}
-        minimumValue={minimumValue}
-        maximumValue={maximumValue}
-        value={state.value2}
-        maximumTrackTintColor={colors.greyShade}
-        minimumTrackTintColor={colors.primary}
-        onValueChange={(value2: any) => {
-          pricing(value2);
-          setMinprice(value2);
-          setState({...state, value2});
-          // setState({...state, value2});
-          // !type
-          //   ? dispatch(useMinPricing(`${value2}`)) &&
-          //     setState({...state, value2})
-          //   : setState({...state, value2});
-        }}
-      />
-      <Text style={[S.textStyle, {left: left2}]}>
-        {state.value2 == maximumValue
-          ? `Above \u20A6${currencyFormat(state.value2)}`
-          : `\u20A6${currencyFormat(state.value2)}`}
-      </Text>
+      <View style={{marginLeft: 15}}>
+        <Text style={{fontSize: 10, bottom: 3}}>Minimum</Text>
+        <Slider
+          style={S.sliderStyle}
+          step={100}
+          minimumValue={minimumValue}
+          maximumValue={maximumValue}
+          value={state.value2}
+          maximumTrackTintColor={colors.greyShade}
+          minimumTrackTintColor={colors.primary}
+          onValueChange={(value2: any) => {
+            pricing(value2);
+            setMinprice(value2);
+            setState({...state, value2});
+            // setState({...state, value2});
+            // !type
+            //   ? dispatch(useMinPricing(`${value2}`)) &&
+            //     setState({...state, value2})
+            //   : setState({...state, value2});
+          }}
+        />
 
-      <Text style={{fontSize: 10, left: 260}}>Maximum</Text>
-      <Slider
-        style={S.sliderStyle}
-        step={500}
-        minimumValue={minimumValue}
-        maximumValue={maximumValue}
-        value={state.value1}
-        maximumTrackTintColor={colors.greyShade}
-        minimumTrackTintColor={colors.primary}
-        onValueChange={(value1: any) => {
-          // console.log(value1, 'valuee');
-          setMaxprice(value1);
-          pricing1(value1);
-          setState({...state, value1});
-          // !type
-          //   ? // ? dispatch(useMaxPricing(`${value1}`)) &&
-          //     dispatch(useMaxPricing(`${value1}`)) &&
-          //     setState({...state, value1})
-          //   : setState({...state, value1});
-        }}
-      />
-      <Text style={[S.textStyle, {left: left1}]}>
-        {state.value1 == maximumValue
-          ? `Above \u20A6${currencyFormat(state.value1)}`
-          : `\u20A6${currencyFormat(state.value1)}`}
-      </Text>
-      {type && (
+        <Text style={[S.textStyle, {left: left2}]}>
+          {state.value2 == maximumValue
+            ? `Above \u20A6${currencyFormat(state.value2)}`
+            : `\u20A6${currencyFormat(state.value2)}`}
+        </Text>
+      </View>
+
+      <View style={{marginLeft: 15}}>
+        <Text style={{fontSize: 10, left: 260}}>Maximum</Text>
+        <Slider
+          style={S.sliderStyle}
+          step={100}
+          minimumValue={minimumValue}
+          maximumValue={maximumValue}
+          value={state.value1}
+          maximumTrackTintColor={colors.greyShade}
+          minimumTrackTintColor={colors.primary}
+          onValueChange={(value1: any) => {
+            // console.log(value1, 'valuee');
+            setMaxprice(value1);
+            pricing1(value1);
+            setState({...state, value1});
+            // !type
+            //   ? // ? dispatch(useMaxPricing(`${value1}`)) &&
+            //     dispatch(useMaxPricing(`${value1}`)) &&
+            //     setState({...state, value1})
+            //   : setState({...state, value1});
+          }}
+        />
+        <Text style={[S.textStyle, {left: left1}]}>
+          {state.value1 == maximumValue
+            ? `Above \u20A6${currencyFormat(state.value1)}`
+            : `\u20A6${currencyFormat(state.value1)}`}
+        </Text>
+      </View>
+
+      {/* {type && (
         <Button
           title="APPLY"
           onPress={() => {
@@ -162,7 +175,7 @@ const SliderBar = ({
           }}
           buttonStyle={S.buttonStyle}
         />
-      )}
+      )} */}
     </View>
   );
 };

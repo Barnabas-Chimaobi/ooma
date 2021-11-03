@@ -1,10 +1,13 @@
 import {StyleSheet} from 'react-native';
+import {colors} from 'react-native-elements';
 
 export default StyleSheet.create({
   main: {
-    width: '90%',
+    width: '100%',
     alignSelf: 'center',
-    marginTop: 20,
+    flex: 1,
+    // marginTop: 20,
+    backgroundColor: colors.white,
   },
   totalStyle: {
     paddingVertical: -10,

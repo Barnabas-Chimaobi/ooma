@@ -21,10 +21,57 @@ const square = require('./Images/squares.png');
 const map = require('./Images/map.png');
 const arrow = require('./Images/arrow.png');
 const pin = require('./Images/Pin.png');
-const ooma = require('./Images/OOMA.png');
+// const ooma = require('./Images/OOMA.png');
 const check = require('./Images/check.png');
+const profilePics = require('./Images/oomaProfpics.png');
+const ellipse = require('./Images/oomaEllipse.png');
+const oomaNotify = require('./Images/oomaNotify.png');
+const logo = require('./Images/OOMALogo.png');
+const background = require('./Images/oomaBackgroundPics.png');
+const pointDown = require('./Images/pointDown.png');
+const newCheck = require('./Images/newCheck.png');
+const star = require('./Images/5stars.png');
+const newCart = require('./Images/newCart.png');
+const newPlan = require('./Images/newPlan.png');
+const newMore = require('./Images/newMore.png');
+const scroll = require('./Images/scroll.png');
+const nologo = require('./Images/oomaNologo.png');
+const paystack = require('./Images/paystack.png');
+const flutter = require('./Images/flutterwave.png');
+const forward = require('./Images/forwardArrow.png');
+const oomaNew = require('./Images/ooma.jpeg');
+const basket = require('./Images/basket.png');
+const plus = require('./Images/plus.png');
+const instantSuccess = require('./Images/instant.png');
+const mealSuccess = require('./Images/mealPlan.png');
+const loader = require('./Images/oomaLoad.gif');
+const info = require('../assets/Images/info.png');
+const clockNew = require('../assets/Images/clockNew.png');
 
 export {
+    info,
+    clockNew,
+    loader,
+    instantSuccess,
+    mealSuccess,
+    plus,
+    basket,
+    oomaNew,
+    forward,
+    paystack,
+    flutter,
+    nologo,
+    newCart,
+    newMore,
+    newPlan,
+    newCheck,
+    star,
+    pointDown,
+    background,
+    logo,
+    oomaNotify,
+    ellipse,
+    profilePics,
     emptyCart,
     notification,
     active,
@@ -48,6 +95,6 @@ export {
     map,
     arrow,
     pin,
-    ooma,
     check,
+    scroll,
 };
